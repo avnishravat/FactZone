@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Post</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+</head>
+
+<body class="bg-gray-100 p-5">
+
+<div class="max-w-2xl mx-auto bg-white p-6 rounded shadow">
+
+<button onclick="history.back()" class="text-blue-500 mb-4">← Back</button>
+
+<h1 id="title" class="text-2xl font-bold"></h1>
+<img id="img" class="my-3 hidden"/>
+<p id="content"></p>
+
+<h2 class="mt-5 font-bold">💬 Comments</h2>
+
+<input id="commentInput" class="border p-2 w-full" placeholder="Write comment"/>
+<button onclick="addComment()" class="bg-black text-white px-4 py-2 mt-2">Post</button>
+
+<div id="comments" class="mt-4 space-y-2"></div>
+
+</div>
+
+<script>
+const firebaseConfig = {
+  projectId:"factzone-a9ace"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+const id = new URLSearchParams(location.search).get("id");
+
+// POST LOAD
+db.collection("posts").doc(id).get().then(doc=>{
+  const d = doc.data();
+
+  title.innerText=d.title;
+  content.innerText=d.content;
+
+  if(d.image){
+    img.src=d.image;
+    img.classList.remove("hidden");
+  }
+});
+
+// COMMENTS
+function loadComments(){
+  db.collection("posts").doc(id).collection("comments").get()
+  .then(snap=>{
+    comments.innerHTML="";
+    snap.forEach(c=>{
+      comments.innerHTML += `<div class="bg-gray-100 p-2 rounded">${c.data().text}</div>`;
+    });
+  });
+}
+
+function addComment(){
+  const text = commentInput.value.trim();
+  if(!text) return;
+
+  db.collection("posts").doc(id).collection("comments").add({
+    text:text,
+    time:Date.now()
+  }).then(()=>{
+    commentInput.value="";
+    loadComments();
+  });
+}
+
+loadComments();
+</script>
+
+</body>
+</html>
