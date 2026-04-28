@@ -23,99 +23,107 @@
 
 <!-- HEADER -->
 <header class="bg-black text-white p-4 flex items-center justify-between shadow">
-  <h1 class="text-2xl font-bold cursor-pointer" onclick="location.reload()">FactZone</h1>
+  <!-- Click on FactZone to Login -->
+  <h1 class="text-2xl font-bold cursor-pointer select-none" onclick="openLogin()">FactZone</h1>
 
   <input id="search" placeholder="🔍 Search articles..."
-    class="w-1/2 px-4 py-2 rounded-full text-black"/>
-    
+    class="w-1/2 px-4 py-2 rounded-full text-black outline-none focus:ring-2 focus:ring-gray-400"/>
+  
+  <div class="w-10"></div> <!-- Spacer for balance -->
 </header>
 
 <!-- POSTS CONTAINER -->
-<main id="posts" class="p-6 grid md:grid-cols-3 gap-6"></main>
+<main id="posts" class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></main>
 
-<!-- FLOAT BUTTON -->
+<!-- FLOAT BUTTON (Only visible to Admin) -->
 <button id="adminBtn" onclick="openAdmin()"
-class="hidden fixed bottom-5 right-5 bg-black text-white px-4 py-3 rounded-full text-xl shadow-lg">+</button>
+class="hidden fixed bottom-5 right-5 bg-black text-white px-5 py-4 rounded-full text-2xl shadow-2xl hover:scale-110 transition z-50">+</button>
 
 <!-- LOGIN MODAL -->
-<div id="loginModal" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center z-50">
-  <div class="bg-white p-6 rounded-xl w-80">
-    <h2 class="text-xl font-bold mb-3 text-center">Admin Login</h2>
+<div id="loginModal" class="hidden fixed inset-0 bg-black/80 flex justify-center items-center z-[100]">
+  <div class="bg-white p-8 rounded-2xl w-80 shadow-2xl">
+    <h2 class="text-2xl font-bold mb-4 text-center">Admin Access</h2>
     <input type="password" id="adminPass" placeholder="Enter password"
-      class="w-full border p-2 mb-3 rounded"/>
+      class="w-full border-2 p-3 mb-4 rounded-lg outline-none focus:border-black"/>
     <div class="flex gap-2">
-        <button onclick="checkLogin()" class="bg-black text-white w-full py-2 rounded">Login</button>
-        <button onclick="closeLogin()" class="bg-gray-300 w-full py-2 rounded">Close</button>
+        <button onclick="checkLogin()" class="bg-black text-white w-full py-3 rounded-lg font-bold">Login</button>
+        <button onclick="closeLogin()" class="bg-gray-200 w-full py-3 rounded-lg">Cancel</button>
     </div>
   </div>
 </div>
 
-<!-- ADMIN MODAL -->
-<div id="adminModal" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center z-50">
-  <div class="bg-white p-6 rounded-xl w-[95%] max-w-lg relative">
-    <button onclick="closeAdmin()" class="absolute top-2 right-3 text-xl">✕</button>
-    <h2 class="text-xl font-bold mb-3">Add / Edit Post</h2>
-    <input id="title" placeholder="Title" class="w-full border p-2 mb-2 rounded"/>
-    <textarea id="content" placeholder="Content" class="w-full border p-2 mb-2 h-28 rounded"></textarea>
-    <input type="file" id="fileInput" class="mb-2"/>
-    <img id="preview" class="hidden w-full h-40 object-cover mb-2 rounded"/>
-    <div class="flex gap-2">
-      <button onclick="savePost()" class="bg-black text-white w-full py-2 rounded">Save</button>
-      <button onclick="closeAdmin()" class="bg-gray-400 text-white w-full py-2 rounded">Cancel</button>
-    </div>
+<!-- ADMIN MODAL (Add/Edit Post) -->
+<div id="adminModal" class="hidden fixed inset-0 bg-black/80 flex justify-center items-center z-[100]">
+  <div class="bg-white p-6 rounded-2xl w-[95%] max-w-lg relative shadow-2xl">
+    <button onclick="closeAdmin()" class="absolute top-3 right-4 text-2xl font-bold">✕</button>
+    <h2 class="text-xl font-bold mb-4">Post Editor</h2>
+    
+    <input id="titleInput" placeholder="Fact Title" class="w-full border-2 p-3 mb-3 rounded-lg outline-none focus:border-black"/>
+    
+    <textarea id="contentInput" placeholder="Write the amazing fact here..." 
+      class="w-full border-2 p-3 mb-3 h-40 rounded-lg outline-none focus:border-black"></textarea>
+    
+    <input type="file" id="fileInput" class="mb-3 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-black file:text-white hover:file:bg-gray-800"/>
+    
+    <img id="preview" class="hidden w-full h-48 object-cover mb-4 rounded-xl shadow-inner"/>
+    
+    <button id="saveBtn" onclick="savePost()" class="bg-black text-white w-full py-3 rounded-lg font-bold text-lg">Publish Fact ✅</button>
   </div>
 </div>
 
 <script>
-// Firebase Configuration
+// Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
   authDomain: "://firebaseapp.com",
   projectId: "factzone-a9ace"
 };
 
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// Variables
+// Global Variables
 let uploadedImage = "";
 let editId = null;
 let isAdmin = false;
 const ADMIN_PASSWORD = "Avnish@";
 
+// UI Elements
 const postsContainer = document.getElementById("posts");
 const loginModal = document.getElementById("loginModal");
 const adminModal = document.getElementById("adminModal");
 const adminBtn = document.getElementById("adminBtn");
 
 // Functions
-function openLogin(){ loginModal.classList.remove("hidden"); }
-function closeLogin(){ loginModal.classList.add("hidden"); }
+function openLogin() { loginModal.classList.remove("hidden"); }
+function closeLogin() { loginModal.classList.add("hidden"); document.getElementById("adminPass").value = ""; }
 
-function checkLogin(){
+function checkLogin() {
   const pass = document.getElementById("adminPass").value;
-  if(pass === ADMIN_PASSWORD){
+  if(pass === ADMIN_PASSWORD) {
     isAdmin = true;
     adminBtn.classList.remove("hidden");
-    loginModal.classList.add("hidden");
+    closeLogin();
     fetchPosts();
-    alert("Logged in as Admin ✅");
+    alert("Welcome Back, Avnish! 👑");
   } else {
-    alert("Wrong password!");
+    alert("Unauthorized Access!");
   }
 }
 
-function openAdmin(){
-  editId = null; 
-  document.getElementById("title").value = ""; 
-  document.getElementById("content").value = ""; 
+function openAdmin() {
+  editId = null;
+  document.getElementById("titleInput").value = "";
+  document.getElementById("contentInput").value = "";
   uploadedImage = "";
-  document.getElementById("preview").classList.add("hidden"); 
+  document.getElementById("preview").classList.add("hidden");
+  document.getElementById("saveBtn").innerText = "Publish Fact ✅";
   adminModal.classList.remove("hidden");
 }
-function closeAdmin(){ adminModal.classList.add("hidden"); }
 
+function closeAdmin() { adminModal.classList.add("hidden"); }
+
+// Image Preview Logic
 document.getElementById("fileInput").onchange = e => {
   const file = e.target.files[0];
   if(!file) return;
@@ -129,37 +137,40 @@ document.getElementById("fileInput").onchange = e => {
   reader.readAsDataURL(file);
 };
 
-async function fetchPosts(){
-  postsContainer.innerHTML = "<p class='text-center col-span-3'>Loading facts...</p>";
+// Fetch and Show Posts
+async function fetchPosts() {
+  postsContainer.innerHTML = "<div class='col-span-full text-center py-20 text-gray-500 animate-pulse'>Gathering facts...</div>";
   try {
     const snapshot = await db.collection("posts").orderBy("createdAt", "desc").get();
     postsContainer.innerHTML = "";
     
     if(snapshot.empty) {
-        postsContainer.innerHTML = "<p class='text-center col-span-3'>No posts found. Add one!</p>";
-        return;
+      postsContainer.innerHTML = "<div class='col-span-full text-center py-20 text-gray-400'>No facts found. Admin, please add some!</div>";
+      return;
     }
 
     snapshot.forEach(doc => {
       const p = doc.data();
       const div = document.createElement("div");
-      div.className = "bg-white p-4 rounded-xl shadow hover:shadow-lg transition cursor-pointer";
+      div.className = "bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group";
       div.innerHTML = `
-        ${p.image ? `<img src="${p.image}" class="h-40 w-full object-cover mb-2 rounded">` : ""}
-        <h2 class="font-bold text-lg">${p.title}</h2>
-        <p class="text-gray-600">${p.content.substring(0,80)}...</p>
-        <div class="flex justify-between items-center mt-2" onclick="event.stopPropagation()">
-          <button class="likeBtn text-red-500 font-bold">❤️ ${p.likes || 0}</button>
-          ${isAdmin ? `
-            <div class="flex gap-2">
-                <button class="editBtn bg-blue-500 text-white px-2 py-1 rounded text-sm">Edit</button>
-                <button class="deleteBtn bg-red-500 text-white px-2 py-1 rounded text-sm">Delete</button>
-            </div>` : ""}
+        ${p.image ? `<img src="${p.image}" class="h-52 w-full object-cover group-hover:scale-105 transition-transform duration-500">` : ""}
+        <div class="p-5">
+          <h2 class="font-bold text-xl mb-2 text-gray-800">${p.title}</h2>
+          <p class="text-gray-600 leading-relaxed">${p.content.substring(0,120)}${p.content.length > 120 ? '...' : ''}</p>
+          <div class="flex justify-between items-center mt-5 pt-4 border-t border-gray-50">
+            <button class="likeBtn flex items-center gap-1 text-red-500 font-bold hover:scale-110 transition">❤️ <span>${p.likes || 0}</span></button>
+            ${isAdmin ? `
+              <div class="flex gap-2">
+                <button class="editBtn bg-blue-50 text-blue-600 px-3 py-1 rounded-lg text-sm font-semibold hover:bg-blue-100">Edit</button>
+                <button class="deleteBtn bg-red-50 text-red-600 px-3 py-1 rounded-lg text-sm font-semibold hover:bg-red-100">Delete</button>
+              </div>` : ""}
+          </div>
         </div>`;
       
       div.onclick = () => { window.location.href = `details.html?id=${doc.id}`; };
 
-      // Like Logic
+      // Like functionality
       div.querySelector(".likeBtn").onclick = (e) => {
         e.stopPropagation();
         db.collection("posts").doc(doc.id).update({
@@ -167,69 +178,72 @@ async function fetchPosts(){
         }).then(fetchPosts);
       };
 
-      // Admin Actions
-      if(isAdmin){
-          div.querySelector(".editBtn").onclick = (e) => {
-              e.stopPropagation();
-              editId = doc.id;
-              document.getElementById("title").value = p.title;
-              document.getElementById("content").value = p.content;
-              uploadedImage = p.image || "";
-              if(p.image){
-                  const preview = document.getElementById("preview");
-                  preview.src = p.image;
-                  preview.classList.remove("hidden");
-              }
-              adminModal.classList.remove("hidden");
-          };
-          div.querySelector(".deleteBtn").onclick = (e) => {
-              e.stopPropagation();
-              if(confirm("Delete this post?")){
-                  db.collection("posts").doc(doc.id).delete().then(fetchPosts);
-              }
-          };
+      if(isAdmin) {
+        div.querySelector(".editBtn").onclick = (e) => {
+          e.stopPropagation();
+          editId = doc.id;
+          document.getElementById("titleInput").value = p.title;
+          document.getElementById("contentInput").value = p.content;
+          uploadedImage = p.image || "";
+          if(p.image) {
+            const preview = document.getElementById("preview");
+            preview.src = p.image;
+            preview.classList.remove("hidden");
+          }
+          document.getElementById("saveBtn").innerText = "Update Fact 🔄";
+          adminModal.classList.remove("hidden");
+        };
+
+        div.querySelector(".deleteBtn").onclick = (e) => {
+          e.stopPropagation();
+          if(confirm("Are you sure you want to delete this fact?")) {
+            db.collection("posts").doc(doc.id).delete().then(fetchPosts);
+          }
+        };
       }
       postsContainer.appendChild(div);
     });
   } catch (err) {
-    postsContainer.innerHTML = "Error loading posts: " + err.message;
+    postsContainer.innerHTML = "<div class='text-red-500 text-center col-span-full'>Connection Error: " + err.message + "</div>";
   }
 }
 
-async function savePost(){
-  const t = document.getElementById("title").value.trim();
-  const c = document.getElementById("content").value.trim();
-  if(!t || !c){ alert("Please fill title and content"); return; }
+// Save Post Function
+async function savePost() {
+  const t = document.getElementById("titleInput").value.trim();
+  const c = document.getElementById("contentInput").value.trim();
+  if(!t || !c) { alert("Title and Content are required!"); return; }
 
   try {
-    if(editId){
+    if(editId) {
       await db.collection("posts").doc(editId).update({
         title: t, content: c, image: uploadedImage
       });
-      alert("Post Updated!");
+      alert("Fact Updated Successfully!");
     } else {
       await db.collection("posts").add({
         title: t, content: c, image: uploadedImage, likes: 0, createdAt: new Date()
       });
-      alert("Post Saved!");
+      alert("New Fact Published!");
     }
     closeAdmin();
     fetchPosts();
-  } catch(err) { alert("Error: " + err.message); }
+  } catch(err) { alert("Firebase Error: " + err.message); }
 }
 
-// Search Logic
-document.getElementById("search").oninput = async e => {
+// Live Search Function
+document.getElementById("search").oninput = e => {
   const val = e.target.value.toLowerCase();
-  const allCards = postsContainer.querySelectorAll("div.bg-white");
-  allCards.forEach(card => {
-    const title = card.querySelector("h2").innerText.toLowerCase();
-    card.style.display = title.includes(val) ? "block" : "none";
+  const cards = postsContainer.querySelectorAll("div.group");
+  cards.forEach(card => {
+    const text = card.innerText.toLowerCase();
+    card.style.display = text.includes(val) ? "block" : "none";
   });
 };
 
-// Start
+// Initialize
 fetchPosts();
 </script>
+
 </body>
 </html>
