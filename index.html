@@ -106,7 +106,7 @@ function login(){
 
 // AUTH CHECK
 auth.onAuthStateChanged(user=>{
-  if(user && user.uid===ADMIN_UID){
+  if(user && user.uid===FACTZONE_SECRET_123){
     isAdmin = true;
     adminBtn.classList.remove("hidden");
   } else {
