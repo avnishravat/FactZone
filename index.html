@@ -7,15 +7,12 @@
 
 <script src="https://cdn.tailwindcss.com"></script>
 
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
 <style>
 body { background: linear-gradient(135deg,#eef2ff,#f8fafc); }
-
-.card:hover { transform: translateY(-5px); transition: 0.3s; }
 
 .heart {
   position:absolute;
@@ -35,37 +32,27 @@ body { background: linear-gradient(135deg,#eef2ff,#f8fafc); }
 
 <body>
 
-<!-- HEADER -->
-<header class="bg-white shadow p-4 text-center sticky top-0 z-40">
+<header class="text-center p-4 bg-white shadow">
   <h1 onclick="openLogin()" class="text-2xl font-bold cursor-pointer">⚡ FactZone</h1>
 </header>
 
-<!-- SEARCH -->
-<div class="flex justify-center mt-4">
-  <input id="search" placeholder="Search..."
-  class="w-11/12 md:w-1/2 px-4 py-2 rounded-full shadow border">
-</div>
+<main id="posts" class="p-6 grid md:grid-cols-3 gap-6"></main>
 
-<!-- POSTS -->
-<main id="posts" class="p-6 grid sm:grid-cols-2 md:grid-cols-3 gap-6"></main>
+<button id="adminBtn" onclick="openAdmin()" 
+class="hidden fixed bottom-5 right-5 bg-black text-white px-4 py-3 rounded-full">+</button>
 
-<!-- ADMIN BTN -->
-<button id="adminBtn" onclick="openAdmin()"
-class="hidden fixed bottom-6 right-6 bg-black text-white px-5 py-4 rounded-full text-2xl shadow-lg">+</button>
-
-<!-- LOGIN MODAL -->
+<!-- LOGIN -->
 <div id="loginModal" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
-  <div class="bg-white p-6 rounded-xl w-80 text-center">
-    <h2 class="text-lg font-bold mb-3">Admin Login</h2>
-    <input id="email" placeholder="Email" class="w-full border p-2 mb-2">
-    <input id="password" type="password" placeholder="Password" class="w-full border p-2 mb-3">
-    <button onclick="login()" class="bg-black text-white w-full py-2 rounded">Login</button>
+  <div class="bg-white p-5 rounded">
+    <input id="email" placeholder="Email" class="border p-2 mb-2 w-full">
+    <input id="password" type="password" placeholder="Password" class="border p-2 mb-2 w-full">
+    <button onclick="login()" class="bg-black text-white px-4 py-2 w-full">Login</button>
   </div>
 </div>
 
-<!-- ADMIN PANEL -->
+<!-- ADMIN -->
 <div id="adminModal" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
-  <div class="bg-white p-6 rounded-xl w-[95%] max-w-lg">
+  <div class="bg-white p-5 rounded w-96">
     <input id="title" placeholder="Title" class="w-full border p-2 mb-2">
     <textarea id="content" placeholder="Content" class="w-full border p-2 mb-2"></textarea>
 
@@ -78,24 +65,24 @@ class="hidden fixed bottom-6 right-6 bg-black text-white px-5 py-4 rounded-full 
 
 <script>
 
-// 🔥 CONFIG
+// 🔥🔥🔥 STEP 1: API KEY यहाँ डालो 🔥🔥🔥
 const firebaseConfig = {
   apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
   authDomain: "factzone-a9ace.firebaseapp.com",
   projectId: "factzone-a9ace"
 };
 
+// 🔥🔥🔥 STEP 2: ADMIN UID यहाँ डालो 🔥🔥🔥
+const ADMIN_UID = "FACTZONE_SECRET_123";
+
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
 const auth = firebase.auth();
 
-// 🔐 YOUR UID
-const ADMIN_UID = "FACTZONE_SECRET_123";
-
 let isAdmin = false;
-let editId = null;
 let uploadedImage = "";
+let editId = null;
 
 // ❤️ FORMAT
 function formatLikes(n){
@@ -108,22 +95,22 @@ function formatLikes(n){
 function isLiked(id){ return localStorage.getItem("like_"+id)==="true"; }
 function setLiked(id,v){ localStorage.setItem("like_"+id,v); }
 
-// 🔐 LOGIN
+// LOGIN
 function openLogin(){ loginModal.classList.remove("hidden"); }
 
 function login(){
-  auth.signInWithEmailAndPassword(email.value, password.value)
+  auth.signInWithEmailAndPassword(email.value,password.value)
   .then(()=> loginModal.classList.add("hidden"))
   .catch(e=> alert(e.message));
 }
 
-// 🔐 AUTH STATE
+// AUTH CHECK
 auth.onAuthStateChanged(user=>{
   if(user && user.uid===ADMIN_UID){
-    isAdmin=true;
+    isAdmin = true;
     adminBtn.classList.remove("hidden");
   } else {
-    isAdmin=false;
+    isAdmin = false;
     adminBtn.classList.add("hidden");
   }
   fetchPosts();
@@ -150,7 +137,7 @@ async function fetchPosts(){
     const liked=isLiked(doc.id);
 
     const card=document.createElement("div");
-    card.className="card bg-white rounded-xl shadow overflow-hidden cursor-pointer";
+    card.className="bg-white rounded-xl shadow overflow-hidden cursor-pointer";
 
     card.innerHTML=`
       <div class="relative imgBox">
@@ -162,17 +149,15 @@ async function fetchPosts(){
         <h2 class="font-bold">${p.title}</h2>
         <p>${p.content.substring(0,80)}...</p>
 
-        <div class="flex justify-between mt-2">
-          <span class="likeBtn ${liked?'text-red-500':'text-gray-400'} cursor-pointer">
-            ❤️ ${formatLikes(p.likes||0)}
-          </span>
+        <span class="likeBtn ${liked?'text-red-500':'text-gray-400'} cursor-pointer">
+          ❤️ ${formatLikes(p.likes||0)}
+        </span>
 
-          ${isAdmin?`
-            <div>
-              <button class="edit text-blue-500">Edit</button>
-              <button class="del text-red-500">Delete</button>
-            </div>`:''}
-        </div>
+        ${isAdmin?`
+        <div class="mt-2">
+          <button class="edit text-blue-500">Edit</button>
+          <button class="del text-red-500 ml-2">Delete</button>
+        </div>`:''}
       </div>
     `;
 
@@ -180,9 +165,10 @@ async function fetchPosts(){
     const imgBox=card.querySelector(".imgBox");
     const heart=card.querySelector(".heart");
 
-    // LIKE TOGGLE
+    // LIKE
     likeBtn.onclick=e=>{
       e.stopPropagation();
+
       let liked=isLiked(doc.id);
 
       db.collection("posts").doc(doc.id).update({
@@ -216,7 +202,7 @@ async function fetchPosts(){
       likeBtn.classList.add("text-red-500");
     };
 
-    // ADMIN EDIT
+    // ADMIN
     if(isAdmin){
       card.querySelector(".edit").onclick=e=>{
         e.stopPropagation();
@@ -244,7 +230,7 @@ async function fetchPosts(){
 
 // SAVE
 async function savePost(){
-  if(!title.value || !content.value) return alert("Fill all");
+  if(!title.value||!content.value) return alert("Fill all");
 
   if(editId){
     await db.collection("posts").doc(editId).update({
@@ -264,22 +250,6 @@ async function savePost(){
   adminModal.classList.add("hidden");
   fetchPosts();
 }
-
-// SEARCH
-search.oninput=async e=>{
-  const val=e.target.value.toLowerCase();
-  const snap=await db.collection("posts").get();
-  posts.innerHTML="";
-
-  snap.forEach(doc=>{
-    const p=doc.data();
-    if(p.title.toLowerCase().includes(val)){
-      const div=document.createElement("div");
-      div.innerHTML=`<h2>${p.title}</h2>`;
-      posts.appendChild(div);
-    }
-  });
-};
 
 </script>
 
