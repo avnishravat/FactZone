@@ -33,8 +33,8 @@ class="hidden fixed bottom-5 right-5 bg-black text-white p-4 rounded-full">+</bu
 
 <!-- LOGIN -->
 <div id="login" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
-<div class="bg-white p-4">
-<input id="pass" placeholder="Password" class="border p-2 mb-2">
+<div class="bg-white p-4 w-80">
+<input id="pass" placeholder="Password" class="border p-2 mb-2 w-full">
 <button onclick="checkLogin()" class="bg-black text-white p-2 w-full">Login</button>
 </div>
 </div>
@@ -62,7 +62,7 @@ projectId:"factzone-a9ace"
 firebase.initializeApp(firebaseConfig);
 const db=firebase.firestore();
 
-// 🔐 ADMIN PASSWORD
+// 🔐 ADMIN PASSWORD (CHANGE कर सकते हो)
 const ADMIN_PASS="Avnish@";
 
 let isAdmin=false, editId=null, img="";
@@ -75,26 +75,39 @@ return n||0;
 }
 
 // LOGIN
-function openLogin(){login.classList.remove("hidden")}
+function openLogin(){
+document.getElementById("login").classList.remove("hidden");
+}
+
 function checkLogin(){
-if(pass.value===FACTZONE_SECRET_123){
+let val=document.getElementById("pass").value.trim();
+
+if(val===FACTZONE_SECRET_123){
 isAdmin=true;
-addBtn.classList.remove("hidden");
-login.classList.add("hidden");
+document.getElementById("addBtn").classList.remove("hidden");
+document.getElementById("login").classList.add("hidden");
 load();
-}else alert("Wrong Password");
+}else{
+alert("Wrong Password");
+}
 }
 
 // IMAGE
-file.onchange=e=>{
+document.getElementById("file").onchange=e=>{
 let r=new FileReader();
-r.onload=()=>{img=r.result;preview.src=img;preview.classList.remove("hidden");}
+r.onload=()=>{
+img=r.result;
+document.getElementById("preview").src=img;
+document.getElementById("preview").classList.remove("hidden");
+};
 if(e.target.files[0])r.readAsDataURL(e.target.files[0]);
 };
 
 // LOAD POSTS
 async function load(){
+let posts=document.getElementById("posts");
 posts.innerHTML="";
+
 let snap=await db.collection("posts").get();
 
 snap.forEach(doc=>{
@@ -128,8 +141,7 @@ ${isAdmin?`
 card.onclick=()=>location.href="details.html?id="+doc.id;
 
 // LIKE
-let like=card.querySelector(".like");
-like.onclick=e=>{
+card.querySelector(".like").onclick=e=>{
 e.stopPropagation();
 db.collection("posts").doc(doc.id).update({
 likes:firebase.firestore.FieldValue.increment(1)
@@ -155,14 +167,16 @@ if(isAdmin){
 card.querySelector(".edit").onclick=e=>{
 e.stopPropagation();
 editId=doc.id;
-title.value=p.title;
-content.value=p.content;
+document.getElementById("title").value=p.title;
+document.getElementById("content").value=p.content;
 img=p.image||"";
+
 if(p.image){
-preview.src=p.image;
-preview.classList.remove("hidden");
+document.getElementById("preview").src=p.image;
+document.getElementById("preview").classList.remove("hidden");
 }
-admin.classList.remove("hidden");
+
+document.getElementById("admin").classList.remove("hidden");
 };
 
 card.querySelector(".del").onclick=async e=>{
@@ -178,21 +192,30 @@ posts.appendChild(card);
 });
 }
 
-// SAVE POST
+// ADMIN OPEN
+function openAdmin(){
+editId=null;
+document.getElementById("admin").classList.remove("hidden");
+}
+
+// SAVE
 async function savePost(){
-if(!title.value||!content.value)return alert("Fill all");
+let t=document.getElementById("title").value;
+let c=document.getElementById("content").value;
+
+if(!t||!c)return alert("Fill all");
 
 if(editId){
 await db.collection("posts").doc(editId).update({
-title:title.value,
-content:content.value,
+title:t,
+content:c,
 image:img,
 adminKey:"FACTZONE_SECRET_123"
 });
 }else{
 await db.collection("posts").add({
-title:title.value,
-content:content.value,
+title:t,
+content:c,
 image:img,
 likes:0,
 views:0,
@@ -200,12 +223,13 @@ adminKey:"FACTZONE_SECRET_123"
 });
 }
 
-admin.classList.add("hidden");
+document.getElementById("admin").classList.add("hidden");
 load();
 }
 
 load();
 
 </script>
+
 </body>
 </html>
