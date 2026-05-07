@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <title>FactZone</title>
 
+<!-- 🔥 SVG FAVICON -->
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
@@ -15,8 +18,13 @@ body{background:#f1f5f9;}
 
 <body>
 
-<header class="p-4 text-center bg-white shadow">
-<h1 id="logo" class="text-2xl font-bold cursor-pointer">⚡ FactZone</h1>
+<!-- HEADER -->
+<header class="p-4 flex items-center justify-center gap-2 bg-white shadow cursor-pointer" onclick="openLogin()">
+
+<img src="logo.svg" class="w-8 h-8">
+
+<h1 class="text-2xl font-bold">FactZone</h1>
+
 </header>
 
 <main id="posts" class="p-6 grid md:grid-cols-3 gap-6"></main>
@@ -24,9 +32,9 @@ body{background:#f1f5f9;}
 <button id="addBtn" class="hidden fixed bottom-5 right-5 bg-black text-white p-4 rounded-full">+</button>
 
 <!-- LOGIN -->
-<div id="login" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
-<div class="bg-white p-4 w-80">
-<input id="pass" placeholder="Password" class="border p-2 mb-2 w-full">
+<div id="login" class="fixed inset-0 bg-black/70 flex justify-center items-center">
+<div class="bg-white p-4 w-80 rounded">
+<input id="pass" placeholder="Enter Password" class="border p-2 mb-2 w-full">
 <button id="loginBtn" class="bg-black text-white p-2 w-full">Login</button>
 </div>
 </div>
@@ -44,17 +52,18 @@ body{background:#f1f5f9;}
 
 <script>
 
-// 🔥 API KEY डालो
+// 🔥 FIREBASE CONFIG
 const firebaseConfig = {
-  apiKey:"YOUR_API_KEY",
-  authDomain:"factzone-a9ace.firebaseapp.com",
-  projectId:"factzone-a9ace"
+apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
+authDomain:"factzone-a9ace.firebaseapp.com",
+projectId:"factzone-a9ace"
 };
 
 firebase.initializeApp(firebaseConfig);
-const db=firebase.firestore();
+const db = firebase.firestore();
 
-const ADMIN_PASS="1234";
+// 🔐 PASSWORD
+const ADMIN_PASS = "1234";
 
 let isAdmin=false, editId=null, img="";
 
@@ -64,19 +73,20 @@ if(n>=1e3)return(n/1e3).toFixed(1)+"K";
 return n||0;
 }
 
-document.addEventListener("DOMContentLoaded", ()=>{
-
-// OPEN LOGIN
-document.getElementById("logo").onclick=()=>{
+// LOGIN OPEN
+function openLogin(){
 document.getElementById("login").classList.remove("hidden");
-};
+}
 
-// LOGIN CLICK FIX
-document.getElementById("loginBtn").onclick=()=>{
-let val=document.getElementById("pass").value.trim();
+// LOGIN FIX
+window.onload = function(){
 
-if(val===ADMIN_PASS){
-isAdmin=true;
+document.getElementById("loginBtn").onclick = function(){
+
+let val = document.getElementById("pass").value.trim();
+
+if(val === ADMIN_PASS){
+isAdmin = true;
 document.getElementById("addBtn").classList.remove("hidden");
 document.getElementById("login").classList.add("hidden");
 load();
@@ -85,8 +95,8 @@ alert("Wrong Password");
 }
 };
 
-// OPEN ADMIN
-document.getElementById("addBtn").onclick=()=>{
+// ADMIN OPEN
+document.getElementById("addBtn").onclick = ()=>{
 editId=null;
 document.getElementById("admin").classList.remove("hidden");
 };
@@ -111,11 +121,11 @@ if(!t||!c)return alert("Fill all");
 
 if(editId){
 await db.collection("posts").doc(editId).update({
-title:t,content:c,image:img,adminKey:"FACTZONE_SECRET_123"
+title:t,content:c,image:img
 });
 }else{
 await db.collection("posts").add({
-title:t,content:c,image:img,likes:0,views:0,adminKey:"FACTZONE_SECRET_123"
+title:t,content:c,image:img,likes:0,views:0
 });
 }
 
@@ -125,7 +135,7 @@ load();
 
 load();
 
-});
+};
 
 // LOAD POSTS
 async function load(){
