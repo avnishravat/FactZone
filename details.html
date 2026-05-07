@@ -9,73 +9,55 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 </head>
 
-<body class="bg-gray-100 p-5">
+<body class="p-6">
 
-<div class="max-w-2xl mx-auto bg-white p-6 rounded shadow">
-
-<button onclick="history.back()" class="text-blue-500 mb-4">← Back</button>
-
-<h1 id="title" class="text-2xl font-bold"></h1>
-<img id="img" class="my-3 hidden"/>
-<p id="content"></p>
-
-<h2 class="mt-5 font-bold">💬 Comments</h2>
-
-<input id="commentInput" class="border p-2 w-full" placeholder="Write comment"/>
-<button onclick="addComment()" class="bg-black text-white px-4 py-2 mt-2">Post</button>
-
-<div id="comments" class="mt-4 space-y-2"></div>
-
-</div>
+<h1 id="t" class="text-2xl font-bold mb-2"></h1>
+<img id="i" class="w-full mb-4">
+<p id="c"></p>
+<p id="v" class="mt-3 text-gray-500"></p>
 
 <script>
+
+// 🔥 SAME API KEY
 const firebaseConfig = {
-  projectId:"factzone-a9ace"
+apiKey:"AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
+authDomain:"factzone-a9ace.firebaseapp.com",
+projectId:"factzone-a9ace"
 };
 
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+const db=firebase.firestore();
 
-const id = new URLSearchParams(location.search).get("id");
+const id=new URLSearchParams(location.search).get("id");
 
-// POST LOAD
-db.collection("posts").doc(id).get().then(doc=>{
-  const d = doc.data();
+function f(n){
+if(n>=1e6)return(n/1e6).toFixed(1)+"M";
+if(n>=1e3)return(n/1e3).toFixed(1)+"K";
+return n||0;
+}
 
-  title.innerText=d.title;
-  content.innerText=d.content;
+async function load(){
+let ref=db.collection("posts").doc(id);
+let doc=await ref.get();
+let p=doc.data();
 
-  if(d.image){
-    img.src=d.image;
-    img.classList.remove("hidden");
-  }
+t.innerText=p.title;
+c.innerText=p.content;
+if(p.image)i.src=p.image;
+
+v.innerText="👁️ "+f(p.views)+" views";
+
+// 👁️ VIEW COUNT
+if(!localStorage.getItem("view_"+id)){
+await ref.update({
+views:firebase.firestore.FieldValue.increment(1)
 });
-
-// COMMENTS
-function loadComments(){
-  db.collection("posts").doc(id).collection("comments").get()
-  .then(snap=>{
-    comments.innerHTML="";
-    snap.forEach(c=>{
-      comments.innerHTML += `<div class="bg-gray-100 p-2 rounded">${c.data().text}</div>`;
-    });
-  });
+localStorage.setItem("view_"+id,true);
+}
 }
 
-function addComment(){
-  const text = commentInput.value.trim();
-  if(!text) return;
+load();
 
-  db.collection("posts").doc(id).collection("comments").add({
-    text:text,
-    time:Date.now()
-  }).then(()=>{
-    commentInput.value="";
-    loadComments();
-  });
-}
-
-loadComments();
 </script>
 
 </body>
