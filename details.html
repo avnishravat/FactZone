@@ -17,7 +17,7 @@
 ⬅ Back
 </button>
 
-<h1 id="title"></h1>
+<h1 id="title" class="text-2xl font-bold mb-2"></h1>
 <p id="content"></p>
 
 <script>
@@ -31,14 +31,14 @@ projectId:"factzone-a9ace"
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-const id = new URLSearchParams(window.location.search).get("id");
+const id = new URLSearchParams(location.search).get("id");
 
 async function load(){
 let doc = await db.collection("posts").doc(id).get();
 let p = doc.data();
 
-document.getElementById("title").innerText = p.title;
-document.getElementById("content").innerText = p.content;
+title.innerText = p.title;
+content.innerText = p.content;
 }
 
 load();
