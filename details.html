@@ -18,7 +18,6 @@
 
 <script>
 
-// 🔥 SAME API KEY
 const firebaseConfig = {
 apiKey:"AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
 authDomain:"factzone-a9ace.firebaseapp.com",
@@ -47,7 +46,7 @@ if(p.image)i.src=p.image;
 
 v.innerText="👁️ "+f(p.views)+" views";
 
-// 👁️ VIEW COUNT
+// VIEW COUNT
 if(!localStorage.getItem("view_"+id)){
 await ref.update({
 views:firebase.firestore.FieldValue.increment(1)
