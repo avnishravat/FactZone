@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>FactZone</title>
 
-<!-- 🔥 SVG FAVICON -->
 <link rel="icon" type="image/svg+xml" href="logo.svg">
 
 <script src="https://cdn.tailwindcss.com"></script>
@@ -13,18 +12,27 @@
 
 <style>
 body{background:#f1f5f9;}
+
+.heart{
+position:absolute;
+top:50%; left:50%;
+transform:translate(-50%,-50%) scale(0);
+font-size:60px;
+opacity:0;
+transition:0.4s;
+}
+.show{
+transform:translate(-50%,-50%) scale(1.3);
+opacity:1;
+}
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
-<header class="p-4 flex items-center justify-center gap-2 bg-white shadow cursor-pointer" onclick="openLogin()">
-
-<img src="logo.svg" class="w-8 h-8">
-
+<header onclick="openLogin()" class="flex items-center justify-center gap-2 p-4 bg-white shadow cursor-pointer">
+<img src="logo.svg" class="w-8">
 <h1 class="text-2xl font-bold">FactZone</h1>
-
 </header>
 
 <main id="posts" class="p-6 grid md:grid-cols-3 gap-6"></main>
@@ -33,9 +41,9 @@ body{background:#f1f5f9;}
 
 <!-- LOGIN -->
 <div id="login" class="fixed inset-0 bg-black/70 flex justify-center items-center">
-<div class="bg-white p-4 w-80 rounded">
-<input id="pass" placeholder="Enter Password" class="border p-2 mb-2 w-full">
-<button id="loginBtn" class="bg-black text-white p-2 w-full">Login</button>
+<div class="bg-white p-4 w-80">
+<input id="pass" placeholder="Password" class="border p-2 mb-2 w-full">
+<button id="loginBtn" class="bg-black text-white w-full p-2">Login</button>
 </div>
 </div>
 
@@ -52,7 +60,7 @@ body{background:#f1f5f9;}
 
 <script>
 
-// 🔥 FIREBASE CONFIG
+// 🔥 FIREBASE
 const firebaseConfig = {
 apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
 authDomain:"factzone-a9ace.firebaseapp.com",
@@ -62,74 +70,81 @@ projectId:"factzone-a9ace"
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// 🔐 PASSWORD
-const ADMIN_PASS = "1234";
+const ADMIN_PASS="1234";
 
 let isAdmin=false, editId=null, img="";
 
+// FORMAT
 function f(n){
 if(n>=1e6)return(n/1e6).toFixed(1)+"M";
 if(n>=1e3)return(n/1e3).toFixed(1)+"K";
 return n||0;
 }
 
-// LOGIN OPEN
+// LIKE STORAGE
+function isLiked(id){
+return localStorage.getItem("like_"+id)==="true";
+}
+function setLiked(id,val){
+localStorage.setItem("like_"+id,val);
+}
+
+// LOGIN
 function openLogin(){
-document.getElementById("login").classList.remove("hidden");
+login.classList.remove("hidden");
 }
 
-// LOGIN FIX
-window.onload = function(){
+window.onload=()=>{
 
-document.getElementById("loginBtn").onclick = function(){
+loginBtn.onclick=()=>{
+let val=pass.value.trim();
 
-let val = document.getElementById("pass").value.trim();
-
-if(val === ADMIN_PASS){
-isAdmin = true;
-document.getElementById("addBtn").classList.remove("hidden");
-document.getElementById("login").classList.add("hidden");
+if(val===ADMIN_PASS){
+isAdmin=true;
+addBtn.classList.remove("hidden");
+login.classList.add("hidden");
 load();
-}else{
-alert("Wrong Password");
-}
+}else alert("Wrong Password");
 };
 
 // ADMIN OPEN
-document.getElementById("addBtn").onclick = ()=>{
+addBtn.onclick=()=>{
 editId=null;
-document.getElementById("admin").classList.remove("hidden");
+admin.classList.remove("hidden");
 };
 
 // IMAGE
-document.getElementById("file").onchange=e=>{
+file.onchange=e=>{
 let r=new FileReader();
 r.onload=()=>{
 img=r.result;
-document.getElementById("preview").src=img;
-document.getElementById("preview").classList.remove("hidden");
+preview.src=img;
+preview.classList.remove("hidden");
 };
 if(e.target.files[0])r.readAsDataURL(e.target.files[0]);
 };
 
 // SAVE
-document.getElementById("saveBtn").onclick=async ()=>{
-let t=title.value;
-let c=content.value;
-
-if(!t||!c)return alert("Fill all");
+saveBtn.onclick=async ()=>{
+if(!title.value||!content.value)return alert("Fill all");
 
 if(editId){
 await db.collection("posts").doc(editId).update({
-title:t,content:c,image:img
+title:title.value,
+content:content.value,
+image:img
 });
 }else{
 await db.collection("posts").add({
-title:t,content:c,image:img,likes:0,views:0
+title:title.value,
+content:content.value,
+image:img,
+likes:0,
+views:0
 });
 }
 
-document.getElementById("admin").classList.add("hidden");
+admin.classList.add("hidden");
 load();
 };
 
@@ -137,7 +152,7 @@ load();
 
 };
 
-// LOAD POSTS
+// LOAD
 async function load(){
 posts.innerHTML="";
 let snap=await db.collection("posts").get();
@@ -145,16 +160,109 @@ let snap=await db.collection("posts").get();
 snap.forEach(doc=>{
 let p=doc.data();
 
+let liked=isLiked(doc.id);
+
 let card=document.createElement("div");
-card.className="bg-white rounded shadow cursor-pointer p-3";
+card.className="bg-white rounded shadow overflow-hidden cursor-pointer";
 
 card.innerHTML=`
+<div class="relative">
+${p.image?`<img src="${p.image}" class="h-40 w-full object-cover">`:''}
+<div class="heart">❤️</div>
+</div>
+
+<div class="p-3">
 <h2 class="font-bold">${p.title}</h2>
 <p>${(p.content||"").substring(0,60)}...</p>
+
 <p class="text-sm text-gray-500">👁️ ${f(p.views)} views</p>
+
+<span class="likeBtn cursor-pointer ${liked?'text-red-500':'text-gray-400'}">
+❤️ ${f(p.likes||0)}
+</span>
+
+${isAdmin?`
+<div class="mt-2">
+<button class="edit text-blue-500">Edit</button>
+<button class="del text-red-500 ml-2">Delete</button>
+</div>`:''}
+</div>
 `;
 
 card.onclick=()=>location.href="details.html?id="+doc.id;
+
+// LIKE
+const likeBtn=card.querySelector(".likeBtn");
+const heart=card.querySelector(".heart");
+const box=card.querySelector(".relative");
+
+likeBtn.onclick=e=>{
+e.stopPropagation();
+
+let liked=isLiked(doc.id);
+
+if(liked){
+db.collection("posts").doc(doc.id).update({
+likes:firebase.firestore.FieldValue.increment(-1)
+});
+setLiked(doc.id,false);
+p.likes--;
+}else{
+db.collection("posts").doc(doc.id).update({
+likes:firebase.firestore.FieldValue.increment(1)
+});
+setLiked(doc.id,true);
+p.likes++;
+}
+
+likeBtn.innerText="❤️ "+f(p.likes);
+likeBtn.classList.toggle("text-red-500");
+};
+
+// DOUBLE TAP
+box.ondblclick=e=>{
+e.stopPropagation();
+
+if(isLiked(doc.id)) return;
+
+heart.classList.add("show");
+setTimeout(()=>heart.classList.remove("show"),600);
+
+db.collection("posts").doc(doc.id).update({
+likes:firebase.firestore.FieldValue.increment(1)
+});
+
+setLiked(doc.id,true);
+p.likes++;
+
+likeBtn.innerText="❤️ "+f(p.likes);
+likeBtn.classList.add("text-red-500");
+};
+
+// ADMIN
+if(isAdmin){
+card.querySelector(".edit").onclick=e=>{
+e.stopPropagation();
+editId=doc.id;
+title.value=p.title;
+content.value=p.content;
+img=p.image||"";
+
+if(p.image){
+preview.src=p.image;
+preview.classList.remove("hidden");
+}
+admin.classList.remove("hidden");
+};
+
+card.querySelector(".del").onclick=async e=>{
+e.stopPropagation();
+if(confirm("Delete?")){
+await db.collection("posts").doc(doc.id).delete();
+load();
+}
+};
+}
 
 posts.appendChild(card);
 });
