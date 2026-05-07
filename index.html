@@ -7,178 +7,208 @@
 <link rel="icon" href="logo.svg">
 
 <script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <style>
-body{background:#f1f5f9;}
+
+/* 🔥 Instagram Gradient */
+body{
+margin:0;
+min-height:100vh;
+background: linear-gradient(135deg,#fdf497,#fd5949,#d6249f,#285AEB);
+background-size: 300% 300%;
+animation: gradient 10s ease infinite;
+font-family:sans-serif;
+}
+@keyframes gradient{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+/* Card */
+.card{
+background:rgba(255,255,255,0.95);
+border-radius:16px;
+padding:16px;
+box-shadow:0 10px 25px rgba(0,0,0,0.15);
+position:relative;
+overflow:hidden;
+}
+
+/* Heart animation */
+.heart{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%) scale(0);
+font-size:60px;
+opacity:0;
+}
+.show{
+animation:pop .6s;
+}
+@keyframes pop{
+0%{transform:translate(-50%,-50%) scale(0);opacity:0;}
+50%{transform:translate(-50%,-50%) scale(1.3);opacity:1;}
+100%{transform:translate(-50%,-50%) scale(1);opacity:0;}
+}
+
 </style>
 </head>
 
 <body>
 
-<header id="logo" class="flex justify-center gap-2 p-4 bg-white shadow cursor-pointer">
-<img src="logo.svg" class="w-8">
-<h1 class="text-xl font-bold">FactZone</h1>
+<header class="flex justify-between items-center p-4 bg-white/80 backdrop-blur shadow">
+
+<h1 onclick="openLogin()" class="font-bold text-xl flex items-center gap-2 cursor-pointer">
+<img src="logo.svg" class="w-6"> FactZone
+</h1>
+
+<i class="fa-solid fa-lock cursor-pointer" onclick="openLogin()"></i>
+
 </header>
+
+<div class="p-4">
+<input id="search" placeholder="Search..." class="w-full p-3 rounded border">
+</div>
 
 <main id="posts" class="p-6 grid md:grid-cols-3 gap-6"></main>
 
-<button id="addBtn" class="hidden fixed bottom-5 right-5 bg-black text-white p-4 rounded-full">+</button>
+<button id="addBtn"
+class="hidden fixed bottom-6 right-6 bg-black text-white w-14 h-14 rounded-full flex items-center justify-center">
+<i class="fa-solid fa-plus"></i>
+</button>
 
 <!-- LOGIN -->
-<div id="login" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
-<div class="bg-white p-4 w-80 rounded">
-<input id="pass" placeholder="Password" class="border p-2 mb-2 w-full">
-<button id="loginBtn" class="bg-black text-white w-full p-2">Login</button>
+<div id="login" class="hidden fixed inset-0 bg-black/50 flex justify-center items-center">
+<div class="bg-white p-6 w-80 rounded">
+<input id="pass" placeholder="Password" class="w-full border p-2 mb-2">
+<button onclick="login()" class="bg-black text-white w-full p-2">Login</button>
 </div>
 </div>
 
 <!-- ADMIN -->
-<div id="admin" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
-<div class="bg-white p-4 w-96">
+<div id="admin" class="hidden fixed inset-0 bg-black/50 flex justify-center items-center">
+<div class="bg-white p-6 w-96 rounded">
 <input id="title" placeholder="Title" class="w-full border p-2 mb-2">
 <textarea id="content" placeholder="Content" class="w-full border p-2 mb-2"></textarea>
-<button id="saveBtn" class="bg-black text-white w-full p-2">Save</button>
+<button onclick="savePost()" class="bg-black text-white w-full p-2">Save</button>
 </div>
 </div>
 
 <script>
 
 const firebaseConfig = {
-apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
+apiKey:"AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
 authDomain:"factzone-a9ace.firebaseapp.com",
 projectId:"factzone-a9ace"
 };
 
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+const db=firebase.firestore();
 
-const ADMIN_PASS = "Avnish@";
+const ADMIN_PASS="Avnish@";
+let isAdmin=false,editId=null;
 
-let isAdmin = false;
-let editId = null;
+function openLogin(){ login.classList.remove("hidden"); }
 
-// LOGIN OPEN
-logo.onclick = () => login.classList.remove("hidden");
-
-// LOGIN
-loginBtn.onclick = () => {
-if(pass.value === ADMIN_PASS){
-isAdmin = true;
+function login(){
+if(pass.value===ADMIN_PASS){
+isAdmin=true;
 addBtn.classList.remove("hidden");
 login.classList.add("hidden");
 load();
-}else{
-alert("Wrong password");
+}else alert("Wrong password");
 }
-};
 
-// OPEN ADMIN
-addBtn.onclick = () => {
-editId = null;
-admin.classList.remove("hidden");
-};
+addBtn.onclick=()=>{ editId=null; admin.classList.remove("hidden"); };
 
-// SAVE
-saveBtn.onclick = async () => {
-
-let t = title.value.trim();
-let c = content.value.trim();
-
-if(!t || !c){
-alert("Fill all");
-return;
-}
+async function savePost(){
+let t=title.value.trim(),c=content.value.trim();
+if(!t||!c)return alert("Fill all");
 
 if(editId){
-await db.collection("posts").doc(editId).update({
-title:t,
-content:c,
-adminKey:ADMIN_PASS
-});
+await db.collection("posts").doc(editId).update({title:t,content:c});
 }else{
-await db.collection("posts").add({
-title:t,
-content:c,
-likes:0,
-adminKey:ADMIN_PASS
-});
+await db.collection("posts").add({title:t,content:c,likes:0,views:0});
 }
-
 admin.classList.add("hidden");
 load();
-};
+}
 
-// LOAD POSTS
 async function load(){
 posts.innerHTML="";
-
-let snap = await db.collection("posts").get();
+let snap=await db.collection("posts").get();
 
 snap.forEach(doc=>{
+let p=doc.data();
 
-let p = doc.data();
+let card=document.createElement("div");
+card.className="card cursor-pointer";
 
-let div = document.createElement("div");
-div.className="bg-white p-4 rounded shadow cursor-pointer";
+card.innerHTML=`
+<div class="heart">❤️</div>
 
-div.innerHTML = `
 <h2 class="font-bold">${p.title}</h2>
 <p>${p.content.substring(0,80)}...</p>
 
-<div class="flex justify-between mt-2">
-<span class="like text-red-500 cursor-pointer">❤️ ${p.likes||0}</span>
+<p class="text-sm text-gray-500 mt-2">👁️ ${p.views||0}</p>
 
-${isAdmin ? `
-<div>
-<button class="edit">✏️</button>
-<button class="del">🗑️</button>
-</div>` : ""}
+<div class="flex justify-between mt-2">
+<span class="likeBtn text-red-500 cursor-pointer">❤️ ${p.likes||0}</span>
 </div>
 `;
 
-// OPEN DETAILS
-div.onclick = () => {
-window.location.href = "details.html?id="+doc.id;
-};
+let heart=card.querySelector(".heart");
+let likeBtn=card.querySelector(".likeBtn");
 
-// LIKE
-div.querySelector(".like").onclick = (e)=>{
+// DOUBLE TAP ❤️
+card.ondblclick=async e=>{
 e.stopPropagation();
 
+heart.classList.add("show");
+setTimeout(()=>heart.classList.remove("show"),600);
+
+await db.collection("posts").doc(doc.id).update({
+likes:firebase.firestore.FieldValue.increment(1)
+});
+};
+
+// LIKE BUTTON
+likeBtn.onclick=e=>{
+e.stopPropagation();
 db.collection("posts").doc(doc.id).update({
-likes: firebase.firestore.FieldValue.increment(1)
+likes:firebase.firestore.FieldValue.increment(1)
 });
 };
 
-// ADMIN
-if(isAdmin){
+// VIEW + OPEN
+card.onclick=async ()=>{
+let ref=db.collection("posts").doc(doc.id);
 
-div.querySelector(".edit").onclick = (e)=>{
-e.stopPropagation();
-
-editId = doc.id;
-title.value = p.title;
-content.value = p.content;
-admin.classList.remove("hidden");
-};
-
-div.querySelector(".del").onclick = async (e)=>{
-e.stopPropagation();
-
-if(confirm("Delete?")){
-await db.collection("posts").doc(doc.id).delete();
-load();
-}
-};
-
+if(!localStorage.getItem("view_"+doc.id)){
+await ref.update({views:firebase.firestore.FieldValue.increment(1)});
+localStorage.setItem("view_"+doc.id,"yes");
 }
 
-posts.appendChild(div);
+location.href="details.html?id="+doc.id;
+};
+
+posts.appendChild(card);
 
 });
 }
+
+search.oninput=()=>{
+let v=search.value.toLowerCase();
+document.querySelectorAll(".card").forEach(c=>{
+c.style.display=c.innerText.toLowerCase().includes(v)?"block":"none";
+});
+};
 
 load();
 
