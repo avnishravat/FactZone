@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FactZone</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
@@ -10,185 +9,203 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <style>
-body { background: linear-gradient(135deg,#eef2ff,#f8fafc); }
-
-.heart {
-  position:absolute;
-  top:50%; left:50%;
-  transform:translate(-50%,-50%) scale(0);
-  font-size:70px;
-  opacity:0;
-}
-.show-heart { animation: pop 0.6s ease; }
-
-@keyframes pop {
-  0%{transform:translate(-50%,-50%) scale(0);opacity:0;}
-  50%{transform:translate(-50%,-50%) scale(1.3);opacity:1;}
-  100%{transform:translate(-50%,-50%) scale(1);opacity:0;}
+body{background:#f1f5f9;}
+.heart{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);font-size:70px;opacity:0;}
+.show{animation:pop .6s;}
+@keyframes pop{
+0%{transform:translate(-50%,-50%) scale(0);opacity:0;}
+50%{transform:translate(-50%,-50%) scale(1.3);opacity:1;}
+100%{transform:translate(-50%,-50%) scale(1);opacity:0;}
 }
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
-<header class="flex items-center justify-center gap-3 p-4 bg-white shadow">
-  <img src="logo.svg" class="h-8">
-  <h1 onclick="openLogin()" class="text-2xl font-bold cursor-pointer">FactZone</h1>
+<header class="p-4 text-center bg-white shadow">
+<h1 onclick="openLogin()" class="text-2xl font-bold cursor-pointer">⚡ FactZone</h1>
 </header>
 
 <main id="posts" class="p-6 grid md:grid-cols-3 gap-6"></main>
 
-<button id="adminBtn" onclick="openAdmin()" 
-class="hidden fixed bottom-5 right-5 bg-black text-white px-4 py-3 rounded-full">+</button>
+<button id="addBtn" onclick="openAdmin()" 
+class="hidden fixed bottom-5 right-5 bg-black text-white p-4 rounded-full">+</button>
 
 <!-- LOGIN -->
-<div id="loginModal" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
-  <div class="bg-white p-5 rounded">
-    <input id="adminPass" type="password" placeholder="Enter Password" class="border p-2 mb-2">
-    <button onclick="checkLogin()" class="bg-black text-white px-4 py-2 w-full">Login</button>
-  </div>
+<div id="login" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
+<div class="bg-white p-4">
+<input id="pass" placeholder="Password" class="border p-2 mb-2">
+<button onclick="checkLogin()" class="bg-black text-white p-2 w-full">Login</button>
+</div>
 </div>
 
 <!-- ADMIN -->
-<div id="adminModal" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
-  <div class="bg-white p-5 rounded w-96">
-    <input id="title" placeholder="Title" class="w-full border p-2 mb-2">
-    <textarea id="content" placeholder="Content" class="w-full border p-2 mb-2"></textarea>
-
-    <input type="file" id="fileInput">
-    <img id="preview" class="hidden w-full h-40 object-cover mt-2">
-
-    <button onclick="savePost()" class="bg-black text-white w-full py-2 mt-2">Save</button>
-  </div>
+<div id="admin" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
+<div class="bg-white p-4 w-96">
+<input id="title" placeholder="Title" class="w-full border p-2 mb-2">
+<textarea id="content" placeholder="Content" class="w-full border p-2 mb-2"></textarea>
+<input type="file" id="file">
+<img id="preview" class="hidden w-full h-40 object-cover mt-2">
+<button onclick="savePost()" class="bg-black text-white w-full p-2 mt-2">Save</button>
+</div>
 </div>
 
 <script>
 
 // 🔥 API KEY डालो
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "factzone-a9ace.firebaseapp.com",
-  projectId: "factzone-a9ace"
+apiKey:"AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
+authDomain:"factzone-a9ace.firebaseapp.com",
+projectId:"factzone-a9ace"
 };
 
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+const db=firebase.firestore();
 
-// 🔐 SIMPLE ADMIN PASSWORD
-const ADMIN_PASSWORD = "Avnish@";
+// 🔐 ADMIN PASSWORD
+const ADMIN_PASS="Avnish@";
 
-let isAdmin = false;
-let uploadedImage = "";
-let editId = null;
+let isAdmin=false, editId=null, img="";
+
+// FORMAT
+function f(n){
+if(n>=1e6)return(n/1e6).toFixed(1)+"M";
+if(n>=1e3)return(n/1e3).toFixed(1)+"K";
+return n||0;
+}
 
 // LOGIN
-function openLogin(){ loginModal.classList.remove("hidden"); }
-
+function openLogin(){login.classList.remove("hidden")}
 function checkLogin(){
-  if(adminPass.value === ADMIN_PASSWORD){
-    isAdmin = true;
-    adminBtn.classList.remove("hidden");
-    loginModal.classList.add("hidden");
-    fetchPosts();
-  } else {
-    alert("Wrong Password");
-  }
+if(pass.value===FACTZONE_SECRET_123){
+isAdmin=true;
+addBtn.classList.remove("hidden");
+login.classList.add("hidden");
+load();
+}else alert("Wrong Password");
 }
 
 // IMAGE
-fileInput.onchange = e=>{
-  const reader = new FileReader();
-  reader.onload = ()=>{
-    uploadedImage = reader.result;
-    preview.src = uploadedImage;
-    preview.classList.remove("hidden");
-  };
-  reader.readAsDataURL(e.target.files[0]);
+file.onchange=e=>{
+let r=new FileReader();
+r.onload=()=>{img=r.result;preview.src=img;preview.classList.remove("hidden");}
+if(e.target.files[0])r.readAsDataURL(e.target.files[0]);
 };
 
-// FETCH POSTS
-async function fetchPosts(){
-  posts.innerHTML = "";
+// LOAD POSTS
+async function load(){
+posts.innerHTML="";
+let snap=await db.collection("posts").get();
 
-  const snap = await db.collection("posts").get();
+snap.forEach(doc=>{
+let p=doc.data();
 
-  snap.forEach(doc=>{
-    const p = doc.data();
+let card=document.createElement("div");
+card.className="bg-white rounded shadow cursor-pointer overflow-hidden";
 
-    const card = document.createElement("div");
-    card.className = "bg-white rounded-xl shadow overflow-hidden cursor-pointer";
+card.innerHTML=`
+<div class="relative">
+${p.image?`<img src="${p.image}" class="h-40 w-full object-cover">`:''}
+<div class="heart">❤️</div>
+</div>
 
-    card.innerHTML = `
-      ${p.image ? `<img src="${p.image}" class="h-44 w-full object-cover">` : ""}
-      <div class="p-4">
-        <h2 class="font-bold">${p.title}</h2>
-        <p>${p.content.substring(0,80)}...</p>
+<div class="p-3">
+<h2 class="font-bold">${p.title}</h2>
+<p>${(p.content||"").substring(0,70)}...</p>
 
-        ${isAdmin ? `
-        <div class="mt-2">
-          <button class="edit text-blue-500">Edit</button>
-          <button class="del text-red-500 ml-2">Delete</button>
-        </div>` : ""}
-      </div>
-    `;
+<p class="text-sm text-gray-500">👁️ ${f(p.views)} views</p>
 
-    // ✅ POST OPEN FIX
-    card.onclick = () => {
-      window.location.href = "details.html?id=" + doc.id;
-    };
+<div class="flex justify-between mt-2">
+<span class="like cursor-pointer text-red-500">❤️ ${f(p.likes)}</span>
+</div>
 
-    // ADMIN
-    if(isAdmin){
-      card.querySelector(".edit").onclick = e=>{
-        e.stopPropagation();
-        editId = doc.id;
-        title.value = p.title;
-        content.value = p.content;
-        uploadedImage = p.image || "";
-        preview.src = p.image;
-        preview.classList.remove("hidden");
-        adminModal.classList.remove("hidden");
-      };
+${isAdmin?`
+<button class="edit text-blue-500">Edit</button>
+<button class="del text-red-500">Delete</button>`:''}
+</div>
+`;
 
-      card.querySelector(".del").onclick = async e=>{
-        e.stopPropagation();
-        if(confirm("Delete?")){
-          await db.collection("posts").doc(doc.id).delete();
-          fetchPosts();
-        }
-      };
-    }
+card.onclick=()=>location.href="details.html?id="+doc.id;
 
-    posts.appendChild(card);
-  });
+// LIKE
+let like=card.querySelector(".like");
+like.onclick=e=>{
+e.stopPropagation();
+db.collection("posts").doc(doc.id).update({
+likes:firebase.firestore.FieldValue.increment(1)
+});
+};
+
+// DOUBLE TAP
+let box=card.querySelector(".relative");
+let heart=card.querySelector(".heart");
+
+box.ondblclick=e=>{
+e.stopPropagation();
+heart.classList.add("show");
+setTimeout(()=>heart.classList.remove("show"),600);
+
+db.collection("posts").doc(doc.id).update({
+likes:firebase.firestore.FieldValue.increment(1)
+});
+};
+
+// ADMIN
+if(isAdmin){
+card.querySelector(".edit").onclick=e=>{
+e.stopPropagation();
+editId=doc.id;
+title.value=p.title;
+content.value=p.content;
+img=p.image||"";
+if(p.image){
+preview.src=p.image;
+preview.classList.remove("hidden");
+}
+admin.classList.remove("hidden");
+};
+
+card.querySelector(".del").onclick=async e=>{
+e.stopPropagation();
+if(confirm("Delete?")){
+await db.collection("posts").doc(doc.id).delete();
+load();
+}
+};
 }
 
-// SAVE
+posts.appendChild(card);
+});
+}
+
+// SAVE POST
 async function savePost(){
-  if(!title.value || !content.value) return alert("Fill all");
+if(!title.value||!content.value)return alert("Fill all");
 
-  if(editId){
-    await db.collection("posts").doc(editId).update({
-      title: title.value,
-      content: content.value,
-      image: uploadedImage
-    });
-  } else {
-    await db.collection("posts").add({
-      title: title.value,
-      content: content.value,
-      image: uploadedImage
-    });
-  }
-
-  adminModal.classList.add("hidden");
-  fetchPosts();
+if(editId){
+await db.collection("posts").doc(editId).update({
+title:title.value,
+content:content.value,
+image:img,
+adminKey:"FACTZONE_SECRET_123"
+});
+}else{
+await db.collection("posts").add({
+title:title.value,
+content:content.value,
+image:img,
+likes:0,
+views:0,
+adminKey:"FACTZONE_SECRET_123"
+});
 }
 
-fetchPosts();
+admin.classList.add("hidden");
+load();
+}
+
+load();
 
 </script>
-
 </body>
 </html>
