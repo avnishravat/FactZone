@@ -6,10 +6,8 @@
 <title>FactZone</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
-
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
 <style>
 body { background: linear-gradient(135deg,#eef2ff,#f8fafc); }
@@ -18,7 +16,8 @@ body { background: linear-gradient(135deg,#eef2ff,#f8fafc); }
   position:absolute;
   top:50%; left:50%;
   transform:translate(-50%,-50%) scale(0);
-  font-size:70px; opacity:0;
+  font-size:70px;
+  opacity:0;
 }
 .show-heart { animation: pop 0.6s ease; }
 
@@ -32,8 +31,10 @@ body { background: linear-gradient(135deg,#eef2ff,#f8fafc); }
 
 <body>
 
-<header class="text-center p-4 bg-white shadow">
-  <h1 onclick="openLogin()" class="text-2xl font-bold cursor-pointer">⚡ FactZone</h1>
+<!-- HEADER -->
+<header class="flex items-center justify-center gap-3 p-4 bg-white shadow">
+  <img src="logo.svg" class="h-8">
+  <h1 onclick="openLogin()" class="text-2xl font-bold cursor-pointer">FactZone</h1>
 </header>
 
 <main id="posts" class="p-6 grid md:grid-cols-3 gap-6"></main>
@@ -44,9 +45,8 @@ class="hidden fixed bottom-5 right-5 bg-black text-white px-4 py-3 rounded-full"
 <!-- LOGIN -->
 <div id="loginModal" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
   <div class="bg-white p-5 rounded">
-    <input id="email" placeholder="Email" class="border p-2 mb-2 w-full">
-    <input id="password" type="password" placeholder="Password" class="border p-2 mb-2 w-full">
-    <button onclick="login()" class="bg-black text-white px-4 py-2 w-full">Login</button>
+    <input id="adminPass" type="password" placeholder="Enter Password" class="border p-2 mb-2">
+    <button onclick="checkLogin()" class="bg-black text-white px-4 py-2 w-full">Login</button>
   </div>
 </div>
 
@@ -65,63 +65,43 @@ class="hidden fixed bottom-5 right-5 bg-black text-white px-4 py-3 rounded-full"
 
 <script>
 
-// 🔥🔥🔥 STEP 1: API KEY यहाँ डालो 🔥🔥🔥
+// 🔥 API KEY डालो
 const firebaseConfig = {
-  apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
+  apiKey: "YOUR_API_KEY",
   authDomain: "factzone-a9ace.firebaseapp.com",
   projectId: "factzone-a9ace"
 };
 
-// 🔥🔥🔥 STEP 2: ADMIN UID यहाँ डालो 🔥🔥🔥
-const ADMIN_UID = "FACTZONE_SECRET_123";
-
 firebase.initializeApp(firebaseConfig);
-
 const db = firebase.firestore();
-const auth = firebase.auth();
+
+// 🔐 SIMPLE ADMIN PASSWORD
+const ADMIN_PASSWORD = "Avnish@";
 
 let isAdmin = false;
 let uploadedImage = "";
 let editId = null;
 
-// ❤️ FORMAT
-function formatLikes(n){
-  if(n>=1000000) return (n/1000000).toFixed(1)+"M";
-  if(n>=1000) return (n/1000).toFixed(1)+"K";
-  return n;
-}
-
-// ❤️ LOCAL LIKE
-function isLiked(id){ return localStorage.getItem("like_"+id)==="true"; }
-function setLiked(id,v){ localStorage.setItem("like_"+id,v); }
-
 // LOGIN
 function openLogin(){ loginModal.classList.remove("hidden"); }
 
-function login(){
-  auth.signInWithEmailAndPassword(email.value,password.value)
-  .then(()=> loginModal.classList.add("hidden"))
-  .catch(e=> alert(e.message));
-}
-
-// AUTH CHECK
-auth.onAuthStateChanged(user=>{
-  if(user && user.uid===FACTZONE_SECRET_123){
+function checkLogin(){
+  if(adminPass.value === ADMIN_PASSWORD){
     isAdmin = true;
     adminBtn.classList.remove("hidden");
+    loginModal.classList.add("hidden");
+    fetchPosts();
   } else {
-    isAdmin = false;
-    adminBtn.classList.add("hidden");
+    alert("Wrong Password");
   }
-  fetchPosts();
-});
+}
 
 // IMAGE
-fileInput.onchange=e=>{
-  const reader=new FileReader();
-  reader.onload=()=>{
-    uploadedImage=reader.result;
-    preview.src=uploadedImage;
+fileInput.onchange = e=>{
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    uploadedImage = reader.result;
+    preview.src = uploadedImage;
     preview.classList.remove("hidden");
   };
   reader.readAsDataURL(e.target.files[0]);
@@ -129,93 +109,49 @@ fileInput.onchange=e=>{
 
 // FETCH POSTS
 async function fetchPosts(){
-  posts.innerHTML="";
-  const snap=await db.collection("posts").get();
+  posts.innerHTML = "";
+
+  const snap = await db.collection("posts").get();
 
   snap.forEach(doc=>{
-    const p=doc.data();
-    const liked=isLiked(doc.id);
+    const p = doc.data();
 
-    const card=document.createElement("div");
-    card.className="bg-white rounded-xl shadow overflow-hidden cursor-pointer";
+    const card = document.createElement("div");
+    card.className = "bg-white rounded-xl shadow overflow-hidden cursor-pointer";
 
-    card.innerHTML=`
-      <div class="relative imgBox">
-        ${p.image?`<img src="${p.image}" class="h-44 w-full object-cover">`:''}
-        <div class="heart">❤️</div>
-      </div>
-
+    card.innerHTML = `
+      ${p.image ? `<img src="${p.image}" class="h-44 w-full object-cover">` : ""}
       <div class="p-4">
         <h2 class="font-bold">${p.title}</h2>
         <p>${p.content.substring(0,80)}...</p>
 
-        <span class="likeBtn ${liked?'text-red-500':'text-gray-400'} cursor-pointer">
-          ❤️ ${formatLikes(p.likes||0)}
-        </span>
-
-        ${isAdmin?`
+        ${isAdmin ? `
         <div class="mt-2">
           <button class="edit text-blue-500">Edit</button>
           <button class="del text-red-500 ml-2">Delete</button>
-        </div>`:''}
+        </div>` : ""}
       </div>
     `;
 
-    const likeBtn=card.querySelector(".likeBtn");
-    const imgBox=card.querySelector(".imgBox");
-    const heart=card.querySelector(".heart");
-
-    // LIKE
-    likeBtn.onclick=e=>{
-      e.stopPropagation();
-
-      let liked=isLiked(doc.id);
-
-      db.collection("posts").doc(doc.id).update({
-        likes: firebase.firestore.FieldValue.increment(liked?-1:1)
-      });
-
-      setLiked(doc.id,!liked);
-      p.likes += liked?-1:1;
-
-      likeBtn.innerText="❤️ "+formatLikes(p.likes);
-      likeBtn.classList.toggle("text-red-500");
-      likeBtn.classList.toggle("text-gray-400");
-    };
-
-    // DOUBLE TAP
-    imgBox.ondblclick=e=>{
-      e.stopPropagation();
-      if(isLiked(doc.id)) return;
-
-      heart.classList.add("show-heart");
-      setTimeout(()=>heart.classList.remove("show-heart"),600);
-
-      db.collection("posts").doc(doc.id).update({
-        likes: firebase.firestore.FieldValue.increment(1)
-      });
-
-      setLiked(doc.id,true);
-      p.likes++;
-
-      likeBtn.innerText="❤️ "+formatLikes(p.likes);
-      likeBtn.classList.add("text-red-500");
+    // ✅ POST OPEN FIX
+    card.onclick = () => {
+      window.location.href = "details.html?id=" + doc.id;
     };
 
     // ADMIN
     if(isAdmin){
-      card.querySelector(".edit").onclick=e=>{
+      card.querySelector(".edit").onclick = e=>{
         e.stopPropagation();
-        editId=doc.id;
-        title.value=p.title;
-        content.value=p.content;
-        uploadedImage=p.image||"";
-        preview.src=p.image;
+        editId = doc.id;
+        title.value = p.title;
+        content.value = p.content;
+        uploadedImage = p.image || "";
+        preview.src = p.image;
         preview.classList.remove("hidden");
         adminModal.classList.remove("hidden");
       };
 
-      card.querySelector(".del").onclick=async e=>{
+      card.querySelector(".del").onclick = async e=>{
         e.stopPropagation();
         if(confirm("Delete?")){
           await db.collection("posts").doc(doc.id).delete();
@@ -230,26 +166,27 @@ async function fetchPosts(){
 
 // SAVE
 async function savePost(){
-  if(!title.value||!content.value) return alert("Fill all");
+  if(!title.value || !content.value) return alert("Fill all");
 
   if(editId){
     await db.collection("posts").doc(editId).update({
-      title:title.value,
-      content:content.value,
-      image:uploadedImage
+      title: title.value,
+      content: content.value,
+      image: uploadedImage
     });
   } else {
     await db.collection("posts").add({
-      title:title.value,
-      content:content.value,
-      image:uploadedImage,
-      likes:0
+      title: title.value,
+      content: content.value,
+      image: uploadedImage
     });
   }
 
   adminModal.classList.add("hidden");
   fetchPosts();
 }
+
+fetchPosts();
 
 </script>
 
