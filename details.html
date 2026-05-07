@@ -11,6 +11,10 @@
 
 <body class="p-6">
 
+<button onclick="goBack()" class="mb-4 bg-black text-white px-4 py-2 rounded">
+⬅ Back
+</button>
+
 <h1 id="t" class="text-2xl font-bold mb-2"></h1>
 <img id="i" class="w-full mb-4">
 <p id="c"></p>
@@ -19,7 +23,7 @@
 <script>
 
 const firebaseConfig = {
-apiKey:"AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
+apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
 authDomain:"factzone-a9ace.firebaseapp.com",
 projectId:"factzone-a9ace"
 };
@@ -35,6 +39,11 @@ if(n>=1e3)return(n/1e3).toFixed(1)+"K";
 return n||0;
 }
 
+// BACK BUTTON
+function goBack(){
+window.history.back();
+}
+
 async function load(){
 let ref=db.collection("posts").doc(id);
 let doc=await ref.get();
@@ -46,7 +55,6 @@ if(p.image)i.src=p.image;
 
 v.innerText="👁️ "+f(p.views)+" views";
 
-// VIEW COUNT
 if(!localStorage.getItem("view_"+id)){
 await ref.update({
 views:firebase.firestore.FieldValue.increment(1)
