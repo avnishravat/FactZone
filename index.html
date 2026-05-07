@@ -17,7 +17,7 @@ body{background:#f1f5f9;}
 
 <body>
 
-<header id="logoBtn" class="flex justify-center gap-2 p-4 bg-white shadow cursor-pointer">
+<header id="logo" class="flex justify-center gap-2 p-4 bg-white shadow cursor-pointer">
 <img src="logo.svg" class="w-8">
 <h1 class="text-xl font-bold">FactZone</h1>
 </header>
@@ -27,25 +27,24 @@ body{background:#f1f5f9;}
 <button id="addBtn" class="hidden fixed bottom-5 right-5 bg-black text-white p-4 rounded-full">+</button>
 
 <!-- LOGIN -->
-<div id="loginBox" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
+<div id="login" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
 <div class="bg-white p-4 w-80 rounded">
-<input id="passInput" placeholder="Password" class="border p-2 mb-2 w-full">
+<input id="pass" placeholder="Password" class="border p-2 mb-2 w-full">
 <button id="loginBtn" class="bg-black text-white w-full p-2">Login</button>
 </div>
 </div>
 
 <!-- ADMIN -->
-<div id="adminBox" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
+<div id="admin" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
 <div class="bg-white p-4 w-96">
-<input id="titleInput" placeholder="Title" class="w-full border p-2 mb-2">
-<textarea id="contentInput" placeholder="Content" class="w-full border p-2 mb-2"></textarea>
-<button id="saveBtn" class="bg-black text-white w-full p-2 mt-2">Save</button>
+<input id="title" placeholder="Title" class="w-full border p-2 mb-2">
+<textarea id="content" placeholder="Content" class="w-full border p-2 mb-2"></textarea>
+<button id="saveBtn" class="bg-black text-white w-full p-2">Save</button>
 </div>
 </div>
 
 <script>
 
-// 🔥 CONFIG
 const firebaseConfig = {
 apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
 authDomain:"factzone-a9ace.firebaseapp.com",
@@ -60,152 +59,128 @@ const ADMIN_PASS = "Avnish@";
 let isAdmin = false;
 let editId = null;
 
-// DOM READY
-window.onload = () => {
+// LOGIN OPEN
+logo.onclick = () => login.classList.remove("hidden");
 
-const loginBox = document.getElementById("loginBox");
-const adminBox = document.getElementById("adminBox");
-
-// 🔥 OPEN LOGIN
-document.getElementById("logoBtn").onclick = () => {
-loginBox.classList.remove("hidden");
-};
-
-// 🔥 LOGIN FIX
-document.getElementById("loginBtn").onclick = () => {
-let val = document.getElementById("passInput").value.trim();
-
-if(val === ADMIN_PASS){
+// LOGIN
+loginBtn.onclick = () => {
+if(pass.value === ADMIN_PASS){
 isAdmin = true;
-document.getElementById("addBtn").classList.remove("hidden");
-loginBox.classList.add("hidden");
+addBtn.classList.remove("hidden");
+login.classList.add("hidden");
+load();
 }else{
-alert("Wrong Password");
+alert("Wrong password");
 }
 };
 
-// 🔥 OPEN ADMIN
-document.getElementById("addBtn").onclick = () => {
+// OPEN ADMIN
+addBtn.onclick = () => {
 editId = null;
-adminBox.classList.remove("hidden");
+admin.classList.remove("hidden");
 };
 
-// 🔥 SAVE POST
-document.getElementById("saveBtn").onclick = async () => {
+// SAVE
+saveBtn.onclick = async () => {
 
-let t = document.getElementById("titleInput").value.trim();
-let c = document.getElementById("contentInput").value.trim();
+let t = title.value.trim();
+let c = content.value.trim();
 
 if(!t || !c){
-alert("Fill all fields");
+alert("Fill all");
 return;
 }
-
-try{
 
 if(editId){
 await db.collection("posts").doc(editId).update({
 title:t,
 content:c,
-adminKey: ADMIN_PASS
+adminKey:ADMIN_PASS
 });
 }else{
 await db.collection("posts").add({
 title:t,
 content:c,
 likes:0,
-adminKey: ADMIN_PASS
+adminKey:ADMIN_PASS
 });
 }
 
-adminBox.classList.add("hidden");
-loadPosts();
-
-}catch(e){
-console.error(e);
-alert("Save failed");
-}
+admin.classList.add("hidden");
+load();
 };
 
-loadPosts();
-
-};
-
-// 🔥 LOAD POSTS
-async function loadPosts(){
-
-const postsDiv = document.getElementById("posts");
-postsDiv.innerHTML = "";
+// LOAD POSTS
+async function load(){
+posts.innerHTML="";
 
 let snap = await db.collection("posts").get();
 
-snap.forEach(doc => {
+snap.forEach(doc=>{
 
 let p = doc.data();
 
-let card = document.createElement("div");
-card.className = "bg-white p-4 rounded shadow cursor-pointer";
+let div = document.createElement("div");
+div.className="bg-white p-4 rounded shadow cursor-pointer";
 
-card.innerHTML = `
+div.innerHTML = `
 <h2 class="font-bold">${p.title}</h2>
-<p>${(p.content||"").substring(0,80)}...</p>
+<p>${p.content.substring(0,80)}...</p>
 
 <div class="flex justify-between mt-2">
-<span class="likeBtn text-red-500 cursor-pointer">❤️ ${p.likes||0}</span>
+<span class="like text-red-500 cursor-pointer">❤️ ${p.likes||0}</span>
 
 ${isAdmin ? `
 <div>
-<button class="editBtn">✏️</button>
-<button class="delBtn">🗑️</button>
+<button class="edit">✏️</button>
+<button class="del">🗑️</button>
 </div>` : ""}
 </div>
 `;
 
-
-// 🔥 OPEN POST
-card.onclick = () => {
-window.location.href = "details.html?id=" + doc.id;
+// OPEN DETAILS
+div.onclick = () => {
+window.location.href = "details.html?id="+doc.id;
 };
 
-// 🔥 LIKE
-card.querySelector(".likeBtn").onclick = (e)=>{
+// LIKE
+div.querySelector(".like").onclick = (e)=>{
 e.stopPropagation();
 
 db.collection("posts").doc(doc.id).update({
 likes: firebase.firestore.FieldValue.increment(1)
 });
-
 };
 
-// 🔥 ADMIN
+// ADMIN
 if(isAdmin){
 
-card.querySelector(".editBtn").onclick = (e)=>{
+div.querySelector(".edit").onclick = (e)=>{
 e.stopPropagation();
 
 editId = doc.id;
-titleInput.value = p.title;
-contentInput.value = p.content;
-
-document.getElementById("adminBox").classList.remove("hidden");
+title.value = p.title;
+content.value = p.content;
+admin.classList.remove("hidden");
 };
 
-card.querySelector(".delBtn").onclick = async (e)=>{
+div.querySelector(".del").onclick = async (e)=>{
 e.stopPropagation();
 
 if(confirm("Delete?")){
 await db.collection("posts").doc(doc.id).delete();
-loadPosts();
+load();
 }
 };
 
 }
 
-postsDiv.appendChild(card);
+posts.appendChild(div);
 
 });
-
 }
+
+load();
 
 </script>
 
