@@ -10,32 +10,24 @@
 
 <style>
 body{background:#f1f5f9;}
-.heart{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);font-size:70px;opacity:0;}
-.show{animation:pop .6s;}
-@keyframes pop{
-0%{transform:translate(-50%,-50%) scale(0);opacity:0;}
-50%{transform:translate(-50%,-50%) scale(1.3);opacity:1;}
-100%{transform:translate(-50%,-50%) scale(1);opacity:0;}
-}
 </style>
 </head>
 
 <body>
 
 <header class="p-4 text-center bg-white shadow">
-<h1 onclick="openLogin()" class="text-2xl font-bold cursor-pointer">⚡ FactZone</h1>
+<h1 id="logo" class="text-2xl font-bold cursor-pointer">⚡ FactZone</h1>
 </header>
 
 <main id="posts" class="p-6 grid md:grid-cols-3 gap-6"></main>
 
-<button id="addBtn" onclick="openAdmin()" 
-class="hidden fixed bottom-5 right-5 bg-black text-white p-4 rounded-full">+</button>
+<button id="addBtn" class="hidden fixed bottom-5 right-5 bg-black text-white p-4 rounded-full">+</button>
 
 <!-- LOGIN -->
 <div id="login" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
 <div class="bg-white p-4 w-80">
 <input id="pass" placeholder="Password" class="border p-2 mb-2 w-full">
-<button onclick="checkLogin()" class="bg-black text-white p-2 w-full">Login</button>
+<button id="loginBtn" class="bg-black text-white p-2 w-full">Login</button>
 </div>
 </div>
 
@@ -46,7 +38,7 @@ class="hidden fixed bottom-5 right-5 bg-black text-white p-4 rounded-full">+</bu
 <textarea id="content" placeholder="Content" class="w-full border p-2 mb-2"></textarea>
 <input type="file" id="file">
 <img id="preview" class="hidden w-full h-40 object-cover mt-2">
-<button onclick="savePost()" class="bg-black text-white w-full p-2 mt-2">Save</button>
+<button id="saveBtn" class="bg-black text-white w-full p-2 mt-2">Save</button>
 </div>
 </div>
 
@@ -54,35 +46,36 @@ class="hidden fixed bottom-5 right-5 bg-black text-white p-4 rounded-full">+</bu
 
 // 🔥 API KEY डालो
 const firebaseConfig = {
-apiKey:"AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
-authDomain:"factzone-a9ace.firebaseapp.com",
-projectId:"factzone-a9ace"
+  apiKey:"YOUR_API_KEY",
+  authDomain:"factzone-a9ace.firebaseapp.com",
+  projectId:"factzone-a9ace"
 };
 
 firebase.initializeApp(firebaseConfig);
 const db=firebase.firestore();
 
-// 🔐 ADMIN PASSWORD (CHANGE कर सकते हो)
-const ADMIN_PASS="Avnish@";
+const ADMIN_PASS="1234";
 
 let isAdmin=false, editId=null, img="";
 
-// FORMAT
 function f(n){
 if(n>=1e6)return(n/1e6).toFixed(1)+"M";
 if(n>=1e3)return(n/1e3).toFixed(1)+"K";
 return n||0;
 }
 
-// LOGIN
-function openLogin(){
-document.getElementById("login").classList.remove("hidden");
-}
+document.addEventListener("DOMContentLoaded", ()=>{
 
-function checkLogin(){
+// OPEN LOGIN
+document.getElementById("logo").onclick=()=>{
+document.getElementById("login").classList.remove("hidden");
+};
+
+// LOGIN CLICK FIX
+document.getElementById("loginBtn").onclick=()=>{
 let val=document.getElementById("pass").value.trim();
 
-if(val===FACTZONE_SECRET_123){
+if(val===ADMIN_PASS){
 isAdmin=true;
 document.getElementById("addBtn").classList.remove("hidden");
 document.getElementById("login").classList.add("hidden");
@@ -90,7 +83,13 @@ load();
 }else{
 alert("Wrong Password");
 }
-}
+};
+
+// OPEN ADMIN
+document.getElementById("addBtn").onclick=()=>{
+editId=null;
+document.getElementById("admin").classList.remove("hidden");
+};
 
 // IMAGE
 document.getElementById("file").onchange=e=>{
@@ -103,131 +102,53 @@ document.getElementById("preview").classList.remove("hidden");
 if(e.target.files[0])r.readAsDataURL(e.target.files[0]);
 };
 
+// SAVE
+document.getElementById("saveBtn").onclick=async ()=>{
+let t=title.value;
+let c=content.value;
+
+if(!t||!c)return alert("Fill all");
+
+if(editId){
+await db.collection("posts").doc(editId).update({
+title:t,content:c,image:img,adminKey:"FACTZONE_SECRET_123"
+});
+}else{
+await db.collection("posts").add({
+title:t,content:c,image:img,likes:0,views:0,adminKey:"FACTZONE_SECRET_123"
+});
+}
+
+document.getElementById("admin").classList.add("hidden");
+load();
+};
+
+load();
+
+});
+
 // LOAD POSTS
 async function load(){
-let posts=document.getElementById("posts");
 posts.innerHTML="";
-
 let snap=await db.collection("posts").get();
 
 snap.forEach(doc=>{
 let p=doc.data();
 
 let card=document.createElement("div");
-card.className="bg-white rounded shadow cursor-pointer overflow-hidden";
+card.className="bg-white rounded shadow cursor-pointer p-3";
 
 card.innerHTML=`
-<div class="relative">
-${p.image?`<img src="${p.image}" class="h-40 w-full object-cover">`:''}
-<div class="heart">❤️</div>
-</div>
-
-<div class="p-3">
 <h2 class="font-bold">${p.title}</h2>
-<p>${(p.content||"").substring(0,70)}...</p>
-
+<p>${(p.content||"").substring(0,60)}...</p>
 <p class="text-sm text-gray-500">👁️ ${f(p.views)} views</p>
-
-<div class="flex justify-between mt-2">
-<span class="like cursor-pointer text-red-500">❤️ ${f(p.likes)}</span>
-</div>
-
-${isAdmin?`
-<button class="edit text-blue-500">Edit</button>
-<button class="del text-red-500">Delete</button>`:''}
-</div>
 `;
 
 card.onclick=()=>location.href="details.html?id="+doc.id;
 
-// LIKE
-card.querySelector(".like").onclick=e=>{
-e.stopPropagation();
-db.collection("posts").doc(doc.id).update({
-likes:firebase.firestore.FieldValue.increment(1)
-});
-};
-
-// DOUBLE TAP
-let box=card.querySelector(".relative");
-let heart=card.querySelector(".heart");
-
-box.ondblclick=e=>{
-e.stopPropagation();
-heart.classList.add("show");
-setTimeout(()=>heart.classList.remove("show"),600);
-
-db.collection("posts").doc(doc.id).update({
-likes:firebase.firestore.FieldValue.increment(1)
-});
-};
-
-// ADMIN
-if(isAdmin){
-card.querySelector(".edit").onclick=e=>{
-e.stopPropagation();
-editId=doc.id;
-document.getElementById("title").value=p.title;
-document.getElementById("content").value=p.content;
-img=p.image||"";
-
-if(p.image){
-document.getElementById("preview").src=p.image;
-document.getElementById("preview").classList.remove("hidden");
-}
-
-document.getElementById("admin").classList.remove("hidden");
-};
-
-card.querySelector(".del").onclick=async e=>{
-e.stopPropagation();
-if(confirm("Delete?")){
-await db.collection("posts").doc(doc.id).delete();
-load();
-}
-};
-}
-
 posts.appendChild(card);
 });
 }
-
-// ADMIN OPEN
-function openAdmin(){
-editId=null;
-document.getElementById("admin").classList.remove("hidden");
-}
-
-// SAVE
-async function savePost(){
-let t=document.getElementById("title").value;
-let c=document.getElementById("content").value;
-
-if(!t||!c)return alert("Fill all");
-
-if(editId){
-await db.collection("posts").doc(editId).update({
-title:t,
-content:c,
-image:img,
-adminKey:"FACTZONE_SECRET_123"
-});
-}else{
-await db.collection("posts").add({
-title:t,
-content:c,
-image:img,
-likes:0,
-views:0,
-adminKey:"FACTZONE_SECRET_123"
-});
-}
-
-document.getElementById("admin").classList.add("hidden");
-load();
-}
-
-load();
 
 </script>
 
