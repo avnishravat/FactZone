@@ -15,11 +15,11 @@ body{background:#f1f5f9;}
 
 .heart{
 position:absolute;
-top:50%; left:50%;
+top:50%;left:50%;
 transform:translate(-50%,-50%) scale(0);
 font-size:60px;
 opacity:0;
-transition:0.4s;
+transition:.4s;
 }
 .show{
 transform:translate(-50%,-50%) scale(1.3);
@@ -39,9 +39,9 @@ opacity:1;
 
 <button id="addBtn" class="hidden fixed bottom-5 right-5 bg-black text-white p-4 rounded-full">+</button>
 
-<!-- LOGIN -->
-<div id="login" class="fixed inset-0 bg-black/70 flex justify-center items-center">
-<div class="bg-white p-4 w-80">
+<!-- LOGIN (hidden by default) -->
+<div id="login" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
+<div class="bg-white p-4 w-80 rounded">
 <input id="pass" placeholder="Password" class="border p-2 mb-2 w-full">
 <button id="loginBtn" class="bg-black text-white w-full p-2">Login</button>
 </div>
@@ -60,7 +60,7 @@ opacity:1;
 
 <script>
 
-// 🔥 FIREBASE
+// 🔥 FIREBASE CONFIG
 const firebaseConfig = {
 apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
 authDomain:"factzone-a9ace.firebaseapp.com",
@@ -70,6 +70,7 @@ projectId:"factzone-a9ace"
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
+// 🔐 ADMIN PASSWORD
 const ADMIN_PASS="1234";
 
 let isAdmin=false, editId=null, img="";
@@ -89,13 +90,15 @@ function setLiked(id,val){
 localStorage.setItem("like_"+id,val);
 }
 
-// LOGIN
+// LOGIN OPEN
 function openLogin(){
-login.classList.remove("hidden");
+document.getElementById("login").classList.remove("hidden");
 }
 
+// INIT
 window.onload=()=>{
 
+// LOGIN
 loginBtn.onclick=()=>{
 let val=pass.value.trim();
 
@@ -107,7 +110,7 @@ load();
 }else alert("Wrong Password");
 };
 
-// ADMIN OPEN
+// OPEN ADMIN
 addBtn.onclick=()=>{
 editId=null;
 admin.classList.remove("hidden");
@@ -124,37 +127,53 @@ preview.classList.remove("hidden");
 if(e.target.files[0])r.readAsDataURL(e.target.files[0]);
 };
 
-// SAVE
+// SAVE POST
 saveBtn.onclick=async ()=>{
-if(!title.value||!content.value)return alert("Fill all");
+
+let t=title.value.trim();
+let c=content.value.trim();
+
+if(!t||!c)return alert("Fill all");
+
+try{
 
 if(editId){
 await db.collection("posts").doc(editId).update({
-title:title.value,
-content:content.value,
-image:img
+title:t,
+content:c,
+image:img,
+adminKey:"FACTZONE_SECRET_123"
 });
 }else{
 await db.collection("posts").add({
-title:title.value,
-content:content.value,
+title:t,
+content:c,
 image:img,
 likes:0,
-views:0
+views:0,
+adminKey:"FACTZONE_SECRET_123"
 });
 }
 
+alert("Saved ✅");
 admin.classList.add("hidden");
 load();
+
+}catch(e){
+console.error(e);
+alert("❌ Save failed (check rules)");
+}
+
 };
 
 load();
 
 };
 
-// LOAD
+// LOAD POSTS
 async function load(){
 posts.innerHTML="";
+
 let snap=await db.collection("posts").get();
 
 snap.forEach(doc=>{
@@ -191,10 +210,10 @@ ${isAdmin?`
 
 card.onclick=()=>location.href="details.html?id="+doc.id;
 
-// LIKE
-const likeBtn=card.querySelector(".likeBtn");
-const heart=card.querySelector(".heart");
-const box=card.querySelector(".relative");
+// LIKE CLICK
+let likeBtn=card.querySelector(".likeBtn");
+let heart=card.querySelector(".heart");
+let box=card.querySelector(".relative");
 
 likeBtn.onclick=e=>{
 e.stopPropagation();
@@ -265,7 +284,9 @@ load();
 }
 
 posts.appendChild(card);
+
 });
+
 }
 
 </script>
