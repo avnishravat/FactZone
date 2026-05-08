@@ -2,23 +2,25 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width">
 <title>FactZone</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
-
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <style>
-body {
-  background: linear-gradient(135deg,#000,#1a1a1a,#000);
-  color:white;
-}
-.glass {
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(12px);
+body{background:#fff;color:#111;font-family:sans-serif;}
+header{background:#000;color:#fff;position:sticky;top:0;z-index:50;}
+
+.post{
+max-width:500px;
+margin:auto;
+margin-bottom:20px;
+background:#fff;
+border-radius:12px;
+box-shadow:0 4px 12px rgba(0,0,0,0.1);
+overflow:hidden;
 }
 </style>
 </head>
@@ -26,167 +28,202 @@ body {
 <body>
 
 <!-- HEADER -->
-<header class="flex justify-between items-center p-4 glass shadow-lg">
+<header class="flex justify-between items-center p-3">
 
-<h1 id="logo" class="text-2xl font-bold cursor-pointer">🔥 FactZone</h1>
+<h1 onclick="openLogin()" class="cursor-pointer font-bold text-lg">
+🔥 FactZone
+</h1>
 
-<input id="search" placeholder="Search..."
-class="px-4 py-2 rounded-full text-black w-1/2">
+<input id="search" placeholder="🔍 Search..."
+class="px-3 py-1 rounded-full text-black w-1/2 outline-none">
 
 </header>
 
-<!-- POSTS -->
-<main id="posts" class="p-6 grid md:grid-cols-3 gap-6"></main>
+<div id="posts" class="p-3"></div>
 
-<!-- ADMIN BTN -->
-<button id="adminBtn" onclick="openAdmin()"
-class="hidden fixed bottom-5 right-5 bg-gradient-to-r from-red-500 to-orange-500 px-5 py-3 rounded-full text-xl shadow-lg">
-+
-</button>
+<button id="adminBtn" onclick="openAdmin()" 
+class="hidden fixed bottom-5 right-5 bg-black text-white px-4 py-3 rounded-full">+</button>
 
 <!-- LOGIN -->
-<div id="loginModal" class="hidden fixed inset-0 bg-black/80 flex justify-center items-center">
-<div class="glass p-6 rounded-xl w-80">
-
-<h2 class="text-center mb-3">Admin Login</h2>
-
-<input type="password" id="adminPass" placeholder="Password"
-class="w-full p-2 text-black rounded mb-3">
-
-<button onclick="checkLogin()" class="w-full bg-orange-500 py-2 rounded">
-Login
-</button>
-
+<div id="loginBox" class="hidden fixed inset-0 bg-black/50 flex justify-center items-center">
+<div class="bg-white p-5 rounded">
+<input id="pass" type="password" placeholder="Password" class="border p-2 mb-2">
+<button onclick="login()">Unlock</button>
 </div>
 </div>
 
 <!-- ADMIN PANEL -->
-<div id="adminModal" class="hidden fixed inset-0 bg-black/80 flex justify-center items-center">
-<div class="glass p-6 rounded-xl w-[90%] max-w-lg">
+<div id="adminPanel" class="hidden fixed inset-0 bg-black/50 flex justify-center items-center">
+<div class="bg-white p-5 rounded w-[90%] max-w-md">
 
-<h2>Add Post</h2>
+<input id="title" placeholder="Title" class="border p-2 mb-2 w-full">
+<textarea id="content" placeholder="Content" class="border p-2 mb-2 w-full"></textarea>
+<input type="file" id="fileInput">
 
-<input id="title" placeholder="Title" class="w-full p-2 text-black mb-2 rounded">
-<textarea id="content" class="w-full p-2 text-black mb-2 rounded"></textarea>
-
-<input type="file" id="fileInput" class="mb-2">
-
-<img id="preview" class="hidden w-full h-40 object-cover mb-2">
-
-<button onclick="savePost()" class="w-full bg-green-500 py-2 rounded">Save</button>
+<button onclick="savePost()" class="bg-green-500 text-white w-full py-2 mt-2">Save</button>
 
 </div>
 </div>
 
 <script>
-const firebaseConfig = {
-apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
-authDomain: "factzone-a9ace.firebaseapp.com",
-projectId: "factzone-a9ace"
+const firebaseConfig={
+apiKey:"AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
+authDomain:"factzone-a9ace.firebaseapp.com",
+projectId:"factzone-a9ace"
 };
 
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+const db=firebase.firestore();
 
-let uploadedImage = "";
-let isAdmin = false;
-
-// 🔐 hidden admin trigger (3 click)
-let clickCount = 0;
-document.getElementById("logo").onclick = ()=>{
-  clickCount++;
-  if(clickCount===3){
-    document.getElementById("loginModal").classList.remove("hidden");
-  }
-  setTimeout(()=>clickCount=0,1500);
-};
+let isAdmin=false;
+let editId=null;
+let imgData="";
 
 // LOGIN
-function checkLogin(){
-  if(document.getElementById("adminPass").value==="Avnish@"){
-    isAdmin = true;
-    document.getElementById("adminBtn").classList.remove("hidden");
-    document.getElementById("loginModal").classList.add("hidden");
-    fetchPosts();
-  } else alert("Wrong password");
-}
-
-// ADMIN
-function openAdmin(){
-  document.getElementById("adminModal").classList.remove("hidden");
+function openLogin(){loginBox.classList.remove("hidden");}
+function login(){
+if(pass.value==="Avnish@@"){
+isAdmin=true;
+adminBtn.classList.remove("hidden");
+loginBox.classList.add("hidden");
+fetchPosts();
+}else alert("Wrong Password");
 }
 
 // IMAGE
-document.getElementById("fileInput").onchange=e=>{
-const file=e.target.files[0];
-const reader=new FileReader();
-reader.onload=()=>{uploadedImage=reader.result;}
-reader.readAsDataURL(file);
+fileInput.onchange=e=>{
+let reader=new FileReader();
+reader.onload=()=>imgData=reader.result;
+reader.readAsDataURL(e.target.files[0]);
 };
 
 // FETCH POSTS
 async function fetchPosts(){
-const postsDiv=document.getElementById("posts");
-postsDiv.innerHTML="Loading...";
+posts.innerHTML="Loading...";
+let snap=await db.collection("posts").orderBy("createdAt","desc").get();
 
-const snapshot=await db.collection("posts").get();
-postsDiv.innerHTML="";
+posts.innerHTML="";
 
-snapshot.forEach(doc=>{
-const p=doc.data();
+snap.forEach(doc=>{
+let p=doc.data();
 
-const liked = localStorage.getItem(doc.id);
+let div=document.createElement("div");
+div.className="post";
 
-const div=document.createElement("div");
-div.className="glass p-4 rounded-xl";
-
+// CLICKABLE LINK
 div.innerHTML=`
-${p.image?`<img src="${p.image}" class="h-40 w-full object-cover mb-2 rounded">`:""}
-<h2>${p.title}</h2>
-<p>${p.content.substring(0,80)}</p>
+<a href="detail.html?id=${doc.id}" style="text-decoration:none;color:inherit;display:block">
 
-<button class="likeBtn ${liked?"bg-gray-500":"bg-red-500"} px-3 py-1 rounded mt-2">
+${p.image?`<img src="${p.image}" style="width:100%;height:260px;object-fit:cover;">`:""}
+
+<div style="padding:12px">
+
+<h2 class="font-bold text-lg">${p.title}</h2>
+<p class="text-gray-600">${p.content.substring(0,90)}...</p>
+
+<div class="flex justify-between mt-2">
+
+<button class="likeBtn bg-red-500 text-white px-3 py-1 rounded-full text-sm">
 ❤️ ${p.likes||0}
 </button>
+
+<span>👁 ${p.views||0}</span>
+
+</div>
+
+${isAdmin?`
+<div class="flex gap-2 mt-2">
+<button class="editBtn bg-blue-500 text-white px-2 py-1 rounded">Edit</button>
+<button class="deleteBtn bg-black text-white px-2 py-1 rounded">Delete</button>
+</div>`:""}
+
+</div>
+</a>
 `;
 
+// LIKE
 div.querySelector(".likeBtn").onclick=(e)=>{
 e.stopPropagation();
-
-if(localStorage.getItem(doc.id)){
-  alert("Already liked");
-  return;
-}
+e.preventDefault();
 
 db.collection("posts").doc(doc.id).update({
-likes: firebase.firestore.FieldValue.increment(1)
+likes:firebase.firestore.FieldValue.increment(1)
 });
 
-localStorage.setItem(doc.id,true);
 fetchPosts();
 };
 
-postsDiv.appendChild(div);
+// EDIT
+if(isAdmin){
+div.querySelector(".editBtn").onclick=(e)=>{
+e.stopPropagation();
+e.preventDefault();
+edit(doc.id);
+};
+}
+
+// DELETE
+if(isAdmin){
+div.querySelector(".deleteBtn").onclick=(e)=>{
+e.stopPropagation();
+e.preventDefault();
+
+if(confirm("Delete post?")){
+db.collection("posts").doc(doc.id).delete().then(fetchPosts);
+}
+};
+}
+
+posts.appendChild(div);
 });
 }
 
-// SAVE
-async function savePost(){
-const t=title.value;
-const c=content.value;
+fetchPosts();
 
-await db.collection("posts").add({
-title:t,
-content:c,
-image:uploadedImage,
-likes:0
+// ADMIN
+function openAdmin(){adminPanel.classList.remove("hidden");}
+
+function savePost(){
+if(!title.value||!content.value)return alert("Fill fields");
+
+if(editId){
+db.collection("posts").doc(editId).set({
+title:title.value,
+content:content.value,
+image:imgData
+},{merge:true});
+}else{
+db.collection("posts").add({
+title:title.value,
+content:content.value,
+image:imgData,
+likes:0,
+views:0,
+createdAt:new Date()
 });
+}
 
-alert("Saved");
+adminPanel.classList.add("hidden");
 fetchPosts();
 }
 
-fetchPosts();
+// EDIT
+function edit(id){editId=id;openAdmin();}
+
+// DELETE
+function del(id){
+if(confirm("Delete?")){
+db.collection("posts").doc(id).delete().then(fetchPosts);
+}
+}
+
+// SEARCH
+search.oninput=e=>{
+let val=e.target.value.toLowerCase();
+document.querySelectorAll("#posts > div").forEach(card=>{
+card.style.display=card.innerText.toLowerCase().includes(val)?"block":"none";
+});
+};
 </script>
 
 </body>
