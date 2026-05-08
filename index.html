@@ -2,48 +2,61 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>FactZone</title>
 
+<link rel="icon" href="logo.svg">
 <script src="https://cdn.tailwindcss.com"></script>
+
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <style>
-body{background:#fff;font-family:sans-serif;}
-header{background:#000;color:#fff;}
-.post{max-width:500px;margin:auto;margin-bottom:20px;background:#fff;
-border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.1);overflow:hidden;}
+.container{
+max-width:1200px;
+margin:auto;
+}
 </style>
+
 </head>
 
-<body>
+<body class="bg-gray-100">
 
-<header class="flex justify-between p-3">
-<h1 onclick="openLogin()" class="cursor-pointer font-bold">🔥 FactZone</h1>
-<input id="search" placeholder="🔍 Search..." class="px-3 py-1 rounded text-black">
+<!-- HEADER -->
+<header class="bg-black text-white p-4 flex items-center justify-between">
+<div class="flex items-center gap-2 cursor-pointer" onclick="openLogin()">
+<img src="logo.svg" class="w-8 h-8">
+<h1 class="text-xl font-bold">FactZone</h1>
+</div>
+
+<input id="search" placeholder="🔍 Search..."
+class="px-4 py-2 rounded-full text-black w-1/3">
 </header>
 
-<div id="posts" class="p-3"></div>
+<!-- POSTS -->
+<div class="container">
+<main id="posts" class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></main>
+</div>
 
 <button id="adminBtn" onclick="openAdmin()" 
-class="hidden fixed bottom-5 right-5 bg-black text-white px-4 py-3 rounded-full">+</button>
+class="hidden fixed bottom-5 right-5 bg-black text-white px-4 py-3 rounded-full shadow-lg">+</button>
 
 <!-- LOGIN -->
-<div id="loginBox" class="hidden fixed inset-0 bg-black/50 flex justify-center items-center">
-<div class="bg-white p-5">
-<input id="pass" type="password" placeholder="Password" class="border p-2 mb-2">
-<button onclick="login()">Unlock</button>
+<div id="loginModal" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
+<div class="bg-white p-6 rounded">
+<input id="adminPass" type="password" placeholder="Password" class="border p-2 mb-2 w-full">
+<button onclick="checkLogin()" class="bg-black text-white w-full py-2">Login</button>
 </div>
 </div>
 
 <!-- ADMIN -->
-<div id="adminPanel" class="hidden fixed inset-0 bg-black/50 flex justify-center items-center">
-<div class="bg-white p-5 w-[90%] max-w-md">
+<div id="adminModal" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
+<div class="bg-white p-6 rounded w-[90%] max-w-md">
 <input id="title" placeholder="Title" class="border p-2 mb-2 w-full">
 <textarea id="content" placeholder="Content" class="border p-2 mb-2 w-full"></textarea>
 <input type="file" id="fileInput">
-<button onclick="savePost()" class="bg-green-500 text-white w-full mt-2 py-2">Save</button>
+<button onclick="savePost()" class="bg-black text-white w-full py-2 mt-2">Save</button>
 </div>
 </div>
 
@@ -59,24 +72,28 @@ const db=firebase.firestore();
 
 let isAdmin=false,editId=null,imgData="";
 
-function openLogin(){loginBox.classList.remove("hidden");}
-function login(){
-if(pass.value==="Avnish@@"){
+// LOGIN
+function openLogin(){loginModal.classList.remove("hidden");}
+function checkLogin(){
+if(adminPass.value==="Avnish@@"){
 isAdmin=true;
 adminBtn.classList.remove("hidden");
-loginBox.classList.add("hidden");
+loginModal.classList.add("hidden");
 fetchPosts();
 }else alert("Wrong Password");
 }
 
+// IMAGE
 fileInput.onchange=e=>{
 let r=new FileReader();
 r.onload=()=>imgData=r.result;
 r.readAsDataURL(e.target.files[0]);
 };
 
+// FETCH POSTS
 async function fetchPosts(){
-posts.innerHTML="Loading...";
+posts.innerHTML="<p class='text-center col-span-full'>Loading...</p>";
+
 let snap=await db.collection("posts").orderBy("createdAt","desc").get();
 
 posts.innerHTML="";
@@ -85,44 +102,53 @@ snap.forEach(doc=>{
 let p=doc.data();
 
 let div=document.createElement("div");
-div.className="post";
+div.className="bg-white rounded-xl shadow hover:shadow-lg cursor-pointer overflow-hidden transition";
+
+// CLICK OPEN
+div.onclick=()=>location.href=`detail.html?id=${doc.id}`;
 
 div.innerHTML=`
-<a href="./detail.html?id=${doc.id}" style="text-decoration:none;color:inherit;display:block">
+${p.image?`<img src="${p.image}" class="w-full h-48 object-cover">`:""}
 
-${p.image?`<img src="${p.image}" style="width:100%;height:250px;object-fit:cover;">`:""}
+<div class="p-3">
+<h2 class="font-bold text-lg">${p.title}</h2>
+<p class="text-gray-600 text-sm">${p.content.substring(0,80)}...</p>
 
-<div style="padding:10px">
-<h2><b>${p.title}</b></h2>
-<p>${p.content.substring(0,80)}...</p>
-
-<div style="display:flex;justify-content:space-between;margin-top:5px">
-<button class="likeBtn">❤️ ${p.likes||0}</button>
-<span>👁 ${p.views||0}</span>
+<div class="flex justify-between items-center mt-2">
+<button class="likeBtn text-red-500 font-bold">❤️ ${p.likes||0}</button>
+<span class="text-gray-500 text-sm">👁 ${p.views||0}</span>
 </div>
 
 ${isAdmin?`
-<button class="editBtn">Edit</button>
-<button class="deleteBtn">Delete</button>`:""}
+<div class="flex gap-2 mt-2">
+<button class="editBtn bg-blue-500 text-white px-2 py-1 rounded text-xs">Edit</button>
+<button class="deleteBtn bg-red-500 text-white px-2 py-1 rounded text-xs">Delete</button>
+</div>`:""}
 
 </div>
-</a>
 `;
 
+// LIKE
 div.querySelector(".likeBtn").onclick=(e)=>{
-e.preventDefault();
 e.stopPropagation();
+e.preventDefault();
 db.collection("posts").doc(doc.id).update({
 likes:firebase.firestore.FieldValue.increment(1)
 }).then(fetchPosts);
 };
 
+// ADMIN
 if(isAdmin){
 div.querySelector(".editBtn").onclick=(e)=>{
-e.preventDefault();e.stopPropagation();edit(doc.id);
+e.stopPropagation();
+editId=doc.id;
+title.value=p.title;
+content.value=p.content;
+openAdmin();
 };
+
 div.querySelector(".deleteBtn").onclick=(e)=>{
-e.preventDefault();e.stopPropagation();
+e.stopPropagation();
 if(confirm("Delete?")){
 db.collection("posts").doc(doc.id).delete().then(fetchPosts);
 }
@@ -135,28 +161,34 @@ posts.appendChild(div);
 
 fetchPosts();
 
-function openAdmin(){adminPanel.classList.remove("hidden");}
+// ADMIN PANEL
+function openAdmin(){adminModal.classList.remove("hidden");}
 
 function savePost(){
 if(!title.value||!content.value)return alert("Fill fields");
 
 if(editId){
 db.collection("posts").doc(editId).set({
-title:title.value,content:content.value,image:imgData
+title:title.value,
+content:content.value,
+image:imgData
 },{merge:true});
 }else{
 db.collection("posts").add({
-title:title.value,content:content.value,image:imgData,
-likes:0,views:0,createdAt:new Date()
+title:title.value,
+content:content.value,
+image:imgData,
+likes:0,
+views:0,
+createdAt:new Date()
 });
 }
 
-adminPanel.classList.add("hidden");
+adminModal.classList.add("hidden");
 fetchPosts();
 }
 
-function edit(id){editId=id;openAdmin();}
-
+// SEARCH
 search.oninput=e=>{
 let v=e.target.value.toLowerCase();
 document.querySelectorAll("#posts > div").forEach(c=>{
