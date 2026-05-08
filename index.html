@@ -4,9 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>FactZone</title>
+<title>FactZone | Amazing Facts & Knowledge</title>
+
+<meta name="description" content="Explore amazing facts and daily knowledge on FactZone.">
+<meta name="keywords" content="facts, amazing facts, knowledge, factzone">
+
+<meta property="og:title" content="FactZone">
+<meta property="og:description" content="Daily amazing facts & knowledge">
+<meta property="og:image" content="https://factzone.online/logo.svg">
 
 <link rel="icon" href="logo.svg">
+
 <script src="https://cdn.tailwindcss.com"></script>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -21,6 +29,7 @@
 
 <!-- HEADER -->
 <header class="bg-black text-white p-4 flex items-center justify-between">
+
 <div class="flex items-center gap-3 cursor-pointer" onclick="openLogin()">
 <img src="logo.svg" class="w-10 h-10 bg-white p-1 rounded-full">
 <h1 class="text-xl font-bold">FactZone</h1>
@@ -28,6 +37,7 @@
 
 <input id="search" placeholder="🔍 Search..."
 class="px-4 py-2 rounded-full text-black w-1/3">
+
 </header>
 
 <!-- POSTS -->
@@ -36,7 +46,7 @@ class="px-4 py-2 rounded-full text-black w-1/3">
 </div>
 
 <button id="adminBtn" onclick="openAdmin()" 
-class="hidden fixed bottom-5 right-5 bg-black text-white px-4 py-3 rounded-full">+</button>
+class="hidden fixed bottom-5 right-5 bg-black text-white px-4 py-3 rounded-full shadow-lg">+</button>
 
 <!-- LOGIN -->
 <div id="loginModal" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
@@ -88,17 +98,16 @@ r.readAsDataURL(e.target.files[0]);
 
 // FETCH POSTS
 async function fetchPosts(){
-posts.innerHTML="<p class='text-center col-span-full'>Loading...</p>";
+posts.innerHTML="Loading...";
 
 let snap=await db.collection("posts").get();
-
 posts.innerHTML="";
 
 snap.forEach(doc=>{
 let p=doc.data();
 
 let div=document.createElement("div");
-div.className="bg-white rounded-xl shadow cursor-pointer overflow-hidden";
+div.className="bg-white rounded-xl shadow hover:shadow-lg cursor-pointer overflow-hidden";
 
 div.onclick=()=>location.href=`detail.html?id=${doc.id}`;
 
@@ -124,7 +133,6 @@ ${isAdmin?`
 // LIKE
 div.querySelector(".likeBtn").onclick=(e)=>{
 e.stopPropagation();
-e.preventDefault();
 db.collection("posts").doc(doc.id).update({
 likes:firebase.firestore.FieldValue.increment(1)
 }).then(fetchPosts);
