@@ -9,11 +9,11 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 </head>
 
-<body class="p-6">
+<body style="background:#fff;color:#111;padding:20px;">
 
-<button onclick="history.back()" class="bg-black text-white px-4 py-2 mb-4">
-⬅ Back
-</button>
+<button onclick="history.back()">⬅ Back</button>
+
+<img id="img" style="width:100%;height:300px;object-fit:cover">
 
 <h1 id="title"></h1>
 <p id="content"></p>
@@ -21,8 +21,9 @@
 <p id="views"></p>
 <p id="likes"></p>
 
-<script>
+<button id="likeBtn">❤️ Like</button>
 
+<script>
 const firebaseConfig={
 apiKey:"AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
 authDomain:"factzone-a9ace.firebaseapp.com",
@@ -35,15 +36,12 @@ const db=firebase.firestore();
 const id=new URLSearchParams(location.search).get("id");
 
 async function load(){
-
 let ref=db.collection("posts").doc(id);
 
 // VIEW
 if(!localStorage.getItem("view_"+id)){
-await ref.update({
-views:firebase.firestore.FieldValue.increment(1)
-});
-localStorage.setItem("view_"+id,"yes");
+await ref.update({views:firebase.firestore.FieldValue.increment(1)});
+localStorage.setItem("view_"+id,true);
 }
 
 let doc=await ref.get();
@@ -51,13 +49,21 @@ let p=doc.data();
 
 title.innerText=p.title;
 content.innerText=p.content;
-views.innerText="👁️ "+(p.views||0);
+views.innerText="👁 "+(p.views||0);
 likes.innerText="❤️ "+(p.likes||0);
 
+if(p.image) img.src=p.image;
+
+// LIKE
+likeBtn.onclick=async ()=>{
+await ref.update({
+likes:firebase.firestore.FieldValue.increment(1)
+});
+load();
+};
 }
 
 load();
-
 </script>
 
 </body>
