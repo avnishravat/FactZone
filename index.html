@@ -1,262 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- SEO Meta Tags -->
-    <title>FactZone | Amazing Facts & Knowledge</title>
-    <meta name="title" content="FactZone | Amazing Facts & Knowledge">
-    <meta name="description" content="Explore amazing and interesting facts from around the world on FactZone. Get your daily dose of knowledge.">
-    
-    <!-- Google Search Console Verification -->
-    <meta name="google-site-verification" content="dtL9Egu7NLpAEH3Gm3VniruledIKjz2S-e-F1wGXuMt4" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="icon" type="image/svg+xml" href="logo.svg" />
-    <script src="https://cdn.tailwindcss.com"></script>
+<title>FactZone</title>
 
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+<style>
+body {
+  background: linear-gradient(135deg,#000,#1a1a1a,#000);
+  color:white;
+}
+.glass {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(12px);
+}
+</style>
 </head>
 
-<body class="bg-gray-100">
+<body>
 
 <!-- HEADER -->
-<header class="bg-black text-white p-4 flex items-center justify-between shadow">
-  <!-- Click on FactZone to Login -->
-  <h1 class="text-2xl font-bold cursor-pointer select-none" onclick="openLogin()">FactZone</h1>
+<header class="flex justify-between items-center p-4 glass shadow-lg">
 
-  <input id="search" placeholder="🔍 Search articles..."
-    class="w-1/2 px-4 py-2 rounded-full text-black outline-none"/>
-    
-  <!-- Space added for visual balance after removing Admin button -->
-  <div class="w-10"></div>
+<h1 id="logo" class="text-2xl font-bold cursor-pointer">🔥 FactZone</h1>
+
+<input id="search" placeholder="Search..."
+class="px-4 py-2 rounded-full text-black w-1/2">
+
 </header>
 
 <!-- POSTS -->
 <main id="posts" class="p-6 grid md:grid-cols-3 gap-6"></main>
 
-<!-- FLOAT BUTTON -->
+<!-- ADMIN BTN -->
 <button id="adminBtn" onclick="openAdmin()"
-class="hidden fixed bottom-5 right-5 bg-black text-white px-4 py-3 rounded-full text-xl shadow-lg z-50">+</button>
+class="hidden fixed bottom-5 right-5 bg-gradient-to-r from-red-500 to-orange-500 px-5 py-3 rounded-full text-xl shadow-lg">
++
+</button>
 
 <!-- LOGIN -->
-<div id="loginModal" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center z-50">
-  <div class="bg-white p-6 rounded-xl w-80 shadow-2xl">
-    <h2 class="text-xl font-bold mb-3 text-center">Admin Login</h2>
-    <input type="password" id="adminPass" placeholder="Enter password"
-      class="w-full border p-2 mb-3 rounded outline-none focus:border-black"/>
-    <div class="flex gap-2">
-        <button onclick="checkLogin()" class="bg-black text-white w-full py-2 rounded">Login</button>
-        <button onclick="closeLogin()" class="bg-gray-200 w-full py-2 rounded">Cancel</button>
-    </div>
-  </div>
+<div id="loginModal" class="hidden fixed inset-0 bg-black/80 flex justify-center items-center">
+<div class="glass p-6 rounded-xl w-80">
+
+<h2 class="text-center mb-3">Admin Login</h2>
+
+<input type="password" id="adminPass" placeholder="Password"
+class="w-full p-2 text-black rounded mb-3">
+
+<button onclick="checkLogin()" class="w-full bg-orange-500 py-2 rounded">
+Login
+</button>
+
+</div>
 </div>
 
 <!-- ADMIN PANEL -->
-<div id="adminModal" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center z-50">
-  <div class="bg-white p-6 rounded-xl w-[95%] max-w-lg relative shadow-2xl">
-    <button onclick="closeAdmin()" class="absolute top-2 right-3 text-xl">✕</button>
-    <h2 class="text-xl font-bold mb-3">Add / Edit Post</h2>
-    <input id="title" placeholder="Title" class="w-full border p-2 mb-2 rounded outline-none focus:border-black"/>
-    <textarea id="content" placeholder="Content" class="w-full border p-2 mb-2 h-28 rounded outline-none focus:border-black"></textarea>
-    <input type="file" id="fileInput" class="mb-2 block w-full text-sm"/>
-    <img id="preview" class="hidden w-full h-40 object-cover mb-2 rounded shadow-inner"/>
-    <div class="flex gap-2">
-      <button onclick="savePost()" class="bg-black text-white w-full py-2 rounded font-bold">Save</button>
-      <button onclick="closeAdmin()" class="bg-gray-400 text-white w-full py-2 rounded">Cancel</button>
-    </div>
-  </div>
+<div id="adminModal" class="hidden fixed inset-0 bg-black/80 flex justify-center items-center">
+<div class="glass p-6 rounded-xl w-[90%] max-w-lg">
+
+<h2>Add Post</h2>
+
+<input id="title" placeholder="Title" class="w-full p-2 text-black mb-2 rounded">
+<textarea id="content" class="w-full p-2 text-black mb-2 rounded"></textarea>
+
+<input type="file" id="fileInput" class="mb-2">
+
+<img id="preview" class="hidden w-full h-40 object-cover mb-2">
+
+<button onclick="savePost()" class="w-full bg-green-500 py-2 rounded">Save</button>
+
+</div>
 </div>
 
 <script>
 const firebaseConfig = {
-  apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
-  authDomain: "factzone-a9ace.firebaseapp.com",
-  projectId: "factzone-a9ace"
+apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
+authDomain: "factzone-a9ace.firebaseapp.com",
+projectId: "factzone-a9ace"
 };
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 let uploadedImage = "";
-let editId = null;
 let isAdmin = false;
 
-const ADMIN_PASSWORD = "Avnish@";
+// 🔐 hidden admin trigger (3 click)
+let clickCount = 0;
+document.getElementById("logo").onclick = ()=>{
+  clickCount++;
+  if(clickCount===3){
+    document.getElementById("loginModal").classList.remove("hidden");
+  }
+  setTimeout(()=>clickCount=0,1500);
+};
 
-// LOGIN FUNCTIONS
-function openLogin(){
-  document.getElementById("loginModal").classList.remove("hidden");
-}
-
-function closeLogin(){
-  document.getElementById("loginModal").classList.add("hidden");
-  document.getElementById("adminPass").value = "";
-}
-
+// LOGIN
 function checkLogin(){
-  const pass = document.getElementById("adminPass").value;
-  if(pass === ADMIN_PASSWORD){
+  if(document.getElementById("adminPass").value==="Avnish@"){
     isAdmin = true;
     document.getElementById("adminBtn").classList.remove("hidden");
     document.getElementById("loginModal").classList.add("hidden");
     fetchPosts();
-  } else {
-    alert("Wrong password");
-  }
+  } else alert("Wrong password");
 }
 
-// ADMIN PANEL FUNCTIONS
+// ADMIN
 function openAdmin(){
-  editId = null;
-  document.getElementById("title").value = "";
-  document.getElementById("content").value = "";
-  uploadedImage = "";
-  document.getElementById("preview").classList.add("hidden");
   document.getElementById("adminModal").classList.remove("hidden");
 }
 
-function closeAdmin(){
-  document.getElementById("adminModal").classList.add("hidden");
-}
-
-// IMAGE UPLOAD
-document.getElementById("fileInput").onchange = e=>{
-  const file = e.target.files[0];
-  if(!file) return;
-
-  const reader = new FileReader();
-  reader.onload = ()=>{
-    uploadedImage = reader.result;
-    const previewImg = document.getElementById("preview");
-    previewImg.src = uploadedImage;
-    previewImg.classList.remove("hidden");
-  };
-  reader.readAsDataURL(file);
+// IMAGE
+document.getElementById("fileInput").onchange=e=>{
+const file=e.target.files[0];
+const reader=new FileReader();
+reader.onload=()=>{uploadedImage=reader.result;}
+reader.readAsDataURL(file);
 };
 
 // FETCH POSTS
 async function fetchPosts(){
-  const postsDiv = document.getElementById("posts");
-  postsDiv.innerHTML = "<p class='col-span-full text-center'>Loading...</p>";
+const postsDiv=document.getElementById("posts");
+postsDiv.innerHTML="Loading...";
 
-  try {
-    const snapshot = await db.collection("posts").get();
-    postsDiv.innerHTML = "";
+const snapshot=await db.collection("posts").get();
+postsDiv.innerHTML="";
 
-    snapshot.forEach(doc=>{
-      const p = doc.data();
-      const div = document.createElement("div");
-      div.className = "bg-white p-4 rounded-xl shadow hover:shadow-lg cursor-pointer transition";
+snapshot.forEach(doc=>{
+const p=doc.data();
 
-      div.innerHTML = `
-        ${p.image ? `<img src="${p.image}" class="h-40 w-full object-cover mb-2 rounded">` : ""}
-        <h2 class="font-bold text-lg text-gray-800">${p.title}</h2>
-        <p class="text-gray-600">${p.content.substring(0,80)}...</p>
+const liked = localStorage.getItem(doc.id);
 
-        <div class="flex justify-between items-center mt-2">
-          <button class="likeBtn text-red-500 font-bold">❤️ ${p.likes || 0}</button>
-          ${isAdmin ? `
-          <div class="flex gap-2">
-            <button class="editBtn bg-blue-500 text-white px-2 py-1 rounded text-xs">Edit</button>
-            <button class="deleteBtn bg-red-500 text-white px-2 py-1 rounded text-xs">Delete</button>
-          </div>` : ""}
-        </div>
-      `;
+const div=document.createElement("div");
+div.className="glass p-4 rounded-xl";
 
-      div.onclick = ()=> location.href = `details.html?id=${doc.id}`;
+div.innerHTML=`
+${p.image?`<img src="${p.image}" class="h-40 w-full object-cover mb-2 rounded">`:""}
+<h2>${p.title}</h2>
+<p>${p.content.substring(0,80)}</p>
 
-      // LIKE
-      div.querySelector(".likeBtn").onclick = (e)=>{
-        e.stopPropagation();
-        db.collection("posts").doc(doc.id).update({
-          likes: firebase.firestore.FieldValue.increment(1)
-        }).then(fetchPosts);
-      };
+<button class="likeBtn ${liked?"bg-gray-500":"bg-red-500"} px-3 py-1 rounded mt-2">
+❤️ ${p.likes||0}
+</button>
+`;
 
-      if(isAdmin){
-          // EDIT
-          div.querySelector(".editBtn").onclick = async (e)=>{
-            e.stopPropagation();
-            editId = doc.id;
-            document.getElementById("title").value = p.title || "";
-            document.getElementById("content").value = p.content || "";
-            uploadedImage = p.image || "";
+div.querySelector(".likeBtn").onclick=(e)=>{
+e.stopPropagation();
 
-            if(p.image){
-              const previewImg = document.getElementById("preview");
-              previewImg.src = p.image;
-              previewImg.classList.remove("hidden");
-            }
-            document.getElementById("adminModal").classList.remove("hidden");
-          };
-
-          // DELETE
-          div.querySelector(".deleteBtn").onclick = (e)=>{
-            e.stopPropagation();
-            if(confirm("Delete post?")){
-              db.collection("posts").doc(doc.id).delete().then(fetchPosts);
-            }
-          };
-      }
-      postsDiv.appendChild(div);
-    });
-  } catch(err) {
-    postsDiv.innerHTML = "Error loading posts.";
-  }
+if(localStorage.getItem(doc.id)){
+  alert("Already liked");
+  return;
 }
 
-// SAVE POST
-async function savePost(){
-  const t = document.getElementById("title").value.trim();
-  const c = document.getElementById("content").value.trim();
+db.collection("posts").doc(doc.id).update({
+likes: firebase.firestore.FieldValue.increment(1)
+});
 
-  if(!t || !c){
-    alert("Fill all fields");
-    return;
-  }
-
-  try{
-    if(editId){
-      const ref = db.collection("posts").doc(editId);
-      await ref.set({
-        title: t,
-        content: c,
-        image: uploadedImage,
-        adminKey: "FACTZONE_SECRET_123"
-      }, {merge:true});
-      alert("Updated ✅");
-    } else {
-      await db.collection("posts").add({
-        title: t,
-        content: c,
-        image: uploadedImage || "",
-        likes: 0,
-        createdAt: new Date(),
-        adminKey: "FACTZONE_SECRET_123"
-      });
-      alert("Saved ✅");
-    }
-    closeAdmin();
-    fetchPosts();
-  } catch(err){
-    alert("Error: " + err.message);
-  }
-}
-
-// SEARCH
-document.getElementById("search").oninput = e => {
-  const value = e.target.value.toLowerCase();
-  const cards = document.querySelectorAll("#posts > div");
-  cards.forEach(card => {
-    const titleText = card.querySelector("h2").innerText.toLowerCase();
-    card.style.display = titleText.includes(value) ? "block" : "none";
-  });
+localStorage.setItem(doc.id,true);
+fetchPosts();
 };
 
-// INIT
+postsDiv.appendChild(div);
+});
+}
+
+// SAVE
+async function savePost(){
+const t=title.value;
+const c=content.value;
+
+await db.collection("posts").add({
+title:t,
+content:c,
+image:uploadedImage,
+likes:0
+});
+
+alert("Saved");
+fetchPosts();
+}
+
 fetchPosts();
 </script>
 
