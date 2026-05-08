@@ -2,14 +2,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Post</title>
+<title>FactZone Post</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 </head>
 
-<body style="background:#fff;color:#111;padding:20px;">
+<body style="background:#fff;padding:20px;">
 
 <button onclick="history.back()">⬅ Back</button>
 
@@ -36,15 +36,29 @@ const db=firebase.firestore();
 const id=new URLSearchParams(location.search).get("id");
 
 async function load(){
+
+if(!id){
+document.body.innerHTML="<h2>Invalid URL</h2>";
+return;
+}
+
 let ref=db.collection("posts").doc(id);
 
 // VIEW
 if(!localStorage.getItem("view_"+id)){
-await ref.update({views:firebase.firestore.FieldValue.increment(1)});
+await ref.update({
+views:firebase.firestore.FieldValue.increment(1)
+});
 localStorage.setItem("view_"+id,true);
 }
 
 let doc=await ref.get();
+
+if(!doc.exists){
+document.body.innerHTML="<h2>Post not found</h2>";
+return;
+}
+
 let p=doc.data();
 
 title.innerText=p.title;
@@ -61,6 +75,7 @@ likes:firebase.firestore.FieldValue.increment(1)
 });
 load();
 };
+
 }
 
 load();
