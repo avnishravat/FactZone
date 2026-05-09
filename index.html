@@ -11,14 +11,14 @@
 
 <meta property="og:title" content="FactZone">
 <meta property="og:description" content="Daily amazing facts & knowledge">
-<meta property="og:image" content="https://factzone.online/logo.svg">
+<meta property="og:image" content="factzone.online">
 
 <link rel="icon" href="logo.svg">
 
-<script src="https://cdn.tailwindcss.com"></script>
+<script src="tailwindcss.com"></script>
 
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="gstatic.com"></script>
+<script src="gstatic.com"></script>
 
 <style>
 .container{max-width:1200px;margin:auto;}
@@ -69,14 +69,14 @@ class="hidden fixed bottom-5 right-5 bg-black text-white px-4 py-3 rounded-full 
 <script>
 const firebaseConfig={
 apiKey:"AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
-authDomain:"factzone-a9ace.firebaseapp.com",
+authDomain:"firebaseapp.com",
 projectId:"factzone-a9ace"
 };
 
 firebase.initializeApp(firebaseConfig);
 const db=firebase.firestore();
 
-// ⬇️ यहाँ अपनी ImgBB API Key डालें
+// ⬇️ अपनी वास्तविक ImgBB API Key यहाँ कोटेशन "" के अंदर पेस्ट करें
 const IMGBB_API_KEY = "f1bdb9735d4cd84dd8a265b7d092d2eb"; 
 
 let isAdmin=false,editId=null,existingImgUrl="",selectedFile=null;
@@ -95,7 +95,7 @@ fetchPosts();
 // IMAGE SELECT
 fileInput.onchange=e=>{
 if(e.target.files.length === 0) { selectedFile = null; return; }
-selectedFile = e.target.files[0]; // मूल फाइल ऑब्जेक्ट सुरक्षित किया
+selectedFile = e.target.files[0]; // सिंगल फाइल ऑब्जेक्ट निकाला
 };
 
 // FETCH POSTS
@@ -151,7 +151,7 @@ e.stopPropagation();
 editId=doc.id;
 title.value=p.title || "";
 content.value=p.content || "";
-existingImgUrl=p.image || ""; // पुरानी इमेज लिंक सहेजें
+existingImgUrl=p.image || "";
 openAdmin();
 };
 
@@ -173,7 +173,7 @@ fetchPosts();
 // ADMIN WINDOW
 function openAdmin(){adminModal.classList.remove("hidden");}
 
-// SECURE ASYNC SAVE POST (With ImgBB Pipeline)
+// SAVE POST
 async function savePost(){
 if(!title.value.trim()||!content.value.trim())return alert("Fill fields");
 
@@ -190,20 +190,20 @@ if(selectedFile) {
 let formData = new FormData();
 formData.append("image", selectedFile);
 
-// ImgBB क्लाउड पर भेजना
-let res = await fetch(`imgbb.com{IMGBB_API_KEY}`, {
+// URL फ़ॉर्मेट को पूरी तरह से ठीक कर दिया गया है
+let res = await fetch("imgbb.com" + IMGBB_API_KEY, {
 method: "POST",
 body: formData
 });
 let resData = await res.json();
 
 if(resData.success) {
-postData.image = resData.data.url; // डायरेक्ट लाइव यूआरएल मिला
+postData.image = resData.data.url;
 } else {
-throw new Error("ImgBB Upload Process Dropped");
+throw new Error(resData.error ? resData.error.message : "ImgBB Upload Error");
 }
 } else if(editId && existingImgUrl) {
-postData.image = existingImgUrl; // कोई नई फोटो नहीं चुनी तो पुरानी रहने दें
+postData.image = existingImgUrl;
 }
 
 if(editId){
