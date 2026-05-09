@@ -1,108 +1,115 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-
-<title>FactZone Post</title>
-
-<meta name="description" content="Read amazing facts on FactZone">
-
-<meta property="og:title" content="FactZone Post">
-<meta property="og:description" content="Amazing facts">
-<meta property="og:image" content="https://factzone.online/logo.svg">
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FactZone Post</title>
+    
+    <meta name="description" content="Read amazing facts on FactZone">
+    <meta property="og:title" content="FactZone Post">
+    <meta property="og:description" content="Amazing facts">
+    <meta property="og:image" content="factzone.online">
+    
+    <script src="tailwindcss.com"></script>
+    <script src="gstatic.com"></script>
+    <script src="gstatic.com"></script>
 </head>
+<body class="bg-gray-50 min-h-screen p-4 sm:p-6 flex flex-col items-center">
 
-<body class="bg-white p-6">
+    <div class="max-w-2xl w-full bg-white rounded-xl shadow p-5 sm:p-8">
+        <button onclick="history.back()" class="bg-black text-white px-4 py-2 mb-6 rounded text-sm font-medium hover:bg-gray-800 transition">⬅ Back</button>
 
-<button onclick="history.back()" class="bg-black text-white px-3 py-1 mb-4">⬅ Back</button>
+        <img id="img" class="w-full h-80 object-cover mb-5 rounded-xl shadow-inner" style="display: none;">
 
-<img id="img" class="w-full h-72 object-cover mb-3 rounded">
+        <h1 id="title" class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4 leading-tight"></h1>
+        
+        <!-- Rendered correctly with custom multi-line breaks format style sheet configurations -->
+        <p id="content" class="text-gray-700 text-base sm:text-lg leading-relaxed whitespace-pre-line border-b pb-6 mb-4"></p>
 
-<h1 id="title" class="text-2xl font-bold mb-2"></h1>
-<p id="content" class="text-gray-700"></p>
+        <div class="flex justify-between items-center text-sm font-medium text-gray-500">
+            <span id="views" class="bg-gray-100 px-3 py-1 rounded-full">👁 0 views</span>
+            <span id="likes" class="bg-red-50 text-red-600 px-3 py-1 rounded-full">❤️ 0 likes</span>
+        </div>
 
-<div class="flex justify-between mt-3">
-<span id="views"></span>
-<span id="likes"></span>
-</div>
+        <button id="likeBtn" class="w-full sm:w-auto bg-red-500 hover:bg-red-600 active:scale-95 text-white font-bold px-6 py-3 mt-6 rounded-lg shadow-md flex items-center justify-center gap-2 transition">
+            ❤️ Like this Fact
+        </button>
+    </div>
 
-<button id="likeBtn" class="bg-red-500 text-white px-4 py-2 mt-4 rounded">
-❤️ Like
-</button>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
+            authDomain: "firebaseapp.com",
+            projectId: "factzone-a9ace"
+        };
 
-<script>
-const firebaseConfig={
-apiKey:"AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
-authDomain:"factzone-a9ace.firebaseapp.com",
-projectId:"factzone-a9ace"
-};
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
 
-firebase.initializeApp(firebaseConfig);
-const db=firebase.firestore();
+        const id = new URLSearchParams(location.search).get("id");
 
-const id=new URLSearchParams(location.search).get("id");
+        async function load() {
+            if(!id) {
+                document.body.innerHTML = "<div class='text-center py-20 font-bold text-xl text-gray-600'>❌ Post ID missing. No Post Found.</div>";
+                return;
+            }
 
-async function load(){
+            let ref = db.collection("posts").doc(id);
 
-if(!id){
-document.body.innerHTML="<h2>No Post Found</h2>";
-return;
-}
+            // VIEW MANAGEMENT SYSTEM
+            if(!localStorage.getItem("view_" + id)) {
+                try {
+                    await ref.update({
+                        views: firebase.firestore.FieldValue.increment(1)
+                    });
+                    localStorage.setItem("view_" + id, "true");
+                } catch(e) { console.error("Views execution issue:", e); }
+            }
 
-let ref=db.collection("posts").doc(id);
+            let doc = await ref.get();
 
-// VIEW
-if(!localStorage.getItem("view_"+id)){
-try{
-await ref.update({
-views:firebase.firestore.FieldValue.increment(1)
-});
-}catch(e){}
-localStorage.setItem("view_"+id,true);
-}
+            if(!doc.exists) {
+                document.body.innerHTML = "<div class='text-center py-20 font-bold text-xl text-gray-600'>❌ Post Not Found in Database.</div>";
+                return;
+            }
 
-let doc=await ref.get();
+            let p = doc.data();
 
-if(!doc.exists){
-document.body.innerHTML="<h2>Post Not Found</h2>";
-return;
-}
+            // SEO METADATA SETTINGS
+            document.title = (p.title || "Post") + " | FactZone";
 
-let p=doc.data();
+            // DATA DISTRIBUTION LAYER
+            title.innerText = p.title || "";
+            content.innerHTML = (p.content || "").replace(/\n/g, '<br>');
+            views.innerText = "👁 " + (p.views || 0) + " views";
+            likes.innerText = "❤️ " + (p.likes || 0) + " likes";
 
-// SEO TITLE
-document.title = p.title + " | FactZone";
+            // IMAGE ELEMENT VALIDATION CONTROL
+            if(p.image) {
+                img.src = p.image;
+                img.style.display = "block";
+            } else {
+                img.style.display = "none";
+            }
 
-// DATA
-title.innerText=p.title||"";
-content.innerText=p.content||"";
-views.innerText="👁 "+(p.views||0);
-likes.innerText="❤️ "+(p.likes||0);
+            // ISOLATED BUTTON ACTION SUBMISSION
+            likeBtn.onclick = async () => {
+                likeBtn.disabled = true; 
+                try {
+                    await ref.update({
+                        likes: firebase.firestore.FieldValue.increment(1)
+                    });
+                    // Refresh data presentation layer UI elements
+                    let latestDoc = await ref.get();
+                    if(latestDoc.exists) {
+                        likes.innerText = "❤️ " + (latestDoc.data().likes || 0) + " likes";
+                    }
+                } catch(err) { console.error(err); }
+                likeBtn.disabled = false;
+            };
+        }
 
-// IMAGE
-if(p.image){
-img.src=p.image;
-}else{
-img.style.display="none";
-}
-
-// LIKE
-likeBtn.onclick=async ()=>{
-await ref.update({
-likes:firebase.firestore.FieldValue.increment(1)
-});
-load();
-};
-
-}
-
-load();
-</script>
-
+        load();
+    </script>
 </body>
 </html>
