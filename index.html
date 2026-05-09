@@ -11,16 +11,14 @@
 
 <meta property="og:title" content="FactZone">
 <meta property="og:description" content="Daily amazing facts & knowledge">
-<meta property="og:image" content="factzone.online">
+<meta property="og:image" content="https://factzone.online/logo.svg">
 
 <link rel="icon" href="logo.svg">
 
-<!-- ✅ TAILWIND CSS FIX (यह लिंक अब बिल्कुल सही है) -->
-<link href="jsdelivr.net" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
 
-<!-- ✅ FIREBASE CDN STABLE LINKS -->
-<script src="gstatic.com"></script>
-<script src="gstatic.com"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <style>
 .container{max-width:1200px;margin:auto;}
@@ -38,7 +36,7 @@
 </div>
 
 <input id="search" placeholder="🔍 Search..."
-class="px-4 py-2 rounded-full text-black w-1/3 outline-none">
+class="px-4 py-2 rounded-full text-black w-1/3">
 
 </header>
 
@@ -51,37 +49,34 @@ class="px-4 py-2 rounded-full text-black w-1/3 outline-none">
 class="hidden fixed bottom-5 right-5 bg-black text-white px-4 py-3 rounded-full shadow-lg">+</button>
 
 <!-- LOGIN -->
-<div id="loginModal" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center z-50">
-<div class="bg-white p-6 rounded shadow-lg">
-<input id="adminPass" type="password" placeholder="Password" class="border p-2 mb-2 w-full rounded">
-<button onclick="checkLogin()" class="bg-black text-white w-full py-2 rounded font-bold">Login</button>
+<div id="loginModal" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
+<div class="bg-white p-6 rounded">
+<input id="adminPass" type="password" placeholder="Password" class="border p-2 mb-2 w-full">
+<button onclick="checkLogin()" class="bg-black text-white w-full py-2">Login</button>
 </div>
 </div>
 
 <!-- ADMIN -->
-<div id="adminModal" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center z-50">
-<div class="bg-white p-6 rounded w-[90%] max-w-md shadow-lg">
-<input id="title" placeholder="Title" class="border p-2 mb-2 w-full rounded">
-<textarea id="content" placeholder="Content" class="border p-2 mb-2 w-full rounded"></textarea>
-<input type="file" id="fileInput" accept="image/*" class="mb-2 block text-sm">
-<div class="flex gap-2">
-<button id="saveBtn" onclick="savePost()" class="bg-black text-white w-full py-2 rounded font-bold">Save</button>
-<button onclick="adminModal.classList.add('hidden')" class="bg-gray-300 w-full py-2 rounded font-bold">Close</button>
-</div>
+<div id="adminModal" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
+<div class="bg-white p-6 rounded w-[90%] max-w-md">
+<input id="title" placeholder="Title" class="border p-2 mb-2 w-full">
+<textarea id="content" placeholder="Content" class="border p-2 mb-2 w-full"></textarea>
+<input type="file" id="fileInput" accept="image/*">
+<button id="saveBtn" onclick="savePost()" class="bg-black text-white w-full py-2 mt-2">Save</button>
 </div>
 </div>
 
 <script>
 const firebaseConfig={
 apiKey:"AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
-authDomain:"firebaseapp.com",
+authDomain:"factzone-a9ace.firebaseapp.com",
 projectId:"factzone-a9ace"
 };
 
 firebase.initializeApp(firebaseConfig);
 const db=firebase.firestore();
 
-// ⬇️ अपनी वास्तविक ImgBB API Key यहाँ कोटेशन "" के अंदर पेस्ट करें
+// ⬇️ यहाँ अपनी ImgBB API Key डालें
 const IMGBB_API_KEY = "f1bdb9735d4cd84dd8a265b7d092d2eb"; 
 
 let isAdmin=false,editId=null,existingImgUrl="",selectedFile=null;
@@ -100,7 +95,7 @@ fetchPosts();
 // IMAGE SELECT
 fileInput.onchange=e=>{
 if(e.target.files.length === 0) { selectedFile = null; return; }
-selectedFile = e.target.files[0]; // सिंगल फ़ाइल ऑब्जेक्ट फ़िक्स किया गया
+selectedFile = e.target.files[0]; // मूल फाइल ऑब्जेक्ट सुरक्षित किया
 };
 
 // FETCH POSTS
@@ -156,7 +151,7 @@ e.stopPropagation();
 editId=doc.id;
 title.value=p.title || "";
 content.value=p.content || "";
-existingImgUrl=p.image || "";
+existingImgUrl=p.image || ""; // पुरानी इमेज लिंक सहेजें
 openAdmin();
 };
 
@@ -178,7 +173,7 @@ fetchPosts();
 // ADMIN WINDOW
 function openAdmin(){adminModal.classList.remove("hidden");}
 
-// SAVE POST
+// SECURE ASYNC SAVE POST (With ImgBB Pipeline)
 async function savePost(){
 if(!title.value.trim()||!content.value.trim())return alert("Fill fields");
 
@@ -195,20 +190,20 @@ if(selectedFile) {
 let formData = new FormData();
 formData.append("image", selectedFile);
 
-// URL फ़ॉर्मेट को सही किया गया है
-let res = await fetch("imgbb.com" + IMGBB_API_KEY, {
+// ImgBB क्लाउड पर भेजना
+let res = await fetch(`imgbb.com{IMGBB_API_KEY}`, {
 method: "POST",
 body: formData
 });
 let resData = await res.json();
 
 if(resData.success) {
-postData.image = resData.data.url;
+postData.image = resData.data.url; // डायरेक्ट लाइव यूआरएल मिला
 } else {
-throw new Error(resData.error ? resData.error.message : "ImgBB Upload Error");
+throw new Error("ImgBB Upload Process Dropped");
 }
 } else if(editId && existingImgUrl) {
-postData.image = existingImgUrl;
+postData.image = existingImgUrl; // कोई नई फोटो नहीं चुनी तो पुरानी रहने दें
 }
 
 if(editId){
@@ -219,7 +214,7 @@ postData.views = 0;
 await db.collection("posts").add(postData);
 }
 
-// फॉर्म रीसेट
+// फॉर्म रीसेट क्लीनअप
 editId=null; title.value=""; content.value=""; fileInput.value=""; selectedFile=null; existingImgUrl="";
 saveBtn.innerText = "Save"; saveBtn.disabled = false;
 adminModal.classList.add("hidden");
