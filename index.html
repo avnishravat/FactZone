@@ -25,12 +25,7 @@
 <style>
 body{
 background:#f3f4f6;
-font-family:Arial, sans-serif;
-}
-
-.container{
-max-width:1200px;
-margin:auto;
+font-family:Arial,sans-serif;
 }
 
 .post-card{
@@ -45,6 +40,7 @@ textarea{
 resize:none;
 }
 </style>
+
 </head>
 
 <body>
@@ -53,9 +49,10 @@ resize:none;
 <header class="bg-black text-white p-4 flex items-center justify-between sticky top-0 z-50 shadow-lg">
 
 <!-- LOGO -->
-<div class="flex items-center gap-3 cursor-pointer" onclick="openLogin()">
+<div onclick="openLogin()" class="flex items-center gap-3 cursor-pointer">
 
-<img src="logo.svg"
+<img
+src="logo.svg"
 class="w-10 h-10 rounded-full bg-white p-1">
 
 <h1 class="text-2xl font-bold">
@@ -69,26 +66,21 @@ FactZone
 id="search"
 type="text"
 placeholder="🔍 Search..."
-class="w-[40%] px-4 py-2 rounded-full text-black outline-none"
-/>
+class="w-[40%] px-4 py-2 rounded-full text-black outline-none">
 
 </header>
 
 <!-- POSTS -->
-<div class="container">
-
 <main
 id="posts"
 class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 </main>
 
-</div>
-
-<!-- ADMIN FLOAT BUTTON -->
+<!-- ADMIN BUTTON -->
 <button
 id="adminBtn"
 onclick="openAdmin()"
-class="hidden fixed bottom-5 right-5 bg-black text-white w-14 h-14 rounded-full text-3xl shadow-xl z-50">
+class="hidden fixed bottom-5 right-5 w-14 h-14 rounded-full bg-black text-white text-3xl shadow-xl z-50">
 +
 </button>
 
@@ -97,7 +89,7 @@ class="hidden fixed bottom-5 right-5 bg-black text-white w-14 h-14 rounded-full 
 id="loginModal"
 class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
 
-<div class="bg-white p-6 rounded-xl w-[90%] max-w-sm">
+<div class="bg-white p-6 rounded-2xl w-[90%] max-w-sm">
 
 <h2 class="text-2xl font-bold mb-4 text-center">
 Admin Login
@@ -107,8 +99,7 @@ Admin Login
 id="adminPass"
 type="password"
 placeholder="Enter Password"
-class="border w-full p-3 rounded mb-3 outline-none"
-/>
+class="border w-full p-3 rounded-lg mb-3 outline-none">
 
 <button
 onclick="checkLogin()"
@@ -130,7 +121,7 @@ Cancel
 id="adminModal"
 class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
 
-<div class="bg-white p-6 rounded-xl w-[95%] max-w-lg">
+<div class="bg-white p-6 rounded-2xl w-[95%] max-w-lg">
 
 <h2 class="text-2xl font-bold mb-4">
 Add / Edit Post
@@ -139,27 +130,23 @@ Add / Edit Post
 <input
 id="title"
 placeholder="Post Title"
-class="border w-full p-3 rounded mb-3 outline-none"
-/>
+class="border w-full p-3 rounded-lg mb-3 outline-none">
 
 <textarea
 id="content"
 placeholder="Post Content"
-class="border w-full p-3 rounded mb-3 h-40 outline-none"></textarea>
+class="border w-full p-3 rounded-lg mb-3 h-40 outline-none"></textarea>
 
 <input
 type="file"
 id="fileInput"
-class="mb-3"
-/>
+class="mb-3 w-full">
 
 <img
 id="preview"
-class="hidden w-full h-52 object-cover rounded-lg mb-3"
-/>
+class="hidden w-full h-52 object-cover rounded-lg mb-3">
 
 <button
-id="saveBtn"
 onclick="savePost()"
 class="bg-black text-white w-full py-3 rounded-lg font-bold">
 Save Post
@@ -205,7 +192,7 @@ document.getElementById("loginModal").classList.add("hidden");
 // ADMIN LOGIN
 async function checkLogin(){
 
-const email = "admin@factzone.com";
+const email = "avnishravat20@gmail.com";
 const password = document.getElementById("adminPass").value;
 
 try{
@@ -235,24 +222,24 @@ function openAdmin(){
 
 editId = null;
 
-title.value = "";
-content.value = "";
+document.getElementById("title").value = "";
+document.getElementById("content").value = "";
 
 uploadedImage = "";
 
-preview.classList.add("hidden");
+document.getElementById("preview").classList.add("hidden");
 
-adminModal.classList.remove("hidden");
+document.getElementById("adminModal").classList.remove("hidden");
 
 }
 
 // CLOSE ADMIN
 function closeAdmin(){
-adminModal.classList.add("hidden");
+document.getElementById("adminModal").classList.add("hidden");
 }
 
 // IMAGE UPLOAD
-fileInput.onchange = e=>{
+document.getElementById("fileInput").onchange = e=>{
 
 const file = e.target.files[0];
 
@@ -263,6 +250,8 @@ const reader = new FileReader();
 reader.onload = ()=>{
 
 uploadedImage = reader.result;
+
+const preview = document.getElementById("preview");
 
 preview.src = uploadedImage;
 
@@ -277,11 +266,15 @@ reader.readAsDataURL(file);
 // FETCH POSTS
 async function fetchPosts(){
 
+const posts = document.getElementById("posts");
+
 posts.innerHTML = `
 <p class="text-center col-span-full text-xl">
 Loading...
 </p>
 `;
+
+try{
 
 const snapshot = await db.collection("posts").get();
 
@@ -294,7 +287,7 @@ const p = doc.data();
 const div = document.createElement("div");
 
 div.className =
-"post-card bg-white rounded-2xl shadow overflow-hidden cursor-pointer";
+"post-card bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer";
 
 div.onclick = ()=>{
 location.href = `detail.html?id=${doc.id}`;
@@ -332,15 +325,15 @@ ${(p.content || "").substring(0,100)}...
 
 ${isAdmin ? `
 
-<div class="flex gap-3 mt-3">
+<div class="flex gap-3 mt-4">
 
 <button
-class="editBtn bg-blue-500 text-white px-3 py-1 rounded">
+class="editBtn bg-blue-500 text-white px-3 py-1 rounded-lg">
 Edit
 </button>
 
 <button
-class="deleteBtn bg-red-500 text-white px-3 py-1 rounded">
+class="deleteBtn bg-red-500 text-white px-3 py-1 rounded-lg">
 Delete
 </button>
 
@@ -377,13 +370,14 @@ e.stopPropagation();
 
 editId = doc.id;
 
-title.value = p.title || "";
-
-content.value = p.content || "";
+document.getElementById("title").value = p.title || "";
+document.getElementById("content").value = p.content || "";
 
 uploadedImage = p.image || "";
 
 if(p.image){
+
+const preview = document.getElementById("preview");
 
 preview.src = p.image;
 
@@ -391,7 +385,7 @@ preview.classList.remove("hidden");
 
 }
 
-openAdmin();
+document.getElementById("adminModal").classList.remove("hidden");
 
 };
 
@@ -416,13 +410,25 @@ posts.appendChild(div);
 
 });
 
+}catch(err){
+
+posts.innerHTML = `
+<p class="text-center text-red-500 col-span-full">
+Error Loading Posts
+</p>
+`;
+
+console.log(err);
+
+}
+
 }
 
 // SAVE POST
 async function savePost(){
 
-const t = title.value.trim();
-const c = content.value.trim();
+const t = document.getElementById("title").value.trim();
+const c = document.getElementById("content").value.trim();
 
 if(!t || !c){
 
@@ -449,7 +455,7 @@ alert("Post Updated");
 
 }
 
-// NEW
+// NEW POST
 else{
 
 await db.collection("posts").add({
@@ -475,12 +481,14 @@ fetchPosts();
 
 alert("Error: " + err.message);
 
+console.log(err);
+
 }
 
 }
 
 // SEARCH
-search.oninput = e=>{
+document.getElementById("search").oninput = e=>{
 
 const value = e.target.value.toLowerCase();
 
