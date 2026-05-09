@@ -61,8 +61,8 @@ class="hidden fixed bottom-5 right-5 bg-black text-white px-4 py-3 rounded-full 
 <div class="bg-white p-6 rounded w-[90%] max-w-md">
 <input id="title" placeholder="Title" class="border p-2 mb-2 w-full">
 <textarea id="content" placeholder="Content" class="border p-2 mb-2 w-full"></textarea>
-<input type="file" id="fileInput">
-<button onclick="savePost()" class="bg-black text-white w-full py-2 mt-2">Save</button>
+<input type="file" id="fileInput" accept="image/*">
+<button id="saveBtn" onclick="savePost()" class="bg-black text-white w-full py-2 mt-2">Save</button>
 </div>
 </div>
 
@@ -76,7 +76,10 @@ projectId:"factzone-a9ace"
 firebase.initializeApp(firebaseConfig);
 const db=firebase.firestore();
 
-let isAdmin=false,editId=null,imgData="";
+// ⬇️ यहाँ अपनी ImgBB API Key डालें
+const IMGBB_API_KEY = "यहाँ_अपनी_IMGBB_API_KEY_डालें"; 
+
+let isAdmin=false,editId=null,existingImgUrl="",selectedFile=null;
 
 // LOGIN
 function openLogin(){loginModal.classList.remove("hidden");}
@@ -89,11 +92,10 @@ fetchPosts();
 }else alert("Wrong Password");
 }
 
-// IMAGE
+// IMAGE SELECT
 fileInput.onchange=e=>{
-let r=new FileReader();
-r.onload=()=>imgData=r.result;
-r.readAsDataURL(e.target.files[0]);
+if(e.target.files.length === 0) { selectedFile = null; return; }
+selectedFile = e.target.files[0]; // मूल फाइल ऑब्जेक्ट सुरक्षित किया
 };
 
 // FETCH POSTS
@@ -119,39 +121,45 @@ ${p.image?`<img src="${p.image}" class="w-full h-48 object-cover">`:""}
 <p class="text-gray-600 text-sm">${(p.content||"").substring(0,80)}...</p>
 
 <div class="flex justify-between mt-2">
-<button class="likeBtn text-red-500">❤️ ${p.likes||0}</button>
+<button class="likeBtn text-red-500">❤️ <span>${p.likes||0}</span></button>
 <span>👁 ${p.views||0}</span>
 </div>
 
 ${isAdmin?`
-<button class="editBtn text-blue-500">Edit</button>
-<button class="deleteBtn text-red-500">Delete</button>`:""}
+<div class="mt-2 flex gap-2">
+<button class="editBtn text-blue-500 font-bold">Edit</button>
+<button class="deleteBtn text-red-500 font-bold">Delete</button>
+</div>`:""}
 
 </div>
 `;
 
 // LIKE
-div.querySelector(".likeBtn").onclick=(e)=>{
+div.querySelector(".likeBtn").onclick=async (e)=>{
 e.stopPropagation();
-db.collection("posts").doc(doc.id).update({
+let targetSpan = e.currentTarget.querySelector("span");
+await db.collection("posts").doc(doc.id).update({
 likes:firebase.firestore.FieldValue.increment(1)
-}).then(fetchPosts);
+});
+targetSpan.innerText = parseInt(targetSpan.innerText) + 1;
 };
 
-// ADMIN
+// ADMIN ACTIONS
 if(isAdmin){
 div.querySelector(".editBtn").onclick=(e)=>{
 e.stopPropagation();
 editId=doc.id;
-title.value=p.title;
-content.value=p.content;
+title.value=p.title || "";
+content.value=p.content || "";
+existingImgUrl=p.image || ""; // पुरानी इमेज लिंक सहेजें
 openAdmin();
 };
 
-div.querySelector(".deleteBtn").onclick=(e)=>{
+div.querySelector(".deleteBtn").onclick=async (e)=>{
 e.stopPropagation();
 if(confirm("Delete?")){
-db.collection("posts").doc(doc.id).delete().then(fetchPosts);
+await db.collection("posts").doc(doc.id).delete();
+fetchPosts();
 }
 };
 }
@@ -162,30 +170,59 @@ posts.appendChild(div);
 
 fetchPosts();
 
-// ADMIN
+// ADMIN WINDOW
 function openAdmin(){adminModal.classList.remove("hidden");}
 
-function savePost(){
-if(!title.value||!content.value)return alert("Fill fields");
+// SECURE ASYNC SAVE POST (With ImgBB Pipeline)
+async function savePost(){
+if(!title.value.trim()||!content.value.trim())return alert("Fill fields");
 
-if(editId){
-db.collection("posts").doc(editId).set({
-title:title.value,
-content:content.value,
-image:imgData
-},{merge:true});
-}else{
-db.collection("posts").add({
-title:title.value,
-content:content.value,
-image:imgData,
-likes:0,
-views:0
+let postData = {
+title: title.value.trim(),
+content: content.value.trim()
+};
+
+saveBtn.innerText = "Uploading Image...";
+saveBtn.disabled = true;
+
+try {
+if(selectedFile) {
+let formData = new FormData();
+formData.append("image", selectedFile);
+
+// ImgBB क्लाउड पर भेजना
+let res = await fetch(`imgbb.com{IMGBB_API_KEY}`, {
+method: "POST",
+body: formData
 });
+let resData = await res.json();
+
+if(resData.success) {
+postData.image = resData.data.url; // डायरेक्ट लाइव यूआरएल मिला
+} else {
+throw new Error("ImgBB Upload Process Dropped");
+}
+} else if(editId && existingImgUrl) {
+postData.image = existingImgUrl; // कोई नई फोटो नहीं चुनी तो पुरानी रहने दें
 }
 
+if(editId){
+await db.collection("posts").doc(editId).set(postData,{merge:true});
+}else{
+postData.likes = 0;
+postData.views = 0;
+await db.collection("posts").add(postData);
+}
+
+// फॉर्म रीसेट क्लीनअप
+editId=null; title.value=""; content.value=""; fileInput.value=""; selectedFile=null; existingImgUrl="";
+saveBtn.innerText = "Save"; saveBtn.disabled = false;
 adminModal.classList.add("hidden");
-fetchPosts();
+await fetchPosts();
+} catch(error) {
+alert("Error saving data: " + error.message);
+saveBtn.innerText = "Save"; saveBtn.disabled = false;
+}
 }
 
 // SEARCH
