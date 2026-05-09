@@ -1,89 +1,214 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Post</title>
+
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>FactZone Post</title>
+
+<meta name="description"
+content="Read amazing facts and knowledge posts on FactZone."/>
+
+<link rel="icon" href="logo.svg" type="image/svg+xml"/>
 
 <script src="https://cdn.tailwindcss.com"></script>
+
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+<style>
+
+body{
+background:#f3f4f6;
+}
+
+</style>
+
 </head>
 
-<body class="p-6 bg-white">
+<body>
 
-<button onclick="history.back()" class="bg-black text-white px-3 py-1 mb-4">⬅ Back</button>
+<!-- HEADER -->
 
-<img id="img" class="w-full h-72 object-cover mb-3">
+<header class="bg-black p-4 sticky top-0 z-50 shadow-lg">
 
-<h1 id="title"></h1>
-<p id="content"></p>
+<div class="max-w-5xl mx-auto flex items-center justify-between">
 
-<p id="views"></p>
-<p id="likes"></p>
+<a href="index.html"
+class="flex items-center gap-2">
 
-<button id="likeBtn">❤️ Like</button>
+<img
+src="logo.svg"
+class="w-10 h-10 rounded-full bg-white p-1"/>
+
+<h1 class="text-2xl font-bold text-white">
+FactZone
+</h1>
+
+</a>
+
+</div>
+
+</header>
+
+<!-- POST -->
+
+<main class="max-w-4xl mx-auto p-4">
+
+<div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+
+<img
+id="image"
+class="w-full max-h-[500px] object-cover"/>
+
+<div class="p-6">
+
+<h1
+id="title"
+class="text-3xl font-bold mb-4">
+Loading...
+</h1>
+
+<div class="flex gap-6 text-gray-600 mb-6">
+
+<p id="views">
+👁️ 0 views
+</p>
+
+<p id="likes">
+❤️ 0 likes
+</p>
+
+</div>
+
+<p
+id="content"
+class="text-lg leading-8 whitespace-pre-wrap text-gray-800">
+</p>
+
+<button
+id="likeBtn"
+class="mt-8 bg-red-500 text-white px-6 py-3 rounded-xl font-bold">
+❤️ Like
+</button>
+
+</div>
+
+</div>
+
+</main>
 
 <script>
-const firebaseConfig={
+
+const firebaseConfig = {
+
 apiKey:"AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
+
 authDomain:"factzone-a9ace.firebaseapp.com",
+
 projectId:"factzone-a9ace"
+
 };
 
 firebase.initializeApp(firebaseConfig);
-const db=firebase.firestore();
 
-const id=new URLSearchParams(location.search).get("id");
+const db = firebase.firestore();
 
-async function load(){
+const id =
+new URLSearchParams(location.search)
+.get("id");
+
+async function loadPost(){
 
 if(!id){
-document.body.innerHTML="<h2>No Post ID</h2>";
+
+alert("Post Not Found");
+
 return;
+
 }
 
-let ref=db.collection("posts").doc(id);
+const ref =
+db.collection("posts").doc(id);
 
-// VIEW
-if(!localStorage.getItem("view_"+id)){
 try{
+
+// VIEW COUNT
+
+if(!localStorage.getItem("view_"+id)){
+
 await ref.update({
-views:firebase.firestore.FieldValue.increment(1)
+
+views: firebase.firestore
+.FieldValue.increment(1)
+
 });
-}catch(e){}
-localStorage.setItem("view_"+id,true);
+
+localStorage.setItem("view_"+id,"yes");
+
 }
 
-let doc=await ref.get();
+// GET DATA
+
+const doc = await ref.get();
 
 if(!doc.exists){
-document.body.innerHTML="<h2>Post Not Found</h2>";
+
+alert("Post Deleted");
+
 return;
+
 }
 
-let p=doc.data();
+const p = doc.data();
 
-title.innerText=p.title||"";
-content.innerText=p.content||"";
-views.innerText="👁 "+(p.views||0);
-likes.innerText="❤️ "+(p.likes||0);
+document.title =
+p.title + " | FactZone";
 
-if(p.image){
-img.src=p.image;
-}else{
-img.style.display="none";
-}
+document.getElementById("title")
+.innerText = p.title;
 
-likeBtn.onclick=async ()=>{
+document.getElementById("content")
+.innerText = p.content;
+
+document.getElementById("image")
+.src = p.image;
+
+document.getElementById("views")
+.innerText =
+"👁️ " + (p.views || 0) + " views";
+
+document.getElementById("likes")
+.innerText =
+"❤️ " + (p.likes || 0) + " likes";
+
+// LIKE BUTTON
+
+document.getElementById("likeBtn")
+.onclick = async ()=>{
+
 await ref.update({
-likes:firebase.firestore.FieldValue.increment(1)
+
+likes: firebase.firestore
+.FieldValue.increment(1)
+
 });
-load();
+
+loadPost();
+
 };
 
+}catch(err){
+
+alert(err.message);
+
 }
 
-load();
+}
+
+loadPost();
+
 </script>
 
 </body>
