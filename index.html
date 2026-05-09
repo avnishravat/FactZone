@@ -1,44 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
 <title>FactZone | Amazing Facts & Knowledge</title>
 
-<meta name="description" content="Explore amazing facts and daily knowledge on FactZone.">
-<meta name="keywords" content="facts, amazing facts, knowledge, factzone">
+<meta name="description"
+content="Explore amazing facts, knowledge, technology, internet secrets and viral content on FactZone."/>
 
-<meta property="og:title" content="FactZone">
-<meta property="og:description" content="Daily amazing facts & knowledge">
-<meta property="og:image" content="https://factzone.online/logo.svg">
+<meta name="keywords"
+content="facts, amazing facts, technology facts, knowledge, FactZone"/>
 
-<link rel="icon" href="logo.svg">
+<meta name="author" content="FactZone"/>
+
+<meta name="google-site-verification"
+content="dtL9Egu7NLpAEH3Gm3VniruledIKjz2S-e-F1wGXuMt4"/>
+
+<link rel="icon" href="logo.svg" type="image/svg+xml"/>
 
 <script src="https://cdn.tailwindcss.com"></script>
 
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <style>
+
 body{
 background:#f3f4f6;
-font-family:Arial,sans-serif;
 }
 
-.post-card{
-transition:0.3s;
+.line-clamp{
+display:-webkit-box;
+-webkit-line-clamp:2;
+-webkit-box-orient:vertical;
+overflow:hidden;
 }
 
-.post-card:hover{
-transform:translateY(-5px);
-}
-
-textarea{
-resize:none;
-}
 </style>
 
 </head>
@@ -46,178 +46,209 @@ resize:none;
 <body>
 
 <!-- HEADER -->
-<header class="bg-black text-white p-4 flex items-center justify-between sticky top-0 z-50 shadow-lg">
 
-<!-- LOGO -->
-<div onclick="openLogin()" class="flex items-center gap-3 cursor-pointer">
+<header class="bg-black sticky top-0 z-50 shadow-lg">
+
+<div class="max-w-7xl mx-auto flex items-center justify-between p-4 gap-3">
+
+<div
+onclick="openLogin()"
+class="flex items-center gap-2 cursor-pointer select-none">
 
 <img
 src="logo.svg"
-class="w-10 h-10 rounded-full bg-white p-1">
+class="w-10 h-10 rounded-full bg-white p-1"/>
 
-<h1 class="text-2xl font-bold">
+<h1 class="text-2xl font-bold text-white">
 FactZone
 </h1>
 
 </div>
 
-<!-- SEARCH -->
 <input
-id="search"
 type="text"
+id="searchInput"
 placeholder="🔍 Search..."
-class="w-[40%] px-4 py-2 rounded-full text-black outline-none">
+class="w-full max-w-xl px-5 py-3 rounded-full outline-none"/>
+
+</div>
 
 </header>
 
 <!-- POSTS -->
+
 <main
-id="posts"
-class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+id="postsContainer"
+class="max-w-7xl mx-auto p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
 </main>
 
-<!-- ADMIN BUTTON -->
+<!-- FLOAT BUTTON -->
+
 <button
-id="adminBtn"
+id="addBtn"
 onclick="openAdmin()"
-class="hidden fixed bottom-5 right-5 w-14 h-14 rounded-full bg-black text-white text-3xl shadow-xl z-50">
+class="hidden fixed bottom-6 right-6 w-14 h-14 rounded-full bg-black text-white text-3xl shadow-xl">
 +
 </button>
 
 <!-- LOGIN MODAL -->
+
 <div
 id="loginModal"
-class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+class="hidden fixed inset-0 bg-black/70 z-50 flex justify-center items-center">
 
-<div class="bg-white p-6 rounded-2xl w-[90%] max-w-sm">
+<div class="bg-white w-[90%] max-w-sm rounded-2xl p-6">
 
-<h2 class="text-2xl font-bold mb-4 text-center">
+<h2 class="text-2xl font-bold text-center mb-5">
 Admin Login
 </h2>
 
 <input
-id="adminPass"
+type="email"
+id="email"
+placeholder="Email"
+class="w-full border p-3 rounded-xl mb-3 outline-none"/>
+
+<input
 type="password"
-placeholder="Enter Password"
-class="border w-full p-3 rounded-lg mb-3 outline-none">
+id="password"
+placeholder="Password"
+class="w-full border p-3 rounded-xl mb-4 outline-none"/>
 
 <button
-onclick="checkLogin()"
-class="bg-black text-white w-full py-3 rounded-lg font-bold">
+onclick="login()"
+class="w-full bg-black text-white py-3 rounded-xl font-bold">
 Login
 </button>
 
 <button
 onclick="closeLogin()"
-class="bg-gray-300 w-full py-3 rounded-lg mt-2">
-Cancel
+class="w-full bg-gray-200 py-3 rounded-xl mt-2">
+Close
 </button>
 
 </div>
+
 </div>
 
-<!-- ADMIN PANEL -->
+<!-- ADMIN MODAL -->
+
 <div
 id="adminModal"
-class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+class="hidden fixed inset-0 bg-black/70 z-50 flex justify-center items-center overflow-auto">
 
-<div class="bg-white p-6 rounded-2xl w-[95%] max-w-lg">
+<div class="bg-white w-[95%] max-w-2xl rounded-2xl p-5 my-10">
 
 <h2 class="text-2xl font-bold mb-4">
-Add / Edit Post
+Create Post
 </h2>
 
 <input
 id="title"
 placeholder="Post Title"
-class="border w-full p-3 rounded-lg mb-3 outline-none">
+class="w-full border p-3 rounded-xl mb-3 outline-none"/>
 
 <textarea
 id="content"
 placeholder="Post Content"
-class="border w-full p-3 rounded-lg mb-3 h-40 outline-none"></textarea>
+class="w-full border p-3 rounded-xl h-40 mb-3 outline-none"></textarea>
 
 <input
 type="file"
 id="fileInput"
-class="mb-3 w-full">
+class="mb-4"/>
 
 <img
 id="preview"
-class="hidden w-full h-52 object-cover rounded-lg mb-3">
+class="hidden w-full h-72 object-cover rounded-xl mb-4"/>
 
 <button
 onclick="savePost()"
-class="bg-black text-white w-full py-3 rounded-lg font-bold">
+class="w-full bg-black text-white py-3 rounded-xl font-bold">
 Save Post
 </button>
 
 <button
 onclick="closeAdmin()"
-class="bg-gray-300 w-full py-3 rounded-lg mt-2">
+class="w-full bg-gray-200 py-3 rounded-xl mt-3">
 Close
 </button>
 
 </div>
+
 </div>
 
 <script>
 
-// FIREBASE CONFIG
 const firebaseConfig = {
+
 apiKey:"AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
+
 authDomain:"factzone-a9ace.firebaseapp.com",
+
 projectId:"factzone-a9ace"
+
 };
 
 firebase.initializeApp(firebaseConfig);
 
-const db = firebase.firestore();
 const auth = firebase.auth();
 
-let isAdmin = false;
-let editId = null;
+const db = firebase.firestore();
+
 let uploadedImage = "";
+let editId = null;
+let isAdmin = false;
 
-// OPEN LOGIN
 function openLogin(){
-document.getElementById("loginModal").classList.remove("hidden");
+
+document.getElementById("loginModal")
+.classList.remove("hidden");
+
 }
 
-// CLOSE LOGIN
 function closeLogin(){
-document.getElementById("loginModal").classList.add("hidden");
+
+document.getElementById("loginModal")
+.classList.add("hidden");
+
 }
 
-// ADMIN LOGIN
-async function checkLogin(){
+async function login(){
 
-const email = "avnishravat20@gmail.com";
-const password = document.getElementById("adminPass").value;
+const email =
+document.getElementById("email").value;
+
+const password =
+document.getElementById("password").value;
 
 try{
 
-await auth.signInWithEmailAndPassword(email,password);
+await auth.signInWithEmailAndPassword(
+email,
+password
+);
 
 isAdmin = true;
 
-document.getElementById("adminBtn").classList.remove("hidden");
+document.getElementById("addBtn")
+.classList.remove("hidden");
 
 closeLogin();
 
 fetchPosts();
 
-alert("Admin Login Success");
+alert("Admin Login Success ✅");
 
 }catch(err){
 
-alert("Wrong Password");
+alert(err.message);
 
 }
 
 }
 
-// OPEN ADMIN
 function openAdmin(){
 
 editId = null;
@@ -227,113 +258,129 @@ document.getElementById("content").value = "";
 
 uploadedImage = "";
 
-document.getElementById("preview").classList.add("hidden");
+document.getElementById("preview")
+.classList.add("hidden");
 
-document.getElementById("adminModal").classList.remove("hidden");
+document.getElementById("adminModal")
+.classList.remove("hidden");
 
 }
 
-// CLOSE ADMIN
 function closeAdmin(){
-document.getElementById("adminModal").classList.add("hidden");
+
+document.getElementById("adminModal")
+.classList.add("hidden");
+
 }
 
-// IMAGE UPLOAD
-document.getElementById("fileInput").onchange = e=>{
+document.getElementById("fileInput")
+.onchange = async (e)=>{
 
 const file = e.target.files[0];
 
 if(!file) return;
 
-const reader = new FileReader();
+const formData = new FormData();
 
-reader.onload = ()=>{
-
-uploadedImage = reader.result;
-
-const preview = document.getElementById("preview");
-
-preview.src = uploadedImage;
-
-preview.classList.remove("hidden");
-
-};
-
-reader.readAsDataURL(file);
-
-};
-
-// FETCH POSTS
-async function fetchPosts(){
-
-const posts = document.getElementById("posts");
-
-posts.innerHTML = `
-<p class="text-center col-span-full text-xl">
-Loading...
-</p>
-`;
+formData.append("image", file);
 
 try{
 
-const snapshot = await db.collection("posts").get();
+document.getElementById("preview")
+.classList.remove("hidden");
 
-posts.innerHTML = "";
+document.getElementById("preview").src =
+"https://i.imgur.com/ZKZC5Qx.gif";
+
+const res = await fetch(
+"https://api.imgbb.com/1/upload?key=f1bdb9735d4cd84dd8a265b7d092d2eb",
+{
+method:"POST",
+body:formData
+}
+);
+
+const data = await res.json();
+
+uploadedImage = data.data.url;
+
+document.getElementById("preview").src =
+uploadedImage;
+
+alert("Image Uploaded ✅");
+
+}catch(err){
+
+alert("Upload Failed ❌");
+
+}
+
+};
+
+async function fetchPosts(){
+
+const container =
+document.getElementById("postsContainer");
+
+container.innerHTML =
+"<h2>Loading...</h2>";
+
+const snapshot =
+await db.collection("posts")
+.orderBy("createdAt","desc")
+.get();
+
+container.innerHTML = "";
 
 snapshot.forEach(doc=>{
 
 const p = doc.data();
 
-const div = document.createElement("div");
+const card = document.createElement("div");
 
-div.className =
-"post-card bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer";
+card.className =
+"bg-white rounded-2xl overflow-hidden shadow hover:shadow-2xl transition cursor-pointer";
 
-div.onclick = ()=>{
-location.href = `detail.html?id=${doc.id}`;
-};
+card.innerHTML = `
 
-div.innerHTML = `
-
-${p.image ? `
 <img
 src="${p.image}"
 class="w-full h-56 object-cover">
-` : ""}
 
 <div class="p-4">
 
-<h2 class="font-bold text-xl mb-2">
-${p.title || ""}
+<h2 class="font-bold text-xl mb-2 line-clamp">
+${p.title}
 </h2>
 
-<p class="text-gray-600 text-sm mb-3">
-${(p.content || "").substring(0,100)}...
+<p class="text-gray-600 text-sm mb-3 line-clamp">
+${p.content}
 </p>
 
 <div class="flex justify-between items-center">
 
-<button class="likeBtn text-red-500 font-bold">
+<button
+class="likeBtn text-red-500 font-bold">
 ❤️ ${p.likes || 0}
 </button>
 
 <span class="text-gray-500 text-sm">
-👁️ ${p.views || 0} views
+👁️ ${p.views || 0}
 </span>
 
 </div>
 
 ${isAdmin ? `
 
-<div class="flex gap-3 mt-4">
+<div class="flex gap-2 mt-4">
 
 <button
-class="editBtn bg-blue-500 text-white px-3 py-1 rounded-lg">
+class="editBtn bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
 Edit
 </button>
 
 <button
-class="deleteBtn bg-red-500 text-white px-3 py-1 rounded-lg">
+class="deleteBtn bg-red-600 text-white px-4 py-2 rounded-lg text-sm">
 Delete
 </button>
 
@@ -344,15 +391,24 @@ Delete
 </div>
 `;
 
+card.onclick = ()=>{
 
-// LIKE
-div.querySelector(".likeBtn").onclick = async (e)=>{
+location.href =
+`detail.html?id=${doc.id}`;
+
+};
+
+card.querySelector(".likeBtn")
+.onclick = async (e)=>{
 
 e.stopPropagation();
 
-await db.collection("posts").doc(doc.id).update({
+await db.collection("posts")
+.doc(doc.id)
+.update({
 
-likes: firebase.firestore.FieldValue.increment(1)
+likes: firebase.firestore
+.FieldValue.increment(1)
 
 });
 
@@ -360,43 +416,43 @@ fetchPosts();
 
 };
 
-// ADMIN BUTTONS
 if(isAdmin){
 
-// EDIT
-div.querySelector(".editBtn").onclick = (e)=>{
+card.querySelector(".editBtn")
+.onclick = (e)=>{
 
 e.stopPropagation();
 
 editId = doc.id;
 
-document.getElementById("title").value = p.title || "";
-document.getElementById("content").value = p.content || "";
+document.getElementById("title").value =
+p.title;
 
-uploadedImage = p.image || "";
+document.getElementById("content").value =
+p.content;
 
-if(p.image){
+uploadedImage = p.image;
 
-const preview = document.getElementById("preview");
+document.getElementById("preview")
+.src = p.image;
 
-preview.src = p.image;
+document.getElementById("preview")
+.classList.remove("hidden");
 
-preview.classList.remove("hidden");
-
-}
-
-document.getElementById("adminModal").classList.remove("hidden");
+openAdmin();
 
 };
 
-// DELETE
-div.querySelector(".deleteBtn").onclick = async (e)=>{
+card.querySelector(".deleteBtn")
+.onclick = async (e)=>{
 
 e.stopPropagation();
 
-if(confirm("Delete this post?")){
+if(confirm("Delete Post?")){
 
-await db.collection("posts").doc(doc.id).delete();
+await db.collection("posts")
+.doc(doc.id)
+.delete();
 
 fetchPosts();
 
@@ -406,31 +462,23 @@ fetchPosts();
 
 }
 
-posts.appendChild(div);
+container.appendChild(card);
 
 });
 
-}catch(err){
-
-posts.innerHTML = `
-<p class="text-center text-red-500 col-span-full">
-Error Loading Posts
-</p>
-`;
-
-console.log(err);
-
 }
 
-}
-
-// SAVE POST
 async function savePost(){
 
-const t = document.getElementById("title").value.trim();
-const c = document.getElementById("content").value.trim();
+const title =
+document.getElementById("title")
+.value.trim();
 
-if(!t || !c){
+const content =
+document.getElementById("content")
+.value.trim();
+
+if(!title || !content){
 
 alert("Fill all fields");
 
@@ -440,28 +488,27 @@ return;
 
 try{
 
-// EDIT
 if(editId){
 
-await db.collection("posts").doc(editId).set({
+await db.collection("posts")
+.doc(editId)
+.update({
 
-title:t,
-content:c,
+title,
+content,
 image:uploadedImage
 
-},{merge:true});
+});
 
-alert("Post Updated");
+alert("Updated ✅");
 
-}
+}else{
 
-// NEW POST
-else{
+await db.collection("posts")
+.add({
 
-await db.collection("posts").add({
-
-title:t,
-content:c,
+title,
+content,
 image:uploadedImage,
 likes:0,
 views:0,
@@ -469,7 +516,7 @@ createdAt:new Date()
 
 });
 
-alert("Post Uploaded");
+alert("Post Uploaded ✅");
 
 }
 
@@ -479,23 +526,26 @@ fetchPosts();
 
 }catch(err){
 
-alert("Error: " + err.message);
-
-console.log(err);
+alert(err.message);
 
 }
 
 }
 
-// SEARCH
-document.getElementById("search").oninput = e=>{
+document.getElementById("searchInput")
+.oninput = (e)=>{
 
-const value = e.target.value.toLowerCase();
+const value =
+e.target.value.toLowerCase();
 
-document.querySelectorAll("#posts > div").forEach(card=>{
+document.querySelectorAll("#postsContainer > div")
+.forEach(card=>{
+
+const text =
+card.innerText.toLowerCase();
 
 card.style.display =
-card.innerText.toLowerCase().includes(value)
+text.includes(value)
 ? "block"
 : "none";
 
@@ -503,7 +553,6 @@ card.innerText.toLowerCase().includes(value)
 
 };
 
-// INIT
 fetchPosts();
 
 </script>
