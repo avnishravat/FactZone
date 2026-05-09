@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FactZone | Amazing Facts & Knowledge</title>
     <link rel="icon" href="logo.svg">
-    <script src="tailwindcss.com"></script>
     
-    <!-- FIREBASE LIBRARIES -->
+    <!-- ✅ TAILWIND CSS V4 FIX -->
+    <script src="unpkg.com"></script>
+    
+    <!-- ✅ FIREBASE CDN FIXED LINKS -->
     <script src="gstatic.com"></script>
     <script src="gstatic.com"></script>
     <script src="gstatic.com"></script>
@@ -29,7 +31,7 @@
                 <h1 class="text-2xl font-black bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">FactZone</h1>
             </div>
             <div class="flex items-center gap-3 w-full sm:w-1/2 justify-end">
-                <input id="search" placeholder="अजीबोगरीब फैक्ट्स खोजें..." class="px-4 py-2.5 rounded-2xl text-black w-full outline-none">
+                <input id="search" placeholder="अजीबोगरीब फैक्ट्स खोजें..." class="px-4 py-2.5 rounded-2xl text-black w-full outline-none bg-white">
                 <button id="logoutBtn" onclick="logout()" class="hidden bg-red-600 text-white px-4 py-2.5 rounded-2xl text-xs font-bold shadow-md">Log Out</button>
             </div>
         </div>
@@ -40,14 +42,14 @@
         <main id="posts" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></main>
     </div>
 
-    <button id="adminBtn" onclick="openAdmin()" class="hidden fixed bottom-6 right-6 bg-amber-500 text-white w-14 h-14 rounded-full shadow-2xl text-3xl flex items-center justify-center">+</button>
+    <button id="adminBtn" onclick="openAdmin()" class="hidden fixed bottom-6 right-6 bg-amber-500 text-white w-14 h-14 rounded-full shadow-2xl text-3xl flex items-center justify-center font-bold">+</button>
 
     <!-- LOGIN MODAL -->
     <div id="loginModal" class="hidden fixed inset-0 bg-black/80 flex justify-center items-center p-4 z-50">
         <div class="bg-white p-8 rounded-3xl max-w-sm w-full">
             <h2 class="text-2xl font-black mb-4">Admin Login</h2>
-            <input id="adminEmail" type="email" placeholder="Admin Email" class="border p-3 mb-3 w-full rounded-2xl">
-            <input id="adminPass" type="password" placeholder="Password" class="border p-3 mb-4 w-full rounded-2xl">
+            <input id="adminEmail" type="email" placeholder="Admin Email" class="border p-3 mb-3 w-full rounded-2xl bg-gray-50 outline-none">
+            <input id="adminPass" type="password" placeholder="Password" class="border p-3 mb-4 w-full rounded-2xl bg-gray-50 outline-none">
             <div class="flex gap-3">
                 <button onclick="login()" class="bg-black text-white w-full py-3 rounded-2xl font-bold">Sign In</button>
                 <button onclick="loginModal.classList.add('hidden')" class="bg-gray-100 text-gray-700 w-full py-3 rounded-2xl">Cancel</button>
@@ -59,8 +61,8 @@
     <div id="adminModal" class="hidden fixed inset-0 bg-black/80 flex justify-center items-center p-4 z-50">
         <div class="bg-white p-6 sm:p-8 rounded-3xl w-[90%] max-w-lg shadow-2xl">
             <h2 id="modalTitle" class="text-2xl font-black mb-4">Create New Post</h2>
-            <input id="title" placeholder="टाइटल लिखें..." class="border p-3 mb-3 w-full rounded-2xl font-semibold">
-            <textarea id="content" placeholder="फैक्ट की जानकारी लिखें..." rows="6" class="border p-3 mb-3 w-full rounded-2xl"></textarea>
+            <input id="title" placeholder="टाइटल लिखें..." class="border p-3 mb-3 w-full rounded-2xl font-semibold bg-gray-50 outline-none">
+            <textarea id="content" placeholder="फैक्ट की जानकारी लिखें..." rows="6" class="border p-3 mb-3 w-full rounded-2xl bg-gray-50 outline-none"></textarea>
             <input type="file" id="fileInput" accept="image/*" class="mb-4 block w-full text-sm text-gray-500">
             <div class="flex gap-3 pt-4">
                 <button id="saveBtn" onclick="savePost()" class="bg-amber-500 text-white w-full py-3 rounded-2xl font-bold">Save & Publish</button>
@@ -80,7 +82,7 @@
         const db = firebase.firestore();
         const auth = firebase.auth();
 
-        // ⚠️ अपनी ImgBB API Key यहाँ डालें
+        // ⚠️ अपनी ImgBB API Key यहाँ डालें (अगर इमेज अपलोड करनी है)
         const IMGBB_API_KEY = "f1bdb9735d4cd84dd8a265b7d092d2eb"; 
 
         let userLoggedIn = false, editId = null, existingImgUrl = "", selectedFile = null;
@@ -99,12 +101,14 @@
         });
 
         function openLoginModal() { if(!userLoggedIn) loginModal.classList.remove("hidden"); }
+        
         async function login() {
             try {
                 await auth.signInWithEmailAndPassword(adminEmail.value.trim(), adminPass.value);
                 loginModal.classList.add("hidden");
             } catch(e) { alert("Failed: " + e.message); }
         }
+        
         async function logout() { if(confirm("Logout?")) { await auth.signOut(); location.reload(); } }
 
         fileInput.onchange = e => {
@@ -120,7 +124,7 @@
                 snap.forEach(doc => {
                     let p = doc.data();
                     let div = document.createElement("div");
-                    div.className = "fact-card bg-white rounded-3xl shadow-md border overflow-hidden flex flex-col justify-between";
+                    div.className = "fact-card bg-white rounded-3xl shadow-md border border-gray-100 overflow-hidden flex flex-col justify-between";
                     div.onclick = () => location.href = `detail.html?id=${doc.id}`;
                     div.innerHTML = `
                         <div>
@@ -163,7 +167,6 @@
             adminModal.classList.add("hidden"); editId = null; title.value = ""; content.value = ""; fileInput.value = ""; selectedFile = null; existingImgUrl = ""; saveBtn.innerText = "Save & Publish"; saveBtn.disabled = false;
         }
 
-        // IMGBB SERVER UPLOAD FUNCTION
         async function savePost() {
             if(!title.value.trim() || !content.value.trim()) return alert("पूरी जानकारी भरें।");
             let postData = { title: title.value.trim(), content: content.value.trim() };
@@ -175,14 +178,13 @@
                     let formData = new FormData();
                     formData.append("image", selectedFile);
                     
-                    // ImgBB API पर अपलोड रिक्वेस्ट
                     let res = await fetch(`imgbb.com{IMGBB_API_KEY}`, { method: "POST", body: formData });
                     let resData = await res.json();
                     
                     if(resData.success) {
-                        postData.image = resData.data.url; // डायरेक्ट इमेज URL लिंक मिला
+                        postData.image = resData.data.url;
                     } else {
-                        throw new Error("Image Upload Failed on ImgBB");
+                        throw new Error("Image Upload Failed");
                     }
                 } else if(editId && existingImgUrl) {
                     postData.image = existingImgUrl;
