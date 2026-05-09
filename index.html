@@ -6,70 +6,70 @@
     <title>FactZone | Amazing Facts & Knowledge</title>
     <link rel="icon" href="logo.svg">
     
-    <!-- ✅ TAILWIND CSS V4 FIX -->
-    <script src="unpkg.com"></script>
+    <!-- ✅ STANDARD STABLE TAILWIND CSS INTEGRATION -->
+    <link href="jsdelivr.net" rel="stylesheet">
     
-    <!-- ✅ FIREBASE CDN FIXED LINKS -->
+    <!-- ✅ FIREBASE CORE APP AND FIRESTORE LIBRARIES -->
     <script src="gstatic.com"></script>
     <script src="gstatic.com"></script>
     <script src="gstatic.com"></script>
-
-    <style>
-        .container { max-width: 1200px; margin: auto; }
-        .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); }
-        .fact-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .fact-card:hover { transform: translateY(-6px); }
-    </style>
 </head>
-<body class="bg-gray-50 text-gray-900 min-h-screen">
+<body class="bg-gray-100 text-gray-900 min-h-screen font-sans">
 
-    <!-- HEADER -->
-    <header class="gradient-bg text-white shadow-xl sticky top-0 z-40">
-        <div class="container p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div class="flex items-center gap-3 cursor-pointer" onclick="openLoginModal()">
-                <img src="logo.svg" class="w-10 h-10 bg-white p-1 rounded-full" alt="Logo">
-                <h1 class="text-2xl font-black bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">FactZone</h1>
+    <!-- PLATFORM NAVIGATION BAR -->
+    <header class="bg-indigo-950 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="toggleAdminPanel()">
+                <div class="bg-gradient-to-tr from-yellow-400 to-red-500 p-0.5 rounded-full shadow">
+                    <img src="logo.svg" class="w-9 h-9 bg-black p-1 rounded-full" alt="FactZone Logo">
+                </div>
+                <div>
+                    <h1 class="text-xl font-black bg-gradient-to-r from-yellow-400 to-yellow-200 bg-clip-text text-transparent">FactZone</h1>
+                    <p class="text-[9px] text-gray-400 tracking-wider uppercase">Uncover The Unknown</p>
+                </div>
             </div>
             <div class="flex items-center gap-3 w-full sm:w-1/2 justify-end">
-                <input id="search" placeholder="अजीबोगरीब फैक्ट्स खोजें..." class="px-4 py-2.5 rounded-2xl text-black w-full outline-none bg-white">
-                <button id="logoutBtn" onclick="logout()" class="hidden bg-red-600 text-white px-4 py-2.5 rounded-2xl text-xs font-bold shadow-md">Log Out</button>
+                <input id="search" placeholder="अजीबोगरीब फैक्ट्स खोजें..." class="px-4 py-2 text-sm rounded-xl text-black w-full outline-none bg-white shadow-inner focus:ring-2 focus:ring-yellow-400">
+                <button id="logoutBtn" onclick="logout()" class="hidden bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow whitespace-nowrap transition">Log Out</button>
             </div>
         </div>
     </header>
 
-    <!-- POSTS -->
-    <div class="container px-4 py-10">
-        <main id="posts" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></main>
-    </div>
+    <!-- SECURE WORKSPACE AREA (TOGGLED DISPLAY) -->
+    <div id="secureArea" class="max-w-4xl mx-auto mt-6 px-4 hidden">
+        
+        <!-- SECURE AUTHENTICATION SUB-PANEL -->
+        <div id="authGate" class="bg-white p-6 rounded-2xl shadow border border-gray-200 max-w-sm mx-auto">
+            <h2 class="text-lg font-bold mb-1 text-gray-800">Admin Authentication</h2>
+            <p class="text-xs text-gray-500 mb-4">Enter master credentials to update the repository.</p>
+            <input id="adminEmail" type="email" placeholder="Admin Email" class="border p-2.5 mb-3 text-sm w-full rounded-xl bg-gray-50 outline-none focus:border-indigo-950">
+            <input id="adminPass" type="password" placeholder="Password" class="border p-2.5 mb-4 text-sm w-full rounded-xl bg-gray-50 outline-none focus:border-indigo-950">
+            <button onclick="login()" class="w-full bg-indigo-950 text-white py-2.5 rounded-xl font-bold text-sm hover:bg-indigo-900 transition">Access Database</button>
+        </div>
 
-    <button id="adminBtn" onclick="openAdmin()" class="hidden fixed bottom-6 right-6 bg-amber-500 text-white w-14 h-14 rounded-full shadow-2xl text-3xl flex items-center justify-center font-bold">+</button>
-
-    <!-- LOGIN MODAL -->
-    <div id="loginModal" class="hidden fixed inset-0 bg-black/80 flex justify-center items-center p-4 z-50">
-        <div class="bg-white p-8 rounded-3xl max-w-sm w-full">
-            <h2 class="text-2xl font-black mb-4">Admin Login</h2>
-            <input id="adminEmail" type="email" placeholder="Admin Email" class="border p-3 mb-3 w-full rounded-2xl bg-gray-50 outline-none">
-            <input id="adminPass" type="password" placeholder="Password" class="border p-3 mb-4 w-full rounded-2xl bg-gray-50 outline-none">
-            <div class="flex gap-3">
-                <button onclick="login()" class="bg-black text-white w-full py-3 rounded-2xl font-bold">Sign In</button>
-                <button onclick="loginModal.classList.add('hidden')" class="bg-gray-100 text-gray-700 w-full py-3 rounded-2xl">Cancel</button>
+        <!-- CONTENT MANAGEMENT CONTROL PANEL (ONLY SEEN AFTER AUTH) -->
+        <div id="crudPanel" class="bg-white p-6 rounded-2xl shadow border border-gray-200 hidden">
+            <h2 id="modalTitle" class="text-xl font-black mb-4 text-gray-800">Create New Fact Post</h2>
+            <input id="title" placeholder="यहाँ पोस्ट का आकर्षक टाइटल लिखें..." class="border p-3 mb-3 text-sm w-full rounded-xl outline-none bg-gray-50 focus:border-indigo-950 font-bold">
+            <textarea id="content" placeholder="यहाँ फैक्ट की पूरी जानकारी विस्तार से लिखें..." rows="5" class="border p-3 mb-3 text-sm w-full rounded-xl outline-none bg-gray-50 focus:border-indigo-950 leading-relaxed"></textarea>
+            
+            <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Featured Asset Link (Optional)</label>
+            <input type="file" id="fileInput" accept="image/*" class="mb-4 block w-full text-xs text-gray-500 cursor-pointer">
+            
+            <div class="flex gap-3 pt-2">
+                <button id="saveBtn" onclick="savePost()" class="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white w-full py-3 rounded-xl font-bold text-sm shadow hover:from-yellow-600 transition">Publish Content</button>
+                <button onclick="toggleAdminPanel()" class="bg-gray-100 text-gray-700 w-full py-3 rounded-xl font-medium text-sm hover:bg-gray-200 transition">Dismiss Panel</button>
             </div>
         </div>
     </div>
 
-    <!-- ADMIN MODAL -->
-    <div id="adminModal" class="hidden fixed inset-0 bg-black/80 flex justify-center items-center p-4 z-50">
-        <div class="bg-white p-6 sm:p-8 rounded-3xl w-[90%] max-w-lg shadow-2xl">
-            <h2 id="modalTitle" class="text-2xl font-black mb-4">Create New Post</h2>
-            <input id="title" placeholder="टाइटल लिखें..." class="border p-3 mb-3 w-full rounded-2xl font-semibold bg-gray-50 outline-none">
-            <textarea id="content" placeholder="फैक्ट की जानकारी लिखें..." rows="6" class="border p-3 mb-3 w-full rounded-2xl bg-gray-50 outline-none"></textarea>
-            <input type="file" id="fileInput" accept="image/*" class="mb-4 block w-full text-sm text-gray-500">
-            <div class="flex gap-3 pt-4">
-                <button id="saveBtn" onclick="savePost()" class="bg-amber-500 text-white w-full py-3 rounded-2xl font-bold">Save & Publish</button>
-                <button onclick="closeAdmin()" class="bg-gray-100 text-gray-700 w-full py-3 rounded-2xl">Close</button>
-            </div>
-        </div>
+    <!-- MAIN INTERACTIVE PUBLIC FEED -->
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <main id="posts" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></main>
     </div>
+
+    <!-- TRIGGER BUTTON TO ACCESS CONTROLS -->
+    <button id="adminBtn" onclick="toggleAdminPanel()" class="fixed bottom-6 right-6 bg-indigo-950 hover:bg-indigo-900 text-white w-14 h-14 rounded-full shadow-lg text-2xl flex items-center justify-center font-bold transition transform active:scale-95 z-40">⚙️</button>
 
     <script>
         const firebaseConfig = {
@@ -82,64 +82,80 @@
         const db = firebase.firestore();
         const auth = firebase.auth();
 
-        // ⚠️ अपनी ImgBB API Key यहाँ डालें (अगर इमेज अपलोड करनी है)
-        const IMGBB_API_KEY = "f1bdb9735d4cd84dd8a265b7d092d2eb"; 
+        // ⚠️ अपनी ImgBB API Key यहाँ इनपुट करें
+        const IMGBB_API_KEY = "यहाँ_अपनी_IMGBB_API_KEY_पेस्ट_करें"; 
 
         let userLoggedIn = false, editId = null, existingImgUrl = "", selectedFile = null;
 
         auth.onAuthStateChanged(user => {
             if (user) {
                 userLoggedIn = true;
-                adminBtn.classList.remove("hidden");
                 logoutBtn.classList.remove("hidden");
+                authGate.classList.add("hidden");
+                crudPanel.classList.remove("hidden");
             } else {
                 userLoggedIn = false;
-                adminBtn.classList.add("hidden");
                 logoutBtn.classList.add("hidden");
+                authGate.classList.remove("hidden");
+                crudPanel.classList.add("hidden");
             }
             fetchPosts();
         });
 
-        function openLoginModal() { if(!userLoggedIn) loginModal.classList.remove("hidden"); }
-        
+        function toggleAdminPanel() {
+            secureArea.classList.toggle("hidden");
+        }
+
         async function login() {
             try {
                 await auth.signInWithEmailAndPassword(adminEmail.value.trim(), adminPass.value);
-                loginModal.classList.add("hidden");
-            } catch(e) { alert("Failed: " + e.message); }
+                adminEmail.value = "";
+                adminPass.value = "";
+            } catch(e) { alert("Access Denied: " + e.message); }
         }
         
-        async function logout() { if(confirm("Logout?")) { await auth.signOut(); location.reload(); } }
+        async function logout() { 
+            if(confirm("Terminate session?")) { 
+                await auth.signOut(); 
+                location.reload(); 
+            } 
+        }
 
         fileInput.onchange = e => {
             if(e.target.files.length === 0) { selectedFile = null; return; }
-            selectedFile = e.target.files[0]; // सिंगल फाइल ऑब्जेक्ट सेव किया
+            selectedFile = e.target.files[0];
         };
 
         async function fetchPosts() {
-            posts.innerHTML = "<div class='col-span-full text-center py-20 text-gray-400 animate-pulse'>फैक्ट्स लोड हो रहे हैं...</div>";
+            posts.innerHTML = "<div class='col-span-full text-center py-20 text-gray-400 font-medium'>फ़ीड रीफ्रेश हो रही है...</div>";
             try {
                 let snap = await db.collection("posts").get();
                 posts.innerHTML = "";
+                
+                if(snap.empty){
+                    posts.innerHTML = "<div class='col-span-full text-center py-20 text-gray-500'>कोई डेटा नहीं मिला।</div>";
+                    return;
+                }
+
                 snap.forEach(doc => {
                     let p = doc.data();
                     let div = document.createElement("div");
-                    div.className = "fact-card bg-white rounded-3xl shadow-md border border-gray-100 overflow-hidden flex flex-col justify-between";
+                    div.className = "fact-card bg-white rounded-2xl shadow border border-gray-200 overflow-hidden flex flex-col justify-between cursor-pointer";
                     div.onclick = () => location.href = `detail.html?id=${doc.id}`;
                     div.innerHTML = `
                         <div>
-                            ${p.image ? `<img src="${p.image}" class="w-full h-52 object-cover">` : ""}
+                            ${p.image ? `<img src="${p.image}" class="w-full h-48 object-cover">` : ""}
                             <div class="p-5">
-                                <h2 class="font-extrabold text-xl mb-2">${p.title || ""}</h2>
-                                <p class="text-gray-500 text-sm">${(p.content || "").substring(0, 95)}...</p>
+                                <h2 class="font-bold text-lg mb-1.5 text-gray-900 leading-tight">${p.title || ""}</h2>
+                                <p class="text-gray-600 text-xs leading-relaxed">${(p.content || "").substring(0, 95)}...</p>
                             </div>
                         </div>
-                        <div class="px-6 pb-6">
-                            <div class="flex justify-between items-center text-xs border-t pt-4">
-                                <button class="likeBtn text-rose-500 font-bold bg-rose-50 px-3 py-1.5 rounded-2xl">❤️ <span>${p.likes || 0}</span></button>
+                        <div class="px-5 pb-5">
+                            <div class="flex justify-between items-center text-xs border-t pt-3 text-gray-400 font-medium">
+                                <button class="likeBtn text-red-500 font-bold bg-red-50 px-2.5 py-1.5 rounded-xl transition">❤️ <span>${p.likes || 0}</span></button>
                                 <span>👁 ${p.views || 0} व्यूज</span>
                             </div>
-                            ${userLoggedIn ? `<div class="flex gap-4 border-t pt-3 mt-4 text-xs font-bold"><button class="editBtn text-blue-600">📝 Edit</button><button class="deleteBtn text-red-600">🗑 Delete</button></div>` : ""}
+                            ${userLoggedIn ? `<div class="flex gap-4 border-t pt-3 mt-3 text-xs font-bold"><button class="editBtn text-blue-600 hover:underline">📝 Edit</button><button class="deleteBtn text-red-600 hover:underline">🗑 Delete</button></div>` : ""}
                         </div>`;
 
                     div.querySelector(".likeBtn").onclick = async (e) => {
@@ -151,10 +167,21 @@
 
                     if(userLoggedIn) {
                         div.querySelector(".editBtn").onclick = (e) => {
-                            e.stopPropagation(); editId = doc.id; title.value = p.title || ""; content.value = p.content || ""; existingImgUrl = p.image || ""; openAdmin();
+                            e.stopPropagation(); 
+                            secureArea.classList.remove("hidden");
+                            editId = doc.id; 
+                            title.value = p.title || ""; 
+                            content.value = p.content || ""; 
+                            existingImgUrl = p.image || ""; 
+                            modalTitle.innerText = "Modify Existing Post";
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
                         };
                         div.querySelector(".deleteBtn").onclick = async (e) => {
-                            e.stopPropagation(); if(confirm("Delete?")) { await db.collection("posts").doc(doc.id).delete(); fetchPosts(); }
+                            e.stopPropagation(); 
+                            if(confirm("Permanent Delete?")) { 
+                                await db.collection("posts").doc(doc.id).delete(); 
+                                fetchPosts(); 
+                            }
                         };
                     }
                     posts.appendChild(div);
@@ -162,15 +189,10 @@
             } catch(e) { posts.innerHTML = `Error: ${e.message}`; }
         }
 
-        function openAdmin() { adminModal.classList.remove("hidden"); }
-        function closeAdmin() {
-            adminModal.classList.add("hidden"); editId = null; title.value = ""; content.value = ""; fileInput.value = ""; selectedFile = null; existingImgUrl = ""; saveBtn.innerText = "Save & Publish"; saveBtn.disabled = false;
-        }
-
         async function savePost() {
             if(!title.value.trim() || !content.value.trim()) return alert("पूरी जानकारी भरें।");
             let postData = { title: title.value.trim(), content: content.value.trim() };
-            saveBtn.innerText = "Uploading Image...";
+            saveBtn.innerText = "Uploading Cloud Data...";
             saveBtn.disabled = true;
 
             try {
@@ -184,7 +206,7 @@
                     if(resData.success) {
                         postData.image = resData.data.url;
                     } else {
-                        throw new Error("Image Upload Failed");
+                        throw new Error("ImgBB Upload Error");
                     }
                 } else if(editId && existingImgUrl) {
                     postData.image = existingImgUrl;
@@ -193,13 +215,19 @@
                 if(editId) {
                     await db.collection("posts").doc(editId).set(postData, { merge: true });
                 } else {
-                    postData.likes = 0; postData.views = 0;
+                    postData.likes = 0; 
+                    postData.views = 0;
                     await db.collection("posts").add(postData);
                 }
-                closeAdmin(); await fetchPosts();
+                
+                // Form Reset Logic
+                editId = null; title.value = ""; content.value = ""; fileInput.value = ""; selectedFile = null; existingImgUrl = "";
+                saveBtn.innerText = "Publish Content"; saveBtn.disabled = false;
+                secureArea.classList.add("hidden");
+                await fetchPosts();
             } catch(error) {
-                alert("त्रुटि: " + error.message);
-                saveBtn.innerText = "Save & Publish"; saveBtn.disabled = false;
+                alert("Error: " + error.message);
+                saveBtn.innerText = "Publish Content"; saveBtn.disabled = false;
             }
         }
 
