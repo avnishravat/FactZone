@@ -7,7 +7,7 @@
 <title>FactZone | Amazing Facts & Knowledge</title>
 
 <meta name="description" content="Explore amazing facts and daily knowledge on FactZone.">
-<meta name="keywords" content="facts, amazing facts, knowledge, online earning ideas, factzone">
+<meta name="keywords" content="facts, amazing facts, knowledge, factzone">
 
 <meta property="og:title" content="FactZone">
 <meta property="og:description" content="Daily amazing facts & knowledge">
@@ -17,221 +17,487 @@
 
 <script src="https://cdn.tailwindcss.com"></script>
 
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
 <style>
-.container{max-width:1200px;margin:auto;}
+body{
+background:#f3f4f6;
+font-family:Arial, sans-serif;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+}
+
+.post-card{
+transition:0.3s;
+}
+
+.post-card:hover{
+transform:translateY(-5px);
+}
+
+textarea{
+resize:none;
+}
 </style>
 </head>
 
-<body class="bg-gray-100">
+<body>
 
 <!-- HEADER -->
-<header class="bg-black text-white p-4 flex items-center justify-between">
+<header class="bg-black text-white p-4 flex items-center justify-between sticky top-0 z-50 shadow-lg">
 
+<!-- LOGO -->
 <div class="flex items-center gap-3 cursor-pointer" onclick="openLogin()">
-<img src="logo.svg" class="w-10 h-10 bg-white p-1 rounded-full">
-<h1 class="text-xl font-bold">FactZone</h1>
+
+<img src="logo.svg"
+class="w-10 h-10 rounded-full bg-white p-1">
+
+<h1 class="text-2xl font-bold">
+FactZone
+</h1>
+
 </div>
 
-<input id="search" placeholder="🔍 Search..."
-class="px-4 py-2 rounded-full text-black w-1/3">
+<!-- SEARCH -->
+<input
+id="search"
+type="text"
+placeholder="🔍 Search..."
+class="w-[40%] px-4 py-2 rounded-full text-black outline-none"
+/>
 
 </header>
 
 <!-- POSTS -->
 <div class="container">
-<main id="posts" class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></main>
+
+<main
+id="posts"
+class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+</main>
+
 </div>
 
-<button id="adminBtn" onclick="openAdmin()" 
-class="hidden fixed bottom-5 right-5 bg-black text-white px-4 py-3 rounded-full shadow-lg">+</button>
+<!-- ADMIN FLOAT BUTTON -->
+<button
+id="adminBtn"
+onclick="openAdmin()"
+class="hidden fixed bottom-5 right-5 bg-black text-white w-14 h-14 rounded-full text-3xl shadow-xl z-50">
++
+</button>
 
-<!-- LOGIN -->
-<div id="loginModal" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
-<div class="bg-white p-6 rounded">
-<input id="adminPass" type="password" placeholder="Password" class="border p-2 mb-2 w-full">
-<button onclick="checkLogin()" class="bg-black text-white w-full py-2">Login</button>
+<!-- LOGIN MODAL -->
+<div
+id="loginModal"
+class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+
+<div class="bg-white p-6 rounded-xl w-[90%] max-w-sm">
+
+<h2 class="text-2xl font-bold mb-4 text-center">
+Admin Login
+</h2>
+
+<input
+id="adminPass"
+type="password"
+placeholder="Enter Password"
+class="border w-full p-3 rounded mb-3 outline-none"
+/>
+
+<button
+onclick="checkLogin()"
+class="bg-black text-white w-full py-3 rounded-lg font-bold">
+Login
+</button>
+
+<button
+onclick="closeLogin()"
+class="bg-gray-300 w-full py-3 rounded-lg mt-2">
+Cancel
+</button>
+
 </div>
 </div>
 
-<!-- ADMIN -->
-<div id="adminModal" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
-<div class="bg-white p-6 rounded w-[90%] max-w-md">
-<input id="title" placeholder="Title" class="border p-2 mb-2 w-full">
-<textarea id="content" placeholder="Content" class="border p-2 mb-2 w-full"></textarea>
-<input type="file" id="fileInput" accept="image/*">
-<button id="saveBtn" onclick="savePost()" class="bg-black text-white w-full py-2 mt-2">Save</button>
+<!-- ADMIN PANEL -->
+<div
+id="adminModal"
+class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+
+<div class="bg-white p-6 rounded-xl w-[95%] max-w-lg">
+
+<h2 class="text-2xl font-bold mb-4">
+Add / Edit Post
+</h2>
+
+<input
+id="title"
+placeholder="Post Title"
+class="border w-full p-3 rounded mb-3 outline-none"
+/>
+
+<textarea
+id="content"
+placeholder="Post Content"
+class="border w-full p-3 rounded mb-3 h-40 outline-none"></textarea>
+
+<input
+type="file"
+id="fileInput"
+class="mb-3"
+/>
+
+<img
+id="preview"
+class="hidden w-full h-52 object-cover rounded-lg mb-3"
+/>
+
+<button
+id="saveBtn"
+onclick="savePost()"
+class="bg-black text-white w-full py-3 rounded-lg font-bold">
+Save Post
+</button>
+
+<button
+onclick="closeAdmin()"
+class="bg-gray-300 w-full py-3 rounded-lg mt-2">
+Close
+</button>
+
 </div>
 </div>
 
 <script>
-const firebaseConfig={
+
+// FIREBASE CONFIG
+const firebaseConfig = {
 apiKey:"AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
 authDomain:"factzone-a9ace.firebaseapp.com",
 projectId:"factzone-a9ace"
 };
 
 firebase.initializeApp(firebaseConfig);
-const db=firebase.firestore();
 
-// ⬇️ यहाँ अपनी ImgBB API Key डालें
-const IMGBB_API_KEY = "f1bdb9735d4cd84dd8a265b7d092d2eb"; 
+const db = firebase.firestore();
+const auth = firebase.auth();
 
-let isAdmin=false,editId=null,existingImgUrl="",selectedFile=null;
+let isAdmin = false;
+let editId = null;
+let uploadedImage = "";
 
-// LOGIN
-function openLogin(){loginModal.classList.remove("hidden");}
-function checkLogin(){
-if(adminPass.value==="Avnish@@"){
-isAdmin=true;
-adminBtn.classList.remove("hidden");
-loginModal.classList.add("hidden");
-fetchPosts();
-}else alert("Wrong Password");
+// OPEN LOGIN
+function openLogin(){
+document.getElementById("loginModal").classList.remove("hidden");
 }
 
-// IMAGE SELECT
-fileInput.onchange=e=>{
-if(e.target.files.length === 0) { selectedFile = null; return; }
-selectedFile = e.target.files[0]; // मूल फाइल ऑब्जेक्ट सुरक्षित किया
+// CLOSE LOGIN
+function closeLogin(){
+document.getElementById("loginModal").classList.add("hidden");
+}
+
+// ADMIN LOGIN
+async function checkLogin(){
+
+const email = "admin@factzone.com";
+const password = document.getElementById("adminPass").value;
+
+try{
+
+await auth.signInWithEmailAndPassword(email,password);
+
+isAdmin = true;
+
+document.getElementById("adminBtn").classList.remove("hidden");
+
+closeLogin();
+
+fetchPosts();
+
+alert("Admin Login Success");
+
+}catch(err){
+
+alert("Wrong Password");
+
+}
+
+}
+
+// OPEN ADMIN
+function openAdmin(){
+
+editId = null;
+
+title.value = "";
+content.value = "";
+
+uploadedImage = "";
+
+preview.classList.add("hidden");
+
+adminModal.classList.remove("hidden");
+
+}
+
+// CLOSE ADMIN
+function closeAdmin(){
+adminModal.classList.add("hidden");
+}
+
+// IMAGE UPLOAD
+fileInput.onchange = e=>{
+
+const file = e.target.files[0];
+
+if(!file) return;
+
+const reader = new FileReader();
+
+reader.onload = ()=>{
+
+uploadedImage = reader.result;
+
+preview.src = uploadedImage;
+
+preview.classList.remove("hidden");
+
+};
+
+reader.readAsDataURL(file);
+
 };
 
 // FETCH POSTS
 async function fetchPosts(){
-posts.innerHTML="Loading...";
 
-let snap=await db.collection("posts").get();
-posts.innerHTML="";
+posts.innerHTML = `
+<p class="text-center col-span-full text-xl">
+Loading...
+</p>
+`;
 
-snap.forEach(doc=>{
-let p=doc.data();
+const snapshot = await db.collection("posts").get();
 
-let div=document.createElement("div");
-div.className="bg-white rounded-xl shadow hover:shadow-lg cursor-pointer overflow-hidden";
+posts.innerHTML = "";
 
-div.onclick=()=>location.href=`detail.html?id=${doc.id}`;
+snapshot.forEach(doc=>{
 
-div.innerHTML=`
-${p.image?`<img src="${p.image}" class="w-full h-48 object-cover">`:""}
+const p = doc.data();
 
-<div class="p-3">
-<h2 class="font-bold text-lg">${p.title||""}</h2>
-<p class="text-gray-600 text-sm">${(p.content||"").substring(0,80)}...</p>
+const div = document.createElement("div");
 
-<div class="flex justify-between mt-2">
-<button class="likeBtn text-red-500">❤️ <span>${p.likes||0}</span></button>
-<span>👁 ${p.views||0}</span>
+div.className =
+"post-card bg-white rounded-2xl shadow overflow-hidden cursor-pointer";
+
+div.onclick = ()=>{
+location.href = `detail.html?id=${doc.id}`;
+};
+
+div.innerHTML = `
+
+${p.image ? `
+<img
+src="${p.image}"
+class="w-full h-56 object-cover">
+` : ""}
+
+<div class="p-4">
+
+<h2 class="font-bold text-xl mb-2">
+${p.title || ""}
+</h2>
+
+<p class="text-gray-600 text-sm mb-3">
+${(p.content || "").substring(0,100)}...
+</p>
+
+<div class="flex justify-between items-center">
+
+<button class="likeBtn text-red-500 font-bold">
+❤️ ${p.likes || 0}
+</button>
+
+<span class="text-gray-500 text-sm">
+👁️ ${p.views || 0} views
+</span>
+
 </div>
 
-${isAdmin?`
-<div class="mt-2 flex gap-2">
-<button class="editBtn text-blue-500 font-bold">Edit</button>
-<button class="deleteBtn text-red-500 font-bold">Delete</button>
-</div>`:""}
+${isAdmin ? `
+
+<div class="flex gap-3 mt-3">
+
+<button
+class="editBtn bg-blue-500 text-white px-3 py-1 rounded">
+Edit
+</button>
+
+<button
+class="deleteBtn bg-red-500 text-white px-3 py-1 rounded">
+Delete
+</button>
+
+</div>
+
+` : ""}
 
 </div>
 `;
 
+
 // LIKE
-div.querySelector(".likeBtn").onclick=async (e)=>{
+div.querySelector(".likeBtn").onclick = async (e)=>{
+
 e.stopPropagation();
-let targetSpan = e.currentTarget.querySelector("span");
+
 await db.collection("posts").doc(doc.id).update({
-likes:firebase.firestore.FieldValue.increment(1)
+
+likes: firebase.firestore.FieldValue.increment(1)
+
 });
-targetSpan.innerText = parseInt(targetSpan.innerText) + 1;
-};
 
-// ADMIN ACTIONS
-if(isAdmin){
-div.querySelector(".editBtn").onclick=(e)=>{
-e.stopPropagation();
-editId=doc.id;
-title.value=p.title || "";
-content.value=p.content || "";
-existingImgUrl=p.image || ""; // पुरानी इमेज लिंक सहेजें
-openAdmin();
-};
-
-div.querySelector(".deleteBtn").onclick=async (e)=>{
-e.stopPropagation();
-if(confirm("Delete?")){
-await db.collection("posts").doc(doc.id).delete();
 fetchPosts();
-}
+
 };
+
+// ADMIN BUTTONS
+if(isAdmin){
+
+// EDIT
+div.querySelector(".editBtn").onclick = (e)=>{
+
+e.stopPropagation();
+
+editId = doc.id;
+
+title.value = p.title || "";
+
+content.value = p.content || "";
+
+uploadedImage = p.image || "";
+
+if(p.image){
+
+preview.src = p.image;
+
+preview.classList.remove("hidden");
+
+}
+
+openAdmin();
+
+};
+
+// DELETE
+div.querySelector(".deleteBtn").onclick = async (e)=>{
+
+e.stopPropagation();
+
+if(confirm("Delete this post?")){
+
+await db.collection("posts").doc(doc.id).delete();
+
+fetchPosts();
+
+}
+
+};
+
 }
 
 posts.appendChild(div);
+
 });
+
 }
+
+// SAVE POST
+async function savePost(){
+
+const t = title.value.trim();
+const c = content.value.trim();
+
+if(!t || !c){
+
+alert("Fill all fields");
+
+return;
+
+}
+
+try{
+
+// EDIT
+if(editId){
+
+await db.collection("posts").doc(editId).set({
+
+title:t,
+content:c,
+image:uploadedImage
+
+},{merge:true});
+
+alert("Post Updated");
+
+}
+
+// NEW
+else{
+
+await db.collection("posts").add({
+
+title:t,
+content:c,
+image:uploadedImage,
+likes:0,
+views:0,
+createdAt:new Date()
+
+});
+
+alert("Post Uploaded");
+
+}
+
+closeAdmin();
 
 fetchPosts();
 
-// ADMIN WINDOW
-function openAdmin(){adminModal.classList.remove("hidden");}
+}catch(err){
 
-// SECURE ASYNC SAVE POST (With ImgBB Pipeline)
-async function savePost(){
-if(!title.value.trim()||!content.value.trim())return alert("Fill fields");
+alert("Error: " + err.message);
 
-let postData = {
-title: title.value.trim(),
-content: content.value.trim()
-};
-
-saveBtn.innerText = "Uploading Image...";
-saveBtn.disabled = true;
-
-try {
-if(selectedFile) {
-let formData = new FormData();
-formData.append("image", selectedFile);
-
-// ImgBB क्लाउड पर भेजना
-let res = await fetch(`imgbb.com{IMGBB_API_KEY}`, {
-method: "POST",
-body: formData
-});
-let resData = await res.json();
-
-if(resData.success) {
-postData.image = resData.data.url; // डायरेक्ट लाइव यूआरएल मिला
-} else {
-throw new Error("ImgBB Upload Process Dropped");
-}
-} else if(editId && existingImgUrl) {
-postData.image = existingImgUrl; // कोई नई फोटो नहीं चुनी तो पुरानी रहने दें
 }
 
-if(editId){
-await db.collection("posts").doc(editId).set(postData,{merge:true});
-}else{
-postData.likes = 0;
-postData.views = 0;
-await db.collection("posts").add(postData);
-}
-
-// फॉर्म रीसेट क्लीनअप
-editId=null; title.value=""; content.value=""; fileInput.value=""; selectedFile=null; existingImgUrl="";
-saveBtn.innerText = "Save"; saveBtn.disabled = false;
-adminModal.classList.add("hidden");
-await fetchPosts();
-} catch(error) {
-alert("Error saving data: " + error.message);
-saveBtn.innerText = "Save"; saveBtn.disabled = false;
-}
 }
 
 // SEARCH
-search.oninput=e=>{
-let v=e.target.value.toLowerCase();
-document.querySelectorAll("#posts > div").forEach(c=>{
-c.style.display=c.innerText.toLowerCase().includes(v)?"block":"none";
+search.oninput = e=>{
+
+const value = e.target.value.toLowerCase();
+
+document.querySelectorAll("#posts > div").forEach(card=>{
+
+card.style.display =
+card.innerText.toLowerCase().includes(value)
+? "block"
+: "none";
+
 });
+
 };
+
+// INIT
+fetchPosts();
+
 </script>
 
 </body>
