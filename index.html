@@ -15,8 +15,10 @@
 
 <link rel="icon" href="logo.svg">
 
-<script src="tailwindcss.com"></script>
+<!-- ✅ TAILWIND CSS FIX (यह लिंक अब बिल्कुल सही है) -->
+<link href="jsdelivr.net" rel="stylesheet">
 
+<!-- ✅ FIREBASE CDN STABLE LINKS -->
 <script src="gstatic.com"></script>
 <script src="gstatic.com"></script>
 
@@ -36,7 +38,7 @@
 </div>
 
 <input id="search" placeholder="🔍 Search..."
-class="px-4 py-2 rounded-full text-black w-1/3">
+class="px-4 py-2 rounded-full text-black w-1/3 outline-none">
 
 </header>
 
@@ -49,20 +51,23 @@ class="px-4 py-2 rounded-full text-black w-1/3">
 class="hidden fixed bottom-5 right-5 bg-black text-white px-4 py-3 rounded-full shadow-lg">+</button>
 
 <!-- LOGIN -->
-<div id="loginModal" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
-<div class="bg-white p-6 rounded">
-<input id="adminPass" type="password" placeholder="Password" class="border p-2 mb-2 w-full">
-<button onclick="checkLogin()" class="bg-black text-white w-full py-2">Login</button>
+<div id="loginModal" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center z-50">
+<div class="bg-white p-6 rounded shadow-lg">
+<input id="adminPass" type="password" placeholder="Password" class="border p-2 mb-2 w-full rounded">
+<button onclick="checkLogin()" class="bg-black text-white w-full py-2 rounded font-bold">Login</button>
 </div>
 </div>
 
 <!-- ADMIN -->
-<div id="adminModal" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
-<div class="bg-white p-6 rounded w-[90%] max-w-md">
-<input id="title" placeholder="Title" class="border p-2 mb-2 w-full">
-<textarea id="content" placeholder="Content" class="border p-2 mb-2 w-full"></textarea>
-<input type="file" id="fileInput" accept="image/*">
-<button id="saveBtn" onclick="savePost()" class="bg-black text-white w-full py-2 mt-2">Save</button>
+<div id="adminModal" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center z-50">
+<div class="bg-white p-6 rounded w-[90%] max-w-md shadow-lg">
+<input id="title" placeholder="Title" class="border p-2 mb-2 w-full rounded">
+<textarea id="content" placeholder="Content" class="border p-2 mb-2 w-full rounded"></textarea>
+<input type="file" id="fileInput" accept="image/*" class="mb-2 block text-sm">
+<div class="flex gap-2">
+<button id="saveBtn" onclick="savePost()" class="bg-black text-white w-full py-2 rounded font-bold">Save</button>
+<button onclick="adminModal.classList.add('hidden')" class="bg-gray-300 w-full py-2 rounded font-bold">Close</button>
+</div>
 </div>
 </div>
 
@@ -95,7 +100,7 @@ fetchPosts();
 // IMAGE SELECT
 fileInput.onchange=e=>{
 if(e.target.files.length === 0) { selectedFile = null; return; }
-selectedFile = e.target.files[0]; // सिंगल फाइल ऑब्जेक्ट निकाला
+selectedFile = e.target.files[0]; // सिंगल फ़ाइल ऑब्जेक्ट फ़िक्स किया गया
 };
 
 // FETCH POSTS
@@ -190,7 +195,7 @@ if(selectedFile) {
 let formData = new FormData();
 formData.append("image", selectedFile);
 
-// URL फ़ॉर्मेट को पूरी तरह से ठीक कर दिया गया है
+// URL फ़ॉर्मेट को सही किया गया है
 let res = await fetch("imgbb.com" + IMGBB_API_KEY, {
 method: "POST",
 body: formData
@@ -214,7 +219,7 @@ postData.views = 0;
 await db.collection("posts").add(postData);
 }
 
-// फॉर्म रीसेट क्लीनअप
+// फॉर्म रीसेट
 editId=null; title.value=""; content.value=""; fileInput.value=""; selectedFile=null; existingImgUrl="";
 saveBtn.innerText = "Save"; saveBtn.disabled = false;
 adminModal.classList.add("hidden");
