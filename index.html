@@ -1,240 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FactZone | Amazing Facts & Knowledge</title>
-    <link rel="icon" href="logo.svg">
-    
-    <!-- ✅ STANDARD STABLE TAILWIND CSS INTEGRATION -->
-    <link href="jsdelivr.net" rel="stylesheet">
-    
-    <!-- ✅ FIREBASE CORE APP AND FIRESTORE LIBRARIES -->
-    <script src="gstatic.com"></script>
-    <script src="gstatic.com"></script>
-    <script src="gstatic.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>FactZone | Amazing Facts & Knowledge</title>
+
+<meta name="description" content="Explore amazing facts and daily knowledge on FactZone.">
+<meta name="keywords" content="facts, amazing facts, knowledge, factzone">
+
+<meta property="og:title" content="FactZone">
+<meta property="og:description" content="Daily amazing facts & knowledge">
+<meta property="og:image" content="https://factzone.online/logo.svg">
+
+<link rel="icon" href="logo.svg">
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+<style>
+.container{max-width:1200px;margin:auto;}
+</style>
 </head>
-<body class="bg-gray-100 text-gray-900 min-h-screen font-sans">
 
-    <!-- PLATFORM NAVIGATION BAR -->
-    <header class="bg-indigo-950 text-white shadow-md sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div class="flex items-center gap-3 cursor-pointer" onclick="toggleAdminPanel()">
-                <div class="bg-gradient-to-tr from-yellow-400 to-red-500 p-0.5 rounded-full shadow">
-                    <img src="logo.svg" class="w-9 h-9 bg-black p-1 rounded-full" alt="FactZone Logo">
-                </div>
-                <div>
-                    <h1 class="text-xl font-black bg-gradient-to-r from-yellow-400 to-yellow-200 bg-clip-text text-transparent">FactZone</h1>
-                    <p class="text-[9px] text-gray-400 tracking-wider uppercase">Uncover The Unknown</p>
-                </div>
-            </div>
-            <div class="flex items-center gap-3 w-full sm:w-1/2 justify-end">
-                <input id="search" placeholder="अजीबोगरीब फैक्ट्स खोजें..." class="px-4 py-2 text-sm rounded-xl text-black w-full outline-none bg-white shadow-inner focus:ring-2 focus:ring-yellow-400">
-                <button id="logoutBtn" onclick="logout()" class="hidden bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow whitespace-nowrap transition">Log Out</button>
-            </div>
-        </div>
-    </header>
+<body class="bg-gray-100">
 
-    <!-- SECURE WORKSPACE AREA (TOGGLED DISPLAY) -->
-    <div id="secureArea" class="max-w-4xl mx-auto mt-6 px-4 hidden">
-        
-        <!-- SECURE AUTHENTICATION SUB-PANEL -->
-        <div id="authGate" class="bg-white p-6 rounded-2xl shadow border border-gray-200 max-w-sm mx-auto">
-            <h2 class="text-lg font-bold mb-1 text-gray-800">Admin Authentication</h2>
-            <p class="text-xs text-gray-500 mb-4">Enter master credentials to update the repository.</p>
-            <input id="adminEmail" type="email" placeholder="Admin Email" class="border p-2.5 mb-3 text-sm w-full rounded-xl bg-gray-50 outline-none focus:border-indigo-950">
-            <input id="adminPass" type="password" placeholder="Password" class="border p-2.5 mb-4 text-sm w-full rounded-xl bg-gray-50 outline-none focus:border-indigo-950">
-            <button onclick="login()" class="w-full bg-indigo-950 text-white py-2.5 rounded-xl font-bold text-sm hover:bg-indigo-900 transition">Access Database</button>
-        </div>
+<!-- HEADER -->
+<header class="bg-black text-white p-4 flex items-center justify-between">
 
-        <!-- CONTENT MANAGEMENT CONTROL PANEL (ONLY SEEN AFTER AUTH) -->
-        <div id="crudPanel" class="bg-white p-6 rounded-2xl shadow border border-gray-200 hidden">
-            <h2 id="modalTitle" class="text-xl font-black mb-4 text-gray-800">Create New Fact Post</h2>
-            <input id="title" placeholder="यहाँ पोस्ट का आकर्षक टाइटल लिखें..." class="border p-3 mb-3 text-sm w-full rounded-xl outline-none bg-gray-50 focus:border-indigo-950 font-bold">
-            <textarea id="content" placeholder="यहाँ फैक्ट की पूरी जानकारी विस्तार से लिखें..." rows="5" class="border p-3 mb-3 text-sm w-full rounded-xl outline-none bg-gray-50 focus:border-indigo-950 leading-relaxed"></textarea>
-            
-            <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Featured Asset Link (Optional)</label>
-            <input type="file" id="fileInput" accept="image/*" class="mb-4 block w-full text-xs text-gray-500 cursor-pointer">
-            
-            <div class="flex gap-3 pt-2">
-                <button id="saveBtn" onclick="savePost()" class="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white w-full py-3 rounded-xl font-bold text-sm shadow hover:from-yellow-600 transition">Publish Content</button>
-                <button onclick="toggleAdminPanel()" class="bg-gray-100 text-gray-700 w-full py-3 rounded-xl font-medium text-sm hover:bg-gray-200 transition">Dismiss Panel</button>
-            </div>
-        </div>
-    </div>
+<div class="flex items-center gap-3 cursor-pointer" onclick="openLogin()">
+<img src="logo.svg" class="w-10 h-10 bg-white p-1 rounded-full">
+<h1 class="text-xl font-bold">FactZone</h1>
+</div>
 
-    <!-- MAIN INTERACTIVE PUBLIC FEED -->
-    <div class="max-w-6xl mx-auto px-4 py-8">
-        <main id="posts" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></main>
-    </div>
+<input id="search" placeholder="🔍 Search..."
+class="px-4 py-2 rounded-full text-black w-1/3">
 
-    <!-- TRIGGER BUTTON TO ACCESS CONTROLS -->
-    <button id="adminBtn" onclick="toggleAdminPanel()" class="fixed bottom-6 right-6 bg-indigo-950 hover:bg-indigo-900 text-white w-14 h-14 rounded-full shadow-lg text-2xl flex items-center justify-center font-bold transition transform active:scale-95 z-40">⚙️</button>
+</header>
 
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
-            authDomain: "firebaseapp.com",
-            projectId: "factzone-a9ace"
-        };
+<!-- POSTS -->
+<div class="container">
+<main id="posts" class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></main>
+</div>
 
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const auth = firebase.auth();
+<button id="adminBtn" onclick="openAdmin()" 
+class="hidden fixed bottom-5 right-5 bg-black text-white px-4 py-3 rounded-full shadow-lg">+</button>
 
-        // ⚠️ अपनी ImgBB API Key यहाँ इनपुट करें
-        const IMGBB_API_KEY = "यहाँ_अपनी_IMGBB_API_KEY_पेस्ट_करें"; 
+<!-- LOGIN -->
+<div id="loginModal" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
+<div class="bg-white p-6 rounded">
+<input id="adminPass" type="password" placeholder="Password" class="border p-2 mb-2 w-full">
+<button onclick="checkLogin()" class="bg-black text-white w-full py-2">Login</button>
+</div>
+</div>
 
-        let userLoggedIn = false, editId = null, existingImgUrl = "", selectedFile = null;
+<!-- ADMIN -->
+<div id="adminModal" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
+<div class="bg-white p-6 rounded w-[90%] max-w-md">
+<input id="title" placeholder="Title" class="border p-2 mb-2 w-full">
+<textarea id="content" placeholder="Content" class="border p-2 mb-2 w-full"></textarea>
+<input type="file" id="fileInput">
+<button onclick="savePost()" class="bg-black text-white w-full py-2 mt-2">Save</button>
+</div>
+</div>
 
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                userLoggedIn = true;
-                logoutBtn.classList.remove("hidden");
-                authGate.classList.add("hidden");
-                crudPanel.classList.remove("hidden");
-            } else {
-                userLoggedIn = false;
-                logoutBtn.classList.add("hidden");
-                authGate.classList.remove("hidden");
-                crudPanel.classList.add("hidden");
-            }
-            fetchPosts();
-        });
+<script>
+const firebaseConfig={
+apiKey:"AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
+authDomain:"factzone-a9ace.firebaseapp.com",
+projectId:"factzone-a9ace"
+};
 
-        function toggleAdminPanel() {
-            secureArea.classList.toggle("hidden");
-        }
+firebase.initializeApp(firebaseConfig);
+const db=firebase.firestore();
 
-        async function login() {
-            try {
-                await auth.signInWithEmailAndPassword(adminEmail.value.trim(), adminPass.value);
-                adminEmail.value = "";
-                adminPass.value = "";
-            } catch(e) { alert("Access Denied: " + e.message); }
-        }
-        
-        async function logout() { 
-            if(confirm("Terminate session?")) { 
-                await auth.signOut(); 
-                location.reload(); 
-            } 
-        }
+let isAdmin=false,editId=null,imgData="";
 
-        fileInput.onchange = e => {
-            if(e.target.files.length === 0) { selectedFile = null; return; }
-            selectedFile = e.target.files[0];
-        };
+// LOGIN
+function openLogin(){loginModal.classList.remove("hidden");}
+function checkLogin(){
+if(adminPass.value==="Avnish@@"){
+isAdmin=true;
+adminBtn.classList.remove("hidden");
+loginModal.classList.add("hidden");
+fetchPosts();
+}else alert("Wrong Password");
+}
 
-        async function fetchPosts() {
-            posts.innerHTML = "<div class='col-span-full text-center py-20 text-gray-400 font-medium'>फ़ीड रीफ्रेश हो रही है...</div>";
-            try {
-                let snap = await db.collection("posts").get();
-                posts.innerHTML = "";
-                
-                if(snap.empty){
-                    posts.innerHTML = "<div class='col-span-full text-center py-20 text-gray-500'>कोई डेटा नहीं मिला।</div>";
-                    return;
-                }
+// IMAGE
+fileInput.onchange=e=>{
+let r=new FileReader();
+r.onload=()=>imgData=r.result;
+r.readAsDataURL(e.target.files[0]);
+};
 
-                snap.forEach(doc => {
-                    let p = doc.data();
-                    let div = document.createElement("div");
-                    div.className = "fact-card bg-white rounded-2xl shadow border border-gray-200 overflow-hidden flex flex-col justify-between cursor-pointer";
-                    div.onclick = () => location.href = `detail.html?id=${doc.id}`;
-                    div.innerHTML = `
-                        <div>
-                            ${p.image ? `<img src="${p.image}" class="w-full h-48 object-cover">` : ""}
-                            <div class="p-5">
-                                <h2 class="font-bold text-lg mb-1.5 text-gray-900 leading-tight">${p.title || ""}</h2>
-                                <p class="text-gray-600 text-xs leading-relaxed">${(p.content || "").substring(0, 95)}...</p>
-                            </div>
-                        </div>
-                        <div class="px-5 pb-5">
-                            <div class="flex justify-between items-center text-xs border-t pt-3 text-gray-400 font-medium">
-                                <button class="likeBtn text-red-500 font-bold bg-red-50 px-2.5 py-1.5 rounded-xl transition">❤️ <span>${p.likes || 0}</span></button>
-                                <span>👁 ${p.views || 0} व्यूज</span>
-                            </div>
-                            ${userLoggedIn ? `<div class="flex gap-4 border-t pt-3 mt-3 text-xs font-bold"><button class="editBtn text-blue-600 hover:underline">📝 Edit</button><button class="deleteBtn text-red-600 hover:underline">🗑 Delete</button></div>` : ""}
-                        </div>`;
+// FETCH POSTS
+async function fetchPosts(){
+posts.innerHTML="Loading...";
 
-                    div.querySelector(".likeBtn").onclick = async (e) => {
-                        e.stopPropagation();
-                        let targetSpan = e.currentTarget.querySelector("span");
-                        await db.collection("posts").doc(doc.id).update({ likes: firebase.firestore.FieldValue.increment(1) });
-                        targetSpan.innerText = parseInt(targetSpan.innerText) + 1;
-                    };
+let snap=await db.collection("posts").get();
+posts.innerHTML="";
 
-                    if(userLoggedIn) {
-                        div.querySelector(".editBtn").onclick = (e) => {
-                            e.stopPropagation(); 
-                            secureArea.classList.remove("hidden");
-                            editId = doc.id; 
-                            title.value = p.title || ""; 
-                            content.value = p.content || ""; 
-                            existingImgUrl = p.image || ""; 
-                            modalTitle.innerText = "Modify Existing Post";
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                        };
-                        div.querySelector(".deleteBtn").onclick = async (e) => {
-                            e.stopPropagation(); 
-                            if(confirm("Permanent Delete?")) { 
-                                await db.collection("posts").doc(doc.id).delete(); 
-                                fetchPosts(); 
-                            }
-                        };
-                    }
-                    posts.appendChild(div);
-                });
-            } catch(e) { posts.innerHTML = `Error: ${e.message}`; }
-        }
+snap.forEach(doc=>{
+let p=doc.data();
 
-        async function savePost() {
-            if(!title.value.trim() || !content.value.trim()) return alert("पूरी जानकारी भरें।");
-            let postData = { title: title.value.trim(), content: content.value.trim() };
-            saveBtn.innerText = "Uploading Cloud Data...";
-            saveBtn.disabled = true;
+let div=document.createElement("div");
+div.className="bg-white rounded-xl shadow hover:shadow-lg cursor-pointer overflow-hidden";
 
-            try {
-                if(selectedFile) {
-                    let formData = new FormData();
-                    formData.append("image", selectedFile);
-                    
-                    let res = await fetch(`imgbb.com{IMGBB_API_KEY}`, { method: "POST", body: formData });
-                    let resData = await res.json();
-                    
-                    if(resData.success) {
-                        postData.image = resData.data.url;
-                    } else {
-                        throw new Error("ImgBB Upload Error");
-                    }
-                } else if(editId && existingImgUrl) {
-                    postData.image = existingImgUrl;
-                }
+div.onclick=()=>location.href=`detail.html?id=${doc.id}`;
 
-                if(editId) {
-                    await db.collection("posts").doc(editId).set(postData, { merge: true });
-                } else {
-                    postData.likes = 0; 
-                    postData.views = 0;
-                    await db.collection("posts").add(postData);
-                }
-                
-                // Form Reset Logic
-                editId = null; title.value = ""; content.value = ""; fileInput.value = ""; selectedFile = null; existingImgUrl = "";
-                saveBtn.innerText = "Publish Content"; saveBtn.disabled = false;
-                secureArea.classList.add("hidden");
-                await fetchPosts();
-            } catch(error) {
-                alert("Error: " + error.message);
-                saveBtn.innerText = "Publish Content"; saveBtn.disabled = false;
-            }
-        }
+div.innerHTML=`
+${p.image?`<img src="${p.image}" class="w-full h-48 object-cover">`:""}
 
-        search.oninput = e => {
-            let v = e.target.value.toLowerCase();
-            document.querySelectorAll("#posts > div").forEach(c => { c.style.display = c.innerText.toLowerCase().includes(v) ? "flex" : "none"; });
-        };
-    </script>
+<div class="p-3">
+<h2 class="font-bold text-lg">${p.title||""}</h2>
+<p class="text-gray-600 text-sm">${(p.content||"").substring(0,80)}...</p>
+
+<div class="flex justify-between mt-2">
+<button class="likeBtn text-red-500">❤️ ${p.likes||0}</button>
+<span>👁 ${p.views||0}</span>
+</div>
+
+${isAdmin?`
+<button class="editBtn text-blue-500">Edit</button>
+<button class="deleteBtn text-red-500">Delete</button>`:""}
+
+</div>
+`;
+
+// LIKE
+div.querySelector(".likeBtn").onclick=(e)=>{
+e.stopPropagation();
+db.collection("posts").doc(doc.id).update({
+likes:firebase.firestore.FieldValue.increment(1)
+}).then(fetchPosts);
+};
+
+// ADMIN
+if(isAdmin){
+div.querySelector(".editBtn").onclick=(e)=>{
+e.stopPropagation();
+editId=doc.id;
+title.value=p.title;
+content.value=p.content;
+openAdmin();
+};
+
+div.querySelector(".deleteBtn").onclick=(e)=>{
+e.stopPropagation();
+if(confirm("Delete?")){
+db.collection("posts").doc(doc.id).delete().then(fetchPosts);
+}
+};
+}
+
+posts.appendChild(div);
+});
+}
+
+fetchPosts();
+
+// ADMIN
+function openAdmin(){adminModal.classList.remove("hidden");}
+
+function savePost(){
+if(!title.value||!content.value)return alert("Fill fields");
+
+if(editId){
+db.collection("posts").doc(editId).set({
+title:title.value,
+content:content.value,
+image:imgData
+},{merge:true});
+}else{
+db.collection("posts").add({
+title:title.value,
+content:content.value,
+image:imgData,
+likes:0,
+views:0
+});
+}
+
+adminModal.classList.add("hidden");
+fetchPosts();
+}
+
+// SEARCH
+search.oninput=e=>{
+let v=e.target.value.toLowerCase();
+document.querySelectorAll("#posts > div").forEach(c=>{
+c.style.display=c.innerText.toLowerCase().includes(v)?"block":"none";
+});
+};
+</script>
+
 </body>
 </html>
