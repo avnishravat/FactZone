@@ -209,7 +209,7 @@ let uploadedImage = "";
 let editId = null;
 let isAdmin = false;
 
-// ENABLE CACHE
+// CACHE
 
 db.enablePersistence()
 .catch((err)=>{
@@ -312,14 +312,13 @@ if(!file) return;
 
 const formData = new FormData();
 
-formData.append("image",file);
+formData.append("image", file);
 
 try{
 
-document.getElementById("preview")
-.classList.remove("hidden");
+preview.classList.remove("hidden");
 
-document.getElementById("preview").src =
+preview.src =
 "https://i.imgur.com/ZKZC5Qx.gif";
 
 const response = await fetch(
@@ -335,18 +334,27 @@ body:formData
 
 const data = await response.json();
 
-uploadedImage = data.data.url;
+console.log(data);
 
-document.getElementById("preview").src =
-uploadedImage;
+if(data.success){
+
+uploadedImage = data.data.display_url;
+
+preview.src = uploadedImage;
 
 alert("Image Uploaded ✅");
 
+}else{
+
+alert("Image Upload Failed");
+
+}
+
 }catch(err){
 
-alert("Upload Failed ❌");
-
 console.log(err);
+
+alert("Upload Error ❌");
 
 }
 
@@ -481,11 +489,9 @@ firebase.firestore.FieldValue.increment(1)
 });
 
 
-// ADMIN
+// EDIT
 
 if(isAdmin){
-
-// EDIT
 
 div.querySelector(".editBtn")
 .addEventListener("click",(e)=>{
