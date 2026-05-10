@@ -209,7 +209,7 @@ let uploadedImage = "";
 let editId = null;
 let isAdmin = false;
 
-// CACHE
+// ENABLE CACHE
 
 db.enablePersistence()
 .catch((err)=>{
@@ -217,6 +217,14 @@ db.enablePersistence()
 console.log(err);
 
 });
+
+// CHECK ADMIN
+
+if(localStorage.getItem("admin") === "yes"){
+
+isAdmin = true;
+
+}
 
 // OPEN LOGIN
 
@@ -255,10 +263,14 @@ password
 
 isAdmin = true;
 
+localStorage.setItem("admin","yes");
+
 document.getElementById("addBtn")
 .classList.remove("hidden");
 
 closeLogin();
+
+fetchPosts();
 
 alert("Admin Login Success ✅");
 
@@ -269,6 +281,15 @@ alert("Wrong Email or Password");
 console.log(err);
 
 }
+
+}
+
+// SHOW ADMIN BUTTON AFTER REFRESH
+
+if(isAdmin){
+
+document.getElementById("addBtn")
+.classList.remove("hidden");
 
 }
 
@@ -333,8 +354,6 @@ body:formData
 );
 
 const data = await response.json();
-
-console.log(data);
 
 if(data.success){
 
@@ -460,7 +479,7 @@ Delete
 `;
 
 
-// OPEN DETAIL PAGE
+// OPEN POST
 
 div.addEventListener("click",()=>{
 
@@ -489,9 +508,11 @@ firebase.firestore.FieldValue.increment(1)
 });
 
 
-// EDIT
+// ADMIN OPTIONS
 
 if(isAdmin){
+
+// EDIT
 
 div.querySelector(".editBtn")
 .addEventListener("click",(e)=>{
@@ -607,6 +628,8 @@ alert("Post Uploaded ✅");
 }
 
 closeAdmin();
+
+fetchPosts();
 
 }catch(err){
 
