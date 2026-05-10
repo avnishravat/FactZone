@@ -14,7 +14,8 @@ content="Explore amazing facts and knowledge on FactZone.">
 
 <script src="https://cdn.tailwindcss.com"></script>
 
-<!-- Firebase -->
+<!-- FIREBASE -->
+
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
@@ -138,7 +139,7 @@ Close
 
 </div>
 
-<!-- ADMIN PANEL -->
+<!-- ADMIN MODAL -->
 
 <div
 id="adminModal"
@@ -204,7 +205,11 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// CACHE
+let uploadedImage = "";
+let editId = null;
+let isAdmin = false;
+
+// ENABLE CACHE
 
 db.enablePersistence()
 .catch((err)=>{
@@ -213,15 +218,12 @@ console.log(err);
 
 });
 
-let uploadedImage = "";
-let editId = null;
-let isAdmin = false;
-
 // OPEN LOGIN
 
 function openLogin(){
 
-loginModal.classList.remove("hidden");
+document.getElementById("loginModal")
+.classList.remove("hidden");
 
 }
 
@@ -229,7 +231,8 @@ loginModal.classList.remove("hidden");
 
 function closeLogin(){
 
-loginModal.classList.add("hidden");
+document.getElementById("loginModal")
+.classList.add("hidden");
 
 }
 
@@ -237,9 +240,11 @@ loginModal.classList.add("hidden");
 
 async function login(){
 
-const email = document.getElementById("email").value;
+const email =
+document.getElementById("email").value;
 
-const password = document.getElementById("password").value;
+const password =
+document.getElementById("password").value;
 
 try{
 
@@ -250,11 +255,10 @@ password
 
 isAdmin = true;
 
-addBtn.classList.remove("hidden");
+document.getElementById("addBtn")
+.classList.remove("hidden");
 
 closeLogin();
-
-fetchPosts();
 
 alert("Admin Login Success ✅");
 
@@ -274,14 +278,17 @@ function openAdmin(){
 
 editId = null;
 
-title.value = "";
-content.value = "";
+document.getElementById("title").value = "";
+
+document.getElementById("content").value = "";
 
 uploadedImage = "";
 
-preview.classList.add("hidden");
+document.getElementById("preview")
+.classList.add("hidden");
 
-adminModal.classList.remove("hidden");
+document.getElementById("adminModal")
+.classList.remove("hidden");
 
 }
 
@@ -289,13 +296,15 @@ adminModal.classList.remove("hidden");
 
 function closeAdmin(){
 
-adminModal.classList.add("hidden");
+document.getElementById("adminModal")
+.classList.add("hidden");
 
 }
 
 // IMAGE UPLOAD
 
-fileInput.onchange = async (e)=>{
+document.getElementById("fileInput")
+.onchange = async (e)=>{
 
 const file = e.target.files[0];
 
@@ -307,9 +316,10 @@ formData.append("image",file);
 
 try{
 
-preview.classList.remove("hidden");
+document.getElementById("preview")
+.classList.remove("hidden");
 
-preview.src =
+document.getElementById("preview").src =
 "https://i.imgur.com/ZKZC5Qx.gif";
 
 const response = await fetch(
@@ -327,13 +337,14 @@ const data = await response.json();
 
 uploadedImage = data.data.url;
 
-preview.src = uploadedImage;
+document.getElementById("preview").src =
+uploadedImage;
 
 alert("Image Uploaded ✅");
 
 }catch(err){
 
-alert("Image Upload Failed ❌");
+alert("Upload Failed ❌");
 
 console.log(err);
 
@@ -345,12 +356,14 @@ console.log(err);
 
 function fetchPosts(){
 
+const posts =
+document.getElementById("posts");
+
 posts.innerHTML = `
 
 <div class="text-center col-span-full py-10">
 
-<div class="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto">
-</div>
+<div class="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto"></div>
 
 <p class="mt-3 text-gray-500">
 Loading Posts...
@@ -369,7 +382,7 @@ posts.innerHTML = "";
 if(snapshot.empty){
 
 posts.innerHTML = `
-<h2 class="text-center text-gray-500 col-span-full text-2xl">
+<h2 class="text-center text-2xl text-gray-500 col-span-full">
 No Posts Found
 </h2>
 `;
@@ -385,11 +398,9 @@ const p = doc.data();
 const div = document.createElement("div");
 
 div.className =
-"card bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl";
+"card bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl cursor-pointer";
 
 div.innerHTML = `
-
-<a href="detail.html?id=${doc.id}" class="block">
 
 <img
 src="${p.image || 'https://via.placeholder.com/500'}"
@@ -402,7 +413,7 @@ class="w-full h-60 object-cover bg-gray-200">
 ${p.title || ""}
 </h2>
 
-<p class="text-gray-600 text-sm line2 mb-4">
+<p class="text-gray-600 text-sm mb-4 line2">
 ${p.content || ""}
 </p>
 
@@ -438,17 +449,24 @@ Delete
 ` : ""}
 
 </div>
-
-</a>
 `;
+
+
+// OPEN DETAIL PAGE
+
+div.addEventListener("click",()=>{
+
+window.location.href =
+`detail.html?id=${doc.id}`;
+
+});
 
 
 // LIKE
 
 div.querySelector(".likeBtn")
-.onclick = async (e)=>{
+.addEventListener("click", async (e)=>{
 
-e.preventDefault();
 e.stopPropagation();
 
 await db.collection("posts")
@@ -460,7 +478,8 @@ firebase.firestore.FieldValue.increment(1)
 
 });
 
-};
+});
+
 
 // ADMIN
 
@@ -469,33 +488,36 @@ if(isAdmin){
 // EDIT
 
 div.querySelector(".editBtn")
-.onclick = (e)=>{
+.addEventListener("click",(e)=>{
 
-e.preventDefault();
 e.stopPropagation();
 
 editId = doc.id;
 
-title.value = p.title || "";
+document.getElementById("title").value =
+p.title || "";
 
-content.value = p.content || "";
+document.getElementById("content").value =
+p.content || "";
 
 uploadedImage = p.image || "";
 
-preview.src = p.image || "";
+document.getElementById("preview").src =
+p.image || "";
 
-preview.classList.remove("hidden");
+document.getElementById("preview")
+.classList.remove("hidden");
 
-adminModal.classList.remove("hidden");
+document.getElementById("adminModal")
+.classList.remove("hidden");
 
-};
+});
 
 // DELETE
 
 div.querySelector(".deleteBtn")
-.onclick = async (e)=>{
+.addEventListener("click", async (e)=>{
 
-e.preventDefault();
 e.stopPropagation();
 
 if(confirm("Delete Post?")){
@@ -506,7 +528,7 @@ await db.collection("posts")
 
 }
 
-};
+});
 
 }
 
@@ -522,10 +544,15 @@ posts.appendChild(div);
 
 async function savePost(){
 
-const t = title.value.trim();
-const c = content.value.trim();
+const title =
+document.getElementById("title")
+.value.trim();
 
-if(!t || !c){
+const content =
+document.getElementById("content")
+.value.trim();
+
+if(!title || !content){
 
 alert("Fill all fields");
 
@@ -535,27 +562,33 @@ return;
 
 try{
 
+// UPDATE
+
 if(editId){
 
 await db.collection("posts")
 .doc(editId)
 .update({
 
-title:t,
-content:c,
+title,
+content,
 image:uploadedImage
 
 });
 
 alert("Post Updated ✅");
 
-}else{
+}
+
+// NEW POST
+
+else{
 
 await db.collection("posts")
 .add({
 
-title:t,
-content:c,
+title,
+content,
 image:uploadedImage,
 likes:0,
 views:0,
@@ -569,8 +602,6 @@ alert("Post Uploaded ✅");
 
 closeAdmin();
 
-fetchPosts();
-
 }catch(err){
 
 alert(err.message);
@@ -583,7 +614,8 @@ console.log(err);
 
 // SEARCH
 
-searchInput.oninput = (e)=>{
+document.getElementById("searchInput")
+.oninput = (e)=>{
 
 const value =
 e.target.value.toLowerCase();
