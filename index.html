@@ -10,12 +10,6 @@
 <meta name="description"
 content="Explore amazing facts and knowledge on FactZone.">
 
-<meta name="keywords"
-content="facts, amazing facts, knowledge, viral facts">
-
-<meta property="og:title" content="FactZone">
-<meta property="og:description" content="Amazing facts and knowledge daily">
-
 <link rel="icon" type="image/svg+xml" href="logo.svg">
 
 <script src="https://cdn.tailwindcss.com"></script>
@@ -210,7 +204,7 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// CACHE ENABLE
+// CACHE
 
 db.enablePersistence()
 .catch((err)=>{
@@ -227,8 +221,7 @@ let isAdmin = false;
 
 function openLogin(){
 
-document.getElementById("loginModal")
-.classList.remove("hidden");
+loginModal.classList.remove("hidden");
 
 }
 
@@ -236,8 +229,7 @@ document.getElementById("loginModal")
 
 function closeLogin(){
 
-document.getElementById("loginModal")
-.classList.add("hidden");
+loginModal.classList.add("hidden");
 
 }
 
@@ -245,11 +237,9 @@ document.getElementById("loginModal")
 
 async function login(){
 
-const email =
-document.getElementById("email").value;
+const email = document.getElementById("email").value;
 
-const password =
-document.getElementById("password").value;
+const password = document.getElementById("password").value;
 
 try{
 
@@ -260,8 +250,7 @@ password
 
 isAdmin = true;
 
-document.getElementById("addBtn")
-.classList.remove("hidden");
+addBtn.classList.remove("hidden");
 
 closeLogin();
 
@@ -396,9 +385,11 @@ const p = doc.data();
 const div = document.createElement("div");
 
 div.className =
-"card bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl cursor-pointer";
+"card bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl";
 
 div.innerHTML = `
+
+<a href="detail.html?id=${doc.id}" class="block">
 
 <img
 src="${p.image || 'https://via.placeholder.com/500'}"
@@ -447,17 +438,9 @@ Delete
 ` : ""}
 
 </div>
+
+</a>
 `;
-
-
-// OPEN POST
-
-div.onclick = ()=>{
-
-location.href =
-`detail.html?id=${doc.id}`;
-
-};
 
 
 // LIKE
@@ -465,6 +448,7 @@ location.href =
 div.querySelector(".likeBtn")
 .onclick = async (e)=>{
 
+e.preventDefault();
 e.stopPropagation();
 
 await db.collection("posts")
@@ -478,7 +462,6 @@ firebase.firestore.FieldValue.increment(1)
 
 };
 
-
 // ADMIN
 
 if(isAdmin){
@@ -488,6 +471,7 @@ if(isAdmin){
 div.querySelector(".editBtn")
 .onclick = (e)=>{
 
+e.preventDefault();
 e.stopPropagation();
 
 editId = doc.id;
@@ -511,6 +495,7 @@ adminModal.classList.remove("hidden");
 div.querySelector(".deleteBtn")
 .onclick = async (e)=>{
 
+e.preventDefault();
 e.stopPropagation();
 
 if(confirm("Delete Post?")){
