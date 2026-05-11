@@ -5,12 +5,40 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- SEO -->
+
 <title>FactZone | Amazing Facts & Knowledge</title>
 
 <meta name="description"
+content="Explore amazing facts, viral knowledge, science facts, history facts and interesting articles on FactZone.">
+
+<meta name="keywords"
+content="facts, amazing facts, knowledge, science facts, viral facts, history facts, factzone">
+
+<meta name="author"
+content="FactZone">
+
+<meta name="robots"
+content="index, follow">
+
+<meta property="og:title"
+content="FactZone | Amazing Facts & Knowledge">
+
+<meta property="og:description"
 content="Explore amazing facts and knowledge on FactZone.">
 
-<link rel="icon" type="image/svg+xml" href="logo.svg">
+<meta property="og:type"
+content="website">
+
+<meta property="og:image"
+content="logo.svg">
+
+<meta name="twitter:card"
+content="summary_large_image">
+
+<link rel="icon" href="logo.svg">
+
+<!-- TAILWIND -->
 
 <script src="https://cdn.tailwindcss.com"></script>
 
@@ -52,13 +80,13 @@ transform:translateY(-5px);
 
 <header class="bg-black sticky top-0 z-50 shadow-lg">
 
-<div class="max-w-7xl mx-auto flex items-center justify-between p-4 gap-4">
+<div class="max-w-7xl mx-auto p-4">
 
 <!-- LOGO -->
 
 <div
 onclick="openLogin()"
-class="flex items-center gap-3 cursor-pointer">
+class="flex items-center gap-3 cursor-pointer mb-4">
 
 <img
 src="logo.svg"
@@ -76,7 +104,7 @@ FactZone
 type="text"
 id="searchInput"
 placeholder="🔍 Search posts..."
-class="w-full max-w-xl px-5 py-3 rounded-full outline-none">
+class="w-full px-5 py-3 rounded-full outline-none">
 
 </div>
 
@@ -209,7 +237,7 @@ let uploadedImage = "";
 let editId = null;
 let isAdmin = false;
 
-// ENABLE CACHE
+// CACHE
 
 db.enablePersistence()
 .catch((err)=>{
@@ -218,11 +246,20 @@ console.log(err);
 
 });
 
-// CHECK ADMIN
+// ADMIN CHECK
 
 if(localStorage.getItem("admin") === "yes"){
 
 isAdmin = true;
+
+}
+
+// SHOW ADMIN BTN
+
+if(isAdmin){
+
+document.getElementById("addBtn")
+.classList.remove("hidden");
 
 }
 
@@ -278,18 +315,7 @@ alert("Admin Login Success ✅");
 
 alert("Wrong Email or Password");
 
-console.log(err);
-
 }
-
-}
-
-// SHOW ADMIN BUTTON AFTER REFRESH
-
-if(isAdmin){
-
-document.getElementById("addBtn")
-.classList.remove("hidden");
 
 }
 
@@ -370,8 +396,6 @@ alert("Image Upload Failed");
 }
 
 }catch(err){
-
-console.log(err);
 
 alert("Upload Error ❌");
 
@@ -488,7 +512,6 @@ window.location.href =
 
 });
 
-
 // LIKE
 
 div.querySelector(".likeBtn")
@@ -507,8 +530,7 @@ firebase.firestore.FieldValue.increment(1)
 
 });
 
-
-// ADMIN OPTIONS
+// ADMIN
 
 if(isAdmin){
 
@@ -634,8 +656,6 @@ fetchPosts();
 }catch(err){
 
 alert(err.message);
-
-console.log(err);
 
 }
 
