@@ -1,157 +1,350 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <!-- SEO -->
-  <title>FactZone Post</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta name="description"
-  content="Amazing facts and knowledge from FactZone">
+<!-- SEO -->
+<title>FactZone Post</title>
 
-  <meta name="keywords"
-  content="facts, amazing facts, knowledge, tech, education">
+<meta name="description"
+content="Amazing facts and knowledge from FactZone">
 
-  <meta name="author" content="FactZone">
+<meta name="keywords"
+content="facts, amazing facts, knowledge, technology, education">
 
-  <!-- Open Graph SEO -->
-  <meta property="og:type" content="article">
-  <meta property="og:title" content="FactZone Post">
-  <meta property="og:description"
-  content="Amazing facts and knowledge from FactZone">
-  <meta property="og:image" content="logo.svg">
+<meta name="author"
+content="FactZone">
 
-  <!-- Favicon -->
-  <link rel="icon" href="logo.svg">
+<meta name="robots"
+content="index, follow">
 
-  <!-- Tailwind -->
-  <script src="https://cdn.tailwindcss.com"></script>
+<!-- Open Graph -->
+<meta property="og:type"
+content="article">
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<meta property="og:title"
+content="FactZone Post">
 
-  <style>
-    body{
-      background:#0f0f0f;
-      color:white;
-      font-family:Arial;
-    }
+<meta property="og:description"
+content="Amazing facts and knowledge from FactZone">
 
-    .glass{
-      background:rgba(255,255,255,0.05);
-      backdrop-filter:blur(10px);
-      border:1px solid rgba(255,255,255,0.08);
-    }
+<meta property="og:image"
+content="logo.svg">
 
-    .fade{
-      animation:fade .5s ease;
-    }
+<meta property="og:url"
+content="https://factzone.online">
 
-    @keyframes fade{
-      from{
-        opacity:0;
-        transform:translateY(20px);
-      }
-      to{
-        opacity:1;
-        transform:translateY(0);
-      }
-    }
-  </style>
+<!-- Twitter SEO -->
+<meta name="twitter:card"
+content="summary_large_image">
+
+<meta name="twitter:title"
+content="FactZone Post">
+
+<meta name="twitter:description"
+content="Amazing facts and knowledge from FactZone">
+
+<meta name="twitter:image"
+content="logo.svg">
+
+<!-- Favicon -->
+<link rel="icon" href="logo.svg">
+
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+background:#0f0f0f;
+color:white;
+font-family:Arial;
+overflow-x:hidden;
+}
+
+/* SCROLLBAR */
+
+::-webkit-scrollbar{
+width:8px;
+}
+
+::-webkit-scrollbar-thumb{
+background:#444;
+border-radius:20px;
+}
+
+/* HEADER */
+
+.header{
+position:sticky;
+top:0;
+z-index:999;
+background:#000;
+border-bottom:1px solid #222;
+padding:15px;
+backdrop-filter:blur(10px);
+}
+
+/* GLASS */
+
+.glass{
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(10px);
+border:1px solid rgba(255,255,255,0.08);
+}
+
+/* FADE */
+
+.fade{
+animation:fade .5s ease;
+}
+
+@keyframes fade{
+
+from{
+opacity:0;
+transform:translateY(20px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+/* LOADER */
+
+.loader{
+width:55px;
+height:55px;
+border:5px solid #222;
+border-top:5px solid white;
+border-radius:50%;
+animation:spin 1s linear infinite;
+margin:auto;
+}
+
+@keyframes spin{
+
+100%{
+transform:rotate(360deg);
+}
+
+}
+
+/* CONTENT */
+
+#postContent img{
+max-width:100%;
+border-radius:15px;
+margin-top:15px;
+}
+
+/* BUTTON */
+
+.likeBtn{
+
+background:#dc2626;
+padding:14px 25px;
+border-radius:15px;
+font-weight:bold;
+transition:.3s;
+border:none;
+cursor:pointer;
+}
+
+.likeBtn:hover{
+background:#b91c1c;
+transform:scale(1.03);
+}
+
+/* RELATED */
+
+.relatedCard{
+transition:.3s;
+cursor:pointer;
+}
+
+.relatedCard:hover{
+transform:translateY(-5px);
+}
+
+/* SHARE */
+
+.shareBtn{
+background:#111827;
+padding:12px 18px;
+border-radius:12px;
+transition:.3s;
+}
+
+.shareBtn:hover{
+background:#1f2937;
+}
+
+</style>
+
 </head>
 
 <body>
 
 <!-- HEADER -->
-<header class="sticky top-0 z-50 bg-black border-b border-gray-800 p-4">
 
-  <div class="flex items-center gap-3">
+<header class="header">
 
-    <img src="logo.svg"
-    class="w-11 h-11 rounded-full border border-gray-700">
+<div class="max-w-6xl mx-auto flex items-center justify-between">
 
-    <div>
-      <h1 class="text-2xl font-bold text-white">
-        FactZone
-      </h1>
+<div class="flex items-center gap-3">
 
-      <p class="text-gray-400 text-sm">
-        Amazing Facts & Knowledge
-      </p>
-    </div>
+<img src="logo.svg"
+class="w-12 h-12 rounded-full border border-gray-700">
 
-  </div>
+<div>
+
+<h1 class="text-2xl font-bold">
+FactZone
+</h1>
+
+<p class="text-gray-400 text-sm">
+Amazing Facts & Knowledge
+</p>
+
+</div>
+
+</div>
+
+<a href="index.html"
+class="bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-xl">
+Home
+</a>
+
+</div>
 
 </header>
 
 <!-- MAIN -->
-<div class="max-w-4xl mx-auto p-4">
 
-  <!-- Back -->
-  <button onclick="history.back()"
-  class="mb-4 bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg">
-    ← Back
-  </button>
+<div class="max-w-5xl mx-auto p-4">
 
-  <!-- Loading -->
-  <div id="loading"
-  class="text-center text-gray-400 py-10">
-    Loading post...
-  </div>
+<!-- BACK -->
 
-  <!-- POST -->
-  <div id="postBox"
-  class="hidden glass rounded-2xl overflow-hidden fade">
+<button onclick="history.back()"
+class="mb-5 bg-gray-800 hover:bg-gray-700 px-5 py-2 rounded-xl">
+← Back
+</button>
 
-    <!-- IMAGE -->
-    <img id="postImage"
-    class="w-full max-h-[500px] object-cover">
+<!-- LOADING -->
 
-    <!-- CONTENT -->
-    <div class="p-6">
+<div id="loading"
+class="py-16 text-center">
 
-      <!-- TITLE -->
-      <h1 id="postTitle"
-      class="text-3xl font-bold mb-4 leading-tight">
-      </h1>
+<div class="loader"></div>
 
-      <!-- META -->
-      <div class="flex gap-4 text-sm text-gray-400 mb-6">
+<p class="mt-5 text-gray-400">
+Loading Post...
+</p>
 
-        <span id="postDate"></span>
+</div>
 
-        <span>
-          ❤️ <span id="likesCount">0</span>
-        </span>
+<!-- POST -->
 
-      </div>
+<div id="postBox"
+class="hidden glass rounded-3xl overflow-hidden fade">
 
-      <!-- CONTENT -->
-      <div id="postContent"
-      class="text-gray-200 leading-8 text-lg whitespace-pre-line">
-      </div>
+<!-- IMAGE -->
 
-      <!-- LIKE -->
-      <button id="likeBtn"
-      class="mt-8 bg-red-600 hover:bg-red-700 px-6 py-3 rounded-xl font-bold transition">
-        ❤️ Like Post
-      </button>
+<img id="postImage"
+class="w-full max-h-[550px] object-cover">
 
-    </div>
+<!-- CONTENT -->
 
-  </div>
+<div class="p-6">
+
+<!-- TITLE -->
+
+<h1 id="postTitle"
+class="text-4xl font-bold leading-tight mb-5">
+</h1>
+
+<!-- META -->
+
+<div class="flex flex-wrap gap-5 text-sm text-gray-400 mb-6">
+
+<span id="postDate"></span>
+
+<span>
+❤️ <span id="likesCount">0</span> Likes
+</span>
+
+</div>
+
+<!-- CONTENT -->
+
+<div id="postContent"
+class="text-gray-200 leading-9 text-lg whitespace-pre-line">
+</div>
+
+<!-- BUTTONS -->
+
+<div class="flex gap-4 flex-wrap mt-8">
+
+<button id="likeBtn"
+class="likeBtn">
+❤️ Like Post
+</button>
+
+<button id="shareBtn"
+class="shareBtn">
+📤 Share
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- RELATED POSTS -->
+
+<div class="mt-10">
+
+<h2 class="text-2xl font-bold mb-5">
+Related Posts
+</h2>
+
+<div id="relatedPosts"
+class="grid md:grid-cols-3 gap-5">
+</div>
+
+</div>
 
 </div>
 
 <script>
+
 /* FIREBASE */
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
-  authDomain: "factzone-a9ace.firebaseapp.com",
-  projectId: "factzone-a9ace"
+
+apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
+
+authDomain: "factzone-a9ace.firebaseapp.com",
+
+projectId: "factzone-a9ace"
+
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -184,129 +377,243 @@ const postDate = document.getElementById("postDate");
 
 async function loadPost(){
 
-  if(!id){
-    loading.innerHTML = "Post not found";
-    return;
-  }
+if(!id){
 
-  try{
+loading.innerHTML =
+"<p class='text-red-500'>Post not found</p>";
 
-    const doc = await db.collection("posts")
-    .doc(id)
-    .get();
+return;
 
-    if(!doc.exists){
-      loading.innerHTML = "Post not found";
-      return;
-    }
+}
 
-    const post = doc.data();
+try{
 
-    /* SHOW DATA */
+const doc = await db.collection("posts")
+.doc(id)
+.get();
 
-    postTitle.innerText = post.title || "";
+if(!doc.exists){
 
-    postContent.innerText = post.content || "";
+loading.innerHTML =
+"<p class='text-red-500'>Post not found</p>";
 
-    likesCount.innerText = post.likes || 0;
+return;
 
-    /* DATE */
+}
 
-    if(post.createdAt){
+const post = doc.data();
 
-      const date = post.createdAt.toDate();
+/* TITLE */
 
-      postDate.innerText =
-      date.toLocaleDateString();
+postTitle.innerText =
+post.title || "";
 
-    }
+/* CONTENT */
 
-    /* IMAGE */
+postContent.innerText =
+post.content || "";
 
-    if(post.image){
+/* LIKES */
 
-      postImage.src = post.image;
+likesCount.innerText =
+post.likes || 0;
 
-      postImage.style.display = "block";
+/* DATE */
 
-    }else{
+if(post.createdAt){
 
-      postImage.style.display = "none";
+const date = post.createdAt.toDate();
 
-    }
+postDate.innerText =
+"📅 " + date.toLocaleDateString();
 
-    /* SEO DYNAMIC */
+}
 
-    document.title =
-    post.title + " | FactZone";
+/* IMAGE */
 
-    document.querySelector(
-    'meta[name="description"]'
-    ).setAttribute(
-      "content",
-      post.content.substring(0,150)
-    );
+if(post.image){
 
-    document.querySelector(
-    'meta[property="og:title"]'
-    ).setAttribute(
-      "content",
-      post.title
-    );
+postImage.src = post.image;
 
-    document.querySelector(
-    'meta[property="og:description"]'
-    ).setAttribute(
-      "content",
-      post.content.substring(0,150)
-    );
+postImage.style.display = "block";
 
-    if(post.image){
+}else{
 
-      document.querySelector(
-      'meta[property="og:image"]'
-      ).setAttribute(
-        "content",
-        post.image
-      );
+postImage.style.display = "none";
 
-    }
+}
 
-    /* SHOW */
+/* SEO */
 
-    loading.style.display = "none";
+document.title =
+post.title + " | FactZone";
 
-    postBox.classList.remove("hidden");
+document.querySelector(
+'meta[name="description"]'
+).setAttribute(
+"content",
+post.content.substring(0,150)
+);
 
-    /* LIKE */
+document.querySelector(
+'meta[property="og:title"]'
+).setAttribute(
+"content",
+post.title
+);
 
-    document.getElementById("likeBtn")
-    .onclick = async ()=>{
+document.querySelector(
+'meta[property="og:description"]'
+).setAttribute(
+"content",
+post.content.substring(0,150)
+);
 
-      await db.collection("posts")
-      .doc(id)
-      .update({
-        likes:
-        firebase.firestore.FieldValue.increment(1)
-      });
+if(post.image){
 
-      likesCount.innerText =
-      parseInt(likesCount.innerText)+1;
+document.querySelector(
+'meta[property="og:image"]'
+).setAttribute(
+"content",
+post.image
+);
 
-    };
+}
 
-  }catch(err){
+/* SHOW */
 
-    loading.innerHTML =
-    "Failed to load post";
+loading.style.display = "none";
 
-    console.log(err);
+postBox.classList.remove("hidden");
 
-  }
+/* LIKE */
+
+document.getElementById("likeBtn")
+.onclick = async ()=>{
+
+await db.collection("posts")
+.doc(id)
+.update({
+
+likes:
+firebase.firestore.FieldValue.increment(1)
+
+});
+
+likesCount.innerText =
+parseInt(likesCount.innerText)+1;
+
+};
+
+/* SHARE */
+
+document.getElementById("shareBtn")
+.onclick = async ()=>{
+
+if(navigator.share){
+
+navigator.share({
+
+title:post.title,
+
+text:post.content.substring(0,100),
+
+url:window.location.href
+
+});
+
+}else{
+
+navigator.clipboard.writeText(
+window.location.href
+);
+
+alert("Link copied");
+
+}
+
+};
+
+/* RELATED POSTS */
+
+loadRelatedPosts();
+
+}catch(err){
+
+console.log(err);
+
+loading.innerHTML = `
+<p class="text-red-500">
+Failed to load post
+</p>
+`;
+
+}
+
+}
+
+/* RELATED POSTS */
+
+async function loadRelatedPosts(){
+
+const wrap =
+document.getElementById("relatedPosts");
+
+const snap =
+await db.collection("posts")
+.limit(3)
+.get();
+
+wrap.innerHTML = "";
+
+snap.forEach(doc=>{
+
+if(doc.id === id) return;
+
+const p = doc.data();
+
+wrap.innerHTML += `
+
+<div
+onclick="openPost('${doc.id}')"
+class="relatedCard glass rounded-2xl overflow-hidden">
+
+${p.image ? `
+<img src="${p.image}"
+class="h-44 w-full object-cover">
+` : ""}
+
+<div class="p-4">
+
+<h3 class="font-bold text-lg mb-2">
+${p.title}
+</h3>
+
+<p class="text-gray-400 text-sm">
+${(p.content || "").substring(0,80)}...
+</p>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+/* OPEN */
+
+function openPost(id){
+
+location.href =
+"detail.html?id=" + id;
 
 }
 
 loadPost();
+
 </script>
 
 </body>
