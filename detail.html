@@ -208,7 +208,15 @@ alert(err.message);
 }
 
 loadPost();
+const canonical =
+document.createElement("link");
 
+canonical.rel = "canonical";
+
+canonical.href =
+window.location.href;
+
+document.head.appendChild(canonical);
 </script>
 
 </body>
