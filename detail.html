@@ -3,24 +3,113 @@
 <head>
 
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0"/>
+
+<!-- SEO -->
 
 <title>FactZone Post</title>
 
 <meta name="description"
 content="Read amazing facts and knowledge posts on FactZone."/>
 
-<link rel="icon" href="logo.svg" type="image/svg+xml"/>
+<meta name="keywords"
+content="facts, amazing facts, knowledge, education"/>
+
+<meta name="author"
+content="Avnish Ravat"/>
+
+<meta name="developer"
+content="Avnish Ravat"/>
+
+<meta name="designer"
+content="FactZone"/>
+
+<meta name="robots"
+content="index, follow"/>
+
+<!-- OPEN GRAPH -->
+
+<meta property="og:type"
+content="article"/>
+
+<meta property="og:title"
+content="FactZone Post"/>
+
+<meta property="og:description"
+content="Amazing facts and knowledge from FactZone"/>
+
+<meta property="og:image"
+content="logo.svg"/>
+
+<!-- ICON -->
+
+<link rel="icon"
+href="logo.svg"
+type="image/svg+xml"/>
+
+<!-- TAILWIND -->
 
 <script src="https://cdn.tailwindcss.com"></script>
 
+<!-- FIREBASE -->
+
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <style>
 
 body{
 background:#f3f4f6;
+font-family:Arial;
+}
+
+/* SCROLL */
+
+::-webkit-scrollbar{
+width:8px;
+}
+
+::-webkit-scrollbar-thumb{
+background:#999;
+border-radius:20px;
+}
+
+/* ANIMATION */
+
+.fade{
+animation:fade .4s ease;
+}
+
+@keyframes fade{
+
+from{
+opacity:0;
+transform:translateY(20px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+/* IMAGE */
+
+#image{
+background:#e5e7eb;
+}
+
+/* BUTTON */
+
+.likeBtn{
+transition:.3s;
+}
+
+.likeBtn:hover{
+transform:scale(1.03);
 }
 
 </style>
@@ -31,46 +120,93 @@ background:#f3f4f6;
 
 <!-- HEADER -->
 
-<header class="bg-black p-4 sticky top-0 z-50 shadow-lg">
+<header
+class="bg-black p-4 sticky top-0 z-50 shadow-lg">
 
-<div class="max-w-5xl mx-auto flex items-center justify-between">
+<div
+class="max-w-5xl mx-auto flex items-center justify-between">
 
 <a href="index.html"
-class="flex items-center gap-2">
+class="flex items-center gap-3">
 
 <img
 src="logo.svg"
-class="w-10 h-10 rounded-full bg-white p-1"/>
+class="w-11 h-11 rounded-full bg-white p-1"/>
 
-<h1 class="text-2xl font-bold text-white">
+<div>
+
+<h1
+class="text-2xl font-bold text-white">
 FactZone
 </h1>
 
+<p
+class="text-gray-400 text-sm">
+Amazing Facts & Knowledge
+</p>
+
+</div>
+
 </a>
+
+<button
+onclick="history.back()"
+class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-xl">
+← Back
+</button>
 
 </div>
 
 </header>
 
+<!-- MAIN -->
+
+<main
+class="max-w-4xl mx-auto p-4">
+
+<!-- LOADING -->
+
+<div
+id="loading"
+class="text-center py-20">
+
+<div
+class="animate-spin rounded-full h-14 w-14 border-b-4 border-black mx-auto">
+</div>
+
+<p class="mt-4 text-gray-500">
+Loading Post...
+</p>
+
+</div>
+
 <!-- POST -->
 
-<main class="max-w-4xl mx-auto p-4">
+<div
+id="postBox"
+class="hidden bg-white rounded-3xl shadow-2xl overflow-hidden fade">
 
-<div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+<!-- IMAGE -->
 
 <img
 id="image"
 class="w-full max-h-[500px] object-cover"/>
 
+<!-- CONTENT -->
+
 <div class="p-6">
+
+<!-- TITLE -->
 
 <h1
 id="title"
-class="text-3xl font-bold mb-4">
-Loading...
+class="text-4xl font-bold mb-5 text-gray-900 leading-tight">
 </h1>
 
-<div class="flex gap-6 text-gray-600 mb-6">
+<!-- META -->
+
+<div
+class="flex flex-wrap gap-6 text-gray-500 mb-6 text-sm">
 
 <p id="views">
 👁️ 0 views
@@ -82,16 +218,31 @@ Loading...
 
 </div>
 
+<!-- CONTENT -->
+
 <p
 id="content"
-class="text-lg leading-8 whitespace-pre-wrap text-gray-800">
+class="text-lg leading-9 whitespace-pre-wrap text-gray-800">
 </p>
+
+<!-- BUTTONS -->
+
+<div
+class="flex gap-4 mt-8 flex-wrap">
 
 <button
 id="likeBtn"
-class="mt-8 bg-red-500 text-white px-6 py-3 rounded-xl font-bold">
+class="likeBtn bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-2xl font-bold">
 ❤️ Like
 </button>
+
+<button
+id="shareBtn"
+class="bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-2xl font-bold">
+📤 Share
+</button>
+
+</div>
 
 </div>
 
@@ -101,13 +252,18 @@ class="mt-8 bg-red-500 text-white px-6 py-3 rounded-xl font-bold">
 
 <script>
 
+/* FIREBASE */
+
 const firebaseConfig = {
 
-apiKey:"AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
+apiKey:
+"AAIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
 
-authDomain:"factzone-a9ace.firebaseapp.com",
+authDomain:
+"factzone-a9ace.firebaseapp.com",
 
-projectId:"factzone-a9ace"
+projectId:
+"factzone-a9ace"
 
 };
 
@@ -115,9 +271,25 @@ firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
 
+/* GET ID */
+
 const id =
 new URLSearchParams(location.search)
 .get("id");
+
+/* CANONICAL */
+
+const canonical =
+document.createElement("link");
+
+canonical.rel = "canonical";
+
+canonical.href =
+window.location.href;
+
+document.head.appendChild(canonical);
+
+/* LOAD POST */
 
 async function loadPost(){
 
@@ -134,24 +306,29 @@ db.collection("posts").doc(id);
 
 try{
 
-// VIEW COUNT
+/* VIEW COUNT */
 
 if(!localStorage.getItem("view_"+id)){
 
 await ref.update({
 
-views: firebase.firestore
+views:
+firebase.firestore
 .FieldValue.increment(1)
 
 });
 
-localStorage.setItem("view_"+id,"yes");
+localStorage.setItem(
+"view_"+id,
+"yes"
+);
 
 }
 
-// GET DATA
+/* GET POST */
 
-const doc = await ref.get();
+const doc =
+await ref.get();
 
 if(!doc.exists){
 
@@ -163,17 +340,16 @@ return;
 
 const p = doc.data();
 
-document.title =
-p.title + " | FactZone";
+/* SHOW DATA */
 
 document.getElementById("title")
-.innerText = p.title;
+.innerText = p.title || "";
 
 document.getElementById("content")
-.innerText = p.content;
+.innerText = p.content || "";
 
 document.getElementById("image")
-.src = p.image;
+.src = p.image || "";
 
 document.getElementById("views")
 .innerText =
@@ -183,48 +359,148 @@ document.getElementById("likes")
 .innerText =
 "❤️ " + (p.likes || 0) + " likes";
 
-// LIKE BUTTON
+/* SEO */
 
-document.getElementById("likeBtn")
-.onclick = async ()=>{
+document.title =
+p.title + " | FactZone";
+
+document.querySelector(
+'meta[name="description"]'
+).setAttribute(
+"content",
+(p.content || "").substring(0,150)
+);
+
+document.querySelector(
+'meta[property="og:title"]'
+).setAttribute(
+"content",
+p.title
+);
+
+document.querySelector(
+'meta[property="og:description"]'
+).setAttribute(
+"content",
+(p.content || "").substring(0,150)
+);
+
+if(p.image){
+
+document.querySelector(
+'meta[property="og:image"]'
+).setAttribute(
+"content",
+p.image
+);
+
+}
+
+/* SHOW */
+
+document.getElementById("loading")
+.style.display = "none";
+
+document.getElementById("postBox")
+.classList.remove("hidden");
+
+/* LIKE SYSTEM */
+
+const likedPosts =
+JSON.parse(
+localStorage.getItem("likedPosts")
+) || [];
+
+const likeBtn =
+document.getElementById("likeBtn");
+
+if(likedPosts.includes(id)){
+
+likeBtn.innerText =
+"❤️ Liked";
+
+likeBtn.disabled = true;
+
+likeBtn.style.opacity = "0.6";
+
+}
+
+likeBtn.onclick = async ()=>{
+
+if(likedPosts.includes(id))
+return;
 
 await ref.update({
 
-likes: firebase.firestore
+likes:
+firebase.firestore
 .FieldValue.increment(1)
 
 });
 
-loadPost();
+document.getElementById("likes")
+.innerText =
+"❤️ " +
+((p.likes || 0)+1)
++ " likes";
+
+likedPosts.push(id);
+
+localStorage.setItem(
+"likedPosts",
+JSON.stringify(likedPosts)
+);
+
+likeBtn.innerText =
+"❤️ Liked";
+
+likeBtn.disabled = true;
+
+likeBtn.style.opacity = "0.6";
+
+};
+
+/* SHARE */
+
+document.getElementById("shareBtn")
+.onclick = async ()=>{
+
+if(navigator.share){
+
+navigator.share({
+
+title:p.title,
+
+text:p.content.substring(0,100),
+
+url:window.location.href
+
+});
+
+}else{
+
+navigator.clipboard.writeText(
+window.location.href
+);
+
+alert("Link Copied");
+
+}
 
 };
 
 }catch(err){
+
+console.log(err);
 
 alert(err.message);
 
 }
 
 }
-const canonical =
-document.createElement("link");
 
-canonical.rel = "canonical";
-
-canonical.href =
-window.location.href;
-
-document.head.appendChild(canonical);
 loadPost();
-const canonical =
-document.createElement("link");
 
-canonical.rel = "canonical";
-
-canonical.href =
-window.location.href;
-
-document.head.appendChild(canonical);
 </script>
 
 </body>
