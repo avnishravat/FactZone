@@ -22,4 +22,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- POST URL -->
+
+  <url>
+    <loc>
+      https://factzone.online/detail.html?id=post_01
+    </loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>
