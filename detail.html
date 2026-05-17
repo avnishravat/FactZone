@@ -361,27 +361,39 @@ document.getElementById("likes")
 
 /* SEO */
 
+/* SEO */
+
 document.title =
-p.title + " | FactZone";
+(p.seoTitle || p.title)
++ " | FactZone";
 
 document.querySelector(
 'meta[name="description"]'
 ).setAttribute(
 "content",
+p.seoDescription ||
 (p.content || "").substring(0,150)
+);
+
+document.querySelector(
+'meta[name="keywords"]'
+).setAttribute(
+"content",
+p.seoKeywords || ""
 );
 
 document.querySelector(
 'meta[property="og:title"]'
 ).setAttribute(
 "content",
-p.title
+p.seoTitle || p.title
 );
 
 document.querySelector(
 'meta[property="og:description"]'
 ).setAttribute(
 "content",
+p.seoDescription ||
 (p.content || "").substring(0,150)
 );
 
