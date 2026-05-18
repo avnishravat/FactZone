@@ -537,25 +537,54 @@ Delete
 
 div.addEventListener("click",()=>{
 
-const urls = {
+if(p.title.includes("वॉकिंग")){
 
-"Walking Tree Fact":
-"posts/walking-tree-fact.html",
+window.location.href =
+"posts/walking-tree-fact.html";
 
-"Voynich Manuscript Mystery":
-"posts/voynich-manuscript-mystery.html",
+}
 
-"Mobile Security Settings":
-"posts/mobile-security-settings.html",
+else if(p.title.includes("वॉयनिच")){
 
-"Space Facts About Tears":
-"posts/space-facts-tears.html",
+window.location.href =
+"posts/voynich-manuscript-mystery.html";
 
-"Technology Facts":
-"posts/technology-facts.html",
+}
 
-"Amazing Space Facts":
-"posts/amazing-space-facts.html"
+else if(p.title.includes("मोबाइल")){
+
+window.location.href =
+"posts/mobile-security-settings.html";
+
+}
+
+else if(p.title.includes("अंतरिक्ष में रोने")){
+
+window.location.href =
+"posts/space-facts-tears.html";
+
+}
+
+else if(p.title.includes("टेक्नोलॉजी")){
+
+window.location.href =
+"posts/technology-facts.html";
+
+}
+
+else if(p.title.includes("Amazing Space")){
+
+window.location.href =
+"posts/amazing-space-facts.html";
+
+}
+
+else{
+
+window.location.href =
+`detail.html?id=${doc.id}`;
+
+}
 
 });
 
