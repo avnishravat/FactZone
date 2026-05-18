@@ -9,7 +9,6 @@ src="https://www.googletagmanager.com/gtag/js?id=G-311JQXBXR9">
 </script>
 
 <script>
-
 window.dataLayer = window.dataLayer || [];
 
 function gtag(){
@@ -19,7 +18,6 @@ dataLayer.push(arguments);
 gtag('js', new Date());
 
 gtag('config', 'G-311JQXBXR9');
-
 </script>
 
 <meta charset="UTF-8">
@@ -30,34 +28,79 @@ content="width=device-width, initial-scale=1.0">
 <!-- SEO -->
 
 <title>
-FactZone | Amazing Facts & Skill Based Knowledge
+FactZone | Amazing Facts & Knowledge
 </title>
 
 <meta name="description"
-content="Explore amazing facts, science facts, technology updates, space facts, history facts and viral knowledge on FactZone.">
+content="Explore amazing facts, science facts, technology facts, history facts, viral knowledge and educational content on FactZone.">
 
 <meta name="keywords"
-content="facts, amazing facts, science facts, technology facts, space facts, viral knowledge, factzone">
+content="facts, amazing facts, science facts, technology facts, space facts, history facts, viral facts, educational facts, factzone">
 
 <meta name="author"
 content="Avnish Ravat">
 
+<meta name="developer"
+content="Avnish Ravat">
+
+<meta name="designer"
+content="FactZone">
+
 <meta name="robots"
 content="index, follow">
+
+<meta name="googlebot"
+content="index, follow">
+
+<meta name="bingbot"
+content="index, follow">
+
+<meta name="theme-color"
+content="#000000">
+
+<meta name="language"
+content="Hindi">
+
+<meta name="revisit-after"
+content="1 days">
+
+<meta name="distribution"
+content="global">
+
+<meta name="rating"
+content="general">
+
+<meta name="coverage"
+content="Worldwide">
+
+<meta name="target"
+content="all">
+
+<meta name="HandheldFriendly"
+content="True">
+
+<meta name="MobileOptimized"
+content="320">
 
 <link rel="canonical"
 href="https://factzone.online/">
 
 <!-- OPEN GRAPH -->
 
+<meta property="og:type"
+content="website">
+
+<meta property="og:site_name"
+content="FactZone">
+
+<meta property="og:locale"
+content="en_IN">
+
 <meta property="og:title"
 content="FactZone | Amazing Facts & Knowledge">
 
 <meta property="og:description"
-content="Explore amazing facts and interesting knowledge on FactZone.">
-
-<meta property="og:type"
-content="website">
+content="Explore amazing facts and educational knowledge on FactZone.">
 
 <meta property="og:url"
 content="https://factzone.online/">
@@ -71,30 +114,76 @@ content="https://factzone.online/logo.svg">
 content="summary_large_image">
 
 <meta name="twitter:title"
-content="FactZone">
+content="FactZone | Amazing Facts">
 
 <meta name="twitter:description"
-content="Amazing facts and knowledge platform.">
+content="Amazing facts and educational platform.">
 
 <meta name="twitter:image"
 content="https://factzone.online/logo.svg">
+
+<meta name="twitter:site"
+content="@factzone">
+
+<meta name="twitter:creator"
+content="@factzone">
+
+<!-- APPLE -->
+
+<meta name="apple-mobile-web-app-capable"
+content="yes">
+
+<meta name="apple-mobile-web-app-status-bar-style"
+content="black">
+
+<meta name="apple-mobile-web-app-title"
+content="FactZone">
 
 <!-- ICON -->
 
 <link rel="icon"
 href="logo.svg">
 
+<link rel="apple-touch-icon"
+href="logo.svg">
+
+<link rel="shortcut icon"
+href="logo.svg">
+
+<!-- PRELOAD -->
+
+<link rel="preload"
+as="image"
+href="logo.svg">
+
+<!-- DNS PREFETCH -->
+
+<link rel="dns-prefetch"
+href="//www.gstatic.com">
+
+<link rel="dns-prefetch"
+href="//cdn.tailwindcss.com">
+
+<!-- STRUCTURED DATA -->
+
+<script type="application/ld+json">
+{
+"@context":"https://schema.org",
+"@type":"WebSite",
+"name":"FactZone",
+"url":"https://factzone.online/",
+"description":"Amazing facts, science facts, technology facts and educational platform.",
+"publisher":{
+"@type":"Organization",
+"name":"FactZone",
+"url":"https://factzone.online/"
+}
+}
+</script>
+
 <!-- TAILWIND -->
 
 <script src="https://cdn.tailwindcss.com"></script>
-
-<!-- FIREBASE -->
-
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <style>
 
@@ -138,13 +227,13 @@ border-radius:20px;
 <header
 class="bg-black sticky top-0 z-50 shadow-lg">
 
-<div class="max-w-7xl mx-auto p-4">
+<div
+class="max-w-7xl mx-auto p-4">
 
 <!-- LOGO -->
 
-<div
-onclick="openLogin()"
-class="flex items-center gap-3 cursor-pointer mb-4">
+<a href="index.html"
+class="flex items-center gap-3 mb-4">
 
 <img
 src="logo.svg"
@@ -155,7 +244,7 @@ class="text-2xl font-bold text-white">
 FactZone
 </h1>
 
-</div>
+</a>
 
 <!-- SEARCH -->
 
@@ -169,7 +258,7 @@ class="w-full px-5 py-3 rounded-full outline-none">
 
 </header>
 
-<!-- HIDDEN SEO CONTENT -->
+<!-- HIDDEN SEO -->
 
 <section class="hidden">
 
@@ -338,211 +427,9 @@ Space से जुड़े सबसे amazing facts।
 
 </main>
 
-<!-- ADMIN BUTTON -->
-
-<button
-id="addBtn"
-onclick="openAdmin()"
-class="hidden fixed bottom-6 right-6 w-14 h-14 rounded-full bg-black text-white text-3xl shadow-xl z-50">
-+
-</button>
-
-<!-- LOGIN MODAL -->
-
-<div
-id="loginModal"
-class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-
-<div
-class="bg-white w-[90%] max-w-sm rounded-2xl p-6">
-
-<h2
-class="text-2xl font-bold text-center mb-5">
-Admin Login
-</h2>
-
-<input
-type="email"
-id="email"
-placeholder="Email"
-class="w-full border p-3 rounded-xl mb-3 outline-none">
-
-<input
-type="password"
-id="password"
-placeholder="Password"
-class="w-full border p-3 rounded-xl mb-4 outline-none">
-
-<button
-onclick="login()"
-class="w-full bg-black text-white py-3 rounded-xl font-bold">
-Login
-</button>
-
-<button
-onclick="closeLogin()"
-class="w-full bg-gray-200 py-3 rounded-xl mt-2">
-Close
-</button>
-
-</div>
-
-</div>
-
-<!-- ADMIN MODAL -->
-
-<div
-id="adminModal"
-class="hidden fixed inset-0 bg-black/70 flex justify-center items-center z-50 overflow-auto">
-
-<div
-class="bg-white w-[95%] max-w-2xl rounded-2xl p-5 my-10">
-
-<h2 class="text-2xl font-bold mb-4">
-Create / Edit Post
-</h2>
-
-<input
-id="title"
-placeholder="Post Title"
-class="w-full border p-3 rounded-xl mb-3 outline-none">
-
-<textarea
-id="content"
-placeholder="Post Content"
-class="w-full border p-3 rounded-xl h-40 mb-3 outline-none"></textarea>
-
-<input
-type="file"
-id="fileInput"
-class="mb-4">
-
-<img
-id="preview"
-class="hidden w-full h-72 object-cover rounded-xl mb-4">
-
-<button
-onclick="savePost()"
-class="w-full bg-black text-white py-3 rounded-xl font-bold">
-Save Post
-</button>
-
-<button
-onclick="closeAdmin()"
-class="w-full bg-gray-200 py-3 rounded-xl mt-3">
-Close
-</button>
-
-</div>
-
-</div>
+<!-- SEARCH SCRIPT -->
 
 <script>
-
-/* FIREBASE */
-
-const firebaseConfig = {
-
-apiKey:
-"AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
-
-authDomain:
-"factzone-a9ace.firebaseapp.com",
-
-projectId:
-"factzone-a9ace"
-
-};
-
-firebase.initializeApp(firebaseConfig);
-
-const auth = firebase.auth();
-
-let uploadedImage = "";
-
-let editId = null;
-
-let isAdmin = false;
-
-/* ADMIN CHECK */
-
-if(localStorage.getItem("admin") === "yes"){
-
-isAdmin = true;
-
-document.getElementById("addBtn")
-.classList.remove("hidden");
-
-}
-
-/* LOGIN */
-
-function openLogin(){
-
-document.getElementById("loginModal")
-.classList.remove("hidden");
-
-}
-
-function closeLogin(){
-
-document.getElementById("loginModal")
-.classList.add("hidden");
-
-}
-
-async function login(){
-
-const email =
-document.getElementById("email").value;
-
-const password =
-document.getElementById("password").value;
-
-try{
-
-await auth.signInWithEmailAndPassword(
-email,
-password
-);
-
-localStorage.setItem(
-"admin",
-"yes"
-);
-
-document.getElementById("addBtn")
-.classList.remove("hidden");
-
-closeLogin();
-
-alert("Admin Login Success ✅");
-
-}catch{
-
-alert("Wrong Email or Password");
-
-}
-
-}
-
-/* ADMIN PANEL */
-
-function openAdmin(){
-
-document.getElementById("adminModal")
-.classList.remove("hidden");
-
-}
-
-function closeAdmin(){
-
-document.getElementById("adminModal")
-.classList.add("hidden");
-
-}
-
-/* SEARCH */
 
 document.getElementById("searchInput")
 .addEventListener("input",(e)=>{
