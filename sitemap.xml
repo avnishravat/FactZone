@@ -1,35 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <url>
-    <loc>https://factzone.online/</loc>
-    <lastmod>2026-05-08</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
+<!-- HOMEPAGE -->
 
-  <url>
-    <loc>https://factzone.online/index.html</loc>
-    <lastmod>2026-05-08</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
+<url>
+<loc>https://factzone.online/</loc>
+<lastmod>2026-05-17</lastmod>
+<changefreq>daily</changefreq>
+<priority>1.0</priority>
+</url>
 
-  <url>
-    <loc>https://factzone.online/detail.html</loc>
-    <lastmod>2026-05-08</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
+<!-- MAIN PAGE -->
 
-  <!-- POST URL -->
+<url>
+<loc>https://factzone.online/index.html</loc>
+<lastmod>2026-05-17</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.9</priority>
+</url>
 
-  <url>
-    <loc>
-      https://factzone.online/detail.html?id=post_01
-    </loc>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
+<!-- ABOUT -->
+
+<url>
+<loc>https://factzone.online/about.html</loc>
+<changefreq>monthly</changefreq>
+<priority>0.6</priority>
+</url>
+
+<!-- CONTACT -->
+
+<url>
+<loc>https://factzone.online/contact.html</loc>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<!-- PRIVACY -->
+
+<url>
+<loc>https://factzone.online/privacy.html</loc>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<!-- TERMS -->
+
+<url>
+<loc>https://factzone.online/terms.html</loc>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<!-- DISCLAIMER -->
+
+<url>
+<loc>https://factzone.online/disclaimer.html</loc>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<!-- POSTS -->
+
+<url>
+<loc>
+https://factzone.online/posts/walking-tree-fact.html
+</loc>
+<changefreq>weekly</changefreq>
+<priority>0.8</priority>
+</url>
+
+<url>
+<loc>
+https://factzone.online/posts/voynich-manuscript-mystery.html
+</loc>
+<changefreq>weekly</changefreq>
+<priority>0.8</priority>
+</url>
+
+<url>
+<loc>
+https://factzone.online/posts/mobile-security-settings.html
+</loc>
+<changefreq>weekly</changefreq>
+<priority>0.8</priority>
+</url>
+
+<url>
+<loc>
+https://factzone.online/posts/space-facts-tears.html
+</loc>
+<changefreq>weekly</changefreq>
+<priority>0.8</priority>
+</url>
+
+<url>
+<loc>
+https://factzone.online/posts/technology-facts.html
+</loc>
+<changefreq>weekly</changefreq>
+<priority>0.8</priority>
+</url>
 
 </urlset>
