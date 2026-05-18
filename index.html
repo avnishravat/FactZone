@@ -615,6 +615,12 @@ document.getElementById("title")
 const content =
 document.getElementById("content")
 .value.trim();
+  
+// SLUG
+const slug = title
+.toLowerCase()
+.replace(/[^a-z0-9]+/g,"-")
+.replace(/^-|-$/g,"");
 
 if(!title || !content){
 
