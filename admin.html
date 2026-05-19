@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+async function savePost(){
+
+const title =
+document.getElementById("title")
+.value.trim();
+
+const content =
+document.getElementById("content")
+.value.trim();
+
+const image =
+document.getElementById("image")
+.value.trim();
+
+const filename =
+document.getElementById("filename")
+.value.trim();
+
+if(!title || !content || !filename){
+
+alert("Fill all fields");
+
+return;
+
+}
+
+const slug = title
+.toLowerCase()
+.replace(/[^a-z0-9]+/g,"-")
+.replace(/^-|-$/g,"");
+
+await db.collection("posts")
+.add({
+
+title,
+content,
+image,
+filename,
+slug,
+createdAt:new Date()
+
+});
+
+alert("Post Saved ✅");
+
+
+document.getElementById("title").value = "";
+document.getElementById("content").value = "";
+document.getElementById("image").value = "";
+document.getElementById("filename").value = "";
+
+}
+
+</script>
+
+</body>
+</html>
