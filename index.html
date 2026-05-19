@@ -102,6 +102,8 @@ background:#f3f4f6;
 font-family:Arial,sans-serif;
 }
 
+/* CARD TEXT LIMIT */
+
 .line2{
 display:-webkit-box;
 -webkit-line-clamp:2;
@@ -109,13 +111,20 @@ display:-webkit-box;
 overflow:hidden;
 }
 
+/* POST CARD */
+
 .card{
 transition:.3s;
+border:2px solid #d1d5db;
 }
 
 .card:hover{
 transform:translateY(-6px);
+border:2px solid black;
+box-shadow:0 10px 25px rgba(0,0,0,.15);
 }
+
+/* SCROLLBAR */
 
 ::-webkit-scrollbar{
 width:8px;
@@ -162,7 +171,7 @@ FactZone
 type="text"
 id="searchInput"
 placeholder="🔍 Search posts..."
-class="w-full px-5 py-3 rounded-full outline-none">
+class="w-full px-5 py-3 rounded-full outline-none border-2 border-gray-300">
 
 </div>
 
@@ -194,7 +203,14 @@ class="max-w-7xl mx-auto p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:g
 <!-- POST 1 -->
 
 <a href="posts/walking-tree-fact.html"
-class="card bg-white rounded-2xl overflow-hidden shadow-lg p-5">
+class="card bg-white rounded-2xl overflow-hidden shadow-lg">
+
+<img
+src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e"
+loading="lazy"
+class="w-full h-52 object-cover">
+
+<div class="p-5">
 
 <h2 class="font-bold text-xl mb-3 line2">
 Walking Tree Fact
@@ -204,12 +220,21 @@ Walking Tree Fact
 जानिए उस पेड़ के बारे में जो सच में चलता है।
 </p>
 
+</div>
+
 </a>
 
 <!-- POST 2 -->
 
 <a href="posts/voynich-manuscript-mystery.html"
-class="card bg-white rounded-2xl overflow-hidden shadow-lg p-5">
+class="card bg-white rounded-2xl overflow-hidden shadow-lg">
+
+<img
+src="https://images.unsplash.com/photo-1512820790803-83ca734da794"
+loading="lazy"
+class="w-full h-52 object-cover">
+
+<div class="p-5">
 
 <h2 class="font-bold text-xl mb-3 line2">
 Voynich Manuscript Mystery
@@ -219,12 +244,21 @@ Voynich Manuscript Mystery
 दुनिया की सबसे रहस्यमयी किताब।
 </p>
 
+</div>
+
 </a>
 
 <!-- POST 3 -->
 
 <a href="posts/mobile-security-settings.html"
-class="card bg-white rounded-2xl overflow-hidden shadow-lg p-5">
+class="card bg-white rounded-2xl overflow-hidden shadow-lg">
+
+<img
+src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9"
+loading="lazy"
+class="w-full h-52 object-cover">
+
+<div class="p-5">
 
 <h2 class="font-bold text-xl mb-3 line2">
 Mobile Security Settings
@@ -234,12 +268,21 @@ Mobile Security Settings
 मोबाइल की dangerous settings के बारे में जानिए।
 </p>
 
+</div>
+
 </a>
 
 <!-- POST 4 -->
 
 <a href="posts/space-facts-tears.html"
-class="card bg-white rounded-2xl overflow-hidden shadow-lg p-5">
+class="card bg-white rounded-2xl overflow-hidden shadow-lg">
+
+<img
+src="https://images.unsplash.com/photo-1446776877081-d282a0f896e2"
+loading="lazy"
+class="w-full h-52 object-cover">
+
+<div class="p-5">
 
 <h2 class="font-bold text-xl mb-3 line2">
 Space Facts About Tears
@@ -249,12 +292,21 @@ Space Facts About Tears
 अंतरिक्ष में आंसू नीचे क्यों नहीं गिरते?
 </p>
 
+</div>
+
 </a>
 
 <!-- POST 5 -->
 
 <a href="posts/technology-facts.html"
-class="card bg-white rounded-2xl overflow-hidden shadow-lg p-5">
+class="card bg-white rounded-2xl overflow-hidden shadow-lg">
+
+<img
+src="https://images.unsplash.com/photo-1518770660439-4636190af475"
+loading="lazy"
+class="w-full h-52 object-cover">
+
+<div class="p-5">
 
 <h2 class="font-bold text-xl mb-3 line2">
 Technology Facts
@@ -264,12 +316,21 @@ Technology Facts
 5 technology facts जो आपको smart बना देंगे।
 </p>
 
+</div>
+
 </a>
 
 <!-- POST 6 -->
 
 <a href="posts/amazing-space-facts.html"
-class="card bg-white rounded-2xl overflow-hidden shadow-lg p-5">
+class="card bg-white rounded-2xl overflow-hidden shadow-lg">
+
+<img
+src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564"
+loading="lazy"
+class="w-full h-52 object-cover">
+
+<div class="p-5">
 
 <h2 class="font-bold text-xl mb-3 line2">
 Amazing Space Facts
@@ -278,6 +339,8 @@ Amazing Space Facts
 <p class="text-gray-600 text-sm">
 Space से जुड़े सबसे amazing facts।
 </p>
+
+</div>
 
 </a>
 
