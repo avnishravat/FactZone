@@ -3,7 +3,10 @@
 <head>
 
 <!-- GOOGLE ANALYTICS -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-311JQXBXR9"></script>
+
+<script async
+src="https://www.googletagmanager.com/gtag/js?id=G-311JQXBXR9">
+</script>
 
 <script>
 window.dataLayer = window.dataLayer || [];
@@ -145,23 +148,6 @@ class="w-full px-5 py-3 rounded-full outline-none">
 
 </header>
 
-<!-- SEO TEXT -->
-
-<section class="hidden">
-
-<h2>
-Amazing Facts, Science Facts, Technology Facts,
-History Facts and Viral Knowledge
-</h2>
-
-<p>
-FactZone is a platform where users can explore
-interesting facts, educational content,
-space facts, technology updates and viral knowledge.
-</p>
-
-</section>
-
 <!-- POSTS -->
 
 <main
@@ -295,24 +281,6 @@ document.getElementById("addBtn")
 
 }
 
-// OPEN LOGIN
-
-function openLogin(){
-
-document.getElementById("loginModal")
-.classList.remove("hidden");
-
-}
-
-// CLOSE LOGIN
-
-function closeLogin(){
-
-document.getElementById("loginModal")
-.classList.add("hidden");
-
-}
-
 // LOGIN
 
 async function login(){
@@ -348,6 +316,24 @@ alert("Login Success ✅");
 alert("Wrong Email or Password");
 
 }
+
+}
+
+// OPEN LOGIN
+
+function openLogin(){
+
+document.getElementById("loginModal")
+.classList.remove("hidden");
+
+}
+
+// CLOSE LOGIN
+
+function closeLogin(){
+
+document.getElementById("loginModal")
+.classList.add("hidden");
 
 }
 
@@ -393,7 +379,6 @@ document.getElementById("image").value.trim();
 if(!title || !content){
 
 alert("Fill all fields");
-
 return;
 
 }
@@ -449,11 +434,29 @@ function fetchPosts(){
 const posts =
 document.getElementById("posts");
 
+posts.innerHTML = `
+<h2 class="text-center col-span-full text-2xl">
+Loading Posts...
+</h2>
+`;
+
 db.collection("posts")
 .orderBy("createdAt","desc")
 .onSnapshot((snapshot)=>{
 
 posts.innerHTML = "";
+
+if(snapshot.empty){
+
+posts.innerHTML = `
+<h2 class="text-center col-span-full text-2xl">
+No Posts Found
+</h2>
+`;
+
+return;
+
+}
 
 snapshot.forEach((doc)=>{
 
@@ -462,22 +465,22 @@ const p = doc.data();
 const div = document.createElement("div");
 
 div.className =
-"card bg-white rounded-2xl overflow-hidden shadow-lg cursor-pointer";
+"card bg-white rounded-2xl overflow-hidden shadow-xl cursor-pointer";
 
 div.innerHTML = `
 
 <img
 src="${p.image || 'https://via.placeholder.com/500'}"
-class="w-full h-60 object-cover">
+class="w-full h-60 object-cover bg-gray-200">
 
 <div class="p-4">
 
 <h2 class="font-bold text-xl mb-2 line2">
-${p.title}
+${p.title || ""}
 </h2>
 
 <p class="text-gray-600 text-sm mb-4 line2">
-${p.content}
+${p.content || ""}
 </p>
 
 ${isAdmin ? `
@@ -485,12 +488,12 @@ ${isAdmin ? `
 <div class="flex gap-2">
 
 <button
-class="editBtn bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
+class="editBtn bg-blue-600 text-white px-4 py-2 rounded-lg text-sm w-full">
 Edit
 </button>
 
 <button
-class="deleteBtn bg-red-600 text-white px-4 py-2 rounded-lg text-sm">
+class="deleteBtn bg-red-600 text-white px-4 py-2 rounded-lg text-sm w-full">
 Delete
 </button>
 
@@ -520,10 +523,10 @@ e.stopPropagation();
 editId = doc.id;
 
 document.getElementById("title").value =
-p.title;
+p.title || "";
 
 document.getElementById("content").value =
-p.content;
+p.content || "";
 
 document.getElementById("image").value =
 p.image || "";
@@ -545,6 +548,8 @@ if(confirm("Delete Post?")){
 await db.collection("posts")
 .doc(doc.id)
 .delete();
+
+alert("Post Deleted ✅");
 
 }
 
@@ -588,47 +593,6 @@ text.includes(value)
 fetchPosts();
 
 </script>
-
-<!-- FOOTER -->
-
-<footer class="bg-black text-white mt-10">
-
-<div class="max-w-7xl mx-auto px-5 py-8">
-
-<div class="flex flex-wrap gap-5 justify-center text-sm">
-
-<a href="about.html"
-class="hover:text-gray-400">
-About
-</a>
-
-<a href="contact.html"
-class="hover:text-gray-400">
-Contact
-</a>
-
-<a href="privacy.html"
-class="hover:text-gray-400">
-Privacy Policy
-</a>
-
-<a href="terms.html"
-class="hover:text-gray-400">
-Terms
-</a>
-
-</div>
-
-<p class="text-center text-gray-400 mt-5 text-sm">
-
-© 2026 FactZone.
-All Rights Reserved.
-
-</p>
-
-</div>
-
-</footer>
 
 </body>
 </html>
