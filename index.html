@@ -1,14 +1,9 @@
-<!-- index.html -->
-
 <!DOCTYPE html>
 <html lang="hi">
 <head>
 
 <!-- GOOGLE ANALYTICS -->
-
-<script async
-src="https://www.googletagmanager.com/gtag/js?id=G-311JQXBXR9">
-</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-311JQXBXR9"></script>
 
 <script>
 window.dataLayer = window.dataLayer || [];
@@ -18,7 +13,6 @@ dataLayer.push(arguments);
 }
 
 gtag('js', new Date());
-
 gtag('config', 'G-311JQXBXR9');
 </script>
 
@@ -27,23 +21,65 @@ gtag('config', 'G-311JQXBXR9');
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
+<!-- SEO -->
+
 <title>
 FactZone | Amazing Facts & Knowledge
 </title>
 
 <meta name="description"
-content="Amazing facts, science facts, technology facts and space facts.">
+content="Explore amazing facts, science facts, technology facts, history facts and viral knowledge on FactZone.">
 
 <meta name="keywords"
-content="facts, amazing facts, science facts, technology facts">
+content="facts, amazing facts, science facts, technology facts, space facts, history facts">
 
 <meta name="robots"
 content="index, follow">
 
+<meta name="author"
+content="Avnish Ravat">
+
+<link rel="canonical"
+href="https://factzone.online/">
+
+<meta property="og:title"
+content="FactZone | Amazing Facts">
+
+<meta property="og:description"
+content="Amazing facts and educational knowledge platform.">
+
+<meta property="og:image"
+content="https://factzone.online/logo.svg">
+
+<meta property="og:url"
+content="https://factzone.online/">
+
+<meta property="og:type"
+content="website">
+
+<meta name="twitter:card"
+content="summary_large_image">
+
+<meta name="twitter:title"
+content="FactZone">
+
+<meta name="twitter:image"
+content="https://factzone.online/logo.svg">
+
 <link rel="icon"
 href="logo.svg">
 
+<!-- TAILWIND -->
+
 <script src="https://cdn.tailwindcss.com"></script>
+
+<!-- FIREBASE -->
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <style>
 
@@ -52,21 +88,21 @@ background:#f3f4f6;
 font-family:Arial,sans-serif;
 }
 
+.line2{
+display:-webkit-box;
+-webkit-line-clamp:2;
+-webkit-box-orient:vertical;
+overflow:hidden;
+}
+
 .card{
 transition:.3s;
 border:2px solid #e5e7eb;
 }
 
 .card:hover{
-transform:translateY(-6px);
+transform:translateY(-5px);
 border-color:black;
-}
-
-.line2{
-display:-webkit-box;
--webkit-line-clamp:2;
--webkit-box-orient:vertical;
-overflow:hidden;
 }
 
 </style>
@@ -77,23 +113,21 @@ overflow:hidden;
 
 <!-- HEADER -->
 
-<header
-class="bg-black sticky top-0 z-50 shadow-lg">
+<header class="bg-black sticky top-0 z-50 shadow-lg">
 
-<div
-class="max-w-7xl mx-auto p-4">
+<div class="max-w-7xl mx-auto p-4">
 
 <!-- LOGO -->
 
 <div
-class="flex items-center gap-3 mb-4">
+onclick="openLogin()"
+class="flex items-center gap-3 cursor-pointer mb-4">
 
 <img
 src="logo.svg"
 class="w-11 h-11 rounded-full bg-white p-1">
 
-<h1
-class="text-2xl font-bold text-white">
+<h1 class="text-2xl font-bold text-white">
 FactZone
 </h1>
 
@@ -111,155 +145,422 @@ class="w-full px-5 py-3 rounded-full outline-none">
 
 </header>
 
+<!-- SEO TEXT -->
+
+<section class="hidden">
+
+<h2>
+Amazing Facts, Science Facts, Technology Facts,
+History Facts and Viral Knowledge
+</h2>
+
+<p>
+FactZone is a platform where users can explore
+interesting facts, educational content,
+space facts, technology updates and viral knowledge.
+</p>
+
+</section>
+
 <!-- POSTS -->
 
 <main
 id="posts"
 class="max-w-7xl mx-auto p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
-<!-- POST 1 -->
-
-<a href="detail.html?title=Walking Tree Fact&image=walking-tree.png&desc=जानिए उस पेड़ के बारे में जो सच में चलता है।"
-class="card bg-white rounded-2xl overflow-hidden shadow-lg">
-
-<img
-src="walking-tree.png"
-class="w-full h-60 object-cover">
-
-<div class="p-4">
-
-<h2 class="font-bold text-xl mb-2 line2">
-Walking Tree Fact
-</h2>
-
-<p class="text-gray-600 text-sm">
-जानिए उस पेड़ के बारे में जो सच में चलता है।
-</p>
-
-</div>
-
-</a>
-
-<!-- POST 2 -->
-
-<a href="detail.html?title=Voynich Manuscript Mystery&image=voynich-manuscript.png&desc=दुनिया की सबसे रहस्यमयी किताब।"
-class="card bg-white rounded-2xl overflow-hidden shadow-lg">
-
-<img
-src="voynich-manuscript.png"
-class="w-full h-60 object-cover">
-
-<div class="p-4">
-
-<h2 class="font-bold text-xl mb-2 line2">
-Voynich Manuscript Mystery
-</h2>
-
-<p class="text-gray-600 text-sm">
-दुनिया की सबसे रहस्यमयी किताब।
-</p>
-
-</div>
-
-</a>
-
-<!-- POST 3 -->
-
-<a href="detail.html?title=Mobile Security Settings&image=mobile-security.png&desc=मोबाइल की dangerous settings के बारे में जानिए।"
-class="card bg-white rounded-2xl overflow-hidden shadow-lg">
-
-<img
-src="mobile-security.png"
-class="w-full h-60 object-cover">
-
-<div class="p-4">
-
-<h2 class="font-bold text-xl mb-2 line2">
-Mobile Security Settings
-</h2>
-
-<p class="text-gray-600 text-sm">
-मोबाइल की dangerous settings के बारे में जानिए।
-</p>
-
-</div>
-
-</a>
-
-<!-- POST 4 -->
-
-<a href="detail.html?title=Space Facts About Tears&image=space-tears.png&desc=अंतरिक्ष में आंसू नीचे क्यों नहीं गिरते?"
-class="card bg-white rounded-2xl overflow-hidden shadow-lg">
-
-<img
-src="space-tears.png"
-class="w-full h-60 object-cover">
-
-<div class="p-4">
-
-<h2 class="font-bold text-xl mb-2 line2">
-Space Facts About Tears
-</h2>
-
-<p class="text-gray-600 text-sm">
-अंतरिक्ष में आंसू नीचे क्यों नहीं गिरते?
-</p>
-
-</div>
-
-</a>
-
-<!-- POST 5 -->
-
-<a href="detail.html?title=Technology Facts&image=technology-facts.png&desc=5 technology facts जो आपको smart बना देंगे।"
-class="card bg-white rounded-2xl overflow-hidden shadow-lg">
-
-<img
-src="technology-facts.png"
-class="w-full h-60 object-cover">
-
-<div class="p-4">
-
-<h2 class="font-bold text-xl mb-2 line2">
-Technology Facts
-</h2>
-
-<p class="text-gray-600 text-sm">
-5 technology facts जो आपको smart बना देंगे।
-</p>
-
-</div>
-
-</a>
-
-<!-- POST 6 -->
-
-<a href="detail.html?title=Amazing Space Facts&image=amazing-space.png&desc=Space से जुड़े सबसे amazing facts।"
-class="card bg-white rounded-2xl overflow-hidden shadow-lg">
-
-<img
-src="amazing-space.png"
-class="w-full h-60 object-cover">
-
-<div class="p-4">
-
-<h2 class="font-bold text-xl mb-2 line2">
-Amazing Space Facts
-</h2>
-
-<p class="text-gray-600 text-sm">
-Space से जुड़े सबसे amazing facts।
-</p>
-
-</div>
-
-</a>
-
 </main>
 
-<!-- SEARCH -->
+<!-- ADMIN BUTTON -->
+
+<button
+id="addBtn"
+onclick="openAdmin()"
+class="hidden fixed bottom-6 right-6 w-14 h-14 rounded-full bg-black text-white text-3xl shadow-xl z-50">
++
+</button>
+
+<!-- LOGIN MODAL -->
+
+<div
+id="loginModal"
+class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+
+<div class="bg-white w-[90%] max-w-sm rounded-2xl p-6">
+
+<h2 class="text-2xl font-bold text-center mb-5">
+Admin Login
+</h2>
+
+<input
+type="email"
+id="email"
+placeholder="Email"
+class="w-full border p-3 rounded-xl mb-3 outline-none">
+
+<input
+type="password"
+id="password"
+placeholder="Password"
+class="w-full border p-3 rounded-xl mb-4 outline-none">
+
+<button
+onclick="login()"
+class="w-full bg-black text-white py-3 rounded-xl font-bold">
+Login
+</button>
+
+<button
+onclick="closeLogin()"
+class="w-full bg-gray-200 py-3 rounded-xl mt-2">
+Close
+</button>
+
+</div>
+
+</div>
+
+<!-- ADMIN MODAL -->
+
+<div
+id="adminModal"
+class="hidden fixed inset-0 bg-black/70 flex justify-center items-center z-50 overflow-auto">
+
+<div class="bg-white w-[95%] max-w-2xl rounded-2xl p-5 my-10">
+
+<h2 class="text-2xl font-bold mb-4">
+Create / Edit Post
+</h2>
+
+<input
+id="title"
+placeholder="Post Title"
+class="w-full border p-3 rounded-xl mb-3 outline-none">
+
+<textarea
+id="content"
+placeholder="Post Content"
+class="w-full border p-3 rounded-xl h-40 mb-3 outline-none"></textarea>
+
+<input
+id="image"
+placeholder="Image URL"
+class="w-full border p-3 rounded-xl mb-4 outline-none">
+
+<button
+onclick="savePost()"
+class="w-full bg-black text-white py-3 rounded-xl font-bold">
+Save Post
+</button>
+
+<button
+onclick="closeAdmin()"
+class="w-full bg-gray-200 py-3 rounded-xl mt-3">
+Close
+</button>
+
+</div>
+
+</div>
 
 <script>
+
+// FIREBASE CONFIG
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
+
+authDomain:"factzone-a9ace.firebaseapp.com",
+
+projectId:"factzone-a9ace"
+
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+let editId = null;
+let isAdmin = false;
+
+// ADMIN CHECK
+
+if(localStorage.getItem("admin") === "yes"){
+
+isAdmin = true;
+
+document.getElementById("addBtn")
+.classList.remove("hidden");
+
+}
+
+// OPEN LOGIN
+
+function openLogin(){
+
+document.getElementById("loginModal")
+.classList.remove("hidden");
+
+}
+
+// CLOSE LOGIN
+
+function closeLogin(){
+
+document.getElementById("loginModal")
+.classList.add("hidden");
+
+}
+
+// LOGIN
+
+async function login(){
+
+const email =
+document.getElementById("email").value;
+
+const password =
+document.getElementById("password").value;
+
+try{
+
+await auth.signInWithEmailAndPassword(
+email,
+password
+);
+
+localStorage.setItem("admin","yes");
+
+isAdmin = true;
+
+document.getElementById("addBtn")
+.classList.remove("hidden");
+
+closeLogin();
+
+fetchPosts();
+
+alert("Login Success ✅");
+
+}catch(err){
+
+alert("Wrong Email or Password");
+
+}
+
+}
+
+// OPEN ADMIN
+
+function openAdmin(){
+
+editId = null;
+
+document.getElementById("title").value = "";
+
+document.getElementById("content").value = "";
+
+document.getElementById("image").value = "";
+
+document.getElementById("adminModal")
+.classList.remove("hidden");
+
+}
+
+// CLOSE ADMIN
+
+function closeAdmin(){
+
+document.getElementById("adminModal")
+.classList.add("hidden");
+
+}
+
+// SAVE POST
+
+async function savePost(){
+
+const title =
+document.getElementById("title").value.trim();
+
+const content =
+document.getElementById("content").value.trim();
+
+const image =
+document.getElementById("image").value.trim();
+
+if(!title || !content){
+
+alert("Fill all fields");
+
+return;
+
+}
+
+try{
+
+if(editId){
+
+await db.collection("posts")
+.doc(editId)
+.update({
+
+title,
+content,
+image
+
+});
+
+alert("Post Updated ✅");
+
+}else{
+
+await db.collection("posts")
+.add({
+
+title,
+content,
+image,
+createdAt:new Date()
+
+});
+
+alert("Post Uploaded ✅");
+
+}
+
+closeAdmin();
+
+fetchPosts();
+
+}catch(err){
+
+alert(err.message);
+
+}
+
+}
+
+// FETCH POSTS
+
+function fetchPosts(){
+
+const posts =
+document.getElementById("posts");
+
+db.collection("posts")
+.orderBy("createdAt","desc")
+.onSnapshot((snapshot)=>{
+
+posts.innerHTML = "";
+
+snapshot.forEach((doc)=>{
+
+const p = doc.data();
+
+const div = document.createElement("div");
+
+div.className =
+"card bg-white rounded-2xl overflow-hidden shadow-lg cursor-pointer";
+
+div.innerHTML = `
+
+<img
+src="${p.image || 'https://via.placeholder.com/500'}"
+class="w-full h-60 object-cover">
+
+<div class="p-4">
+
+<h2 class="font-bold text-xl mb-2 line2">
+${p.title}
+</h2>
+
+<p class="text-gray-600 text-sm mb-4 line2">
+${p.content}
+</p>
+
+${isAdmin ? `
+
+<div class="flex gap-2">
+
+<button
+class="editBtn bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
+Edit
+</button>
+
+<button
+class="deleteBtn bg-red-600 text-white px-4 py-2 rounded-lg text-sm">
+Delete
+</button>
+
+</div>
+
+` : ""}
+
+</div>
+`;
+
+div.addEventListener("click",()=>{
+
+window.location.href =
+`detail.html?id=${doc.id}`;
+
+});
+
+// EDIT
+
+if(isAdmin){
+
+div.querySelector(".editBtn")
+.addEventListener("click",(e)=>{
+
+e.stopPropagation();
+
+editId = doc.id;
+
+document.getElementById("title").value =
+p.title;
+
+document.getElementById("content").value =
+p.content;
+
+document.getElementById("image").value =
+p.image || "";
+
+document.getElementById("adminModal")
+.classList.remove("hidden");
+
+});
+
+// DELETE
+
+div.querySelector(".deleteBtn")
+.addEventListener("click", async (e)=>{
+
+e.stopPropagation();
+
+if(confirm("Delete Post?")){
+
+await db.collection("posts")
+.doc(doc.id)
+.delete();
+
+}
+
+});
+
+}
+
+posts.appendChild(div);
+
+});
+
+});
+
+}
+
+// SEARCH
 
 document.getElementById("searchInput")
 .addEventListener("input",(e)=>{
@@ -267,7 +568,7 @@ document.getElementById("searchInput")
 const value =
 e.target.value.toLowerCase();
 
-document.querySelectorAll("#posts a")
+document.querySelectorAll("#posts .card")
 .forEach(card=>{
 
 const text =
@@ -282,18 +583,43 @@ text.includes(value)
 
 });
 
+// INIT
+
+fetchPosts();
+
 </script>
 
 <!-- FOOTER -->
 
-<footer
-class="bg-black text-white mt-10">
+<footer class="bg-black text-white mt-10">
 
-<div
-class="max-w-7xl mx-auto px-5 py-8">
+<div class="max-w-7xl mx-auto px-5 py-8">
 
-<p
-class="text-center text-gray-400 text-sm">
+<div class="flex flex-wrap gap-5 justify-center text-sm">
+
+<a href="about.html"
+class="hover:text-gray-400">
+About
+</a>
+
+<a href="contact.html"
+class="hover:text-gray-400">
+Contact
+</a>
+
+<a href="privacy.html"
+class="hover:text-gray-400">
+Privacy Policy
+</a>
+
+<a href="terms.html"
+class="hover:text-gray-400">
+Terms
+</a>
+
+</div>
+
+<p class="text-center text-gray-400 mt-5 text-sm">
 
 © 2026 FactZone.
 All Rights Reserved.
