@@ -1,301 +1,238 @@
-<!-- ADMIN PANEL BUTTON -->
+<!-- admin.html -->
 
-<button
-onclick="openAdmin()"
-class="fixed bottom-6 right-6 bg-black text-white w-14 h-14 rounded-full text-3xl shadow-2xl z-50">
-+
-</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
-<!-- ADMIN PANEL -->
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+FactZone Admin
+</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100">
 
 <div
-id="adminPanel"
-class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-5 overflow-auto">
+class="max-w-5xl mx-auto p-5">
 
-<div
-class="bg-white w-full max-w-2xl rounded-2xl p-6">
-
-<h2 class="text-3xl font-bold mb-5">
+<h1 class="text-4xl font-bold mb-5">
 Admin Panel
-</h2>
+</h1>
+
+<div
+class="bg-white p-5 rounded-2xl shadow-lg">
 
 <input
-id="postTitleInput"
+id="title"
 placeholder="Post Title"
-class="w-full border-2 p-3 rounded-xl mb-3 outline-none">
+class="w-full border p-3 rounded-lg mb-3">
 
 <input
-id="postImageInput"
-placeholder="Image Name (example: walking-tree.png)"
-class="w-full border-2 p-3 rounded-xl mb-3 outline-none">
+id="desc"
+placeholder="Short Description"
+class="w-full border p-3 rounded-lg mb-3">
+
+<input
+id="image"
+placeholder="Image URL"
+class="w-full border p-3 rounded-lg mb-3">
 
 <textarea
-id="postDescInput"
-placeholder="Post Description"
-class="w-full border-2 p-3 rounded-xl mb-3 h-40 outline-none"></textarea>
+id="content"
+placeholder="Post Content"
+class="w-full border p-3 rounded-lg mb-3 h-40"></textarea>
 
 <button
-onclick="addPost()"
-class="w-full bg-black text-white py-3 rounded-xl font-bold mb-3">
-Upload Post
-</button>
-
-<div id="adminPosts"></div>
-
-<button
-onclick="closeAdmin()"
-class="w-full bg-gray-200 py-3 rounded-xl mt-4">
-Close
+id="publishBtn"
+class="bg-black text-white px-6 py-3 rounded-xl">
+Publish Post
 </button>
 
 </div>
 
+<h2 class="text-3xl font-bold mt-10 mb-5">
+All Posts
+</h2>
+
+<div id="allPosts"></div>
+
 </div>
 
-<script>
+<script type="module">
 
-/* POSTS DATA */
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-let posts = JSON.parse(localStorage.getItem("factzonePosts")) || [
-
-{
-title:"Walking Tree Fact",
-image:"walking-tree.png",
-desc:"जानिए उस पेड़ के बारे में जो सच में चलता है।"
-},
-
-{
-title:"Voynich Manuscript Mystery",
-image:"voynich-manuscript.png",
-desc:"दुनिया की सबसे रहस्यमयी किताब।"
+import {
+getFirestore,
+collection,
+addDoc,
+getDocs,
+deleteDoc,
+doc,
+updateDoc
 }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-];
+const firebaseConfig = {
 
-/* RENDER POSTS */
+apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
 
-function renderPosts(){
+authDomain: "factzone-a9ace.firebaseapp.com",
 
-const container =
-document.getElementById("posts");
+databaseURL: "https://factzone-a9ace-default-rtdb.firebaseio.com",
 
-container.innerHTML = "";
+projectId: "factzone-a9ace",
 
-posts.forEach((post,index)=>{
+storageBucket: "factzone-a9ace.firebasestorage.app",
 
-container.innerHTML += `
+messagingSenderId: "425838320650",
 
-<a href="
-detail.html?
-title=${encodeURIComponent(post.title)}
-&image=${encodeURIComponent(post.image)}
-&desc=${encodeURIComponent(post.desc)}
-"
+appId: "1:425838320650:web:beab18baddf818cb73d3f3",
 
-class="
-card
-bg-white
-rounded-2xl
-overflow-hidden
-shadow-lg
-">
+measurementId: "G-311JQXBXR9"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+const allPosts =
+document.getElementById("allPosts");
+
+async function loadPosts(){
+
+allPosts.innerHTML="";
+
+const querySnapshot =
+await getDocs(collection(db,"posts"));
+
+querySnapshot.forEach((d)=>{
+
+const post = d.data();
+
+allPosts.innerHTML += `
+
+<div class="bg-white p-5 rounded-2xl shadow-lg mb-5">
 
 <img
 src="${post.image}"
-class="w-full h-60 object-cover">
+class="w-full h-60 object-cover rounded-xl mb-4">
 
-<div class="p-4">
-
-<h2 class="font-bold text-xl mb-2 line2">
+<h2 class="text-2xl font-bold mb-2">
 ${post.title}
 </h2>
 
-<p class="text-gray-600 text-sm">
+<p class="mb-4">
 ${post.desc}
 </p>
 
-</div>
-
-</a>
-
-`;
-
-});
-
-}
-
-/* ADMIN POSTS */
-
-function renderAdminPosts(){
-
-const admin =
-document.getElementById("adminPosts");
-
-admin.innerHTML = "";
-
-posts.forEach((post,index)=>{
-
-admin.innerHTML += `
-
-<div class="
-border-2
-rounded-2xl
-p-4
-mb-4
-">
-
-<h3 class="font-bold text-xl mb-2">
-${post.title}
-</h3>
+<div class="flex gap-3">
 
 <button
-onclick="editPost(${index})"
-class="
-bg-blue-500
-text-white
-px-4
-py-2
-rounded-xl
-mr-2
-">
+onclick="editPost('${d.id}','${post.title}','${post.desc}','${post.image}','${post.content}')"
+class="bg-blue-500 text-white px-5 py-2 rounded-lg">
 Edit
 </button>
 
 <button
-onclick="deletePost(${index})"
-class="
-bg-red-500
-text-white
-px-4
-py-2
-rounded-xl
-">
+onclick="deletePost('${d.id}')"
+class="bg-red-500 text-white px-5 py-2 rounded-lg">
 Delete
 </button>
 
 </div>
 
+</div>
+
 `;
 
 });
 
 }
 
-/* ADD POST */
+window.deletePost = async(id)=>{
 
-function addPost(){
+await deleteDoc(doc(db,"posts",id));
 
-const title =
-document.getElementById("postTitleInput").value;
-
-const image =
-document.getElementById("postImageInput").value;
-
-const desc =
-document.getElementById("postDescInput").value;
-
-if(!title || !image || !desc){
-
-alert("Fill all fields");
-
-return;
-
-}
-
-posts.unshift({
-
-title,
-image,
-desc
-
-});
-
-localStorage.setItem(
-"factzonePosts",
-JSON.stringify(posts)
-);
-
-renderPosts();
-
-renderAdminPosts();
-
-alert("Post Uploaded ✅");
-
-}
-
-/* DELETE */
-
-function deletePost(index){
-
-posts.splice(index,1);
-
-localStorage.setItem(
-"factzonePosts",
-JSON.stringify(posts)
-);
-
-renderPosts();
-
-renderAdminPosts();
-
-}
-
-/* EDIT */
-
-function editPost(index){
-
-const post = posts[index];
-
-const newTitle =
-prompt("Edit Title",post.title);
-
-const newImage =
-prompt("Edit Image",post.image);
-
-const newDesc =
-prompt("Edit Description",post.desc);
-
-posts[index] = {
-
-title:newTitle,
-image:newImage,
-desc:newDesc
+loadPosts();
 
 };
 
-localStorage.setItem(
-"factzonePosts",
-JSON.stringify(posts)
-);
+window.editPost = async(id,title,desc,image,content)=>{
 
-renderPosts();
+const newTitle =
+prompt("Edit Title",title);
 
-renderAdminPosts();
+const newDesc =
+prompt("Edit Desc",desc);
 
-}
+const newImage =
+prompt("Edit Image",image);
 
-/* OPEN CLOSE */
+const newContent =
+prompt("Edit Content",content);
 
-function openAdmin(){
+await updateDoc(doc(db,"posts",id),{
 
-document
-.getElementById("adminPanel")
-.classList.remove("hidden");
+title:newTitle,
 
-renderAdminPosts();
+desc:newDesc,
 
-}
+image:newImage,
 
-function closeAdmin(){
+content:newContent
 
-document
-.getElementById("adminPanel")
-.classList.add("hidden");
+});
 
-}
+loadPosts();
 
-/* START */
+};
 
-renderPosts();
+document.getElementById("publishBtn")
+.onclick = async()=>{
+
+const title =
+document.getElementById("title").value;
+
+const desc =
+document.getElementById("desc").value;
+
+const image =
+document.getElementById("image").value;
+
+const content =
+document.getElementById("content").value;
+
+await addDoc(collection(db,"posts"),{
+
+title,
+
+desc,
+
+image,
+
+content
+
+});
+
+alert("Post Published");
+
+loadPosts();
+
+};
+
+loadPosts();
 
 </script>
+
+</body>
+</html>
