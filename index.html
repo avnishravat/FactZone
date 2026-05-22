@@ -1,42 +1,37 @@
+<!-- index.html -->
+
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>FactZone | Amazing Facts & Knowledge</title>
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+FactZone | Amazing Facts & Knowledge
+</title>
 
 <meta name="description"
-content="Amazing facts, science facts, technology facts and educational knowledge platform.">
+content="Amazing facts, science facts, technology facts and viral knowledge.">
 
 <meta name="keywords"
-content="facts, amazing facts, science facts, technology facts, space facts">
+content="facts, amazing facts, science facts, technology facts">
 
 <meta name="robots"
 content="index, follow">
-
-<link rel="canonical"
-href="https://factzone.online/">
 
 <link rel="icon"
 href="logo.svg">
 
 <script src="https://cdn.tailwindcss.com"></script>
 
-<!-- FIREBASE -->
-
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-
 <style>
 
 body{
 background:#f3f4f6;
-font-family:Arial,sans-serif;
+font-family:Arial;
 }
 
 .card{
@@ -45,7 +40,7 @@ border:2px solid #e5e7eb;
 }
 
 .card:hover{
-transform:translateY(-6px);
+transform:translateY(-5px);
 border-color:black;
 }
 
@@ -64,29 +59,32 @@ overflow:hidden;
 
 <!-- HEADER -->
 
-<header class="bg-black sticky top-0 z-50 shadow-lg">
-
-<div class="max-w-7xl mx-auto p-4">
+<header
+class="bg-black sticky top-0 z-50 shadow-lg">
 
 <div
-onclick="openLogin()"
-class="flex items-center gap-3 mb-4 cursor-pointer">
+class="max-w-7xl mx-auto p-4">
+
+<a href="#"
+class="flex items-center gap-3">
 
 <img
 src="logo.svg"
-class="w-11 h-11 rounded-full bg-white p-1">
+class="w-12 h-12 rounded-full bg-white p-1">
 
-<h1 class="text-2xl font-bold text-white">
+<h1
+id="adminBtn"
+class="text-3xl font-bold text-white cursor-pointer">
 FactZone
 </h1>
 
-</div>
+</a>
 
 <input
 type="text"
 id="searchInput"
 placeholder="🔍 Search posts..."
-class="w-full px-5 py-3 rounded-full outline-none">
+class="w-full mt-4 px-5 py-3 rounded-full outline-none text-lg">
 
 </div>
 
@@ -98,107 +96,22 @@ class="w-full px-5 py-3 rounded-full outline-none">
 id="posts"
 class="max-w-7xl mx-auto p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
+<div class="text-center col-span-full text-xl">
+Loading posts...
+</div>
+
 </main>
-
-<!-- ADD BUTTON -->
-
-<button
-id="addBtn"
-onclick="openAdmin()"
-class="hidden fixed bottom-5 right-5 w-14 h-14 rounded-full bg-black text-white text-3xl shadow-xl">
-+
-</button>
-
-<!-- LOGIN MODAL -->
-
-<div
-id="loginModal"
-class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-
-<div class="bg-white w-[90%] max-w-sm rounded-2xl p-6">
-
-<h2 class="text-2xl font-bold text-center mb-5">
-Admin Login
-</h2>
-
-<input
-id="email"
-type="email"
-placeholder="Email"
-class="w-full border p-3 rounded-xl mb-3">
-
-<input
-id="password"
-type="password"
-placeholder="Password"
-class="w-full border p-3 rounded-xl mb-4">
-
-<button
-onclick="login()"
-class="w-full bg-black text-white py-3 rounded-xl">
-Login
-</button>
-
-<button
-onclick="closeLogin()"
-class="w-full bg-gray-200 py-3 rounded-xl mt-3">
-Close
-</button>
-
-</div>
-
-</div>
-
-<!-- ADMIN MODAL -->
-
-<div
-id="adminModal"
-class="hidden fixed inset-0 bg-black/70 flex justify-center items-center z-50 overflow-auto">
-
-<div class="bg-white w-[95%] max-w-2xl rounded-2xl p-5 my-10">
-
-<h2 class="text-2xl font-bold mb-4">
-Create / Edit Post
-</h2>
-
-<input
-id="title"
-placeholder="Post Title"
-class="w-full border p-3 rounded-xl mb-3">
-
-<textarea
-id="content"
-placeholder="Post Content"
-class="w-full border p-3 rounded-xl h-40 mb-3"></textarea>
-
-<input
-id="image"
-placeholder="Image URL"
-class="w-full border p-3 rounded-xl mb-4">
-
-<button
-onclick="savePost()"
-class="w-full bg-black text-white py-3 rounded-xl">
-Save Post
-</button>
-
-<button
-onclick="closeAdmin()"
-class="w-full bg-gray-200 py-3 rounded-xl mt-3">
-Close
-</button>
-
-</div>
-
-</div>
 
 <!-- FOOTER -->
 
-<footer class="bg-black text-white mt-10">
+<footer
+class="bg-black text-white mt-10">
 
-<div class="max-w-7xl mx-auto px-5 py-8">
+<div
+class="max-w-7xl mx-auto px-5 py-8 text-center">
 
-<div class="flex flex-wrap gap-5 justify-center text-sm">
+<div
+class="flex flex-wrap gap-5 justify-center text-sm mb-5">
 
 <a href="about.html">About</a>
 
@@ -212,7 +125,7 @@ Close
 
 </div>
 
-<p class="text-center text-gray-400 mt-5 text-sm">
+<p class="text-gray-400">
 © 2026 FactZone
 </p>
 
@@ -220,9 +133,19 @@ Close
 
 </footer>
 
-<script>
+<!-- FIREBASE -->
 
-// FIREBASE CONFIG
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
 
@@ -244,258 +167,54 @@ measurementId: "G-311JQXBXR9"
 
 };
 
-firebase.initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
-const auth = firebase.auth();
+const db = getFirestore(app);
 
-const db = firebase.firestore();
-
-let editId = null;
-
-let isAdmin =
-localStorage.getItem("admin") === "yes";
-
-if(isAdmin){
-
-document.getElementById("addBtn")
-.classList.remove("hidden");
-
-}
-
-// LOGIN
-
-function openLogin(){
-
-document.getElementById("loginModal")
-.classList.remove("hidden");
-
-}
-
-function closeLogin(){
-
-document.getElementById("loginModal")
-.classList.add("hidden");
-
-}
-
-async function login(){
-
-const email =
-document.getElementById("email").value;
-
-const password =
-document.getElementById("password").value;
-
-try{
-
-await auth.signInWithEmailAndPassword(
-email,
-password
-);
-
-localStorage.setItem("admin","yes");
-
-isAdmin = true;
-
-document.getElementById("addBtn")
-.classList.remove("hidden");
-
-closeLogin();
-
-fetchPosts();
-
-alert("Login Success");
-
-}catch(err){
-
-alert(err.message);
-
-}
-
-}
-
-// ADMIN
-
-function openAdmin(){
-
-editId = null;
-
-document.getElementById("title").value = "";
-
-document.getElementById("content").value = "";
-
-document.getElementById("image").value = "";
-
-document.getElementById("adminModal")
-.classList.remove("hidden");
-
-}
-
-function closeAdmin(){
-
-document.getElementById("adminModal")
-.classList.add("hidden");
-
-}
-
-// SAVE POST
-
-async function savePost(){
-
-const title =
-document.getElementById("title").value;
-
-const content =
-document.getElementById("content").value;
-
-const image =
-document.getElementById("image").value;
-
-if(editId){
-
-await db.collection("posts")
-.doc(editId)
-.update({
-
-title,
-content,
-image
-
-});
-
-}else{
-
-await db.collection("posts")
-.add({
-
-title,
-content,
-image,
-createdAt:Date.now()
-
-});
-
-}
-
-closeAdmin();
-
-fetchPosts();
-
-}
-
-// FETCH POSTS
-
-async function fetchPosts(){
-
-const posts =
+const postsContainer =
 document.getElementById("posts");
 
-posts.innerHTML =
-"<h2 class='col-span-full text-center'>Loading...</h2>";
+async function loadPosts(){
 
-const snapshot =
-await db.collection("posts")
-.orderBy("createdAt","desc")
-.get();
+const querySnapshot =
+await getDocs(collection(db,"posts"));
 
-posts.innerHTML = "";
+postsContainer.innerHTML = "";
 
-snapshot.forEach((doc)=>{
+querySnapshot.forEach((doc)=>{
 
-const p = doc.data();
+const post = doc.data();
 
-const div =
-document.createElement("div");
+postsContainer.innerHTML += `
 
-div.className =
-"card bg-white rounded-2xl overflow-hidden shadow-lg";
-
-div.innerHTML = `
-
-<a href="detail.html?id=${doc.id}">
+<a href="detail.html?id=${doc.id}"
+class="card bg-white rounded-2xl overflow-hidden shadow-lg">
 
 <img
-src="${p.image}"
+src="${post.image}"
 class="w-full h-60 object-cover">
 
 <div class="p-4">
 
 <h2 class="font-bold text-xl mb-2 line2">
-${p.title}
+${post.title}
 </h2>
 
 <p class="text-gray-600 text-sm line2">
-${p.content}
+${post.desc}
 </p>
 
 </div>
 
 </a>
 
-${isAdmin ? `
-
-<div class="flex gap-2 p-4">
-
-<button
-onclick="editPost('${doc.id}','${p.title}','${p.content}','${p.image}')"
-class="bg-blue-600 text-white px-4 py-2 rounded-lg">
-Edit
-</button>
-
-<button
-onclick="deletePost('${doc.id}')"
-class="bg-red-600 text-white px-4 py-2 rounded-lg">
-Delete
-</button>
-
-</div>
-
-` : ""}
-
 `;
-
-posts.appendChild(div);
 
 });
 
 }
 
-// EDIT
-
-function editPost(id,title,content,image){
-
-editId = id;
-
-document.getElementById("title").value =
-title;
-
-document.getElementById("content").value =
-content;
-
-document.getElementById("image").value =
-image;
-
-openAdmin();
-
-}
-
-// DELETE
-
-async function deletePost(id){
-
-if(confirm("Delete Post?")){
-
-await db.collection("posts")
-.doc(id)
-.delete();
-
-fetchPosts();
-
-}
-
-}
-
-// SEARCH
+loadPosts();
 
 document.getElementById("searchInput")
 .addEventListener("input",(e)=>{
@@ -503,11 +222,12 @@ document.getElementById("searchInput")
 const value =
 e.target.value.toLowerCase();
 
-document.querySelectorAll(".card")
+document.querySelectorAll("#posts a")
 .forEach(card=>{
 
 card.style.display =
-card.innerText.toLowerCase().includes(value)
+card.innerText.toLowerCase()
+.includes(value)
 ? "block"
 : "none";
 
@@ -515,7 +235,19 @@ card.innerText.toLowerCase().includes(value)
 
 });
 
-fetchPosts();
+document.getElementById("adminBtn")
+.onclick=()=>{
+
+const pass =
+prompt("Enter Admin Password");
+
+if(pass==="admin123"){
+
+location.href="admin.html";
+
+}
+
+};
 
 </script>
 
