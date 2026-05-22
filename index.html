@@ -2,52 +2,29 @@
 <html lang="hi">
 <head>
 
-<!-- GOOGLE ANALYTICS -->
-
-<script async
-src="https://www.googletagmanager.com/gtag/js?id=G-311JQXBXR9">
-</script>
-
-<script>
-window.dataLayer = window.dataLayer || [];
-
-function gtag(){
-dataLayer.push(arguments);
-}
-
-gtag('js', new Date());
-
-gtag('config', 'G-311JQXBXR9');
-</script>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>
-FactZone | Amazing Facts & Knowledge
-</title>
+<title>FactZone | Amazing Facts & Knowledge</title>
 
 <meta name="description"
-content="Explore amazing facts, science facts, technology facts and viral knowledge on FactZone.">
+content="Amazing facts, science facts, technology facts and educational knowledge platform.">
 
 <meta name="keywords"
-content="facts, amazing facts, science facts, technology facts">
+content="facts, amazing facts, science facts, technology facts, space facts">
 
 <meta name="robots"
 content="index, follow">
 
-<meta property="og:title"
-content="FactZone">
-
-<meta property="og:image"
-content="https://factzone.online/logo.svg">
+<link rel="canonical"
+href="https://factzone.online/">
 
 <link rel="icon"
 href="logo.svg">
 
 <script src="https://cdn.tailwindcss.com"></script>
+
+<!-- FIREBASE -->
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 
@@ -68,7 +45,7 @@ border:2px solid #e5e7eb;
 }
 
 .card:hover{
-transform:translateY(-5px);
+transform:translateY(-6px);
 border-color:black;
 }
 
@@ -87,22 +64,19 @@ overflow:hidden;
 
 <!-- HEADER -->
 
-<header
-class="bg-black sticky top-0 z-50 shadow-lg">
+<header class="bg-black sticky top-0 z-50 shadow-lg">
 
-<div
-class="max-w-7xl mx-auto p-4">
+<div class="max-w-7xl mx-auto p-4">
 
 <div
 onclick="openLogin()"
-class="flex items-center gap-3 cursor-pointer mb-4">
+class="flex items-center gap-3 mb-4 cursor-pointer">
 
 <img
 src="logo.svg"
 class="w-11 h-11 rounded-full bg-white p-1">
 
-<h1
-class="text-2xl font-bold text-white">
+<h1 class="text-2xl font-bold text-white">
 FactZone
 </h1>
 
@@ -124,18 +98,14 @@ class="w-full px-5 py-3 rounded-full outline-none">
 id="posts"
 class="max-w-7xl mx-auto p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
-<div class="text-center col-span-full py-20">
-Loading Posts...
-</div>
-
 </main>
 
-<!-- ADMIN BUTTON -->
+<!-- ADD BUTTON -->
 
 <button
 id="addBtn"
 onclick="openAdmin()"
-class="hidden fixed bottom-6 right-6 w-14 h-14 rounded-full bg-black text-white text-3xl shadow-xl">
+class="hidden fixed bottom-5 right-5 w-14 h-14 rounded-full bg-black text-white text-3xl shadow-xl">
 +
 </button>
 
@@ -145,23 +115,21 @@ class="hidden fixed bottom-6 right-6 w-14 h-14 rounded-full bg-black text-white 
 id="loginModal"
 class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
 
-<div
-class="bg-white p-6 rounded-2xl w-[90%] max-w-sm">
+<div class="bg-white w-[90%] max-w-sm rounded-2xl p-6">
 
-<h2
-class="text-2xl font-bold mb-4 text-center">
+<h2 class="text-2xl font-bold text-center mb-5">
 Admin Login
 </h2>
 
 <input
-type="email"
 id="email"
+type="email"
 placeholder="Email"
 class="w-full border p-3 rounded-xl mb-3">
 
 <input
-type="password"
 id="password"
+type="password"
 placeholder="Password"
 class="w-full border p-3 rounded-xl mb-4">
 
@@ -171,21 +139,25 @@ class="w-full bg-black text-white py-3 rounded-xl">
 Login
 </button>
 
-</div>
+<button
+onclick="closeLogin()"
+class="w-full bg-gray-200 py-3 rounded-xl mt-3">
+Close
+</button>
 
 </div>
 
-<!-- ADMIN PANEL -->
+</div>
+
+<!-- ADMIN MODAL -->
 
 <div
 id="adminModal"
 class="hidden fixed inset-0 bg-black/70 flex justify-center items-center z-50 overflow-auto">
 
-<div
-class="bg-white w-[95%] max-w-2xl rounded-2xl p-5 my-10">
+<div class="bg-white w-[95%] max-w-2xl rounded-2xl p-5 my-10">
 
-<h2
-class="text-2xl font-bold mb-4">
+<h2 class="text-2xl font-bold mb-4">
 Create / Edit Post
 </h2>
 
@@ -206,7 +178,7 @@ class="w-full border p-3 rounded-xl mb-4">
 
 <button
 onclick="savePost()"
-class="w-full bg-black text-white py-3 rounded-xl font-bold">
+class="w-full bg-black text-white py-3 rounded-xl">
 Save Post
 </button>
 
@@ -220,17 +192,55 @@ Close
 
 </div>
 
+<!-- FOOTER -->
+
+<footer class="bg-black text-white mt-10">
+
+<div class="max-w-7xl mx-auto px-5 py-8">
+
+<div class="flex flex-wrap gap-5 justify-center text-sm">
+
+<a href="about.html">About</a>
+
+<a href="contact.html">Contact</a>
+
+<a href="privacy.html">Privacy</a>
+
+<a href="terms.html">Terms</a>
+
+<a href="disclaimer.html">Disclaimer</a>
+
+</div>
+
+<p class="text-center text-gray-400 mt-5 text-sm">
+© 2026 FactZone
+</p>
+
+</div>
+
+</footer>
+
 <script>
 
-/* FIREBASE */
+// FIREBASE CONFIG
 
 const firebaseConfig = {
 
-apiKey:"YOUR_API_KEY",
+apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
 
-authDomain:"YOUR_AUTH_DOMAIN",
+authDomain: "factzone-a9ace.firebaseapp.com",
 
-projectId:"YOUR_PROJECT_ID"
+databaseURL: "https://factzone-a9ace-default-rtdb.firebaseio.com",
+
+projectId: "factzone-a9ace",
+
+storageBucket: "factzone-a9ace.firebasestorage.app",
+
+messagingSenderId: "425838320650",
+
+appId: "1:425838320650:web:beab18baddf818cb73d3f3",
+
+measurementId: "G-311JQXBXR9"
 
 };
 
@@ -245,8 +255,6 @@ let editId = null;
 let isAdmin =
 localStorage.getItem("admin") === "yes";
 
-/* ADMIN BUTTON */
-
 if(isAdmin){
 
 document.getElementById("addBtn")
@@ -254,12 +262,19 @@ document.getElementById("addBtn")
 
 }
 
-/* LOGIN */
+// LOGIN
 
 function openLogin(){
 
 document.getElementById("loginModal")
 .classList.remove("hidden");
+
+}
+
+function closeLogin(){
+
+document.getElementById("loginModal")
+.classList.add("hidden");
 
 }
 
@@ -280,17 +295,26 @@ password
 
 localStorage.setItem("admin","yes");
 
-location.reload();
+isAdmin = true;
+
+document.getElementById("addBtn")
+.classList.remove("hidden");
+
+closeLogin();
+
+fetchPosts();
+
+alert("Login Success");
 
 }catch(err){
 
-alert("Wrong Email or Password");
+alert(err.message);
 
 }
 
 }
 
-/* ADMIN */
+// ADMIN
 
 function openAdmin(){
 
@@ -314,31 +338,18 @@ document.getElementById("adminModal")
 
 }
 
-/* SAVE POST */
+// SAVE POST
 
 async function savePost(){
 
 const title =
-document.getElementById("title")
-.value.trim();
+document.getElementById("title").value;
 
 const content =
-document.getElementById("content")
-.value.trim();
+document.getElementById("content").value;
 
 const image =
-document.getElementById("image")
-.value.trim();
-
-if(!title || !content){
-
-alert("Fill all fields");
-
-return;
-
-}
-
-try{
+document.getElementById("image").value;
 
 if(editId){
 
@@ -352,8 +363,6 @@ image
 
 });
 
-alert("Post Updated ✅");
-
 }else{
 
 await db.collection("posts")
@@ -366,66 +375,48 @@ createdAt:Date.now()
 
 });
 
-alert("Post Uploaded ✅");
-
 }
 
 closeAdmin();
 
 fetchPosts();
 
-}catch(err){
-
-alert(err.message);
-
 }
 
-}
-
-/* FETCH POSTS */
+// FETCH POSTS
 
 async function fetchPosts(){
 
 const posts =
 document.getElementById("posts");
 
-posts.innerHTML = "";
+posts.innerHTML =
+"<h2 class='col-span-full text-center'>Loading...</h2>";
 
-const snap =
+const snapshot =
 await db.collection("posts")
 .orderBy("createdAt","desc")
 .get();
 
-if(snap.empty){
+posts.innerHTML = "";
 
-posts.innerHTML = `
-<h2 class="text-center text-2xl text-gray-500 col-span-full">
-No Posts Found
-</h2>
-`;
-
-return;
-
-}
-
-snap.forEach((doc)=>{
+snapshot.forEach((doc)=>{
 
 const p = doc.data();
 
 const div =
-document.createElement("a");
-
-div.href =
-`detail.html?id=${doc.id}`;
+document.createElement("div");
 
 div.className =
 "card bg-white rounded-2xl overflow-hidden shadow-lg";
 
 div.innerHTML = `
 
+<a href="detail.html?id=${doc.id}">
+
 <img
-src="${p.image || 'https://via.placeholder.com/500'}"
-class="w-full h-60 object-cover bg-gray-200">
+src="${p.image}"
+class="w-full h-60 object-cover">
 
 <div class="p-4">
 
@@ -433,31 +424,33 @@ class="w-full h-60 object-cover bg-gray-200">
 ${p.title}
 </h2>
 
-<p class="text-gray-600 text-sm mb-4 line2">
+<p class="text-gray-600 text-sm line2">
 ${p.content}
 </p>
 
+</div>
+
+</a>
+
 ${isAdmin ? `
 
-<div class="flex gap-2">
+<div class="flex gap-2 p-4">
 
 <button
-onclick="editPost(event,'${doc.id}','${p.title}','${p.content}','${p.image}')"
-class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
+onclick="editPost('${doc.id}','${p.title}','${p.content}','${p.image}')"
+class="bg-blue-600 text-white px-4 py-2 rounded-lg">
 Edit
 </button>
 
 <button
-onclick="deletePost(event,'${doc.id}')"
-class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm">
+onclick="deletePost('${doc.id}')"
+class="bg-red-600 text-white px-4 py-2 rounded-lg">
 Delete
 </button>
 
 </div>
 
 ` : ""}
-
-</div>
 
 `;
 
@@ -467,11 +460,9 @@ posts.appendChild(div);
 
 }
 
-/* EDIT */
+// EDIT
 
-function editPost(e,id,title,content,image){
-
-e.preventDefault();
+function editPost(id,title,content,image){
 
 editId = id;
 
@@ -484,16 +475,13 @@ content;
 document.getElementById("image").value =
 image;
 
-document.getElementById("adminModal")
-.classList.remove("hidden");
+openAdmin();
 
 }
 
-/* DELETE */
+// DELETE
 
-async function deletePost(e,id){
-
-e.preventDefault();
+async function deletePost(id){
 
 if(confirm("Delete Post?")){
 
@@ -507,7 +495,7 @@ fetchPosts();
 
 }
 
-/* SEARCH */
+// SEARCH
 
 document.getElementById("searchInput")
 .addEventListener("input",(e)=>{
@@ -515,22 +503,17 @@ document.getElementById("searchInput")
 const value =
 e.target.value.toLowerCase();
 
-document.querySelectorAll("#posts a")
+document.querySelectorAll(".card")
 .forEach(card=>{
 
-const text =
-card.innerText.toLowerCase();
-
 card.style.display =
-text.includes(value)
+card.innerText.toLowerCase().includes(value)
 ? "block"
 : "none";
 
 });
 
 });
-
-/* INIT */
 
 fetchPosts();
 
