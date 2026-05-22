@@ -1,74 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>FactZone Admin</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-
-</head>
-
-<body class="bg-gray-100">
-
-<div class="max-w-2xl mx-auto p-5">
-
-<h1 class="text-4xl font-bold mb-8 text-center">
-FactZone Admin Panel
-</h1>
-
-<div class="bg-white p-6 rounded-2xl shadow-xl">
-
-<input
-id="email"
-type="email"
-placeholder="Admin Email"
-class="w-full border p-3 rounded-xl mb-4">
-
-<input
-id="password"
-type="password"
-placeholder="Password"
-class="w-full border p-3 rounded-xl mb-4">
+<!-- ADMIN PANEL BUTTON -->
 
 <button
-onclick="login()"
-class="w-full bg-black text-white py-3 rounded-xl mb-6">
-Login
+onclick="openAdmin()"
+class="fixed bottom-6 right-6 bg-black text-white w-14 h-14 rounded-full text-3xl shadow-2xl z-50">
++
 </button>
 
-<hr class="mb-6">
+<!-- ADMIN PANEL -->
+
+<div
+id="adminPanel"
+class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-5 overflow-auto">
+
+<div
+class="bg-white w-full max-w-2xl rounded-2xl p-6">
+
+<h2 class="text-3xl font-bold mb-5">
+Admin Panel
+</h2>
 
 <input
-id="title"
+id="postTitleInput"
 placeholder="Post Title"
-class="w-full border p-3 rounded-xl mb-4">
+class="w-full border-2 p-3 rounded-xl mb-3 outline-none">
+
+<input
+id="postImageInput"
+placeholder="Image Name (example: walking-tree.png)"
+class="w-full border-2 p-3 rounded-xl mb-3 outline-none">
 
 <textarea
-id="content"
-placeholder="Post Content"
-class="w-full border p-3 rounded-xl h-40 mb-4"></textarea>
-
-<input
-id="image"
-placeholder="Image URL"
-class="w-full border p-3 rounded-xl mb-4">
-
-<input
-id="filename"
-placeholder="File Name"
-class="w-full border p-3 rounded-xl mb-4">
+id="postDescInput"
+placeholder="Post Description"
+class="w-full border-2 p-3 rounded-xl mb-3 h-40 outline-none"></textarea>
 
 <button
-onclick="savePost()"
-class="w-full bg-green-600 text-white py-3 rounded-xl">
-Save Post
+onclick="addPost()"
+class="w-full bg-black text-white py-3 rounded-xl font-bold mb-3">
+Upload Post
+</button>
+
+<div id="adminPosts"></div>
+
+<button
+onclick="closeAdmin()"
+class="w-full bg-gray-200 py-3 rounded-xl mt-4">
+Close
 </button>
 
 </div>
@@ -77,64 +54,147 @@ Save Post
 
 <script>
 
-const firebaseConfig = {
+/* POSTS DATA */
 
-apiKey:"AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
+let posts = JSON.parse(localStorage.getItem("factzonePosts")) || [
 
-authDomain:"factzone-a9ace.firebaseapp.com",
+{
+title:"Walking Tree Fact",
+image:"walking-tree.png",
+desc:"जानिए उस पेड़ के बारे में जो सच में चलता है।"
+},
 
-projectId:"factzone-a9ace"
+{
+title:"Voynich Manuscript Mystery",
+image:"voynich-manuscript.png",
+desc:"दुनिया की सबसे रहस्यमयी किताब।"
+}
 
-};
+];
 
-firebase.initializeApp(firebaseConfig);
+/* RENDER POSTS */
 
-const auth = firebase.auth();
+function renderPosts(){
 
-const db = firebase.firestore();
+const container =
+document.getElementById("posts");
 
-function login(){
+container.innerHTML = "";
 
-const email =
-document.getElementById("email").value;
+posts.forEach((post,index)=>{
 
-const password =
-document.getElementById("password").value;
+container.innerHTML += `
 
-auth.signInWithEmailAndPassword(
-email,
-password
-)
+<a href="
+detail.html?
+title=${encodeURIComponent(post.title)}
+&image=${encodeURIComponent(post.image)}
+&desc=${encodeURIComponent(post.desc)}
+"
 
-.then(()=>{
+class="
+card
+bg-white
+rounded-2xl
+overflow-hidden
+shadow-lg
+">
 
-alert("Login Success ✅");
+<img
+src="${post.image}"
+class="w-full h-60 object-cover">
 
-})
+<div class="p-4">
 
-.catch(()=>{
+<h2 class="font-bold text-xl mb-2 line2">
+${post.title}
+</h2>
 
-alert("Wrong Email or Password ❌");
+<p class="text-gray-600 text-sm">
+${post.desc}
+</p>
+
+</div>
+
+</a>
+
+`;
 
 });
 
 }
 
-async function savePost(){
+/* ADMIN POSTS */
+
+function renderAdminPosts(){
+
+const admin =
+document.getElementById("adminPosts");
+
+admin.innerHTML = "";
+
+posts.forEach((post,index)=>{
+
+admin.innerHTML += `
+
+<div class="
+border-2
+rounded-2xl
+p-4
+mb-4
+">
+
+<h3 class="font-bold text-xl mb-2">
+${post.title}
+</h3>
+
+<button
+onclick="editPost(${index})"
+class="
+bg-blue-500
+text-white
+px-4
+py-2
+rounded-xl
+mr-2
+">
+Edit
+</button>
+
+<button
+onclick="deletePost(${index})"
+class="
+bg-red-500
+text-white
+px-4
+py-2
+rounded-xl
+">
+Delete
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+/* ADD POST */
+
+function addPost(){
 
 const title =
-document.getElementById("title").value.trim();
-
-const content =
-document.getElementById("content").value.trim();
+document.getElementById("postTitleInput").value;
 
 const image =
-document.getElementById("image").value.trim();
+document.getElementById("postImageInput").value;
 
-const filename =
-document.getElementById("filename").value.trim();
+const desc =
+document.getElementById("postDescInput").value;
 
-if(!title || !content || !filename){
+if(!title || !image || !desc){
 
 alert("Fill all fields");
 
@@ -142,28 +202,100 @@ return;
 
 }
 
-const slug = title
-.toLowerCase()
-.replace(/[^a-z0-9]+/g,"-")
-.replace(/^-|-$/g,"");
-
-await db.collection("posts")
-.add({
+posts.unshift({
 
 title,
-content,
 image,
-filename,
-slug,
-createdAt:new Date()
+desc
 
 });
 
-alert("Post Saved ✅");
+localStorage.setItem(
+"factzonePosts",
+JSON.stringify(posts)
+);
+
+renderPosts();
+
+renderAdminPosts();
+
+alert("Post Uploaded ✅");
 
 }
 
-</script>
+/* DELETE */
 
-</body>
-</html>
+function deletePost(index){
+
+posts.splice(index,1);
+
+localStorage.setItem(
+"factzonePosts",
+JSON.stringify(posts)
+);
+
+renderPosts();
+
+renderAdminPosts();
+
+}
+
+/* EDIT */
+
+function editPost(index){
+
+const post = posts[index];
+
+const newTitle =
+prompt("Edit Title",post.title);
+
+const newImage =
+prompt("Edit Image",post.image);
+
+const newDesc =
+prompt("Edit Description",post.desc);
+
+posts[index] = {
+
+title:newTitle,
+image:newImage,
+desc:newDesc
+
+};
+
+localStorage.setItem(
+"factzonePosts",
+JSON.stringify(posts)
+);
+
+renderPosts();
+
+renderAdminPosts();
+
+}
+
+/* OPEN CLOSE */
+
+function openAdmin(){
+
+document
+.getElementById("adminPanel")
+.classList.remove("hidden");
+
+renderAdminPosts();
+
+}
+
+function closeAdmin(){
+
+document
+.getElementById("adminPanel")
+.classList.add("hidden");
+
+}
+
+/* START */
+
+renderPosts();
+
+</script>
