@@ -11,6 +11,9 @@ content="width=device-width, initial-scale=1.0">
 FactZone Post
 </title>
 
+<link rel="icon"
+href="logo.svg">
+
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
@@ -27,10 +30,43 @@ font-family:Arial;
 <body>
 
 <div
+class="max-w-4xl mx-auto p-5">
+
+<!-- HEADER -->
+
+<div
+class="flex items-center justify-between mb-5">
+
+<a href="index.html"
+class="flex items-center gap-3">
+
+<img
+src="logo.svg"
+class="w-12 h-12 rounded-full bg-white p-1 shadow">
+
+<h1
+class="text-3xl font-bold">
+FactZone
+</h1>
+
+</a>
+
+<a href="index.html"
+class="bg-black text-white px-5 py-3 rounded-xl">
+← Back
+</a>
+
+</div>
+
+<!-- POST -->
+
+<div
 id="post"
-class="max-w-4xl mx-auto bg-white p-5 mt-10 rounded-2xl shadow-lg">
+class="bg-white p-5 rounded-2xl shadow-lg">
 
 Loading...
+
+</div>
 
 </div>
 
