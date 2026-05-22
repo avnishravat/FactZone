@@ -1,5 +1,3 @@
-<!-- detail.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,9 +13,18 @@ FactZone Post
 
 <script src="https://cdn.tailwindcss.com"></script>
 
+<style>
+
+body{
+background:#f3f4f6;
+font-family:Arial;
+}
+
+</style>
+
 </head>
 
-<body class="bg-gray-100">
+<body>
 
 <div
 id="post"
@@ -66,12 +73,15 @@ const db = getFirestore(app);
 const params =
 new URLSearchParams(location.search);
 
-const id = params.get("id");
+const id =
+params.get("id");
 
 const postDiv =
 document.getElementById("post");
 
 async function loadPost(){
+
+try{
 
 const docRef =
 doc(db,"posts",id);
@@ -81,31 +91,45 @@ await getDoc(docRef);
 
 if(snap.exists()){
 
-const post = snap.data();
+const post =
+snap.data();
 
 document.title =
-post.title;
+post.title || "FactZone";
 
 postDiv.innerHTML = `
 
 <img
-src="${post.image}"
+src="${post.image || 'https://via.placeholder.com/800'}"
 class="w-full rounded-xl mb-5">
 
 <h1 class="text-4xl font-bold mb-4">
-${post.title}
+${post.title || ''}
 </h1>
 
-<p class="text-gray-700 text-lg leading-8">
-${post.content}
+<p class="text-gray-700 text-lg leading-8 whitespace-pre-line">
+${post.content || ''}
 </p>
 
 `;
 
 }else{
 
-postDiv.innerHTML =
-"Post not found";
+postDiv.innerHTML = `
+<h2 class="text-3xl text-center">
+Post Not Found
+</h2>
+`;
+
+}
+
+}catch(error){
+
+postDiv.innerHTML = `
+<h2 class="text-3xl text-center text-red-500">
+Error Loading Post
+</h2>
+`;
 
 }
 
