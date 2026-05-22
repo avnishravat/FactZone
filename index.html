@@ -3,6 +3,7 @@
 <head>
 
 <!-- GOOGLE ANALYTICS -->
+
 <script async
 src="https://www.googletagmanager.com/gtag/js?id=G-311JQXBXR9">
 </script>
@@ -24,56 +25,29 @@ gtag('config', 'G-311JQXBXR9');
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<!-- SEO -->
-
 <title>
 FactZone | Amazing Facts & Knowledge
 </title>
 
 <meta name="description"
-content="Explore amazing facts, science facts, technology facts, history facts, viral knowledge and educational content on FactZone.">
+content="Explore amazing facts, science facts, technology facts and viral knowledge on FactZone.">
 
 <meta name="keywords"
-content="facts, amazing facts, science facts, technology facts, space facts, history facts, viral facts, educational facts, factzone">
-
-<meta name="author"
-content="Avnish Ravat">
+content="facts, amazing facts, science facts, technology facts">
 
 <meta name="robots"
 content="index, follow">
 
-<link rel="canonical"
-href="https://factzone.online/">
-
 <meta property="og:title"
-content="FactZone | Amazing Facts">
-
-<meta property="og:description"
-content="Amazing facts and educational content.">
+content="FactZone">
 
 <meta property="og:image"
-content="https://factzone.online/logo.svg">
-
-<meta property="og:url"
-content="https://factzone.online/">
-
-<meta property="og:type"
-content="website">
-
-<meta name="twitter:card"
-content="summary_large_image">
-
-<meta name="twitter:image"
 content="https://factzone.online/logo.svg">
 
 <link rel="icon"
 href="logo.svg">
 
-<!-- TAILWIND -->
-
 <script src="https://cdn.tailwindcss.com"></script>
-
-<!-- FIREBASE -->
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 
@@ -88,30 +62,21 @@ background:#f3f4f6;
 font-family:Arial,sans-serif;
 }
 
-.line2{
-display:-webkit-box;
--webkit-line-clamp:2;
--webkit-box-orient:vertical;
-overflow:hidden;
-}
-
 .card{
 transition:.3s;
 border:2px solid #e5e7eb;
 }
 
 .card:hover{
-transform:translateY(-6px);
+transform:translateY(-5px);
 border-color:black;
 }
 
-::-webkit-scrollbar{
-width:8px;
-}
-
-::-webkit-scrollbar-thumb{
-background:#888;
-border-radius:20px;
+.line2{
+display:-webkit-box;
+-webkit-line-clamp:2;
+-webkit-box-orient:vertical;
+overflow:hidden;
 }
 
 </style>
@@ -128,11 +93,9 @@ class="bg-black sticky top-0 z-50 shadow-lg">
 <div
 class="max-w-7xl mx-auto p-4">
 
-<!-- LOGO -->
-
 <div
 onclick="openLogin()"
-class="flex items-center gap-3 mb-4 cursor-pointer">
+class="flex items-center gap-3 cursor-pointer mb-4">
 
 <img
 src="logo.svg"
@@ -145,8 +108,6 @@ FactZone
 
 </div>
 
-<!-- SEARCH -->
-
 <input
 type="text"
 id="searchInput"
@@ -157,28 +118,15 @@ class="w-full px-5 py-3 rounded-full outline-none">
 
 </header>
 
-<!-- SEO TEXT -->
-
-<section class="hidden">
-
-<h2>
-Amazing Facts, Science Facts, Technology Facts,
-History Facts and Viral Knowledge
-</h2>
-
-<p>
-FactZone is a platform where users can explore
-interesting facts, educational content, science facts,
-space facts, technology updates and viral knowledge.
-</p>
-
-</section>
-
 <!-- POSTS -->
 
 <main
 id="posts"
 class="max-w-7xl mx-auto p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
+<div class="text-center col-span-full py-20">
+Loading Posts...
+</div>
 
 </main>
 
@@ -187,7 +135,7 @@ class="max-w-7xl mx-auto p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:g
 <button
 id="addBtn"
 onclick="openAdmin()"
-class="hidden fixed bottom-6 right-6 w-14 h-14 rounded-full bg-black text-white text-3xl shadow-xl z-50">
+class="hidden fixed bottom-6 right-6 w-14 h-14 rounded-full bg-black text-white text-3xl shadow-xl">
 +
 </button>
 
@@ -198,10 +146,10 @@ id="loginModal"
 class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
 
 <div
-class="bg-white w-[90%] max-w-sm rounded-2xl p-6">
+class="bg-white p-6 rounded-2xl w-[90%] max-w-sm">
 
 <h2
-class="text-2xl font-bold text-center mb-5">
+class="text-2xl font-bold mb-4 text-center">
 Admin Login
 </h2>
 
@@ -209,31 +157,25 @@ Admin Login
 type="email"
 id="email"
 placeholder="Email"
-class="w-full border p-3 rounded-xl mb-3 outline-none">
+class="w-full border p-3 rounded-xl mb-3">
 
 <input
 type="password"
 id="password"
 placeholder="Password"
-class="w-full border p-3 rounded-xl mb-4 outline-none">
+class="w-full border p-3 rounded-xl mb-4">
 
 <button
 onclick="login()"
-class="w-full bg-black text-white py-3 rounded-xl font-bold">
+class="w-full bg-black text-white py-3 rounded-xl">
 Login
 </button>
 
-<button
-onclick="closeLogin()"
-class="w-full bg-gray-200 py-3 rounded-xl mt-2">
-Close
-</button>
-
 </div>
 
 </div>
 
-<!-- ADMIN MODAL -->
+<!-- ADMIN PANEL -->
 
 <div
 id="adminModal"
@@ -250,17 +192,17 @@ Create / Edit Post
 <input
 id="title"
 placeholder="Post Title"
-class="w-full border p-3 rounded-xl mb-3 outline-none">
+class="w-full border p-3 rounded-xl mb-3">
 
 <textarea
 id="content"
 placeholder="Post Content"
-class="w-full border p-3 rounded-xl h-40 mb-3 outline-none"></textarea>
+class="w-full border p-3 rounded-xl h-40 mb-3"></textarea>
 
 <input
 id="image"
 placeholder="Image URL"
-class="w-full border p-3 rounded-xl mb-4 outline-none">
+class="w-full border p-3 rounded-xl mb-4">
 
 <button
 onclick="savePost()"
@@ -284,11 +226,11 @@ Close
 
 const firebaseConfig = {
 
-apiKey:"AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
+apiKey:"YOUR_API_KEY",
 
-authDomain:"factzone-a9ace.firebaseapp.com",
+authDomain:"YOUR_AUTH_DOMAIN",
 
-projectId:"factzone-a9ace"
+projectId:"YOUR_PROJECT_ID"
 
 };
 
@@ -298,22 +240,21 @@ const auth = firebase.auth();
 
 const db = firebase.firestore();
 
-let isAdmin = false;
-
 let editId = null;
 
-/* ADMIN CHECK */
+let isAdmin =
+localStorage.getItem("admin") === "yes";
 
-if(localStorage.getItem("admin") === "yes"){
+/* ADMIN BUTTON */
 
-isAdmin = true;
+if(isAdmin){
 
 document.getElementById("addBtn")
 .classList.remove("hidden");
 
 }
 
-/* LOGIN OPEN */
+/* LOGIN */
 
 function openLogin(){
 
@@ -321,43 +262,6 @@ document.getElementById("loginModal")
 .classList.remove("hidden");
 
 }
-
-/* LOGIN CLOSE */
-
-function closeLogin(){
-
-document.getElementById("loginModal")
-.classList.add("hidden");
-
-}
-
-/* ADMIN OPEN */
-
-function openAdmin(){
-
-editId = null;
-
-document.getElementById("title").value = "";
-
-document.getElementById("content").value = "";
-
-document.getElementById("image").value = "";
-
-document.getElementById("adminModal")
-.classList.remove("hidden");
-
-}
-
-/* ADMIN CLOSE */
-
-function closeAdmin(){
-
-document.getElementById("adminModal")
-.classList.add("hidden");
-
-}
-
-/* LOGIN */
 
 async function login(){
 
@@ -376,16 +280,7 @@ password
 
 localStorage.setItem("admin","yes");
 
-isAdmin = true;
-
-document.getElementById("addBtn")
-.classList.remove("hidden");
-
-closeLogin();
-
-fetchPosts();
-
-alert("Admin Login Success ✅");
+location.reload();
 
 }catch(err){
 
@@ -395,23 +290,45 @@ alert("Wrong Email or Password");
 
 }
 
+/* ADMIN */
+
+function openAdmin(){
+
+editId = null;
+
+document.getElementById("title").value = "";
+
+document.getElementById("content").value = "";
+
+document.getElementById("image").value = "";
+
+document.getElementById("adminModal")
+.classList.remove("hidden");
+
+}
+
+function closeAdmin(){
+
+document.getElementById("adminModal")
+.classList.add("hidden");
+
+}
+
 /* SAVE POST */
 
 async function savePost(){
 
 const title =
-document.getElementById("title").value;
+document.getElementById("title")
+.value.trim();
 
 const content =
-document.getElementById("content").value;
+document.getElementById("content")
+.value.trim();
 
 const image =
-document.getElementById("image").value;
-
-const slug = title
-.toLowerCase()
-.replace(/[^a-z0-9]+/g,"-")
-.replace(/^-|-$/g,"");
+document.getElementById("image")
+.value.trim();
 
 if(!title || !content){
 
@@ -431,8 +348,7 @@ await db.collection("posts")
 
 title,
 content,
-image,
-slug
+image
 
 });
 
@@ -446,8 +362,7 @@ await db.collection("posts")
 title,
 content,
 image,
-slug,
-createdAt:new Date()
+createdAt:Date.now()
 
 });
 
@@ -469,48 +384,48 @@ alert(err.message);
 
 /* FETCH POSTS */
 
-function fetchPosts(){
+async function fetchPosts(){
 
 const posts =
 document.getElementById("posts");
 
-posts.innerHTML =
-`<h2 class="text-center col-span-full text-2xl">
-Loading...
-</h2>`;
-
-db.collection("posts")
-.orderBy("createdAt","desc")
-.onSnapshot((snapshot)=>{
-
 posts.innerHTML = "";
 
-if(snapshot.empty){
+const snap =
+await db.collection("posts")
+.orderBy("createdAt","desc")
+.get();
 
-posts.innerHTML =
-`<h2 class="text-center col-span-full text-2xl">
+if(snap.empty){
+
+posts.innerHTML = `
+<h2 class="text-center text-2xl text-gray-500 col-span-full">
 No Posts Found
-</h2>`;
+</h2>
+`;
 
 return;
 
 }
 
-snapshot.forEach((doc)=>{
+snap.forEach((doc)=>{
 
 const p = doc.data();
 
 const div =
-document.createElement("div");
+document.createElement("a");
+
+div.href =
+`detail.html?id=${doc.id}`;
 
 div.className =
-"card bg-white rounded-2xl overflow-hidden shadow-lg cursor-pointer";
+"card bg-white rounded-2xl overflow-hidden shadow-lg";
 
 div.innerHTML = `
 
 <img
 src="${p.image || 'https://via.placeholder.com/500'}"
-class="w-full h-60 object-cover">
+class="w-full h-60 object-cover bg-gray-200">
 
 <div class="p-4">
 
@@ -518,96 +433,77 @@ class="w-full h-60 object-cover">
 ${p.title}
 </h2>
 
-<p class="text-gray-600 text-sm line2">
+<p class="text-gray-600 text-sm mb-4 line2">
 ${p.content}
 </p>
 
-${
-isAdmin
-?
+${isAdmin ? `
 
-`
-<div class="flex gap-2 mt-4">
+<div class="flex gap-2">
 
 <button
-class="editBtn bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
+onclick="editPost(event,'${doc.id}','${p.title}','${p.content}','${p.image}')"
+class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
 Edit
 </button>
 
 <button
-class="deleteBtn bg-red-600 text-white px-4 py-2 rounded-lg text-sm">
+onclick="deletePost(event,'${doc.id}')"
+class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm">
 Delete
 </button>
 
 </div>
-`
 
-:
-
-""
-}
+` : ""}
 
 </div>
+
 `;
-
-/* OPEN DETAIL */
-
-div.addEventListener("click",()=>{
-
-window.location.href =
-`detail.html?id=${doc.id}`;
-
-});
-
-/* EDIT */
-
-if(isAdmin){
-
-div.querySelector(".editBtn")
-.addEventListener("click",(e)=>{
-
-e.stopPropagation();
-
-editId = doc.id;
-
-document.getElementById("title").value =
-p.title;
-
-document.getElementById("content").value =
-p.content;
-
-document.getElementById("image").value =
-p.image;
-
-document.getElementById("adminModal")
-.classList.remove("hidden");
-
-});
-
-/* DELETE */
-
-div.querySelector(".deleteBtn")
-.addEventListener("click", async (e)=>{
-
-e.stopPropagation();
-
-if(confirm("Delete Post?")){
-
-await db.collection("posts")
-.doc(doc.id)
-.delete();
-
-}
-
-});
-
-}
 
 posts.appendChild(div);
 
 });
 
-});
+}
+
+/* EDIT */
+
+function editPost(e,id,title,content,image){
+
+e.preventDefault();
+
+editId = id;
+
+document.getElementById("title").value =
+title;
+
+document.getElementById("content").value =
+content;
+
+document.getElementById("image").value =
+image;
+
+document.getElementById("adminModal")
+.classList.remove("hidden");
+
+}
+
+/* DELETE */
+
+async function deletePost(e,id){
+
+e.preventDefault();
+
+if(confirm("Delete Post?")){
+
+await db.collection("posts")
+.doc(id)
+.delete();
+
+fetchPosts();
+
+}
 
 }
 
@@ -619,7 +515,7 @@ document.getElementById("searchInput")
 const value =
 e.target.value.toLowerCase();
 
-document.querySelectorAll("#posts .card")
+document.querySelectorAll("#posts a")
 .forEach(card=>{
 
 const text =
@@ -639,58 +535,6 @@ text.includes(value)
 fetchPosts();
 
 </script>
-
-<!-- FOOTER -->
-
-<footer
-class="bg-black text-white mt-10">
-
-<div
-class="max-w-7xl mx-auto px-5 py-8">
-
-<div
-class="flex flex-wrap gap-5 justify-center text-sm">
-
-<a href="about.html"
-class="hover:text-gray-400">
-About
-</a>
-
-<a href="contact.html"
-class="hover:text-gray-400">
-Contact
-</a>
-
-<a href="privacy.html"
-class="hover:text-gray-400">
-Privacy Policy
-</a>
-
-<a href="terms.html"
-class="hover:text-gray-400">
-Terms & Conditions
-</a>
-
-<a href="disclaimer.html"
-class="hover:text-gray-400">
-Disclaimer
-</a>
-
-</div>
-
-<p
-class="text-center text-gray-400 mt-5 text-sm">
-
-© 2026 FactZone.
-All Rights Reserved.
-
-Developed by Avnish Ravat
-
-</p>
-
-</div>
-
-</footer>
 
 </body>
 </html>
