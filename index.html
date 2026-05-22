@@ -1,3 +1,5 @@
+<!-- index.html -->
+
 <!DOCTYPE html>
 <html lang="hi">
 <head>
@@ -25,67 +27,21 @@ gtag('config', 'G-311JQXBXR9');
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<!-- SEO -->
-
 <title>
 FactZone | Amazing Facts & Knowledge
 </title>
 
 <meta name="description"
-content="Explore amazing facts, science facts, technology facts, history facts, viral knowledge and educational content on FactZone.">
+content="Amazing facts, science facts, technology facts and space facts.">
 
 <meta name="keywords"
-content="facts, amazing facts, science facts, technology facts, space facts, history facts, viral facts, educational facts, factzone">
-
-<meta name="author"
-content="Avnish Ravat">
+content="facts, amazing facts, science facts, technology facts">
 
 <meta name="robots"
 content="index, follow">
 
-<link rel="canonical"
-href="https://factzone.online/">
-
-<!-- OPEN GRAPH -->
-
-<meta property="og:type"
-content="website">
-
-<meta property="og:site_name"
-content="FactZone">
-
-<meta property="og:title"
-content="FactZone | Amazing Facts & Knowledge">
-
-<meta property="og:description"
-content="Explore amazing facts and educational knowledge on FactZone.">
-
-<meta property="og:url"
-content="https://factzone.online/">
-
-<meta property="og:image"
-content="https://factzone.online/logo.svg">
-
-<!-- TWITTER -->
-
-<meta name="twitter:card"
-content="summary_large_image">
-
-<meta name="twitter:title"
-content="FactZone | Amazing Facts">
-
-<meta name="twitter:description"
-content="Amazing facts and educational platform.">
-
-<meta name="twitter:image"
-content="https://factzone.online/logo.svg">
-
-<!-- ICON -->
-
 <link rel="icon"
 href="logo.svg">
-
-<!-- TAILWIND -->
 
 <script src="https://cdn.tailwindcss.com"></script>
 
@@ -96,34 +52,21 @@ background:#f3f4f6;
 font-family:Arial,sans-serif;
 }
 
-.line2{
-display:-webkit-box;
--webkit-line-clamp:2;
--webkit-box-orient:vertical;
-overflow:hidden;
-}
-
-/* POST CARD */
-
 .card{
 transition:.3s;
-border:2px solid #d1d5db;
-background:white;
+border:2px solid #e5e7eb;
 }
 
 .card:hover{
 transform:translateY(-6px);
 border-color:black;
-box-shadow:0 15px 30px rgba(0,0,0,.15);
 }
 
-::-webkit-scrollbar{
-width:8px;
-}
-
-::-webkit-scrollbar-thumb{
-background:#888;
-border-radius:20px;
+.line2{
+display:-webkit-box;
+-webkit-line-clamp:2;
+-webkit-box-orient:vertical;
+overflow:hidden;
 }
 
 </style>
@@ -142,7 +85,7 @@ class="max-w-7xl mx-auto p-4">
 
 <!-- LOGO -->
 
-<a href="index.html"
+<div
 class="flex items-center gap-3 mb-4">
 
 <img
@@ -154,7 +97,7 @@ class="text-2xl font-bold text-white">
 FactZone
 </h1>
 
-</a>
+</div>
 
 <!-- SEARCH -->
 
@@ -168,23 +111,6 @@ class="w-full px-5 py-3 rounded-full outline-none">
 
 </header>
 
-<!-- HIDDEN SEO -->
-
-<section class="hidden">
-
-<h2>
-Amazing Facts, Science Facts, Technology Facts,
-History Facts and Viral Knowledge
-</h2>
-
-<p>
-FactZone is a platform where users can explore
-interesting facts, educational content, science facts,
-space facts, technology updates and viral knowledge.
-</p>
-
-</section>
-
 <!-- POSTS -->
 
 <main
@@ -193,10 +119,14 @@ class="max-w-7xl mx-auto p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:g
 
 <!-- POST 1 -->
 
-<a href="posts/walking-tree-fact.html"
-class="card rounded-2xl overflow-hidden">
+<a href="detail.html?title=Walking Tree Fact&image=walking-tree.png&desc=जानिए उस पेड़ के बारे में जो सच में चलता है।"
+class="card bg-white rounded-2xl overflow-hidden shadow-lg">
 
-<div class="p-5">
+<img
+src="walking-tree.png"
+class="w-full h-60 object-cover">
+
+<div class="p-4">
 
 <h2 class="font-bold text-xl mb-2 line2">
 Walking Tree Fact
@@ -212,10 +142,14 @@ Walking Tree Fact
 
 <!-- POST 2 -->
 
-<a href="posts/voynich-manuscript-mystery.html"
-class="card rounded-2xl overflow-hidden">
+<a href="detail.html?title=Voynich Manuscript Mystery&image=voynich-manuscript.png&desc=दुनिया की सबसे रहस्यमयी किताब।"
+class="card bg-white rounded-2xl overflow-hidden shadow-lg">
 
-<div class="p-5">
+<img
+src="voynich-manuscript.png"
+class="w-full h-60 object-cover">
+
+<div class="p-4">
 
 <h2 class="font-bold text-xl mb-2 line2">
 Voynich Manuscript Mystery
@@ -231,10 +165,14 @@ Voynich Manuscript Mystery
 
 <!-- POST 3 -->
 
-<a href="posts/mobile-security-settings.html"
-class="card rounded-2xl overflow-hidden">
+<a href="detail.html?title=Mobile Security Settings&image=mobile-security.png&desc=मोबाइल की dangerous settings के बारे में जानिए।"
+class="card bg-white rounded-2xl overflow-hidden shadow-lg">
 
-<div class="p-5">
+<img
+src="mobile-security.png"
+class="w-full h-60 object-cover">
+
+<div class="p-4">
 
 <h2 class="font-bold text-xl mb-2 line2">
 Mobile Security Settings
@@ -250,10 +188,14 @@ Mobile Security Settings
 
 <!-- POST 4 -->
 
-<a href="posts/space-facts-tears.html"
-class="card rounded-2xl overflow-hidden">
+<a href="detail.html?title=Space Facts About Tears&image=space-tears.png&desc=अंतरिक्ष में आंसू नीचे क्यों नहीं गिरते?"
+class="card bg-white rounded-2xl overflow-hidden shadow-lg">
 
-<div class="p-5">
+<img
+src="space-tears.png"
+class="w-full h-60 object-cover">
+
+<div class="p-4">
 
 <h2 class="font-bold text-xl mb-2 line2">
 Space Facts About Tears
@@ -269,10 +211,14 @@ Space Facts About Tears
 
 <!-- POST 5 -->
 
-<a href="posts/technology-facts.html"
-class="card rounded-2xl overflow-hidden">
+<a href="detail.html?title=Technology Facts&image=technology-facts.png&desc=5 technology facts जो आपको smart बना देंगे।"
+class="card bg-white rounded-2xl overflow-hidden shadow-lg">
 
-<div class="p-5">
+<img
+src="technology-facts.png"
+class="w-full h-60 object-cover">
+
+<div class="p-4">
 
 <h2 class="font-bold text-xl mb-2 line2">
 Technology Facts
@@ -288,10 +234,14 @@ Technology Facts
 
 <!-- POST 6 -->
 
-<a href="posts/amazing-space-facts.html"
-class="card rounded-2xl overflow-hidden">
+<a href="detail.html?title=Amazing Space Facts&image=amazing-space.png&desc=Space से जुड़े सबसे amazing facts।"
+class="card bg-white rounded-2xl overflow-hidden shadow-lg">
 
-<div class="p-5">
+<img
+src="amazing-space.png"
+class="w-full h-60 object-cover">
+
+<div class="p-4">
 
 <h2 class="font-bold text-xl mb-2 line2">
 Amazing Space Facts
@@ -307,7 +257,7 @@ Space से जुड़े सबसे amazing facts।
 
 </main>
 
-<!-- SEARCH SCRIPT -->
+<!-- SEARCH -->
 
 <script>
 
@@ -342,43 +292,11 @@ class="bg-black text-white mt-10">
 <div
 class="max-w-7xl mx-auto px-5 py-8">
 
-<div
-class="flex flex-wrap gap-5 justify-center text-sm">
-
-<a href="about.html"
-class="hover:text-gray-400">
-About
-</a>
-
-<a href="contact.html"
-class="hover:text-gray-400">
-Contact
-</a>
-
-<a href="privacy.html"
-class="hover:text-gray-400">
-Privacy Policy
-</a>
-
-<a href="terms.html"
-class="hover:text-gray-400">
-Terms & Conditions
-</a>
-
-<a href="disclaimer.html"
-class="hover:text-gray-400">
-Disclaimer
-</a>
-
-</div>
-
 <p
-class="text-center text-gray-400 mt-5 text-sm">
+class="text-center text-gray-400 text-sm">
 
 © 2026 FactZone.
 All Rights Reserved.
-
-Developed by Avnish Ravat
 
 </p>
 
