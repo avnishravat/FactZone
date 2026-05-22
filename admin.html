@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>FactZone Admin</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+</head>
+
+<body class="bg-gray-100">
+
+<div class="max-w-2xl mx-auto p-5">
+
+<h1 class="text-4xl font-bold mb-8 text-center">
+FactZone Admin Panel
+</h1>
+
+<div class="bg-white p-6 rounded-2xl shadow-xl">
+
+<input
+id="email"
+type="email"
+placeholder="Admin Email"
+class="w-full border p-3 rounded-xl mb-4">
+
+<input
+id="password"
+type="password"
+placeholder="Password"
+class="w-full border p-3 rounded-xl mb-4">
+
+<button
+onclick="login()"
+class="w-full bg-black text-white py-3 rounded-xl mb-6">
+Login
+</button>
+
+<hr class="mb-6">
+
+<input
+id="title"
+placeholder="Post Title"
+class="w-full border p-3 rounded-xl mb-4">
+
+<textarea
+id="content"
+placeholder="Post Content"
+class="w-full border p-3 rounded-xl h-40 mb-4"></textarea>
+
+<input
+id="image"
+placeholder="Image URL"
+class="w-full border p-3 rounded-xl mb-4">
+
+<input
+id="filename"
+placeholder="File Name"
+class="w-full border p-3 rounded-xl mb-4">
+
+<button
+onclick="savePost()"
+class="w-full bg-green-600 text-white py-3 rounded-xl">
+Save Post
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
+
+authDomain:"factzone-a9ace.firebaseapp.com",
+
+projectId:"factzone-a9ace"
+
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+
+const db = firebase.firestore();
+
+function login(){
+
+const email =
+document.getElementById("email").value;
+
+const password =
+document.getElementById("password").value;
+
+auth.signInWithEmailAndPassword(
+email,
+password
+)
+
+.then(()=>{
+
+alert("Login Success ✅");
+
+})
+
+.catch(()=>{
+
+alert("Wrong Email or Password ❌");
+
+});
+
+}
+
+async function savePost(){
+
+const title =
+document.getElementById("title").value.trim();
+
+const content =
+document.getElementById("content").value.trim();
+
+const image =
+document.getElementById("image").value.trim();
+
+const filename =
+document.getElementById("filename").value.trim();
+
+if(!title || !content || !filename){
+
+alert("Fill all fields");
+
+return;
+
+}
+
+const slug = title
+.toLowerCase()
+.replace(/[^a-z0-9]+/g,"-")
+.replace(/^-|-$/g,"");
+
+await db.collection("posts")
+.add({
+
+title,
+content,
+image,
+filename,
+slug,
+createdAt:new Date()
+
+});
+
+alert("Post Saved ✅");
+
+}
+
+</script>
+
+</body>
+</html>
