@@ -1,0 +1,12 @@
+/* TEAM */
+Developer: Avnish Ravat
+Email: avnishravat20@gmail.com
+Instagram (Personal): https://instagram.com
+Instagram (Page): https://instagram.com
+Location: India
+
+/* SITE */
+Last update: 2026/05/23
+Language: Hindi / English
+Doctype: HTML5
+Hosting: GitHub Pages
