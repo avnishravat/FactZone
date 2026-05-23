@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 
-<link rel="author" href="humans.txt" />
+<link rel="author" href="humans.txt">
 
 <meta charset="UTF-8">
 
@@ -14,16 +14,81 @@ FactZone | Amazing Facts & Knowledge
 </title>
 
 <meta name="description"
-content="Amazing facts, science facts, technology facts and viral knowledge.">
+content="Explore amazing facts, science facts, technology facts, history facts and viral knowledge on FactZone.">
 
 <meta name="keywords"
-content="facts, science facts, amazing facts, viral facts">
+content="facts, amazing facts, science facts, technology facts, history facts, viral facts">
 
 <meta name="robots"
 content="index, follow">
 
+<meta name="author"
+content="Avnish Ravat">
+
+<meta name="theme-color"
+content="#000000">
+
+<link rel="canonical"
+href="https://factzone.online/">
+
+<!-- OPEN GRAPH -->
+
+<meta property="og:type"
+content="website">
+
+<meta property="og:title"
+content="FactZone | Amazing Facts & Knowledge">
+
+<meta property="og:description"
+content="Amazing facts, science facts, technology facts and viral knowledge.">
+
+<meta property="og:url"
+content="https://factzone.online/">
+
+<meta property="og:image"
+content="https://factzone.online/logo.svg">
+
+<!-- TWITTER -->
+
+<meta name="twitter:card"
+content="summary_large_image">
+
+<meta name="twitter:title"
+content="FactZone">
+
+<meta name="twitter:description"
+content="Amazing facts and educational platform.">
+
+<meta name="twitter:image"
+content="https://factzone.online/logo.svg">
+
+<!-- FAVICON -->
+
 <link rel="icon"
 href="logo.svg">
+
+<!-- ADSENSE -->
+
+<script async
+src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-697419046628538"
+crossorigin="anonymous">
+</script>
+
+<!-- SCHEMA -->
+
+<script type="application/ld+json">
+
+{
+"@context":"https://schema.org",
+"@type":"WebSite",
+"name":"FactZone",
+"url":"https://factzone.online",
+"description":"Amazing facts and educational knowledge platform."
+}
+
+</script>
+
+<!-- TAILWIND -->
 
 <script src="https://cdn.tailwindcss.com"></script>
 
@@ -52,11 +117,6 @@ overflow:hidden;
 }
 
 </style>
- 
-<meta charset="UTF-8">
-<title>FactZone</title>
-    
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-697419046628538" crossorigin="anonymous"></script>
 
 </head>
 
@@ -94,6 +154,24 @@ class="w-full mt-4 px-5 py-3 rounded-full outline-none text-lg">
 
 </header>
 
+<!-- ADSENSE -->
+
+<div class="max-w-7xl mx-auto px-5 mt-5">
+
+<ins class="adsbygoogle"
+style="display:block"
+data-ad-client="ca-pub-697419046628538"
+data-ad-slot="1234567890"
+data-ad-format="auto"
+data-full-width-responsive="true">
+</ins>
+
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+</div>
+
 <!-- POSTS -->
 
 <main
@@ -126,8 +204,7 @@ class="flex flex-wrap gap-5 justify-center text-sm mb-5">
 </div>
 
 <p class="text-gray-400">
-© 2026 FactZone
-  • Avnish Ravat 
+© 2026 FactZone • Avnish Ravat
 </p>
 
 </div>
@@ -144,7 +221,9 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
 getFirestore,
 collection,
-getDocs
+getDocs,
+query,
+orderBy
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -180,8 +259,14 @@ async function loadPosts(){
 postsContainer.innerHTML =
 "<h2 class='text-center text-2xl col-span-full'>Loading...</h2>";
 
+const q =
+query(
+collection(db,"posts"),
+orderBy("createdAt","desc")
+);
+
 const querySnapshot =
-await getDocs(collection(db,"posts"));
+await getDocs(q);
 
 postsContainer.innerHTML = "";
 
@@ -208,6 +293,7 @@ class="card bg-white rounded-2xl overflow-hidden shadow-lg">
 
 <img
 src="${post.image || 'https://via.placeholder.com/500'}"
+alt="${post.title || ''}"
 class="w-full h-60 object-cover">
 
 <div class="p-4">
