@@ -14,10 +14,10 @@ FactZone | Amazing Facts & Knowledge
 </title>
 
 <meta name="description"
-content="Explore amazing facts, science facts, technology facts, history facts and viral knowledge on FactZone.">
+content="Amazing facts, science facts, technology facts and viral knowledge.">
 
 <meta name="keywords"
-content="facts, amazing facts, science facts, technology facts, history facts, viral facts">
+content="facts, science facts, amazing facts, viral facts">
 
 <meta name="robots"
 content="index, follow">
@@ -30,8 +30,6 @@ content="#000000">
 
 <link rel="canonical"
 href="https://factzone.online/">
-
-<!-- OPEN GRAPH -->
 
 <meta property="og:type"
 content="website">
@@ -48,8 +46,6 @@ content="https://factzone.online/">
 <meta property="og:image"
 content="https://factzone.online/logo.svg">
 
-<!-- TWITTER -->
-
 <meta name="twitter:card"
 content="summary_large_image">
 
@@ -62,22 +58,15 @@ content="Amazing facts and educational platform.">
 <meta name="twitter:image"
 content="https://factzone.online/logo.svg">
 
-<!-- FAVICON -->
-
 <link rel="icon"
 href="logo.svg">
-
-<!-- ADSENSE -->
 
 <script async
 src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-697419046628538"
 crossorigin="anonymous">
 </script>
 
-<!-- SCHEMA -->
-
 <script type="application/ld+json">
-
 {
 "@context":"https://schema.org",
 "@type":"WebSite",
@@ -85,10 +74,7 @@ crossorigin="anonymous">
 "url":"https://factzone.online",
 "description":"Amazing facts and educational knowledge platform."
 }
-
 </script>
-
-<!-- TAILWIND -->
 
 <script src="https://cdn.tailwindcss.com"></script>
 
@@ -96,21 +82,33 @@ crossorigin="anonymous">
 
 body{
 background:#f3f4f6;
-font-family:Arial;
+font-family:Arial,sans-serif;
 margin:0;
 padding:0;
+overflow-x:hidden;
 }
 
 .card{
 transition:.3s;
 border:2px solid #e5e7eb;
-background:white;
+background:#fff;
+border-radius:20px;
 overflow:hidden;
+display:flex;
+flex-direction:column;
 }
 
 .card:hover{
 transform:translateY(-5px);
 border-color:black;
+}
+
+.post-image{
+width:100%;
+height:220px;
+object-fit:cover;
+display:block;
+background:#ddd;
 }
 
 .line2{
@@ -120,17 +118,17 @@ display:-webkit-box;
 overflow:hidden;
 }
 
-.post-image{
-width:100%;
-height:220px;
-object-fit:cover;
-background:#ddd;
-display:block;
-}
-
 #posts{
 align-items:start;
-min-height:300px;
+}
+
+::-webkit-scrollbar{
+width:8px;
+}
+
+::-webkit-scrollbar-thumb{
+background:#888;
+border-radius:20px;
 }
 
 </style>
@@ -138,8 +136,6 @@ min-height:300px;
 </head>
 
 <body>
-
-<!-- HEADER -->
 
 <header
 class="bg-black sticky top-0 z-50 shadow-lg">
@@ -171,37 +167,15 @@ class="w-full mt-4 px-5 py-3 rounded-full outline-none text-lg">
 
 </header>
 
-<!-- ADSENSE -->
-
-<div class="max-w-7xl mx-auto px-5 mt-4">
-
-<ins class="adsbygoogle"
-style="display:block"
-data-ad-client="ca-pub-697419046628538"
-data-ad-slot="1234567890"
-data-ad-format="auto"
-data-full-width-responsive="true">
-</ins>
-
-<script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-</div>
-
-<!-- POSTS -->
-
 <main
 id="posts"
-class="max-w-7xl mx-auto p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 items-start">
+class="max-w-7xl mx-auto p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
 <h2 class="text-center text-2xl col-span-full">
 Loading...
 </h2>
 
 </main>
-
-<!-- FOOTER -->
 
 <footer
 class="bg-black text-white mt-10">
@@ -231,8 +205,6 @@ class="flex flex-wrap gap-5 justify-center text-sm mb-5">
 </div>
 
 </footer>
-
-<!-- FIREBASE -->
 
 <script type="module">
 
@@ -309,7 +281,7 @@ const post = doc.data();
 postsContainer.innerHTML += `
 
 <a href="detail.html?id=${doc.id}"
-class="card rounded-2xl shadow-lg">
+class="card shadow-lg">
 
 <img
 src="${post.image || 'https://via.placeholder.com/500'}"
