@@ -11,20 +11,11 @@ content="width=device-width, initial-scale=1.0">
 FactZone Admin Panel
 </title>
 
-<meta name="robots"
-content="noindex,nofollow">
-
 <link rel="icon"
 href="logo.svg">
 
-<!-- ADSENSE -->
-
-<script async
-src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-697419046628538"
-crossorigin="anonymous">
-</script>
-
-<!-- TAILWIND -->
+<meta name="robots"
+content="noindex,nofollow">
 
 <script src="https://cdn.tailwindcss.com"></script>
 
@@ -32,21 +23,15 @@ crossorigin="anonymous">
 
 body{
 background:#f3f4f6;
-font-family:Arial,sans-serif;
-margin:0;
-padding:0;
+font-family:Arial;
 }
 
-/* CARD */
-
 .card{
-background:#fff;
+background:white;
 border-radius:20px;
 padding:20px;
 box-shadow:0 5px 20px rgba(0,0,0,.1);
 }
-
-/* INPUTS */
 
 input,
 textarea{
@@ -56,15 +41,12 @@ border:2px solid #ddd;
 border-radius:12px;
 outline:none;
 margin-top:10px;
-font-size:16px;
 }
 
 input:focus,
 textarea:focus{
 border-color:black;
 }
-
-/* BUTTON */
 
 button{
 transition:.3s;
@@ -74,32 +56,30 @@ button:hover{
 transform:scale(1.03);
 }
 
-/* POST CARD */
-
 .post-card{
 border:2px solid #e5e7eb;
 border-radius:20px;
 overflow:hidden;
 background:#fff;
+transition:.3s;
+}
+
+.post-card:hover{
+border-color:black;
+transform:translateY(-4px);
 }
 
 .post-card img{
 width:100%;
-height:220px;
+height:200px;
 object-fit:cover;
-display:block;
-background:#ddd;
 }
 
-/* SCROLLBAR */
-
-::-webkit-scrollbar{
-width:8px;
-}
-
-::-webkit-scrollbar-thumb{
-background:#888;
-border-radius:20px;
+.line2{
+display:-webkit-box;
+-webkit-line-clamp:2;
+-webkit-box-orient:vertical;
+overflow:hidden;
 }
 
 </style>
@@ -111,17 +91,17 @@ border-radius:20px;
 <!-- HEADER -->
 
 <header
-class="bg-black text-white p-4 shadow-lg sticky top-0 z-50">
+class="bg-black sticky top-0 z-50 shadow-lg">
 
 <div
-class="max-w-6xl mx-auto flex items-center gap-3">
+class="max-w-7xl mx-auto p-4 flex items-center gap-3">
 
 <img
 src="logo.svg"
 class="w-12 h-12 rounded-full bg-white p-1">
 
 <h1
-class="text-3xl font-bold">
+class="text-3xl font-bold text-white">
 FactZone Admin
 </h1>
 
@@ -129,28 +109,10 @@ FactZone Admin
 
 </header>
 
-<!-- ADSENSE -->
-
-<div class="max-w-6xl mx-auto px-5 mt-5">
-
-<ins class="adsbygoogle"
-style="display:block"
-data-ad-client="ca-pub-697419046628538"
-data-ad-slot="1234567890"
-data-ad-format="auto"
-data-full-width-responsive="true">
-</ins>
-
-<script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-</div>
-
 <!-- MAIN -->
 
 <div
-class="max-w-6xl mx-auto p-5">
+class="max-w-7xl mx-auto p-5">
 
 <!-- FORM -->
 
@@ -201,7 +163,7 @@ All Posts
 
 <div
 id="posts"
-class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
 </div>
 
@@ -295,16 +257,15 @@ postsDiv.innerHTML += `
 <div class="post-card shadow-lg">
 
 <img
-src="${post.image || 'https://via.placeholder.com/500'}"
-alt="${post.title || ''}">
+src="${post.image || 'https://via.placeholder.com/500'}">
 
 <div class="p-4">
 
-<h2 class="text-2xl font-bold mb-2">
+<h2 class="text-xl font-bold mb-2 line2">
 ${post.title || ''}
 </h2>
 
-<p class="text-gray-600 mb-4">
+<p class="text-gray-600 text-sm mb-4 line2">
 ${post.desc || ''}
 </p>
 
@@ -380,7 +341,7 @@ createdAt:Date.now()
 }
 );
 
-alert("Post Uploaded Successfully");
+alert("Post Uploaded");
 
 document.getElementById("title").value="";
 document.getElementById("desc").value="";
@@ -391,7 +352,7 @@ loadPosts();
 
 });
 
-/* DELETE POST */
+/* DELETE */
 
 window.deletePost =
 async(id)=>{
@@ -406,7 +367,7 @@ loadPosts();
 
 };
 
-/* EDIT POST */
+/* EDIT */
 
 window.editPost =
 async(id,title,desc,image,content)=>{
@@ -437,7 +398,7 @@ content:newContent
 }
 );
 
-alert("Post Updated Successfully");
+alert("Post Updated");
 
 loadPosts();
 
