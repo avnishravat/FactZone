@@ -108,14 +108,6 @@ padding:0;
 overflow-x:hidden;
 }
 
-/* HEADER */
-
-header{
-width:100%;
-}
-
-/* CARD */
-
 .card{
 transition:.3s;
 border:2px solid #e5e7eb;
@@ -124,14 +116,13 @@ border-radius:20px;
 overflow:hidden;
 display:flex;
 flex-direction:column;
+height:100%;
 }
 
 .card:hover{
 transform:translateY(-5px);
 border-color:black;
 }
-
-/* IMAGE */
 
 .post-image{
 width:100%;
@@ -141,8 +132,6 @@ display:block;
 background:#ddd;
 }
 
-/* TEXT LIMIT */
-
 .line2{
 display:-webkit-box;
 -webkit-line-clamp:2;
@@ -150,13 +139,10 @@ display:-webkit-box;
 overflow:hidden;
 }
 
-/* POSTS */
-
 #posts{
 align-items:start;
+min-height:300px;
 }
-
-/* SCROLLBAR */
 
 ::-webkit-scrollbar{
 width:8px;
@@ -320,13 +306,32 @@ return;
 
 }
 
+/* FIXED SORT */
+
+const posts = [];
+
 querySnapshot.forEach((doc)=>{
 
-const post = doc.data();
+posts.push({
+
+id:doc.id,
+...doc.data()
+
+});
+
+});
+
+posts.sort((a,b)=>
+(b.createdAt || 0) - (a.createdAt || 0)
+);
+
+/* POSTS LOOP */
+
+posts.forEach((post)=>{
 
 postsContainer.innerHTML += `
 
-<a href="detail.html?id=${doc.id}"
+<a href="detail.html?id=${post.id}"
 class="card shadow-lg">
 
 <img
@@ -335,7 +340,7 @@ alt="${post.title || ''}"
 class="post-image"
 loading="lazy">
 
-<div class="p-4">
+<div class="p-4 flex flex-col flex-1">
 
 <h2 class="font-bold text-xl mb-2 line2">
 ${post.title || ''}
