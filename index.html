@@ -10,14 +10,14 @@
 content="width=device-width, initial-scale=1.0">
 
 <title>
-FactZone | Amazing Facts & Knowledge
+FactZone Official | Amazing Facts, Science Facts & Viral Knowledge
 </title>
 
 <meta name="description"
-content="Amazing facts, science facts, technology facts and viral knowledge.">
+content="FactZone Official is a Hindi educational platform sharing amazing facts, science facts, technology facts, history facts and viral knowledge.">
 
 <meta name="keywords"
-content="facts, science facts, amazing facts, viral facts">
+content="facts, amazing facts, science facts, technology facts, history facts, viral facts, hindi facts">
 
 <meta name="robots"
 content="index, follow">
@@ -31,11 +31,16 @@ content="#000000">
 <link rel="canonical"
 href="https://factzone.online/">
 
+<!-- OPEN GRAPH -->
+
 <meta property="og:type"
 content="website">
 
+<meta property="og:site_name"
+content="FactZone">
+
 <meta property="og:title"
-content="FactZone | Amazing Facts & Knowledge">
+content="FactZone Official | Amazing Facts">
 
 <meta property="og:description"
 content="Amazing facts, science facts, technology facts and viral knowledge.">
@@ -46,11 +51,13 @@ content="https://factzone.online/">
 <meta property="og:image"
 content="https://factzone.online/logo.svg">
 
+<!-- TWITTER -->
+
 <meta name="twitter:card"
 content="summary_large_image">
 
 <meta name="twitter:title"
-content="FactZone">
+content="FactZone Official">
 
 <meta name="twitter:description"
 content="Amazing facts and educational platform.">
@@ -58,23 +65,36 @@ content="Amazing facts and educational platform.">
 <meta name="twitter:image"
 content="https://factzone.online/logo.svg">
 
+<!-- FAVICON -->
+
 <link rel="icon"
 href="logo.svg">
+
+<!-- ADSENSE -->
 
 <script async
 src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-697419046628538"
 crossorigin="anonymous">
 </script>
 
+<!-- SCHEMA SEO -->
+
 <script type="application/ld+json">
 {
 "@context":"https://schema.org",
-"@type":"WebSite",
+"@type":"Organization",
 "name":"FactZone",
 "url":"https://factzone.online",
-"description":"Amazing facts and educational knowledge platform."
+"logo":"https://factzone.online/logo.svg",
+"description":"Hindi educational facts platform",
+"sameAs":[
+"https://www.instagram.com/",
+"https://www.youtube.com/"
+]
 }
 </script>
+
+<!-- TAILWIND -->
 
 <script src="https://cdn.tailwindcss.com"></script>
 
@@ -87,6 +107,14 @@ margin:0;
 padding:0;
 overflow-x:hidden;
 }
+
+/* HEADER */
+
+header{
+width:100%;
+}
+
+/* CARD */
 
 .card{
 transition:.3s;
@@ -103,6 +131,8 @@ transform:translateY(-5px);
 border-color:black;
 }
 
+/* IMAGE */
+
 .post-image{
 width:100%;
 height:220px;
@@ -111,6 +141,8 @@ display:block;
 background:#ddd;
 }
 
+/* TEXT LIMIT */
+
 .line2{
 display:-webkit-box;
 -webkit-line-clamp:2;
@@ -118,9 +150,13 @@ display:-webkit-box;
 overflow:hidden;
 }
 
+/* POSTS */
+
 #posts{
 align-items:start;
 }
+
+/* SCROLLBAR */
 
 ::-webkit-scrollbar{
 width:8px;
@@ -136,6 +172,8 @@ border-radius:20px;
 </head>
 
 <body>
+
+<!-- HEADER -->
 
 <header
 class="bg-black sticky top-0 z-50 shadow-lg">
@@ -167,6 +205,8 @@ class="w-full mt-4 px-5 py-3 rounded-full outline-none text-lg">
 
 </header>
 
+<!-- POSTS -->
+
 <main
 id="posts"
 class="max-w-7xl mx-auto p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -176,6 +216,8 @@ Loading...
 </h2>
 
 </main>
+
+<!-- FOOTER -->
 
 <footer
 class="bg-black text-white mt-10">
@@ -205,6 +247,8 @@ class="flex flex-wrap gap-5 justify-center text-sm mb-5">
 </div>
 
 </footer>
+
+<!-- FIREBASE -->
 
 <script type="module">
 
@@ -246,6 +290,8 @@ const db = getFirestore(app);
 
 const postsContainer =
 document.getElementById("posts");
+
+/* LOAD POSTS */
 
 async function loadPosts(){
 
@@ -322,6 +368,8 @@ console.log(error);
 }
 
 loadPosts();
+
+/* SEARCH */
 
 document.getElementById("searchInput")
 .addEventListener("input",(e)=>{
