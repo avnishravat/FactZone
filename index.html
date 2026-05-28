@@ -197,9 +197,7 @@ class="w-full mt-4 px-5 py-3 rounded-full outline-none text-lg">
 id="posts"
 class="max-w-7xl mx-auto p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
-<h2 class="text-center text-2xl col-span-full">
-Loading...
-</h2>
+
 
 </main>
 
@@ -244,12 +242,12 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
 getFirestore,
 collection,
-getDocs,
 query,
-orderBy
+orderBy,
+onSnapshot
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
+  
 const firebaseConfig = {
 
 apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
@@ -279,9 +277,14 @@ document.getElementById("posts");
 
 /* LOAD POSTS */
 
-async function loadPosts(){
+function loadPosts(){
 
-try{
+const cachedPosts =
+localStorage.getItem("factzone_posts");
+
+if(cachedPosts){
+postsContainer.innerHTML = cachedPosts;
+}
 
 const q =
 query(
@@ -289,8 +292,7 @@ collection(db,"posts"),
 orderBy("createdAt","desc")
 );
 
-const querySnapshot =
-await getDocs(q);
+onSnapshot(q,(querySnapshot)=>{
 
 postsContainer.innerHTML = "";
 
@@ -306,17 +308,13 @@ return;
 
 }
 
-/* FIXED SORT */
-
 const posts = [];
 
 querySnapshot.forEach((doc)=>{
 
 posts.push({
-
 id:doc.id,
 ...doc.data()
-
 });
 
 });
@@ -324,8 +322,6 @@ id:doc.id,
 posts.sort((a,b)=>
 (b.createdAt || 0) - (a.createdAt || 0)
 );
-
-/* POSTS LOOP */
 
 posts.forEach((post)=>{
 
@@ -358,17 +354,12 @@ ${post.desc || ''}
 
 });
 
-}catch(error){
+localStorage.setItem(
+"factzone_posts",
+postsContainer.innerHTML
+);
 
-postsContainer.innerHTML = `
-<h2 class="text-center text-red-500 text-2xl col-span-full">
-Failed To Load Posts
-</h2>
-`;
-
-console.log(error);
-
-}
+});
 
 }
 
