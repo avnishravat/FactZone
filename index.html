@@ -342,32 +342,27 @@ posts.forEach((post)=>{
 
 postsContainer.innerHTML += `
 
+const popularPosts =
+document.getElementById("popularPosts");
+
+if(popularPosts){
+
+popularPosts.innerHTML = "";
+
+posts.slice(0,5).forEach(post=>{
+
+popularPosts.innerHTML += `
+<div class="mb-3">
 <a href="detail.html?id=${post.id}"
-class="card shadow-lg">
-
-<img
-src="${post.image || 'https://via.placeholder.com/500'}"
-alt="${post.title || ''}"
-class="post-image"
-loading="lazy">
-
-<div class="p-4 flex flex-col flex-1">
-
-<h2 class="font-bold text-xl mb-2 line2">
-${post.title || ''}
-</h2>
-
-<p class="text-gray-600 text-sm line2">
-${post.desc || ''}
-</p>
-
-</div>
-
+class="text-blue-600 hover:underline font-medium">
+${post.title}
 </a>
-
+</div>
 `;
 
 });
+
+}
 
 localStorage.setItem(
 "factzone_posts",
