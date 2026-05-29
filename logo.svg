@@ -1,4 +1,4 @@
-<png xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
 <defs>
 <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
 <stop offset="0%" stop-color="#000"/>
@@ -13,4 +13,4 @@ font-size="90" font-family="Segoe UI" font-weight="bold">FZ</text>
 
 <text x="50%" y="75%" text-anchor="middle" fill="#ddd"
 font-size="14">FACTZONE</text>
-</png>
+</svg>
