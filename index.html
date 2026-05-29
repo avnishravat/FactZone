@@ -50,7 +50,7 @@ content="Amazing facts, science facts, technology facts and educational knowledg
 content="https://factzone.online/">
 
 <meta property="og:image"
-content="https://factzone.online/logo.svg">
+content="https://factzone.online/logo.png">
 
 <!-- Twitter -->
 
@@ -64,7 +64,7 @@ content="FactZone Official">
 content="Amazing facts and educational platform">
 
 <meta name="twitter:image"
-content="https://factzone.online/logo.svg">
+content="https://factzone.online/logo.png">
 
 <!-- FAVICON -->
 
@@ -155,7 +155,34 @@ border-radius:20px;
 }
 
 </style>
+<script type="application/ld+json">
+{
+ "@context":"https://schema.org",
+ "@type":"WebSite",
+ "name":"FactZone Official",
+ "url":"https://factzone.online",
+ "potentialAction":{
+   "@type":"SearchAction",
+   "target":"https://factzone.online/?search={search_term_string}",
+   "query-input":"required name=search_term_string"
+ }
+}
+</script>
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-311JQXBXR9"></script>
 
+<script>
+window.dataLayer = window.dataLayer || [];
+
+function gtag(){
+dataLayer.push(arguments);
+}
+
+gtag('js', new Date());
+
+gtag('config', 'G-311JQXBXR9');
+</script>
+  
 </head>
 
 <body>
@@ -191,7 +218,19 @@ class="w-full mt-4 px-5 py-3 rounded-full outline-none text-lg">
 </div>
 
 </header>
+<section class="max-w-7xl mx-auto px-5 py-4">
 
+<h2 class="text-2xl font-bold">
+Amazing Facts, Science Facts & Knowledge
+</h2>
+
+<p class="text-gray-600 mt-2">
+Read science facts, technology facts, history facts,
+mystery facts and educational knowledge articles.
+</p>
+
+</section>
+  
 <!-- POSTS -->
 
 <main
@@ -210,6 +249,10 @@ Loading... </h2>
 
 <div id="popularPosts"
 class="bg-white rounded-2xl shadow p-5">
+
+<noscript>
+Popular science facts and amazing facts articles.
+</noscript>
 
 Loading...
 
