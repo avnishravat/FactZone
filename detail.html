@@ -29,7 +29,25 @@ font-family:Arial;
 <title>FactZone</title>
   
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-697419046628538" crossorigin="anonymous"></script>
-
+<script type="application/ld+json">
+{
+ "@context":"https://schema.org",
+ "@type":"BreadcrumbList",
+ "itemListElement":[
+ {
+ "@type":"ListItem",
+ "position":1,
+ "name":"Home",
+ "item":"https://factzone.online"
+ },
+ {
+ "@type":"ListItem",
+ "position":2,
+ "name":"Article"
+ }
+ ]
+}
+</script>
 </head>
 
 <body>
@@ -72,111 +90,148 @@ class="bg-white p-5 rounded-2xl shadow-lg">
 Loading...
 
 </div>
+<section
+id="relatedPosts"
+class="mt-10 bg-white p-5 rounded-2xl shadow">
 
+<h2 class="text-2xl font-bold mb-4">
+Related Facts
+</h2>
+
+Loading...
+
+</section>
 </div>
 
 <script type="module">
 
+// 1. सबसे ऊपर सभी फ़ायरबेस फ़ंक्शंस को एक साथ इम्पोर्ट किया गया है
 import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+from "https://gstatic.com";
 
 import {
 getFirestore,
 doc,
-getDoc
+getDoc,
+collection,
+getDocs,
+limit,
+query
 }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+from "https://gstatic.com";
 
 const firebaseConfig = {
-
 apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
-
-authDomain: "factzone-a9ace.firebaseapp.com",
-
-databaseURL: "https://factzone-a9ace-default-rtdb.firebaseio.com",
-
+authDomain: "://firebaseapp.com",
+databaseURL: "https://firebaseio.com",
 projectId: "factzone-a9ace",
-
 storageBucket: "factzone-a9ace.firebasestorage.app",
-
 messagingSenderId: "425838320650",
-
 appId: "1:425838320650:web:beab18baddf818cb73d3f3",
-
 measurementId: "G-311JQXBXR9"
-
 };
 
 const app = initializeApp(firebaseConfig);
-
 const db = getFirestore(app);
 
-const params =
-new URLSearchParams(location.search);
+const params = new URLSearchParams(location.search);
+const id = params.get("id");
+const postDiv = document.getElementById("post");
 
-const id =
-params.get("id");
-
-const postDiv =
-document.getElementById("post");
-
+// 2. मुख्य पोस्ट लोड करने का फ़ंक्शन
 async function loadPost(){
-
 try{
-
-const docRef =
-doc(db,"posts",id);
-
-const snap =
-await getDoc(docRef);
+const docRef = doc(db,"posts",id);
+const snap = await getDoc(docRef);
 
 if(snap.exists()){
+const post = snap.data();
+document.title = post.title || "FactZone";
 
-const post =
-snap.data();
+const articleSchema = {
+"@context":"https://schema.org",
+"@type":"Article",
+"headline":post.title,
+"description":(post.content || "").substring(0,160),
+"image":[post.image || 'https://placeholder.com'],
+"author":{
+"@type":"Person",
+"name":"Avnish Ravat"
+},
+"publisher":{
+"@type":"Organization",
+"name":"FactZone Official",
+"logo":{
+"@type":"ImageObject",
+"url":"https://factzone.online"
+}
+}
+};
 
-document.title =
-post.title || "FactZone";
+const schemaScript = document.createElement("script");
+schemaScript.type = "application/ld+json";
+schemaScript.text = JSON.stringify(articleSchema);
+document.head.appendChild(schemaScript);
 
 postDiv.innerHTML = `
-
-<img
-src="${post.image || 'https://via.placeholder.com/800'}"
-class="w-full rounded-xl mb-5">
-
-<h1 class="text-4xl font-bold mb-4">
-${post.title || ''}
-</h1>
-
-<p class="text-gray-700 text-lg leading-8 whitespace-pre-line">
-${post.content || ''}
-</p>
-
+<img src="${post.image || 'https://placeholder.com'}" class="w-full rounded-xl mb-5">
+<h1 class="text-4xl font-bold mb-4">${post.title || ''}</h1>
+<p class="text-gray-700 text-lg leading-8 whitespace-pre-line">${post.content || ''}</p>
 `;
 
 }else{
-
-postDiv.innerHTML = `
-<h2 class="text-3xl text-center">
-Post Not Found
-</h2>
-`;
-
+postDiv.innerHTML = `<h2 class="text-3xl text-center">Post Not Found</h2>`;
 }
-
 }catch(error){
-
-postDiv.innerHTML = `
-<h2 class="text-3xl text-center text-red-500">
-Error Loading Post
-</h2>
-`;
-
+postDiv.innerHTML = `<h2 class="text-3xl text-center text-red-500">Error Loading Post</h2>`;
+}
 }
 
+// 3. रिलेटेड पोस्ट्स लोड करने का सुधरा हुआ सही फ़ंक्शन
+async function loadRelatedPosts() {
+  const relatedContainer = document.getElementById("relatedPosts");
+  
+  try {
+    const q = query(collection(db, "posts"), limit(5));
+    const querySnapshot = await getDocs(q);
+    
+    let htmlContent = `<h2 class="text-2xl font-bold mb-4">🔥 Related Facts</h2>`;
+    htmlContent += `<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">`;
+    
+    let count = 0;
+    querySnapshot.forEach((docSnap) => {
+      if (docSnap.id !== id && count < 4) {
+        const postData = docSnap.data();
+        
+        htmlContent += `
+          <a href="detail.html?id=${docSnap.id}" class="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50 transition border border-gray-100">
+            <img src="${postData.image || 'https://placeholder.com'}" class="w-16 h-16 object-cover rounded-lg bg-gray-200 shrink-0">
+            <div>
+              <h3 class="font-bold text-sm text-gray-900 line-clamp-2">${postData.title || ''}</h3>
+            </div>
+          </a>
+        `;
+        count++;
+      }
+    });
+    
+    htmlContent += `</div>`;
+    
+    if (count === 0) {
+      relatedContainer.style.display = "none";
+    } else {
+      relatedContainer.innerHTML = htmlContent;
+    }
+    
+  } catch (error) {
+    console.error("Error:", error);
+    relatedContainer.innerHTML = `<p class="text-gray-500 text-sm">Failed to load related facts.</p>`;
+  }
 }
 
+// दोनों को कॉल करें
 loadPost();
+loadRelatedPosts();
 
 </script>
 
