@@ -1,67 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>FactZone Post</title>
 
-<!-- SEO -->
-<meta name="description" content="Amazing facts and educational knowledge">
-<meta name="robots" content="index,follow">
+<meta name="description"
+content="Amazing facts and educational knowledge">
 
-<link rel="canonical" href="https://factzone.online/detail.html">
+<meta name="robots"
+content="index,follow,max-image-preview:large">
+
+<link rel="canonical"
+href="https://factzone.online/detail.html">
 
 <!-- Open Graph -->
-<meta property="og:type" content="article">
-<meta property="og:title" content="FactZone Post">
-<meta property="og:description" content="Amazing facts and educational knowledge">
-<meta property="og:image" content="https://factzone.online/logo.svg">
-<meta property="og:url" content="https://factzone.online/detail.html">
+
+<meta property="og:type"
+content="article">
+
+<meta property="og:title"
+content="FactZone Post">
+
+<meta property="og:description"
+content="Amazing facts and educational knowledge">
+
+<meta property="og:image"
+content="https://factzone.online/logo.svg">
+
+<meta property="og:url"
+content="https://factzone.online/detail.html">
 
 <!-- Twitter -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="FactZone Post">
-<meta name="twitter:description" content="Amazing facts and educational knowledge">
-<meta name="twitter:image" content="https://factzone.online/logo.svg">
+
+<meta name="twitter:card"
+content="summary_large_image">
+
+<meta name="twitter:title"
+content="FactZone Post">
+
+<meta name="twitter:description"
+content="Amazing facts and educational knowledge">
+
+<meta name="twitter:image"
+content="https://factzone.online/logo.svg">
 
 <link rel="icon" href="logo.svg">
 
-<!-- AdSense -->
+<!-- Adsense -->
+
 <script async
 src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-697419046628538"
 crossorigin="anonymous"></script>
 
 <!-- Tailwind -->
+
 <script src="https://cdn.tailwindcss.com"></script>
 
-<!-- Breadcrumb Schema -->
-<script type="application/ld+json">
-{
- "@context":"https://schema.org",
- "@type":"BreadcrumbList",
- "itemListElement":[
-  {
-   "@type":"ListItem",
-   "position":1,
-   "name":"Home",
-   "item":"https://factzone.online"
-  },
-  {
-   "@type":"ListItem",
-   "position":2,
-   "name":"Article"
-  }
- ]
-}
-</script>
-
 <style>
+
 body{
 background:#f3f4f6;
 font-family:Arial,sans-serif;
 }
+
 </style>
+
 </head>
 
 <body>
@@ -70,25 +76,44 @@ font-family:Arial,sans-serif;
 
 <div class="flex items-center justify-between mb-5">
 
-<a href="index.html" class="flex items-center gap-3">
+<a href="index.html"
+class="flex items-center gap-3">
+
 <img src="logo.svg"
 class="w-12 h-12 rounded-full bg-white p-1 shadow">
 
 <h1 class="text-3xl font-bold">
 FactZone
 </h1>
+
 </a>
 
 <a href="index.html"
 class="bg-black text-white px-5 py-3 rounded-xl">
+
 ← Back
+
 </a>
 
 </div>
 
+<!-- FAST SKELETON LOADER -->
+
 <div id="post"
 class="bg-white p-5 rounded-2xl shadow-lg">
-Loading...
+
+<div class="animate-pulse">
+
+<div class="h-72 bg-gray-200 rounded-xl mb-5"></div>
+
+<div class="h-10 bg-gray-200 rounded w-3/4 mb-4"></div>
+
+<div class="h-4 bg-gray-200 rounded mb-2"></div>
+<div class="h-4 bg-gray-200 rounded mb-2"></div>
+<div class="h-4 bg-gray-200 rounded mb-2"></div>
+
+</div>
+
 </div>
 
 <section id="relatedPosts"
@@ -98,15 +123,106 @@ class="mt-10 bg-white p-5 rounded-2xl shadow-lg">
 🔥 Related Facts
 </h2>
 
-<div id="relatedContainer"
-class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div id="relatedContainer">
+
 Loading...
+
 </div>
 
 </section>
 
 </div>
 
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+
+initializeFirestore,
+persistentLocalCache,
+persistentMultipleTabManager,
+
+doc,
+getDoc,
+collection,
+getDocs,
+query,
+limit
+
+}
+
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
+
+authDomain:"factzone-a9ace.firebaseapp.com",
+
+databaseURL:"https://factzone-a9ace-default-rtdb.firebaseio.com",
+
+projectId:"factzone-a9ace",
+
+storageBucket:"factzone-a9ace.firebasestorage.app",
+
+messagingSenderId:"425838320650",
+
+appId:"1:425838320650:web:beab18baddf818cb73d3f3"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+/* FIRESTORE CACHE */
+
+const db = initializeFirestore(app,{
+
+localCache:persistentLocalCache({
+
+tabManager:persistentMultipleTabManager()
+
+})
+
+});
+
+const params =
+new URLSearchParams(location.search);
+
+const id = params.get("id");
+
+const postDiv =
+document.getElementById("post");
+
+async function loadPost(){
+
+try{
+
+const docRef =
+doc(db,"posts",id);
+
+const snap =
+await getDoc(docRef);
+
+if(!snap.exists()){
+
+postDiv.innerHTML=`
+<h2 class="text-3xl text-center">
+Post Not Found
+</h2>`;
+
+return;
+}
+
+const post =
+snap.data();
+
+const cleanTitle =
+post.title || "FactZone Article";
+
+document.title =
+cleanTitle + " | FactZone";
 <script type="module">
 
 import { initializeApp }
@@ -123,159 +239,179 @@ limit
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+/* =========================
+   FIREBASE CONFIG
+========================= */
+
 const firebaseConfig = {
-apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
-authDomain: "factzone-a9ace.firebaseapp.com",
-databaseURL: "https://factzone-a9ace-default-rtdb.firebaseio.com",
-projectId: "factzone-a9ace",
-storageBucket: "factzone-a9ace.firebasestorage.app",
-messagingSenderId: "425838320650",
-appId: "1:425838320650:web:beab18baddf818cb73d3f3"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "factzone-a9ace.firebaseapp.com",
+  projectId: "factzone-a9ace",
+  storageBucket: "factzone-a9ace.appspot.com",
+  messagingSenderId: "425838320650",
+  appId: "YOUR_APP_ID"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+/* =========================
+   ELEMENTS
+========================= */
+
+const postDiv = document.getElementById("post");
+const relatedContainer =
+document.getElementById("relatedContainer");
+
 const params = new URLSearchParams(location.search);
 const id = params.get("id");
 
-const postDiv = document.getElementById("post");
+/* =========================
+   LOAD POST
+========================= */
 
-async function loadPost(){
+async function loadPost() {
+
+if(!id){
+postDiv.innerHTML = `
+<h2 class="text-3xl text-center text-red-500">
+Invalid Post URL
+</h2>`;
+return;
+}
 
 try{
 
-const docRef = doc(db,"posts",id);
-const snap = await getDoc(docRef);
+const snap = await getDoc(
+doc(db,"posts",id)
+);
 
-if(snap.exists()){
+if(!snap.exists()){
+
+postDiv.innerHTML = `
+<h2 class="text-3xl text-center">
+Post Not Found
+</h2>`;
+return;
+}
 
 const post = snap.data();
 
-const cleanTitle =
+const title =
 post.title || "FactZone Article";
 
+const description =
+(post.content || "")
+.replace(/\n/g," ")
+.substring(0,160);
+
+const image =
+post.image ||
+"https://factzone.online/logo.svg";
+
+/* =========================
+   SEO UPDATE
+========================= */
+
 document.title =
-cleanTitle + " | FactZone";
+title + " | FactZone";
 
 document
 .querySelector('meta[name="description"]')
-.setAttribute(
-"content",
-(post.content || "").substring(0,160)
-);
-
-document
-.querySelector('meta[property="og:title"]')
-.setAttribute("content",cleanTitle);
-
-document
-.querySelector('meta[property="og:description"]')
-.setAttribute(
-"content",
-(post.content || "").substring(0,160)
-);
-
-document
-.querySelector('meta[property="og:image"]')
-.setAttribute(
-"content",
-post.image ||
-"https://factzone.online/logo.svg"
-);
-
-document
-.querySelector('meta[property="og:url"]')
-.setAttribute("content",location.href);
+.setAttribute("content",description);
 
 document
 .querySelector('link[rel="canonical"]')
 .setAttribute("href",location.href);
 
 document
+.querySelector('meta[property="og:title"]')
+.setAttribute("content",title);
+
+document
+.querySelector('meta[property="og:description"]')
+.setAttribute("content",description);
+
+document
+.querySelector('meta[property="og:image"]')
+.setAttribute("content",image);
+
+document
+.querySelector('meta[property="og:url"]')
+.setAttribute("content",location.href);
+
+document
 .querySelector('meta[name="twitter:title"]')
-.setAttribute("content",cleanTitle);
+.setAttribute("content",title);
 
 document
 .querySelector('meta[name="twitter:description"]')
-.setAttribute(
-"content",
-(post.content || "").substring(0,160)
-);
+.setAttribute("content",description);
 
 document
 .querySelector('meta[name="twitter:image"]')
-.setAttribute(
-"content",
-post.image ||
-"https://factzone.online/logo.svg"
-);
+.setAttribute("content",image);
 
-let pubDate =
-new Date().toISOString();
+/* =========================
+   ARTICLE SCHEMA
+========================= */
 
-if(post.createdAt){
-
-try{
-
-pubDate =
-typeof post.createdAt.toDate === "function"
-? post.createdAt.toDate().toISOString()
-: new Date(post.createdAt).toISOString();
-
-}catch(e){}
-
-}
 const schema = {
 "@context":"https://schema.org",
 "@type":"Article",
-"headline": cleanTitle,
-"description": (post.content || "").substring(0,160),
-"url": location.href,
-
+"headline":title,
+"description":description,
+"url":location.href,
 "mainEntityOfPage":{
-"@type":"WebPage",
-"@id": location.href
+ "@type":"WebPage",
+ "@id":location.href
 },
-
-"datePublished": pubDate,
-"dateModified": new Date().toISOString(),
-
-"image":[
-post.image || "https://factzone.online/logo.svg"
-],
-
+"image":[image],
 "author":{
-"@type":"Person",
-"name":"Avnish Ravat"
+ "@type":"Person",
+ "name":"Avnish Ravat"
 },
-
 "publisher":{
-"@type":"Organization",
-"name":"FactZone Official",
-
-"logo":{
-"@type":"ImageObject",
-"url":"https://factzone.online/logo.svg"
-}
+ "@type":"Organization",
+ "name":"FactZone Official",
+ "logo":{
+   "@type":"ImageObject",
+   "url":"https://factzone.online/logo.svg"
+ }
 }
 };
 
-const s = document.createElement("script");
-s.type = "application/ld+json";
-s.text = JSON.stringify(schema);
-document.head.appendChild(s);
+const oldSchema =
+document.getElementById("articleSchema");
+
+if(oldSchema){
+oldSchema.remove();
+}
+
+const script =
+document.createElement("script");
+
+script.type = "application/ld+json";
+script.id = "articleSchema";
+script.text =
+JSON.stringify(schema);
+
+document.head.appendChild(script);
+
+/* =========================
+   POST HTML
+========================= */
 
 postDiv.innerHTML = `
 
 <img
-src="${post.image || 'https://factzone.online/logo.svg'}"
-alt="${cleanTitle}"
+src="${image}"
+alt="${title}"
 loading="eager"
 class="w-full rounded-xl mb-5">
 
 <h1 class="text-4xl font-bold mb-4">
-${post.title || ''}
+${title}
 </h1>
 
 <h2 class="sr-only">
@@ -284,7 +420,7 @@ Technology Facts, Mystery Facts
 </h2>
 
 <p class="text-gray-700 text-lg leading-8 whitespace-pre-line">
-${post.content || ''}
+${post.content || ""}
 </p>
 
 <div class="mt-10 border-t pt-5">
@@ -304,75 +440,57 @@ Avnish Ravat
 </div>
 `;
 
-}else{
-
-postDiv.innerHTML = `
-<h2 class="text-3xl text-center">
-Post Not Found
-</h2>
-`;
-
 }
+catch(error){
 
-}catch(e){
-
-console.error(e);
+console.error(error);
 
 postDiv.innerHTML = `
 <h2 class="text-3xl text-center text-red-500">
 Error Loading Post
-</h2>
-`;
-
+</h2>`;
 }
 
 }
+
+/* =========================
+   RELATED POSTS
+========================= */
 
 async function loadRelatedPosts(){
-
-const relatedContainer =
-document.getElementById(
-"relatedContainer"
-);
 
 try{
 
 const q = query(
 collection(db,"posts"),
-limit(5)
+limit(6)
 );
 
 const snap = await getDocs(q);
 
-let html = '';
+let html = "";
 let count = 0;
 
-snap.forEach((d)=>{
+snap.forEach(docSnap=>{
 
-if(d.id !== id && count < 4){
+if(docSnap.id === id) return;
+if(count >= 4) return;
 
-const p = d.data();
+const p = docSnap.data();
 
 html += `
 
-<a href="detail.html?id=${d.id}"
-
-class="flex items-center gap-3
-p-2 rounded-xl
-hover:bg-gray-50
-border transition">
+<a
+href="detail.html?id=${docSnap.id}"
+class="flex items-center gap-3 p-2 border rounded-xl hover:bg-gray-50">
 
 <img
 src="${p.image || 'https://factzone.online/logo.svg'}"
+alt="${p.title || ''}"
+loading="lazy"
+class="w-16 h-16 object-cover rounded-lg">
 
-class="w-16 h-16
-rounded-lg
-object-cover
-shrink-0"
-
-alt="${p.title || 'Related Fact'}">
-
-<h3 class="font-bold text-sm line-clamp-2">
+<h3 class="font-bold text-sm">
 ${p.title || ''}
 </h3>
 
@@ -382,35 +500,38 @@ ${p.title || ''}
 
 count++;
 
-}
-
 });
 
-if(count === 0){
+if(count===0){
 
 document.getElementById(
 "relatedPosts"
 ).style.display = "none";
 
-}else{
+return;
+}
 
 relatedContainer.innerHTML = html;
 
 }
+catch(error){
 
-}catch(e){
+console.error(error);
 
 relatedContainer.innerHTML =
-"Failed to load related facts.";
+"Failed to load related posts.";
 
 }
 
 }
 
-loadPost();
-loadRelatedPosts();
+/* =========================
+   FAST LOAD
+========================= */
+
+Promise.all([
+loadPost(),
+loadRelatedPosts()
+]);
 
 </script>
-
-</body>
-</html>
