@@ -7,39 +7,65 @@
 
 <title>FactZone Post</title>
 
-<meta name="description" content="Amazing facts and educational knowledge">
-<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="description"
+content="Amazing facts and educational knowledge">
 
-<link rel="canonical" href="https://factzone.online/detail.html">
+<meta name="robots"
+content="index,follow,max-image-preview:large">
+
+<link rel="canonical"
+href="https://factzone.online/detail.html">
 
 <!-- Open Graph -->
-<meta property="og:type" content="article">
-<meta property="og:title" content="FactZone Post">
-<meta property="og:description" content="Amazing facts and educational knowledge">
-<meta property="og:image" content="https://factzone.online/logo.svg">
-<meta property="og:url" content="https://factzone.online/detail.html">
+
+<meta property="og:type"
+content="article">
+
+<meta property="og:title"
+content="FactZone Post">
+
+<meta property="og:description"
+content="Amazing facts and educational knowledge">
+
+<meta property="og:image"
+content="https://factzone.online/logo.svg">
+
+<meta property="og:url"
+content="https://factzone.online/detail.html">
 
 <!-- Twitter -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="FactZone Post">
-<meta name="twitter:description" content="Amazing facts and educational knowledge">
-<meta name="twitter:image" content="https://factzone.online/logo.svg">
+
+<meta name="twitter:card"
+content="summary_large_image">
+
+<meta name="twitter:title"
+content="FactZone Post">
+
+<meta name="twitter:description"
+content="Amazing facts and educational knowledge">
+
+<meta name="twitter:image"
+content="https://factzone.online/logo.svg">
 
 <link rel="icon" href="logo.svg">
 
 <!-- Adsense -->
+
 <script async
 src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-697419046628538"
 crossorigin="anonymous"></script>
 
 <!-- Tailwind -->
+
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
+
 body{
 background:#f3f4f6;
 font-family:Arial,sans-serif;
 }
+
 </style>
 
 </head>
@@ -50,11 +76,10 @@ font-family:Arial,sans-serif;
 
 <div class="flex items-center justify-between mb-5">
 
-<a href="index.html" class="flex items-center gap-3">
+<a href="index.html"
+class="flex items-center gap-3">
 
-<img
-src="logo.svg"
-alt="FactZone"
+<img src="logo.svg"
 class="w-12 h-12 rounded-full bg-white p-1 shadow">
 
 <h1 class="text-3xl font-bold">
@@ -72,7 +97,7 @@ class="bg-black text-white px-5 py-3 rounded-xl">
 
 </div>
 
-<!-- POST -->
+<!-- Skeleton Loader -->
 
 <div id="post"
 class="bg-white p-5 rounded-2xl shadow-lg">
@@ -84,14 +109,14 @@ class="bg-white p-5 rounded-2xl shadow-lg">
 <div class="h-10 bg-gray-200 rounded w-3/4 mb-4"></div>
 
 <div class="h-4 bg-gray-200 rounded mb-2"></div>
+
 <div class="h-4 bg-gray-200 rounded mb-2"></div>
-<div class="h-4 bg-gray-200 rounded"></div>
+
+<div class="h-4 bg-gray-200 rounded mb-2"></div>
 
 </div>
 
 </div>
-
-<!-- RELATED POSTS -->
 
 <section id="relatedPosts"
 class="mt-10 bg-white p-5 rounded-2xl shadow-lg">
@@ -100,18 +125,13 @@ class="mt-10 bg-white p-5 rounded-2xl shadow-lg">
 🔥 Related Facts
 </h2>
 
-<div id="relatedContainer"
-class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
+<div id="relatedContainer">
 Loading...
-
 </div>
 
 </section>
 
 </div>
-
-<!-- PART 2 SCRIPT HERE -->
 <script type="module">
 
 import { initializeApp }
@@ -131,58 +151,47 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 /* FIREBASE CONFIG */
 
 const firebaseConfig = {
-apiKey:"AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
-authDomain:"factzone-a9ace.firebaseapp.com",
-projectId:"factzone-a9ace",
-storageBucket:"factzone-a9ace.firebasestorage.app",
-messagingSenderId:"425838320650",
-appId:"1:425838320650:web:beab18baddf818cb73d3f3"
+apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
+authDomain: "factzone-a9ace.firebaseapp.com",
+projectId: "factzone-a9ace",
+storageBucket: "factzone-a9ace.firebasestorage.app",
+messagingSenderId: "425838320650",
+appId: "1:425838320650:web:beab18baddf818cb73d3f3"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* ELEMENTS */
+const postDiv = document.getElementById("post");
+const relatedContainer = document.getElementById("relatedContainer");
 
-const postDiv =
-document.getElementById("post");
-
-const relatedContainer =
-document.getElementById("relatedContainer");
-
-const params =
-new URLSearchParams(location.search);
-
-const id =
-params.get("id");
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
 
 /* LOAD POST */
 
-async function loadPost(){
+async function loadPost() {
 
 if(!id){
-
-postDiv.innerHTML = `
-<h2 class="text-3xl text-center text-red-500">
+postDiv.innerHTML =
+`<h2 class="text-3xl text-center text-red-500">
 Invalid Post URL
-</h2>
-`;
-
+</h2>`;
 return;
 }
 
-try{
+try {
 
-const snap =
-await getDoc(doc(db,"posts",id));
+const snap = await getDoc(
+doc(db,"posts",id)
+);
 
 if(!snap.exists()){
 
-postDiv.innerHTML = `
-<h2 class="text-3xl text-center">
+postDiv.innerHTML =
+`<h2 class="text-3xl text-center">
 Post Not Found
-</h2>
-`;
+</h2>`;
 
 return;
 }
@@ -192,60 +201,89 @@ const post = snap.data();
 const title =
 post.title || "FactZone Article";
 
+const image =
+post.image ||
+"https://factzone.online/logo.svg";
+
 const description =
 (post.content || "")
 .replace(/\n/g," ")
 .substring(0,160);
-
-const image =
-post.image ||
-"https://factzone.online/logo.svg";
 
 /* SEO */
 
 document.title =
 title + " | FactZone";
 
-document
-.querySelector('meta[name="description"]')
-.setAttribute("content",description);
+document.querySelector(
+'meta[name="description"]'
+)?.setAttribute(
+"content",
+description
+);
 
-document
-.querySelector('link[rel="canonical"]')
-.setAttribute("href",location.href);
+document.querySelector(
+'link[rel="canonical"]'
+)?.setAttribute(
+"href",
+location.href
+);
 
-document
-.querySelector('meta[property="og:title"]')
-.setAttribute("content",title);
+document.querySelector(
+'meta[property="og:title"]'
+)?.setAttribute(
+"content",
+title
+);
 
-document
-.querySelector('meta[property="og:description"]')
-.setAttribute("content",description);
+document.querySelector(
+'meta[property="og:description"]'
+)?.setAttribute(
+"content",
+description
+);
 
-document
-.querySelector('meta[property="og:image"]')
-.setAttribute("content",image);
+document.querySelector(
+'meta[property="og:image"]'
+)?.setAttribute(
+"content",
+image
+);
 
-document
-.querySelector('meta[property="og:url"]')
-.setAttribute("content",location.href);
+document.querySelector(
+'meta[property="og:url"]'
+)?.setAttribute(
+"content",
+location.href
+);
 
-document
-.querySelector('meta[name="twitter:title"]')
-.setAttribute("content",title);
+document.querySelector(
+'meta[name="twitter:title"]'
+)?.setAttribute(
+"content",
+title
+);
 
-document
-.querySelector('meta[name="twitter:description"]')
-.setAttribute("content",description);
+document.querySelector(
+'meta[name="twitter:description"]'
+)?.setAttribute(
+"content",
+description
+);
 
-document
-.querySelector('meta[name="twitter:image"]')
-.setAttribute("content",image);
+document.querySelector(
+'meta[name="twitter:image"]'
+)?.setAttribute(
+"content",
+image
+);
 
-/* SCHEMA */
+/* ARTICLE SCHEMA */
 
 const oldSchema =
-document.getElementById("articleSchema");
+document.getElementById(
+"articleSchema"
+);
 
 if(oldSchema){
 oldSchema.remove();
@@ -257,10 +295,6 @@ const schema = {
 "headline":title,
 "description":description,
 "url":location.href,
-"mainEntityOfPage":{
-"@type":"WebPage",
-"@id":location.href
-},
 "image":[image],
 "author":{
 "@type":"Person",
@@ -276,19 +310,19 @@ const schema = {
 }
 };
 
-const schemaScript =
+const script =
 document.createElement("script");
 
-schemaScript.type =
+script.type =
 "application/ld+json";
 
-schemaScript.id =
+script.id =
 "articleSchema";
 
-schemaScript.text =
+script.text =
 JSON.stringify(schema);
 
-document.head.appendChild(schemaScript);
+document.head.appendChild(script);
 
 /* POST HTML */
 
@@ -328,17 +362,18 @@ Avnish Ravat
 </p>
 
 </div>
+
 `;
 
-}catch(error){
+}
+catch(error){
 
 console.error(error);
 
-postDiv.innerHTML = `
-<h2 class="text-3xl text-center text-red-500">
+postDiv.innerHTML =
+`<h2 class="text-3xl text-center text-red-500">
 Error Loading Post
-</h2>
-`;
+</h2>`;
 }
 
 }
@@ -403,12 +438,13 @@ return;
 relatedContainer.innerHTML =
 html;
 
-}catch(error){
+}
+catch(error){
 
 console.error(error);
 
 relatedContainer.innerHTML =
-"Failed to load related facts.";
+"Failed to load related posts.";
 
 }
 
@@ -420,6 +456,3 @@ loadPost();
 loadRelatedPosts();
 
 </script>
-
-</body>
-</html>
