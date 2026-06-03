@@ -67,17 +67,15 @@ FactZone
 
 <div id="post" class="bg-white p-5 rounded-2xl shadow-lg">
 
-<div id="loader-placeholder" class="animate-pulse">
-
-<div class="h-72 bg-gray-200 rounded-xl mb-5"></div>
-
-<div class="h-10 bg-gray-200 rounded w-3/4 mb-4"></div>
-
-<div class="h-4 bg-gray-200 rounded mb-2"></div>
-<div class="h-4 bg-gray-200 rounded mb-2"></div>
-<div class="h-4 bg-gray-200 rounded mb-2"></div>
-
-</div>
+    <!-- SEO BACKUP UI: Googlebot के तुरंत आने पर यह टेक्स्ट रेंडर होगा ताकि स्क्रीनशॉट सफेद न आए -->
+    <div id="loader-placeholder">
+        <h1 class="text-2xl font-bold mb-4 text-gray-800">Interesting Educational Fact Article</h1>
+        <p class="text-gray-600 leading-relaxed mb-5">Read full verified facts, amazing science updates, historical mysteries, and knowledge articles on FactZone Official...</p>
+        <div class="animate-pulse flex flex-col gap-3">
+            <div class="h-60 bg-gray-200 rounded-xl"></div>
+            <div class="h-6 bg-gray-200 rounded w-1/2"></div>
+        </div>
+    </div>
 
 </div>
 
@@ -88,7 +86,7 @@ FactZone
 </h2>
 
 <div id="relatedContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-Loading...
+Loading related articles...
 </div>
 
 </section>
@@ -133,6 +131,11 @@ const relatedContainer = document.getElementById("relatedContainer");
 
 const params = new URLSearchParams(location.search);
 const id = params.get("id");
+
+// Googlebot को खाली टाइटल दिखाने से रोकने के लिए स्क्रिप्ट के शुरू होते ही टाइटल बदलें
+if(id) {
+    document.title = "Amazing Fact Update #" + id.substring(0,6) + " | FactZone";
+}
 
 /* FAST RENDER */
 
@@ -285,7 +288,6 @@ if(!id){
     return;
 }
 
-// 1. पहले लोकल स्टोरेज (कैश) से तुरंत पोस्ट दिखाएं
 const cacheKey = "factzone_" + id;
 const cached = localStorage.getItem(cacheKey);
 
@@ -298,12 +300,10 @@ if(cached){
 }
 
 try{
-    // 2. डेटाबेस से लाइव पोस्ट फ़ेच करें
     const snap = await getDoc(doc(db,"posts",id));
 
     if(!snap.exists()){
-        // अगर डेटाबेस में नहीं है और कैश भी खाली है तभी नॉट फाउंड दिखाएं
-        if(!localStorage.getItem(cacheKey)){
+        if(!cached){
             postDiv.innerHTML = `<h2 class="text-center text-2xl font-bold py-10">Post Not Found</h2>`;
         }
         return;
@@ -312,19 +312,18 @@ try{
     const post = snap.data();
     localStorage.setItem(cacheKey, JSON.stringify(post));
     
-    // स्क्रीन को अपडेट करें
     renderPost(post);
 
 }catch(error){
     console.error("Firebase Main Post Error:", error);
-    if(!localStorage.getItem(cacheKey)){
+    if(!cached){
         postDiv.innerHTML = `<h2 class="text-red-500 text-center text-2xl font-bold py-10">Error Loading Post</h2>`;
     }
 }
 
 }
 
-// 3. दोनों फ़ंक्शंस को बिना किसी setTimeout के एक साथ सिंक में चलाएं ताकि Googlebot पूरा पेज एक बार में पढ़ सके
+// बिना किसी टाइमआउट के दोनों फंक्शन्स को सिंक में चलाएं
 async function init(){
     await loadPost();
     await loadRelatedPosts();
