@@ -16,6 +16,8 @@ FactZone Official | Amazing Facts, Science Facts & Viral Knowledge
 
 <meta name="keywords" content="facts, amazing facts, science facts, technology facts, history facts, viral facts, hindi facts">
 
+<!-- SEO -->
+
 <meta name="robots" content="index,follow,max-image-preview:large">
 
 <meta name="googlebot" content="index,follow,max-image-preview:large">
@@ -25,6 +27,8 @@ FactZone Official | Amazing Facts, Science Facts & Viral Knowledge
 <meta name="theme-color" content="#000000">
 
 <link rel="canonical" href="https://factzone.online/">
+
+<!-- Open Graph -->
 
 <meta property="og:type" content="website">
 
@@ -36,6 +40,8 @@ FactZone Official | Amazing Facts, Science Facts & Viral Knowledge
 
 <meta property="og:image" content="https://factzone.online/logo.png">
 
+<!-- Twitter -->
+
 <meta name="twitter:card" content="summary_large_image">
 
 <meta name="twitter:title" content="FactZone Official">
@@ -44,9 +50,15 @@ FactZone Official | Amazing Facts, Science Facts & Viral Knowledge
 
 <meta name="twitter:image" content="https://factzone.online/logo.png">
 
+<!-- FAVICON -->
+
 <link rel="icon" href="logo.svg">
 
+<!-- ADSENSE -->
+
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-697419046628538" crossorigin="anonymous"></script>
+
+<!-- SCHEMA SEO -->
 
 <script type="application/ld+json">
 {
@@ -62,6 +74,8 @@ FactZone Official | Amazing Facts, Science Facts & Viral Knowledge
 ]
 }
 </script>
+
+<!-- TAILWIND -->
 
 <script src="https://cdn.tailwindcss.com"></script>
 
@@ -153,6 +167,8 @@ gtag('config', 'G-311JQXBXR9');
 
 <body>
 
+<!-- HEADER -->
+
 <header class="bg-black sticky top-0 z-50 shadow-lg">
 
 <div class="max-w-7xl mx-auto p-4">
@@ -184,16 +200,33 @@ Read science facts, technology facts, history facts, mystery facts and education
 
 </section>
   
+<!-- POSTS -->
+
 <main id="posts" class="max-w-7xl mx-auto p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
-<div id="seo-placeholder" class="col-span-full py-10 text-center">
-    <h2 class="text-2xl font-bold text-gray-700">Loading Amazing Facts...</h2>
-    <p class="text-gray-500 mt-2">रोचक और हैरान कर देने वाले तथ्य लोड हो रहे हैं।</p>
-</div>
+    <!-- SEO BACKUP CARDS: अगर Firebase लोडिंग में 1 सेकंड की भी देरी हुई, तो Googlebot को ये कीवर्ड्स दिखेंगे -->
+    <div id="seo-placeholder-cards" class="col-span-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full">
+        <div class="card shadow-lg">
+            <img src="logo.png" alt="Amazing Science Facts" class="post-image">
+            <div class="p-4 flex flex-col flex-1">
+                <h2 class="font-bold text-xl mb-2 line2">विज्ञान से जुड़े कुछ बेहद हैरान करने वाले रोचक तथ्य</h2>
+                <p class="text-gray-600 text-sm line2">Read amazing science facts, technology updates, and viral knowledge on FactZone Official...</p>
+            </div>
+        </div>
+        <div class="card shadow-lg">
+            <img src="logo.png" alt="Interesting History Facts" class="post-image">
+            <div class="p-4 flex flex-col flex-1">
+                <h2 class="font-bold text-xl mb-2 line2">इतिहास के कुछ ऐसे रहस्य जो आपको हैरान कर देंगे</h2>
+                <p class="text-gray-600 text-sm line2">Explore hidden secrets, amazing world history facts, and educational articles here...</p>
+            </div>
+        </div>
+    </div>
 
 </main>
 
   
+<!-- FOOTER -->
+
 <footer class="bg-black text-white mt-10">
 
 <div class="max-w-7xl mx-auto px-5 py-8 text-center">
@@ -219,6 +252,8 @@ Read science facts, technology facts, history facts, mystery facts and education
 </div>
 
 </footer>
+
+<!-- FIREBASE -->
 
 <script type="module">
 
@@ -286,7 +321,6 @@ try {
         return;
     }
 
-    // पोस्ट्स को एक एरे (Array) में इकट्ठा करेंगे ताकि उन्हें सॉर्ट किया जा सके
     const postsArray = [];
     querySnapshot.forEach((doc) => {
         postsArray.push({
@@ -295,7 +329,7 @@ try {
         });
     });
 
-    // यहाँ पर हम टाइमस्टैम्प के हिसाब से सॉर्ट कर रहे हैं ताकि सबसे नया फैक्ट सबसे ऊपर आए
+    // नई पोस्ट हमेशा ऊपर रखने के लिए टाइमस्टैम्प सॉर्टिंग
     postsArray.sort((a, b) => {
         const timeA = a.createdAt?.seconds || a.createdAt || 0;
         const timeB = b.createdAt?.seconds || b.createdAt || 0;
@@ -325,12 +359,14 @@ try {
         </a>`;
     });
 
+    // असली डेटा आ गया है, इसलिए बैकअप कार्ड्स हटाकर नया डेटा डालें
     postsContainer.innerHTML = htmlContent;
     localStorage.setItem("factzone_posts", htmlContent);
 
 } catch (error) {
     console.error("Error fetching data from Firebase:", error);
-    if(!postsContainer.innerHTML || postsContainer.querySelector("#seo-placeholder")){
+    // अगर सर्वर डाउन है और पुराना कैश भी नहीं है, तब एरर दिखाएं
+    if(!cachedPosts){
         postsContainer.innerHTML = `<h2 class="text-center text-2xl col-span-full text-red-500">Failed to load content. Please refresh.</h2>`;
     }
 }
