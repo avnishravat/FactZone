@@ -7,14 +7,11 @@
 
 <title>FactZone Post</title>
 
-<meta name="description"
-content="Amazing facts and educational knowledge">
+<meta name="description" content="Amazing facts and educational knowledge">
 
-<meta name="robots"
-content="index,follow,max-image-preview:large">
+<meta name="robots" content="index,follow,max-image-preview:large">
 
-<link rel="canonical"
-href="https://factzone.online/detail.html">
+<link rel="canonical" href="https://factzone.online/detail.html">
 
 <meta property="og:type" content="article">
 <meta property="og:title" content="FactZone Post">
@@ -29,9 +26,7 @@ href="https://factzone.online/detail.html">
 
 <link rel="icon" href="logo.svg">
 
-<script async
-src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-697419046628538"
-crossorigin="anonymous"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-697419046628538" crossorigin="anonymous"></script>
 
 <script src="https://cdn.tailwindcss.com"></script>
 
@@ -52,11 +47,9 @@ font-family:Arial,sans-serif;
 
 <div class="flex items-center justify-between mb-5">
 
-<a href="index.html"
-class="flex items-center gap-3">
+<a href="index.html" class="flex items-center gap-3">
 
-<img src="logo.svg"
-class="w-12 h-12 rounded-full bg-white p-1 shadow">
+<img src="logo.svg" class="w-12 h-12 rounded-full bg-white p-1 shadow">
 
 <h1 class="text-3xl font-bold">
 FactZone
@@ -64,8 +57,7 @@ FactZone
 
 </a>
 
-<a href="index.html"
-class="bg-black text-white px-5 py-3 rounded-xl">
+<a href="index.html" class="bg-black text-white px-5 py-3 rounded-xl">
 
 ← Back
 
@@ -73,10 +65,9 @@ class="bg-black text-white px-5 py-3 rounded-xl">
 
 </div>
 
-<div id="post"
-class="bg-white p-5 rounded-2xl shadow-lg">
+<div id="post" class="bg-white p-5 rounded-2xl shadow-lg">
 
-<div class="animate-pulse">
+<div id="loader-placeholder" class="animate-pulse">
 
 <div class="h-72 bg-gray-200 rounded-xl mb-5"></div>
 
@@ -90,22 +81,21 @@ class="bg-white p-5 rounded-2xl shadow-lg">
 
 </div>
 
-<section id="relatedPosts"
-class="mt-10 bg-white p-5 rounded-2xl shadow-lg">
+<section id="relatedPosts" class="mt-10 bg-white p-5 rounded-2xl shadow-lg">
 
 <h2 class="text-2xl font-bold mb-4">
 🔥 Related Facts
 </h2>
 
-<div id="relatedContainer">
+<div id="relatedContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 Loading...
 </div>
 
 </section>
+
 <script type="module">
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
 getFirestore,
@@ -115,8 +105,7 @@ collection,
 getDocs,
 query,
 limit
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* FIREBASE CONFIG */
 
@@ -139,79 +128,56 @@ appId:"1:425838320650:web:beab18baddf818cb73d3f3"
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const postDiv =
-document.getElementById("post");
+const postDiv = document.getElementById("post");
+const relatedContainer = document.getElementById("relatedContainer");
 
-const relatedContainer =
-document.getElementById("relatedContainer");
-
-const params =
-new URLSearchParams(location.search);
-
+const params = new URLSearchParams(location.search);
 const id = params.get("id");
 
 /* FAST RENDER */
 
 function renderPost(post){
+if(!post) return;
 
-const title =
-post.title || "FactZone Article";
+const title = post.title || "FactZone Article";
+const rawContent = post.content || "";
+const description = rawContent.replace(/\n/g," ").substring(0,160) || "Amazing facts and educational knowledge";
+const image = post.image || "https://factzone.online/logo.svg";
 
-const description =
-(post.content || "")
-.replace(/\n/g," ")
-.substring(0,160);
+/* SEO Dynamic Update */
 
-const image =
-post.image ||
-"https://factzone.online/logo.svg";
+document.title = title + " | FactZone";
 
-/* SEO */
+const metaDesc = document.querySelector('meta[name="description"]');
+if(metaDesc) metaDesc.setAttribute("content", description);
 
-document.title =
-title + " | FactZone";
+const canonical = document.querySelector('link[rel="canonical"]');
+if(canonical) canonical.setAttribute("href", location.href);
 
-document
-.querySelector('meta[name="description"]')
-.setAttribute("content",description);
+const ogTitle = document.querySelector('meta[property="og:title"]');
+if(ogTitle) ogTitle.setAttribute("content", title);
 
-document
-.querySelector('link[rel="canonical"]')
-.setAttribute("href",location.href);
+const ogDesc = document.querySelector('meta[property="og:description"]');
+if(ogDesc) ogDesc.setAttribute("content", description);
 
-document
-.querySelector('meta[property="og:title"]')
-.setAttribute("content",title);
+const ogImage = document.querySelector('meta[property="og:image"]');
+if(ogImage) ogImage.setAttribute("content", image);
 
-document
-.querySelector('meta[property="og:description"]')
-.setAttribute("content",description);
+const ogUrl = document.querySelector('meta[property="og:url"]');
+if(ogUrl) ogUrl.setAttribute("content", location.href);
 
-document
-.querySelector('meta[property="og:image"]')
-.setAttribute("content",image);
+const twTitle = document.querySelector('meta[name="twitter:title"]');
+if(twTitle) twTitle.setAttribute("content", title);
 
-document
-.querySelector('meta[property="og:url"]')
-.setAttribute("content",location.href);
+const twDesc = document.querySelector('meta[name="twitter:description"]');
+if(twDesc) twDesc.setAttribute("content", description);
 
-document
-.querySelector('meta[name="twitter:title"]')
-.setAttribute("content",title);
+const twImage = document.querySelector('meta[name="twitter:image"]');
+if(twImage) twImage.setAttribute("content", image);
 
-document
-.querySelector('meta[name="twitter:description"]')
-.setAttribute("content",description);
+/* SCHEMA GENERATION */
 
-document
-.querySelector('meta[name="twitter:image"]')
-.setAttribute("content",image);
-
-/* SCHEMA */
-
-const oldSchema =
-document.getElementById("articleSchema");
-
+const oldSchema = document.getElementById("articleSchema");
 if(oldSchema) oldSchema.remove();
 
 const schema = {
@@ -235,130 +201,36 @@ const schema = {
 }
 };
 
-const script =
-document.createElement("script");
-
-script.type =
-"application/ld+json";
-
-script.id =
-"articleSchema";
-
-script.text =
-JSON.stringify(schema);
-
+const script = document.createElement("script");
+script.type = "application/ld+json";
+script.id = "articleSchema";
+script.text = JSON.stringify(schema);
 document.head.appendChild(script);
 
-/* HTML */
+/* HTML GENERATION */
 
 postDiv.innerHTML = `
+<img src="${image}" alt="${title}" loading="eager" class="w-full rounded-xl mb-5 max-h-[450px] object-cover">
 
-<img
-src="${image}"
-alt="${title}"
-loading="eager"
-class="w-full rounded-xl mb-5">
-
-<h1 class="text-4xl font-bold mb-4">
+<h1 class="text-3xl md:text-4xl font-bold mb-4">
 ${title}
 </h1>
 
 <h2 class="sr-only">
-Amazing Facts, Science Facts,
-Technology Facts, Mystery Facts
+Amazing Facts, Science Facts, Technology Facts, Mystery Facts
 </h2>
 
 <p class="text-gray-700 text-lg leading-8 whitespace-pre-line">
-${post.content || ""}
+${rawContent}
 </p>
 
 <div class="mt-10 border-t pt-5">
-
-<h3 class="font-bold text-xl mb-2">
-About Author
-</h3>
-
+<h3 class="font-bold text-xl mb-2">About Author</h3>
 <p class="text-gray-600">
-Written by
-<a href="author.html"
-class="text-blue-600">
-Avnish Ravat
-</a>
+Written by <a href="author.html" class="text-blue-600 font-medium hover:underline">Avnish Ravat</a>
 </p>
-
 </div>
-
 `;
-
-}
-
-/* LOAD POST */
-
-async function loadPost(){
-
-if(!id){
-
-postDiv.innerHTML = `
-<h2 class="text-red-500 text-center text-3xl">
-Invalid Post URL
-</h2>`;
-
-return;
-
-}
-
-try{
-
-const cacheKey =
-"factzone_" + id;
-
-const cached =
-localStorage.getItem(cacheKey);
-
-if(cached){
-
-renderPost(
-JSON.parse(cached)
-);
-
-}
-
-const snap =
-await getDoc(
-doc(db,"posts",id)
-);
-
-if(!snap.exists()){
-
-postDiv.innerHTML = `
-<h2 class="text-center text-3xl">
-Post Not Found
-</h2>`;
-
-return;
-
-}
-
-const post =
-snap.data();
-
-localStorage.setItem(
-cacheKey,
-JSON.stringify(post)
-);
-
-renderPost(post);
-
-}catch(error){
-
-console.error(error);
-
-postDiv.innerHTML = `
-<h2 class="text-red-500 text-center text-3xl">
-Error Loading Post
-</h2>`;
-
-}
 
 }
 
@@ -367,82 +239,98 @@ Error Loading Post
 async function loadRelatedPosts(){
 
 try{
-
-const q = query(
-collection(db,"posts"),
-limit(6)
-);
-
-const snap =
-await getDocs(q);
+const q = query(collection(db,"posts"), limit(6));
+const snap = await getDocs(q);
 
 let html = "";
 let count = 0;
 
 snap.forEach(docSnap=>{
+    if(docSnap.id === id) return;
+    if(count >= 4) return;
 
-if(docSnap.id === id) return;
-if(count >= 4) return;
+    const p = docSnap.data();
 
-const p =
-docSnap.data();
+    html += `
+    <a href="detail.html?id=${docSnap.id}" class="flex items-center gap-3 p-3 border rounded-xl bg-gray-50 hover:bg-gray-100 transition shadow-sm">
+        <img src="${p.image || 'https://factzone.online/logo.svg'}" loading="lazy" class="w-16 h-16 object-cover rounded-lg flex-shrink-0">
+        <h3 class="font-bold text-sm text-gray-800 line-clamp-2">
+            ${p.title || ''}
+        </h3>
+    </a>`;
 
-html += `
-
-<a
-href="detail.html?id=${docSnap.id}"
-class="flex items-center gap-3 p-2 border rounded-xl hover:bg-gray-50">
-
-<img
-src="${p.image || 'https://factzone.online/logo.svg'}"
-loading="lazy"
-class="w-16 h-16 object-cover rounded-lg">
-
-<h3 class="font-bold text-sm">
-${p.title || ''}
-</h3>
-
-</a>
-
-`;
-
-count++;
-
+    count++;
 });
 
-if(count===0){
-
-document.getElementById(
-"relatedPosts"
-).style.display = "none";
-
-return;
-
+if(count === 0){
+    document.getElementById("relatedPosts").style.display = "none";
+    return;
 }
 
-relatedContainer.innerHTML =
-html;
+relatedContainer.innerHTML = html;
 
 }catch(error){
-
-console.error(error);
-
-relatedContainer.innerHTML =
-"Failed to load related posts.";
-
+    console.error("Related Posts Error:", error);
+    relatedContainer.innerHTML = "<p class='text-gray-500'>Failed to load related posts.</p>";
 }
 
 }
 
-/* START */
+/* LOAD MAIN POST */
 
-loadPost();
+async function loadPost(){
 
-setTimeout(()=>{
+if(!id){
+    postDiv.innerHTML = `<h2 class="text-red-500 text-center text-2xl font-bold py-10">Invalid Post URL</h2>`;
+    return;
+}
 
-loadRelatedPosts();
+// 1. पहले लोकल स्टोरेज (कैश) से तुरंत पोस्ट दिखाएं
+const cacheKey = "factzone_" + id;
+const cached = localStorage.getItem(cacheKey);
 
-},100);
+if(cached){
+    try {
+        renderPost(JSON.parse(cached));
+    } catch(e) {
+        console.error("Cache parsing error", e);
+    }
+}
+
+try{
+    // 2. डेटाबेस से लाइव पोस्ट फ़ेच करें
+    const snap = await getDoc(doc(db,"posts",id));
+
+    if(!snap.exists()){
+        // अगर डेटाबेस में नहीं है और कैश भी खाली है तभी नॉट फाउंड दिखाएं
+        if(!localStorage.getItem(cacheKey)){
+            postDiv.innerHTML = `<h2 class="text-center text-2xl font-bold py-10">Post Not Found</h2>`;
+        }
+        return;
+    }
+
+    const post = snap.data();
+    localStorage.setItem(cacheKey, JSON.stringify(post));
+    
+    // स्क्रीन को अपडेट करें
+    renderPost(post);
+
+}catch(error){
+    console.error("Firebase Main Post Error:", error);
+    if(!localStorage.getItem(cacheKey)){
+        postDiv.innerHTML = `<h2 class="text-red-500 text-center text-2xl font-bold py-10">Error Loading Post</h2>`;
+    }
+}
+
+}
+
+// 3. दोनों फ़ंक्शंस को बिना किसी setTimeout के एक साथ सिंक में चलाएं ताकि Googlebot पूरा पेज एक बार में पढ़ सके
+async function init(){
+    await loadPost();
+    await loadRelatedPosts();
+}
+
+init();
 
 </script>
 
