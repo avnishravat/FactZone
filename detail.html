@@ -89,7 +89,7 @@ box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
 
 <section id="relatedPosts" class="mt-10 bg-white p-5 rounded-2xl shadow-lg" style="margin-top:2.5rem; background:#fff; padding:1.25rem; border-radius:1rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);">
 <h2 class="text-2xl font-bold mb-4" style="font-size:1.5rem; font-weight:700; margin-bottom:1rem;">🔥 Related Facts</h2>
-<div id="relatedContainer" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap:1rem;">
+<div id="relatedContainer" style="display:grid; grid-template-cols: repeat(auto-fill, minmax(240px, 1fr)); gap:1rem;">
 <p style="color:#6b7280;">Loading related articles...</p>
 </div>
 </section>
@@ -130,7 +130,7 @@ if(id) {
     document.title = "Amazing Fact Update #" + id.substring(0,6) + " | FactZone";
 }
 
-// सुरक्षित रेंडरिंग फ़ंक्शन (डेटा की मौजूदगी की कड़ाई से जांच करता है)
+// कंटेंट रेंडर करने का मुख्य फंक्शन
 function renderPost(post){
 if(!post) return;
 
@@ -139,7 +139,7 @@ const rawContent = post.content || "Amazing facts and verified educational detai
 const description = rawContent.replace(/\n/g," ").substring(0,160) || "Amazing facts and educational knowledge";
 const image = post.image || "https://factzone.online/logo.svg";
 
-// रेंडर होते ही तुरंत एसईओ हेडर अपडेट करें
+// एसईओ टैग्स लाइव अपडेट
 document.title = title + " | FactZone";
 
 const metaDesc = document.querySelector('meta[name="description"]');
@@ -169,11 +169,10 @@ if(twDesc) twDesc.setAttribute("content", description);
 const twImage = document.querySelector('meta[name="twitter:image"]');
 if(twImage) twImage.setAttribute("content", image);
 
-// पुराने स्कीमा को रिमूव करें ताकि डुप्लिकेट न हो
 const oldSchema = document.getElementById("articleSchema");
 if(oldSchema) oldSchema.remove();
 
-// न्यू जनरेशन JSON-LD स्कीमा
+// JSON-LD स्कीमा में "Avnish Ravat" अपडेटेड
 const schema = {
 "@context":"https://schema.org",
 "@type":"Article",
@@ -201,7 +200,7 @@ script.id = "articleSchema";
 script.text = JSON.stringify(schema);
 document.head.appendChild(script);
 
-// लाइव डेटा को DOM में डालें (यह प्लेसहोल्डर को हटा देगा)
+// लाइव डेटा को इंजेक्ट करना (यहाँ भी Avnish Ravat अपडेटेड है)
 postDiv.innerHTML = `
 <img src="${image}" alt="${title}" loading="eager" style="width:100%; border-radius:0.75rem; margin-bottom:1.25rem; max-height:450px; object-fit:cover;">
 <h1 class="text-3xl md:text-4xl font-bold mb-4" style="font-size:2rem; font-weight:700; margin-bottom:1rem;">${title}</h1>
@@ -209,14 +208,13 @@ postDiv.innerHTML = `
 <p class="text-gray-700 text-lg leading-8" style="color:#374151; font-size:1.125rem; line-height:2rem; white-space:pre-line;">${rawContent}</p>
 <div style="margin-top:2.5rem; border-top:1px solid #e5e7eb; padding-top:1.25rem;">
 <h3 style="font-weight:700; font-size:1.25rem; margin-bottom:0.5rem;">About Author</h3>
-<p style="color:#4b5563;">Written by <a href="author.html" style="color:#2563eb; text-decoration:none; font-weight:500;">Awaneesh</a></p>
+<p style="color:#4b5563;">Written by <a href="author.html" style="color:#2563eb; text-decoration:none; font-weight:500;">Avnish Ravat</a></p>
 </div>
 `;
 }
 
 // मुख्य पोस्ट को लोड करने का क्रैश-प्रूफ लॉजिक
 async function loadPost(){
-// अगर URL में id नहीं है (जैसे सामान्य Googlebot क्रॉल), तो क्रैश होने से बचाएं और डिफ़ॉल्ट रूप से प्लेसहोल्डर रहने दें
 if(!id) {
     console.log("No ID provided. Rendering default SEO structure.");
     return;
@@ -297,22 +295,11 @@ try{
 }
 }
 
-// सेफ बूटस्ट्रैप इनिशियलाइज़र
 async function init(){
-    try {
-        await loadPost();
-    } catch(err) {
-        console.error("Error running loadPost:", err);
-    }
-    
-    try {
-        await loadRelatedPosts();
-    } catch(err) {
-        console.error("Error running loadRelatedPosts:", err);
-    }
+    try { await loadPost(); } catch(err) {}
+    try { await loadRelatedPosts(); } catch(err) {}
 }
 
-// स्क्रिप्ट एग्जीक्यूशन स्टार्ट
 init();
 </script>
 
