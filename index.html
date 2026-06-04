@@ -37,8 +37,8 @@
     "logo":"https://factzone.online/logo.svg",
     "description":"Hindi educational facts platform",
     "sameAs":[
-      "https://www.instagram.com/YOUR_PROFILE/",
-      "https://www.youtube.com/@YOUR_CHANNEL"
+      "https://www.instagram.com/avnish__1203/",
+      "https://www.youtube.com/@DirectionNewsWorldwide08"
     ]
   }
   </script>
@@ -140,35 +140,42 @@
     const postsContainer = document.getElementById("posts");
 
     async function loadPosts() {
-      const cachedPosts = localStorage.getItem("factzone_posts");
-      if (cachedPosts) postsContainer.innerHTML = cachedPosts;
-
       try {
         const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
         const querySnapshot = await getDocs(q);
 
         if (querySnapshot.empty) {
-          if (!cachedPosts) postsContainer.innerHTML = `<h2 class="text-center text-2xl col-span-full">No Posts Found</h2>`;
+          postsContainer.innerHTML = `<h2 class="text-center text-2xl col-span-full">No Posts Found</h2>`;
           return;
         }
 
         let htmlContent = "";
+        let isFirst = true;
+
         querySnapshot.forEach((doc) => {
           const post = { id: doc.id, ...doc.data() };
           htmlContent += `
             <a href="detail.html?id=${post.id}" class="card shadow-lg">
-              <img src="${post.image || 'logo.svg'}" alt="${post.title || ''}" class="post-image" loading="lazy" width="500" height="220">
+              <img
+                src="${post.image || 'logo.svg'}"
+                alt="${post.title || ''}"
+                class="post-image"
+                width="500"
+                height="220"
+                ${isFirst ? 'fetchpriority="high"' : 'loading="lazy"'}
+              >
               <div class="p-4 flex flex-col flex-1">
                 <h2 class="font-bold text-xl mb-2 line2">${post.title || ''}</h2>
                 <p class="text-gray-600 text-sm line2">${post.desc || ''}</p>
               </div>
             </a>`;
+          isFirst = false;
         });
 
         postsContainer.innerHTML = htmlContent;
-        localStorage.setItem("factzone_posts", htmlContent);
       } catch (error) {
         console.error("Error fetching data from Firebase:", error);
+        postsContainer.innerHTML = `<h2 class="text-center text-2xl col-span-full">Failed to load posts</h2>`;
       }
     }
 
