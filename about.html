@@ -22,6 +22,18 @@
 
 <body class="bg-black text-white">
 
+<!-- Top Navigation Bar -->
+<nav class="border-b border-gray-800 bg-gray-950 sticky top-0 z-50">
+  <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
+    <div class="text-xl font-bold tracking-wider text-emerald-400">FactZone</div>
+    <div class="flex gap-6 text-sm font-medium">
+      <a href="index.html" class="text-gray-300 hover:text-white transition-colors">Home</a>
+      <a href="about.html" class="text-emerald-400 border-b-2 border-emerald-400 pb-1">About</a>
+      <a href="contact.html" class="text-gray-300 hover:text-white transition-colors">Contact</a>
+    </div>
+  </div>
+</nav>
+
 <div class="max-w-4xl mx-auto p-6">
 
 <h1 class="text-4xl font-bold mb-6">
@@ -42,27 +54,42 @@ Thank you for visiting FactZone.
 
 <!-- --- Developer & Connect Section --- -->
 <div class="border-t border-gray-800 pt-6 mt-8">
-<h2 class="text-xl font-semibold mb-3 text-gray-400">Developer Info</h2>
+<h2 class="text-xl font-semibold mb-6 text-gray-400">Developer Info</h2>
 
-<!-- Brackets wala Hindi name yahan se hata diya hai -->
-<p class="text-xl font-medium text-white mb-0.5">
-Awaneesh
-</p>
+<div class="flex flex-col md:flex-row items-start md:items-center gap-6 bg-gray-900/50 p-6 rounded-2xl border border-gray-800">
+  
+  <!-- Image Container matching image_1d7ca5.jpg -->
+  <div class="relative w-28 h-28 rounded-full overflow-hidden border-2 border-emerald-500/50 flex-shrink-0 bg-gray-800">
+    <img 
+      src="profile.jpg" 
+      alt="Awaneesh" 
+      class="w-full h-full object-cover object-[center_18%]"
+    />
+  </div>
 
-<!-- Also Known As Section -->
-<p class="text-xs text-gray-400 mb-2 italic">
-Also known as: <span class="text-gray-300 not-italic font-medium">Avnish Ravat</span>
-</p>
+  <!-- Developer Details -->
+  <div class="flex-1">
+    <p class="text-2xl font-semibold text-white mb-0.5">
+      Awaneesh
+    </p>
 
-<p class="text-md text-emerald-400 mb-4">Developer and Founder</p>
+    <!-- Also Known As Section -->
+    <p class="text-xs text-gray-400 mb-2 italic">
+      Also known as: <span class="text-gray-300 not-italic font-medium">Avnish Ravat</span>
+    </p>
 
-<div class="flex flex-col sm:flex-row gap-4 mt-2 text-sm text-gray-400">
-  <a href="https://instagram.com/avnish__1203" target="_blank" class="hover:text-pink-500 transition-colors flex items-center gap-1">
-    <span>📸 Instagram:</span> <span class="text-gray-200 font-mono">@avnish__1203</span>
-  </a>
-  <a href="https://youtube.com/@DirectionNewsWorldwide08" target="_blank" class="hover:text-red-500 transition-colors flex items-center gap-1">
-    <span>🎥 YouTube:</span> <span class="text-gray-200">@DirectionNewsWorldwide08</span>
-  </a>
+    <p class="text-md text-emerald-400 font-medium mb-4">Developer and Founder</p>
+
+    <div class="flex flex-col sm:flex-row gap-4 text-sm text-gray-400">
+      <a href="https://instagram.com/avnish__1203" target="_blank" class="hover:text-pink-500 transition-colors flex items-center gap-1.5">
+        <span>📸 Instagram:</span> <span class="text-gray-200 font-mono">@avnish__1203</span>
+      </a>
+      <a href="https://youtube.com/@DirectionNewsWorldwide08" target="_blank" class="hover:text-red-500 transition-colors flex items-center gap-1.5">
+        <span>🎥 YouTube:</span> <span class="text-gray-200">@DirectionNewsWorldwide08</span>
+      </a>
+    </div>
+  </div>
+
 </div>
 </div>
 
