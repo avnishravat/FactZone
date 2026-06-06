@@ -15,9 +15,6 @@
 <link rel="icon" href="logo.svg">
 
 <script src="https://cdn.tailwindcss.com"></script>
-  
-<meta charset="UTF-8">                                                                     
-<title>FactZone</title>
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-697419046628538" crossorigin="anonymous"></script>
 
@@ -31,19 +28,73 @@
 Contact Us
 </h1>
 
-<p class="text-gray-300 leading-8 mb-4">
+<p class="text-gray-300 leading-8 mb-6">
 If you have any questions, suggestions, or business inquiries, feel free to contact us.
 </p>
 
-<div class="bg-gray-900 p-6 rounded-xl border border-gray-800">
+<!-- Grid Section for Info and Form -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+  
+  <!-- Left Column: Contact Details -->
+  <div class="space-y-4">
+    <!-- Contact Details Card -->
+    <div class="bg-gray-900 p-6 rounded-xl border border-gray-800 space-y-4">
+      <div>
+        <p class="text-sm text-gray-400 mb-1">📧 Email</p>
+        <a href="mailto:avnishravat20@gmail.com" class="text-blue-400 hover:underline">avnishravat20@gmail.com</a>
+      </div>
+      
+      <div>
+        <p class="text-sm text-gray-400 mb-1">📞 Phone Number</p>
+        <a href="tel:+919555906106" class="text-gray-200 hover:text-emerald-400 transition-colors">+91 9555906106</a>
+      </div>
 
-<p class="mb-4">
-📧 Email:
-</p>
+      <div>
+        <p class="text-sm text-gray-400 mb-1">💬 WhatsApp</p>
+        <a href="https://wa.me/83035424515" target="_blank" class="text-emerald-400 hover:underline">Chat on WhatsApp</a>
+      </div>
+    </div>
 
-<p class="text-blue-400">
-avnishravat20@gmail.com
-</p>
+    <!-- Location Card -->
+    <div class="bg-gray-900 p-6 rounded-xl border border-gray-800">
+      <p class="text-sm text-gray-400 mb-2">📍 Our Location</p>
+      <div class="text-gray-200 space-y-1 text-sm leading-relaxed">
+        <p><span class="text-gray-500">Village:</span> Gauri Shankerpur Grant</p>
+        <p><span class="text-gray-500">Post:</span> Neverna</p>
+        <p><span class="text-gray-500">District:</span> Unnao</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Column: Contact Form -->
+  <div class="bg-gray-900 p-6 rounded-xl border border-gray-800">
+    <h2 class="text-xl font-semibold mb-4 text-gray-200">Send a Message</h2>
+    
+    <!-- Form Action targets Formspree for handling emails -->
+    <form action="https://formspree.io/f/your_formspree_id_here" method="POST" class="space-y-4">
+      <div>
+        <label class="block text-xs text-gray-400 mb-1 uppercase tracking-wider">Your Name</label>
+        <input type="text" name="name" required class="w-full bg-black border border-gray-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-emerald-500 transition-colors" placeholder="John Doe">
+      </div>
+
+      <div>
+        <label class="block text-xs text-gray-400 mb-1 uppercase tracking-wider">Your Email</label>
+        <input type="email" name="_replyto" required class="w-full bg-black border border-gray-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-emerald-500 transition-colors" placeholder="name@example.com">
+      </div>
+
+      <div>
+        <label class="block text-xs text-gray-400 mb-1 uppercase tracking-wider">Message</label>
+        <textarea name="message" rows="4" required class="w-full bg-black border border-gray-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-emerald-500 transition-colors resize-none" placeholder="Type your message here..."></textarea>
+      </div>
+
+      <!-- Hidden field to prevent spam -->
+      <input type="text" name="_gotcha" style="display:none">
+
+      <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-black font-semibold p-2.5 rounded-lg transition-colors shadow-lg">
+        Submit Message
+      </button>
+    </form>
+  </div>
 
 </div>
 
