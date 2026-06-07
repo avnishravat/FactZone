@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light">
 <head>
   <link rel="author" href="humans.txt">
   <meta charset="UTF-8">
@@ -11,10 +11,9 @@
   <meta name="robots" content="index,follow,max-image-preview:large">
   <meta name="googlebot" content="index,follow,max-image-preview:large">
   <meta name="author" content="Awaneesh">
-  <meta name="theme-color" content="#000000">
+  <meta name="theme-color" content="#000000" id="themeMeta">
   <link class="canonical" href="https://factzone.online/">
 
-  <!-- Super Performance Preconnect Links -->
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
   <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
@@ -33,55 +32,94 @@
   <link rel="icon" href="logo.svg">
 
   <style>
-    body{
-      background:#f3f4f6;
-      font-family:Arial,sans-serif;
-      margin:0;
-      padding:0;
-      overflow-x:hidden;
+    /* Complete Theme Variable Sync for Instant Matching without breaking layout */
+    :root {
+      --bg-body: #f3f4f6;
+      --bg-card: #ffffff;
+      --text-main: #000000;
+      --text-muted: #4b5563;
+      --border-color: #e5e7eb;
+      --hover-border: #000000;
     }
-    .card{
-      transition:.3s;
-      border:2px solid #e5e7eb;
-      background:#fff;
-      border-radius:20px;
-      overflow:hidden;
-      display:flex;
-      flex-direction:column;
-      height:100%;
+
+    html.dark {
+      --bg-body: #09090b;
+      --bg-card: #141417;
+      --text-main: #f4f4f5;
+      --text-muted: #a1a1aa;
+      --border-color: #27272a;
+      --hover-border: #ffffff;
     }
-    .card:hover{
-      transform:translateY(-5px);
-      border-color:black;
+
+    body {
+      background-color: var(--bg-body) !important;
+      color: var(--text-main) !important;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      transition: background-color 0.2s ease, color 0.2s ease;
     }
-    .post-image{
-      width:100%;
-      height:220px;
-      object-fit:cover;
-      display:block;
-      background:#ddd;
+    
+    .card {
+      transition: .3s;
+      border: 2px solid var(--border-color);
+      background-color: var(--bg-card) !important;
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
     }
-    .line2{
-      display:-webkit-box;
-      -webkit-line-clamp:2;
-      -webkit-box-orient:vertical;
-      overflow:hidden;
+    
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: var(--hover-border);
     }
-    #posts{
-      align-items:start;
-      min-height:300px;
+    
+    .post-image {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+      background: #ddd;
     }
-    ::-webkit-scrollbar{
-      width:8px;
+
+    html.dark .post-image {
+      background: #27272a;
     }
-    ::-webkit-scrollbar-thumb{
-      background:#888;
-      border-radius:20px;
+
+    .line2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
+    
+    #posts {
+      align-items: start;
+      min-height: 300px;
+    }
+    
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 20px; }
   </style>
 
-  <!-- Tailwind Script Defer loaded -->
   <script src="https://cdn.tailwindcss.com" defer></script>
+  <script>
+    window.tailwind = {
+      config: {
+        darkMode: 'class'
+      }
+    }
+    // Instant theme application script
+    const savedTheme = localStorage.getItem("factzone_theme") || "light";
+    if (savedTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
 
   <script type="application/ld+json">
   {
@@ -115,24 +153,26 @@
 
 <body>
 
-  <header class="bg-black sticky top-0 z-50 shadow-lg">
+  <header class="bg-black sticky top-0 z-50 shadow-lg border-b border-zinc-900">
     <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col sm:flex-row gap-3 items-center justify-between">
       
-      <a href="index.html" class="flex items-center gap-2.5 self-start sm:self-center">
-        <div class="p-[2px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 rounded-full flex items-center justify-center shadow-md">
-          <img src="logo.svg" alt="FactZone Logo" class="w-8 h-8 rounded-full bg-black p-0.5" width="32" height="32">
-        </div>
-        <h1 class="text-xl md:text-2xl font-bold text-white tracking-wide">FactZone</h1>
-      </a>
+      <div class="flex items-center justify-between w-full sm:w-auto gap-4">
+        <a href="index.html" class="flex items-center gap-2.5">
+          <div class="p-[2px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 rounded-full flex items-center justify-center shadow-md">
+            <img src="logo.svg" alt="FactZone Logo" class="w-8 h-8 rounded-full bg-black p-0.5" width="32" height="32">
+          </div>
+          <span class="text-xl md:text-2xl font-bold text-white tracking-wide">FactZone</span>
+        </a>
+        
+        <button id="themeToggle" onclick="toggleTheme()" class="p-1.5 px-2 rounded-full border border-zinc-800 bg-zinc-950 text-xs shadow-sm hover:scale-105 transition-transform" aria-label="Toggle dark mode">🌙</button>
+      </div>
       
       <div class="w-full sm:w-auto flex items-center gap-2 max-w-md">
         <div class="relative flex-1 sm:w-64">
-          <!-- Accessibility Fix: Added aria-label -->
-          <input type="text" id="searchInput" aria-label="Search posts" placeholder="Search posts..." class="w-full px-4 py-1.5 rounded-full outline-none text-sm text-black border border-gray-700 bg-white placeholder-gray-400">
+          <input type="text" id="searchInput" aria-label="Search posts" placeholder="Search posts..." class="w-full px-4 py-1.5 rounded-full outline-none text-sm text-black border border-gray-300 bg-white placeholder-gray-400">
         </div>
         
-        <!-- Accessibility Fix: Added aria-label to select menu -->
-        <select id="filterInput" aria-label="Filter posts by category" class="bg-gray-900 text-white text-xs font-medium px-3 py-1.5 rounded-full border border-gray-800 outline-none cursor-pointer hover:bg-gray-800 transition-colors">
+        <select id="filterInput" aria-label="Filter posts by category" class="bg-zinc-950 text-white text-xs font-medium px-3 py-1.5 rounded-full border border-zinc-800 outline-none cursor-pointer hover:bg-zinc-900 transition-colors">
           <option value="all">All Topics</option>
           <option value="science">Science / विज्ञान</option>
           <option value="tech">Tech / तकनीक</option>
@@ -145,9 +185,9 @@
     </div>
   </header>
 
-  <section class="max-w-7xl mx-auto px-5 py-4">
-    <h2 class="text-2xl font-bold">Amazing Facts, Science Facts & Knowledge</h2>
-    <p class="text-gray-600 mt-2">Read science facts, technology facts, history facts, mystery facts and educational knowledge articles.</p>
+  <section class="max-w-7xl mx-auto px-5 py-6">
+    <h1 class="text-2xl font-bold m-0" style="color: var(--text-main);">Amazing Facts, Science Facts & Knowledge</h1>
+    <p class="mt-2 m-0" style="color: var(--text-muted);">Read science facts, technology facts, history facts, mystery facts and educational knowledge articles.</p>
   </section>
     
   <main id="posts" class="max-w-7xl mx-auto p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -158,35 +198,61 @@
       } else {
         document.write(`
           <div id="seo-placeholder-cards" class="col-span-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full">
-            <div class="card shadow-lg">
+            <article class="card shadow-lg">
               <img src="logo.svg" alt="Amazing Science Facts" class="post-image p-4 bg-gray-900 object-contain" width="100%" height="220">
               <div class="p-4 flex flex-col flex-1">
-                <h2 class="font-bold text-xl mb-2 line2">विज्ञान से जुड़े कुछ बेहद हैरान करने वाले रोचक तथ्य</h2>
-                <p class="text-gray-600 text-sm line2">Read amazing science facts on FactZone Official...</p>
+                <h2 class="font-bold text-xl mb-2 line2" style="color: var(--text-main);">विज्ञान से जुड़े कुछ बेहद हैरान करने वाले रोचक तथ्य</h2>
+                <p class="text-sm line2" style="color: var(--text-muted);">Read amazing science facts on FactZone Official...</p>
               </div>
-            </div>
+            </article>
           </div>
         `);
       }
     </script>
   </main>
 
-  <footer class="bg-black text-white mt-10">
+  <footer class="bg-black text-white mt-12 border-t border-zinc-900">
     <div class="max-w-7xl mx-auto px-5 py-8 text-center">
       <div class="flex flex-wrap gap-5 justify-center text-sm mb-5">
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
-        <a href="privacy.html">Privacy</a>
-        <a href="terms.html">Terms</a>
-        <a href="disclaimer.html">Disclaimer</a>
+        <a href="about.html" class="text-gray-300 hover:text-white transition-colors">About</a>
+        <a href="contact.html" class="text-gray-300 hover:text-white transition-colors">Contact</a>
+        <a href="privacy.html" class="text-gray-300 hover:text-white transition-colors">Privacy</a>
+        <a href="terms.html" class="text-gray-300 hover:text-white transition-colors">Terms</a>
+        <a href="disclaimer.html" class="text-gray-300 hover:text-white transition-colors">Disclaimer</a>
       </div>
-      <p class="text-gray-400">
-        © 2026 FactZone • <a href="author.html" class="hover:text-white underline transition">Awaneesh</a>
+      <p class="text-gray-400 text-xs m-0">
+        © 2026 FactZone • Designed by <a href="author.html" class="hover:text-white underline transition">Awaneesh</a>
       </p>
     </div>
   </footer>
 
   <script type="module">
+    // Fully Synchronized High Performance Theme Engine
+    window.toggleTheme = function() {
+      const isDark = document.documentElement.classList.contains("dark");
+      
+      if (isDark) {
+        document.documentElement.classList.remove("dark");
+        document.documentElement.classList.add("light");
+        localStorage.setItem("factzone_theme", "light");
+        document.getElementById("themeToggle").innerText = "🌙";
+        document.getElementById("themeMeta").setAttribute("content", "#000000");
+      } else {
+        document.documentElement.classList.remove("light");
+        document.documentElement.classList.add("dark");
+        localStorage.setItem("factzone_theme", "dark");
+        document.getElementById("themeToggle").innerText = "☀️";
+        document.getElementById("themeMeta").setAttribute("content", "#09090b");
+      }
+      
+      window.filterPosts();
+    }
+
+    // Assign indicators accurately on load
+    const activeStateIsDark = document.documentElement.classList.contains("dark");
+    document.getElementById("themeToggle").innerText = activeStateIsDark ? "☀️" : "🌙";
+    document.getElementById("themeMeta").setAttribute("content", activeStateIsDark ? "#09090b" : "#000000");
+
     window.filterPosts = function() {
       const searchValue = document.getElementById("searchInput").value.toLowerCase();
       const selectedCategory = document.getElementById("filterInput").value;
@@ -199,7 +265,7 @@
         viral: ["viral", "रोचक", "तथ्य", "amazing", "facts", "knowledge", "fact"]
       };
 
-      document.querySelectorAll("#posts a").forEach(card => {
+      document.querySelectorAll("#posts article").forEach(card => {
         const cardText = card.innerText.toLowerCase();
         const matchesSearch = cardText.includes(searchValue);
         let matchesCategory = false;
@@ -280,14 +346,19 @@
 
               let htmlContent = "";
               postsArray.forEach((post)=>{
+                // SEO Fix: Wrapped within semantic article node & converted inner text to h3 hierarchy for proper indexing
                 htmlContent += `
-                <a href="detail.html?id=${post.id}" class="card shadow-lg">
-                  <img src="${post.image || 'https://via.placeholder.com/500'}" alt="${post.title || 'FactZone Post'}" class="post-image" loading="lazy" width="100%" height="220">
-                  <div class="p-4 flex flex-col flex-1">
-                    <h2 class="font-bold text-xl mb-2 line2">${post.title || ''}</h2>
-                    <p class="text-gray-600 text-sm line2">${post.desc || ''}</p>
-                  </div>
-                </a>`;
+                <article style="display:block;">
+                  <a href="detail.html?id=${post.id}" class="card shadow-lg">
+                    <div style="overflow:hidden;">
+                      <img src="${post.image || 'https://via.placeholder.com/500'}" alt="${post.title || 'FactZone Post'}" class="post-image hover:scale-105 transition-transform duration-500" loading="lazy" width="100%" height="220">
+                    </div>
+                    <div class="p-4 flex flex-col flex-1">
+                      <h3 class="font-bold text-xl mb-2 line2" style="color: var(--text-main); margin:0;">${post.title || ''}</h3>
+                      <p class="text-sm line2" style="color: var(--text-muted); margin:0;">${post.desc || ''}</p>
+                    </div>
+                  </a>
+                </article>`;
               });
 
               postsContainer.innerHTML = htmlContent;
