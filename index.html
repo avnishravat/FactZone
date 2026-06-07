@@ -30,7 +30,7 @@
   <meta name="twitter:description" content="Amazing facts and educational platform">
   <meta name="twitter:image" content="https://factzone.online/logo.png">
 
-  <link rel="icon" href="logo.svg">
+  <link class="favicon" rel="icon" href="logo.svg">
 
   <!-- Critical Styles First (Prevents Layout Shifts) -->
   <style>
@@ -40,6 +40,10 @@
       margin:0;
       padding:0;
       overflow-x:hidden;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    html.dark body {
+      background: #111827; /* Dark background */
     }
     .card{
       transition:.3s;
@@ -51,9 +55,16 @@
       flex-direction:column;
       height:100%;
     }
+    html.dark .card {
+      background: #1f2937;
+      border-color: #374151;
+    }
     .card:hover{
       transform:translateY(-5px);
       border-color:black;
+    }
+    html.dark .card:hover {
+      border-color: #ffffff;
     }
     .post-image{
       width:100%;
@@ -81,10 +92,24 @@
     }
   </style>
 
-  <!-- Tailwind Loaded via Defer/Async Strategy to not block rendering -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Inline Script to prevent Theme Flash on Load -->
+  <script>
+    if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
 
-  <!-- Lazy Loading AdSense Strategy to save Performance Score -->
+  <!-- Tailwind Config for Class-based Dark Mode -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+    }
+  </script>
+
+  <!-- Lazy Loading AdSense Strategy -->
   <script>
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
@@ -93,7 +118,7 @@
         adsScript.crossOrigin = "anonymous";
         adsScript.async = true;
         document.head.appendChild(adsScript);
-      }, 1500); // Loads after critical content is ready
+      }, 1500);
     });
   </script>
 
@@ -136,24 +161,31 @@
   </script>
 </head>
 
-<body>
+<body class="dark:text-white">
 
-  <header class="bg-black sticky top-0 z-50 shadow-lg">
+  <header class="bg-black sticky top-0 z-50 shadow-lg border-b dark:border-gray-800">
     <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col sm:flex-row gap-3 items-center justify-between">
       
-      <a href="index.html" class="flex items-center gap-2.5 self-start sm:self-center">
-        <div class="p-[2px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 rounded-full flex items-center justify-center shadow-md">
-          <img src="logo.svg" alt="FactZone Logo" class="w-8 h-8 rounded-full bg-black p-0.5" width="32" height="32">
-        </div>
-        <h1 class="text-xl md:text-2xl font-bold text-white tracking-wide">FactZone</h1>
-      </a>
+      <div class="flex items-center justify-between w-full sm:w-auto">
+        <a href="index.html" class="flex items-center gap-2.5">
+          <div class="p-[2px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 rounded-full flex items-center justify-center shadow-md">
+            <img src="logo.svg" alt="FactZone Logo" class="w-8 h-8 rounded-full bg-black p-0.5" width="32" height="32">
+          </div>
+          <h1 class="text-xl md:text-2xl font-bold text-white tracking-wide">FactZone</h1>
+        </a>
+
+        <!-- Dark Mode Toggle Button for Mobile (Hidden on Desktop) -->
+        <button id="themeToggleMobile" class="sm:hidden text-white p-2 rounded-full bg-gray-900 hover:bg-gray-800 border border-gray-700 transition-colors">
+          <span class="dark:hidden">🌙</span><span class="hidden dark:inline">☀️</span>
+        </button>
+      </div>
       
       <div class="w-full sm:w-auto flex items-center gap-2 max-w-md">
         <div class="relative flex-1 sm:w-64">
-          <input type="text" id="searchInput" placeholder="Search posts..." class="w-full px-4 py-1.5 rounded-full outline-none text-sm text-black border border-gray-700 bg-white placeholder-gray-400">
+          <input type="text" id="searchInput" placeholder="Search posts..." class="w-full px-4 py-1.5 rounded-full outline-none text-sm text-black border border-gray-700 bg-white placeholder-gray-400 dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder-gray-500">
         </div>
         
-        <select id="filterInput" class="bg-gray-900 text-white text-xs font-medium px-3 py-1.5 rounded-full border border-gray-800 outline-none cursor-pointer hover:bg-gray-800 transition-colors">
+        <select id="filterInput" class="bg-gray-900 text-white text-xs font-medium px-3 py-1.5 rounded-full border border-gray-800 outline-none cursor-pointer hover:bg-gray-800 transition-colors dark:border-gray-700">
           <option value="all">All Topics</option>
           <option value="science">🔬 Science / विज्ञान</option>
           <option value="tech">💻 Tech / तकनीक</option>
@@ -161,14 +193,19 @@
           <option value="mystery">🔮 Mystery / रहस्य</option>
           <option value="viral">🔥 Viral / रोचक तथ्य</option>
         </select>
+
+        <!-- Dark Mode Toggle Button for Desktop -->
+        <button id="themeToggle" class="hidden sm:block text-white p-2 rounded-full bg-gray-900 hover:bg-gray-800 border border-gray-800 transition-colors">
+          <span class="dark:hidden">🌙</span><span class="hidden dark:inline">☀️</span>
+        </button>
       </div>
 
     </div>
   </header>
 
   <section class="max-w-7xl mx-auto px-5 py-4">
-    <h2 class="text-2xl font-bold">Amazing Facts, Science Facts & Knowledge</h2>
-    <p class="text-gray-600 mt-2">Read science facts, technology facts, history facts, mystery facts and educational knowledge articles.</p>
+    <h2 class="text-2xl font-bold dark:text-white">Amazing Facts, Science Facts & Knowledge</h2>
+    <p class="text-gray-600 dark:text-gray-400 mt-2">Read science facts, technology facts, history facts, mystery facts and educational knowledge articles.</p>
   </section>
     
   <main id="posts" class="max-w-7xl mx-auto p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -177,27 +214,46 @@
       <div class="card shadow-lg">
         <img src="logo.svg" alt="Amazing Science Facts" class="post-image p-4 bg-gray-900 object-contain" width="100%" height="220">
         <div class="p-4 flex flex-col flex-1">
-          <h2 class="font-bold text-xl mb-2 line2">विज्ञान से जुड़े कुछ बेहद हैरान करने वाले रोचक तथ्य</h2>
-          <p class="text-gray-600 text-sm line2">Read amazing science facts, technology updates, and viral knowledge on FactZone Official...</p>
+          <h2 class="font-bold text-xl mb-2 line2 dark:text-white">विज्ञान से जुड़े कुछ बेहद हैरान करने वाले रोचक तथ्य</h2>
+          <p class="text-gray-600 dark:text-gray-400 text-sm line2">Read amazing science facts, technology updates, and viral knowledge on FactZone Official...</p>
         </div>
       </div>
     </div>
   </main>
 
-  <footer class="bg-black text-white mt-10">
+  <footer class="bg-black text-white mt-10 border-t dark:border-gray-900">
     <div class="max-w-7xl mx-auto px-5 py-8 text-center">
       <div class="flex flex-wrap gap-5 justify-center text-sm mb-5">
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
-        <a href="privacy.html">Privacy</a>
-        <a href="terms.html">Terms</a>
-        <a href="disclaimer.html">Disclaimer</a>
+        <a href="about.html" class="hover:text-gray-300">About</a>
+        <a href="contact.html" class="hover:text-gray-300">Contact</a>
+        <a href="privacy.html" class="hover:text-gray-300">Privacy</a>
+        <a href="terms.html" class="hover:text-gray-300">Terms</a>
+        <a href="disclaimer.html" class="hover:text-gray-300">Disclaimer</a>
       </div>
       <p class="text-gray-400">
         © 2026 FactZone • <a href="author.html" class="hover:text-white underline transition">Awaneesh</a>
       </p>
     </div>
   </footer>
+
+  <!-- Dark Mode Toggle Script -->
+  <script>
+    const toggleBtn = document.getElementById('themeToggle');
+    const toggleBtnMobile = document.getElementById('themeToggleMobile');
+
+    function toggleTheme() {
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+
+    toggleBtn.addEventListener('click', toggleTheme);
+    toggleBtnMobile.addEventListener('click', toggleTheme);
+  </script>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -258,7 +314,7 @@
 
         if(querySnapshot.empty){
           if(!cachedPosts) {
-            postsContainer.innerHTML = `<h2 class="text-center text-2xl col-span-full">No Posts Found</h2>`;
+            postsContainer.innerHTML = `<h2 class="text-center text-2xl col-span-full dark:text-white">No Posts Found</h2>`;
           }
           return;
         }
@@ -280,8 +336,8 @@
           <a href="detail.html?id=${post.id}" class="card shadow-lg">
             <img src="${post.image || 'https://via.placeholder.com/500'}" alt="${post.title || 'FactZone Post'}" class="post-image" loading="lazy" width="100%" height="220">
             <div class="p-4 flex flex-col flex-1">
-              <h2 class="font-bold text-xl mb-2 line2">${post.title || ''}</h2>
-              <p class="text-gray-600 text-sm line2">${post.desc || ''}</p>
+              <h2 class="font-bold text-xl mb-2 line2 dark:text-white">${post.title || ''}</h2>
+              <p class="text-gray-600 dark:text-gray-400 text-sm line2">${post.desc || ''}</p>
             </div>
           </a>`;
         });
