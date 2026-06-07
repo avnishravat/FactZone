@@ -9,6 +9,9 @@
   <meta name="robots" content="index,follow,max-image-preview:large">
   <link rel="canonical" href="https://factzone.online/detail.html">
 
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
+
   <meta property="og:type" content="article">
   <meta property="og:title" content="FactZone - Amazing Facts & Educational Knowledge">
   <meta property="og:description" content="Read verified facts, science updates, historical mysteries, and knowledge articles.">
@@ -22,62 +25,76 @@
 
   <link rel="icon" href="logo.svg">
 
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-697419046628538" crossorigin="anonymous"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-
   <style>
     body{background:#f3f4f6;font-family:Arial,sans-serif;margin:0;padding:0}
     .main-wrapper{max-width:896px;margin:0 auto;padding:1.25rem}
     .line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
     .fallback-box{background:#fff;width:100%;height:350px;border-radius:.75rem;border:1px solid #e5e7eb;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:1.25rem;padding:1rem}
   </style>
+
+  <script src="https://cdn.tailwindcss.com" defer></script>
 </head>
 
 <body>
   <div class="main-wrapper">
     <div class="flex items-center justify-between mb-5">
-      <a href="index.html" class="flex items-center gap-3" style="text-decoration:none;color:inherit;">
-        <img src="logo.svg" alt="FactZone" width="48" height="48" class="w-12 h-12 rounded-full bg-white p-1 shadow">
-        <h1 class="text-3xl font-bold">FactZone</h1>
+      <a href="index.html" class="flex items-center gap-3" style="text-decoration:none;color:inherit;" aria-label="FactZone Home">
+        <img src="logo.svg" alt="FactZone Logo" width="48" height="48" class="w-12 h-12 rounded-full bg-white p-1 shadow">
+        <span class="text-3xl font-bold">FactZone</span>
       </a>
-      <a href="index.html" class="bg-black text-white px-5 py-3 rounded-xl" style="text-decoration:none;font-weight:bold;">← Back</a>
+      <a href="index.html" class="bg-black text-white px-5 py-3 rounded-xl hover:bg-gray-800 transition-colors" style="text-decoration:none;font-weight:bold;" aria-label="Go back to home page">← Back</a>
     </div>
 
     <div id="post" class="bg-white p-5 rounded-2xl shadow-lg">
-      <div id="loader-placeholder">
-        <h1 class="text-3xl font-bold mb-4 text-gray-800">Interesting Educational Fact Article</h1>
-        <p class="text-gray-600 leading-relaxed mb-5">Read full verified facts, science updates, historical mysteries, and knowledge articles on FactZone Official.</p>
-        <div class="fallback-box">
-          <div style="font-size:1.25rem;font-weight:bold;color:#1f2937;margin-bottom:.5rem;">FactZone Knowledge Hub</div>
-          <div style="font-size:.875rem;color:#6b7280;">Loading amazing content...</div>
-        </div>
-      </div>
+      <script>
+        const paramsCheck = new URLSearchParams(location.search);
+        const currentId = paramsCheck.get("id");
+        const initialCached = localStorage.getItem("factzone_" + currentId);
+        
+        if (initialCached) {
+          const post = JSON.parse(initialCached);
+          const title = post.title || "FactZone Educational Article";
+          const rawContent = post.content || "Amazing facts and verified educational details.";
+          const image = post.image || "https://factzone.online/logo.svg";
+          
+          document.write(`
+            <img src="${image}" alt="${title}" loading="eager" width="1200" height="675" style="width:100%;border-radius:.75rem;margin-bottom:1.25rem;max-height:450px;object-fit:cover;">
+            <h1 class="text-3xl md:text-4xl font-bold mb-4">${title}</h1>
+            <p class="text-gray-700 text-lg leading-8" style="white-space:pre-line;">${rawContent}</p>
+            <div style="margin-top:2.5rem;border-top:1px solid #e5e7eb;padding-top:1.25rem;">
+              <h3 style="font-weight:700;font-size:1.25rem;margin-bottom:.5rem;">About Author</h3>
+              <p style="color:#4b5563;">Written by <a href="author.html" style="color:#2563eb;text-decoration:none;font-weight:500;">Awaneesh</a></p>
+            </div>
+          `);
+        } else {
+          document.write(`
+            <div id="loader-placeholder">
+              <h1 class="text-3xl font-bold mb-4 text-gray-800">Interesting Educational Fact Article</h1>
+              <p class="text-gray-600 leading-relaxed mb-5">Read full verified facts, science updates, historical mysteries, and knowledge articles on FactZone Official.</p>
+              <div class="fallback-box">
+                <div style="font-size:1.25rem;font-weight:bold;color:#1f2937;margin-bottom:.5rem;">FactZone Knowledge Hub</div>
+                <div style="font-size:.875rem;color:#6b7280;">Loading amazing content...</div>
+              </div>
+            </div>
+          `);
+        }
+      </script>
     </div>
 
     <section id="relatedPosts" class="mt-10 bg-white p-5 rounded-2xl shadow-lg">
       <h2 class="text-2xl font-bold mb-4">Related Facts</h2>
-      <div id="relatedContainer" style="display:grid;gap:1rem;"></div>
+      <div id="relatedContainer" style="display:grid;gap:1rem;">
+        <script>
+          const cachedRelatedHtml = localStorage.getItem("factzone_related");
+          if (cachedRelatedHtml) {
+            document.write(cachedRelatedHtml);
+          }
+        </script>
+      </div>
     </section>
   </div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, doc, getDoc, collection, getDocs, query, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
-      authDomain: "factzone-a9ace.firebaseapp.com",
-      databaseURL: "https://factzone-a9ace-default-rtdb.firebaseio.com",
-      projectId: "factzone-a9ace",
-      storageBucket: "factzone-a9ace.firebasestorage.app",
-      messagingSenderId: "425838320650",
-      appId: "1:425838320650:web:beab18baddf818cb73d3f3",
-      measurementId: "G-311JQXBXR9"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
     const postDiv = document.getElementById("post");
     const relatedContainer = document.getElementById("relatedContainer");
     const params = new URLSearchParams(location.search);
@@ -155,70 +172,97 @@
       `;
     }
 
-    async function loadPost() {
-      if (!id) return;
+    // Lazy load non-critical scripts & Firebase only when user interacts or after baseline timeout
+    let integrationLoaded = false;
+    
+    function loadHeavyIntegrations() {
+      if (integrationLoaded) return;
+      integrationLoaded = true;
 
-      const cacheKey = "factzone_" + id;
-      let cached = null;
+      // 1. Dynamic AdSense Injection
+      const adsScript = document.createElement('script');
+      adsScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-697419046628538";
+      adsScript.crossOrigin = "anonymous";
+      adsScript.async = true;
+      document.head.appendChild(adsScript);
 
-      try {
-        cached = localStorage.getItem(cacheKey);
-        if (cached) renderPost(JSON.parse(cached));
-      } catch(e) {}
+      // 2. Dynamic Firebase Processing
+      import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js").then((firebaseModule) => {
+        import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js").then((firestoreModule) => {
+          
+          const firebaseConfig = {
+            apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
+            authDomain: "factzone-a9ace.firebaseapp.com",
+            databaseURL: "https://factzone-a9ace-default-rtdb.firebaseio.com",
+            projectId: "factzone-a9ace",
+            storageBucket: "factzone-a9ace.firebasestorage.app",
+            messagingSenderId: "425838320650",
+            appId: "1:425838320650:web:beab18baddf818cb73d3f3",
+            measurementId: "G-311JQXBXR9"
+          };
 
-      try {
-        const snap = await getDoc(doc(db, "posts", id));
-        if (snap.exists()) {
-          const post = snap.data();
-          try { localStorage.setItem(cacheKey, JSON.stringify(post)); } catch(e) {}
-          renderPost(post);
-        } else if (!cached) {
-          postDiv.innerHTML = `<h1 class="text-2xl font-bold text-center p-10">Post Not Found</h1>`;
-        }
-      } catch(error) {
-        console.error("Firebase fetch error:", error);
-      }
-    }
+          const app = firebaseModule.initializeApp(firebaseConfig);
+          const db = firestoreModule.getFirestore(app);
 
-    async function loadRelatedPosts() {
-      const relatedCacheKey = "factzone_related";
-      try {
-        const cachedRelated = localStorage.getItem(relatedCacheKey);
-        if (cachedRelated) relatedContainer.innerHTML = cachedRelated;
-      } catch(e) {}
+          async function loadPost() {
+            if (!id) return;
+            const cacheKey = "factzone_" + id;
+            try {
+              const snap = await firestoreModule.getDoc(firestoreModule.doc(db, "posts", id));
+              if (snap.exists()) {
+                const post = snap.data();
+                try { localStorage.setItem(cacheKey, JSON.stringify(post)); } catch(e) {}
+                renderPost(post);
+              } else if (!localStorage.getItem(cacheKey)) {
+                postDiv.innerHTML = `<h1 class="text-2xl font-bold text-center p-10">Post Not Found</h1>`;
+              }
+            } catch(error) {
+              console.error("Firebase fetch error:", error);
+            }
+          }
 
-      try {
-        const q = query(collection(db, "posts"), limit(6));
-        const snap = await getDocs(q);
-        let html = "";
-        let count = 0;
+          async function loadRelatedPosts() {
+            try {
+              const q = firestoreModule.query(firestoreModule.collection(db, "posts"), firestoreModule.limit(6));
+              const snap = await firestoreModule.getDocs(q);
+              let html = "";
+              let count = 0;
 
-        snap.forEach(docSnap => {
-          if (docSnap.id === id || count >= 4) return;
-          const p = docSnap.data();
-          html += `
-            <a href="detail.html?id=${docSnap.id}" style="display:flex;align-items:center;gap:.75rem;padding:.75rem;border:1px solid #e5e7eb;border-radius:.75rem;background:#f9fafb;text-decoration:none;color:inherit;">
-              <img src="${p.image || 'https://factzone.online/logo.svg'}" loading="lazy" width="64" height="64" style="width:64px;height:64px;object-fit:cover;border-radius:.5rem;flex-shrink:0;">
-              <h3 style="font-weight:700;font-size:.875rem;color:#1f2937;margin:0;" class="line-clamp-2">${p.title || ''}</h3>
-            </a>`;
-          count++;
+              snap.forEach(docSnap => {
+                if (docSnap.id === id || count >= 4) return;
+                const p = docSnap.data();
+                html += `
+                  <a href="detail.html?id=${docSnap.id}" style="display:flex;align-items:center;gap:.75rem;padding:.75rem;border:1px solid #e5e7eb;border-radius:.75rem;background:#f9fafb;text-decoration:none;color:inherit;" aria-label="Read related fact: ${p.title || ''}">
+                    <img src="${p.image || 'https://factzone.online/logo.svg'}" loading="lazy" width="64" height="64" style="width:64px;height:64px;object-fit:cover;border-radius:.5rem;flex-shrink:0;" alt="">
+                    <h3 style="font-weight:700;font-size:.875rem;color:#1f2937;margin:0;" class="line-clamp-2">${p.title || ''}</h3>
+                  </a>`;
+                count++;
+              });
+
+              if (html) {
+                relatedContainer.innerHTML = html;
+                try { localStorage.setItem("factzone_related", html); } catch(e) {}
+              } else if (!localStorage.getItem("factzone_related")) {
+                document.getElementById("relatedPosts").style.display = "none";
+              }
+            } catch(e) {
+              console.error("Related posts fetch error:", e);
+            }
+          }
+
+          loadPost();
+          loadRelatedPosts();
         });
-
-        if (html) {
-          relatedContainer.innerHTML = html;
-          try { localStorage.setItem(relatedCacheKey, html); } catch(e) {}
-        } else {
-          document.getElementById("relatedPosts").style.display = "none";
-        }
-      } catch(e) {
-        console.error("Related posts fetch error:", e);
-      }
+      });
     }
 
-    (async function init() {
-      await loadPost();
-      await loadRelatedPosts();
-    })();
+    // Interaction bindings for instant optimization execution
+    window.addEventListener('scroll', loadHeavyIntegrations, { passive: true });
+    window.addEventListener('touchstart', loadHeavyIntegrations, { passive: true });
+    window.addEventListener('mousemove', loadHeavyIntegrations, { passive: true });
+    
+    // Safety fallback
+    setTimeout(loadHeavyIntegrations, 3000);
   </script>
 </body>
 </html>
