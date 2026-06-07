@@ -127,16 +127,18 @@
       
       <div class="w-full sm:w-auto flex items-center gap-2 max-w-md">
         <div class="relative flex-1 sm:w-64">
-          <input type="text" id="searchInput" placeholder="Search posts..." class="w-full px-4 py-1.5 rounded-full outline-none text-sm text-black border border-gray-700 bg-white placeholder-gray-400">
+          <!-- Accessibility Fix: Added aria-label -->
+          <input type="text" id="searchInput" aria-label="Search posts" placeholder="Search posts..." class="w-full px-4 py-1.5 rounded-full outline-none text-sm text-black border border-gray-700 bg-white placeholder-gray-400">
         </div>
         
-        <select id="filterInput" class="bg-gray-900 text-white text-xs font-medium px-3 py-1.5 rounded-full border border-gray-800 outline-none cursor-pointer hover:bg-gray-800 transition-colors">
+        <!-- Accessibility Fix: Added aria-label to select menu -->
+        <select id="filterInput" aria-label="Filter posts by category" class="bg-gray-900 text-white text-xs font-medium px-3 py-1.5 rounded-full border border-gray-800 outline-none cursor-pointer hover:bg-gray-800 transition-colors">
           <option value="all">All Topics</option>
-          <option value="science">🔬 Science / विज्ञान</option>
-          <option value="tech">💻 Tech / तकनीक</option>
-          <option value="history">📜 History / इतिहास</option>
-          <option value="mystery">🔮 Mystery / रहस्य</option>
-          <option value="viral">🔥 Viral / रोचक तथ्य</option>
+          <option value="science">Science / विज्ञान</option>
+          <option value="tech">Tech / तकनीक</option>
+          <option value="history">History / इतिहास</option>
+          <option value="mystery">Mystery / रहस्य</option>
+          <option value="viral">Viral / रोचक तथ्य</option>
         </select>
       </div>
 
@@ -148,10 +150,8 @@
     <p class="text-gray-600 mt-2">Read science facts, technology facts, history facts, mystery facts and educational knowledge articles.</p>
   </section>
     
-  <!-- MAIN CONTAINER (INSTANT INSTANT RENDER FROM LOCALSTORAGE) -->
   <main id="posts" class="max-w-7xl mx-auto p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
     <script>
-      // Page render block hone se pehle local storage se posts inject kar do
       const cached = localStorage.getItem("factzone_posts");
       if(cached) {
         document.write(cached);
@@ -187,7 +187,6 @@
   </footer>
 
   <script type="module">
-    // Filter posts standalone function
     window.filterPosts = function() {
       const searchValue = document.getElementById("searchInput").value.toLowerCase();
       const selectedCategory = document.getElementById("filterInput").value;
@@ -195,7 +194,7 @@
       const categoryMap = {
         science: ["science", "विज्ञान", "वैज्ञानिक", "space", "अंतरिक्ष", "ग्रह", "earth"],
         tech: ["tech", "technology", "तकनीक", "मोबाइल", "computer", "ai", "इंटरनेट"],
-        history: ["history", "इતિહાસ", "पुराना", "राजा", " किला", "प्राचीन", "mystery"],
+        history: ["history", "इतिहास", "पुराना", "राजा", "किला", "प्राचीन", "mystery"],
         mystery: ["mystery", "रहस्य", "अनसुलझा", "हैरान", "भूत", "रहस्यमयी"],
         viral: ["viral", "रोचक", "तथ्य", "amazing", "facts", "knowledge", "fact"]
       };
@@ -219,14 +218,12 @@
     document.getElementById("searchInput").addEventListener("input", window.filterPosts);
     document.getElementById("filterInput").addEventListener("change", window.filterPosts);
 
-    // Smart Interactivity Delay Strategy for Scripts
     let heavyScriptsLoaded = false;
     
     function loadHeavyScripts() {
       if (heavyScriptsLoaded) return;
       heavyScriptsLoaded = true;
 
-      // 1. Dynamic Analytics Load
       const gaScript = document.createElement('script');
       gaScript.src = "https://www.googletagmanager.com/gtag/js?id=G-311JQXBXR9";
       gaScript.async = true;
@@ -239,14 +236,12 @@
         gtag('config', 'G-311JQXBXR9');
       };
 
-      // 2. Dynamic AdSense Load
       const adsScript = document.createElement('script');
       adsScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-697419046628538";
       adsScript.crossOrigin = "anonymous";
       adsScript.async = true;
       document.head.appendChild(adsScript);
 
-      // 3. Dynamic Firebase Import and Core Fetch
       import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js").then((firebaseModule) => {
         import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js").then((firestoreModule) => {
           
@@ -307,12 +302,10 @@
       });
     }
 
-    // Trigger loading on user movement, scroll or mouse intent
     window.addEventListener('scroll', loadHeavyScripts, { passive: true });
     window.addEventListener('touchstart', loadHeavyScripts, { passive: true });
     window.addEventListener('mousemove', loadHeavyScripts, { passive: true });
     
-    // Safety fallback: load anyway after 3.5 seconds if user is idle
     setTimeout(loadHeavyScripts, 3500);
   </script>
 
