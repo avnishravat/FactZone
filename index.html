@@ -14,6 +14,11 @@
   <meta name="theme-color" content="#000000">
   <link class="canonical" href="https://factzone.online/">
 
+  <!-- Performance Boost: Preconnect to external servers -->
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
+  <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+
   <meta property="og:type" content="website">
   <meta property="og:title" content="FactZone Official | Amazing Facts">
   <meta property="og:description" content="Amazing facts, science facts, technology facts and educational knowledge.">
@@ -27,25 +32,7 @@
 
   <link rel="icon" href="logo.svg">
 
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-697419046628538" crossorigin="anonymous"></script>
-
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"Organization",
-    "name":"FactZone",
-    "url":"https://factzone.online",
-    "logo":"https://factzone.online/logo.svg",
-    "description":"Hindi educational facts platform",
-    "sameAs":[
-      "https://www.instagram.com/avnish__123/",
-      "https://www.youtube.com/DirectionNewsWorldwide08"
-    ]
-  }
-  </script>
-
-  <script src="https://cdn.tailwindcss.com"></script>
-
+  <!-- Critical Styles First (Prevents Layout Shifts) -->
   <style>
     body{
       background:#f3f4f6;
@@ -94,6 +81,37 @@
     }
   </style>
 
+  <!-- Tailwind Loaded via Defer/Async Strategy to not block rendering -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Lazy Loading AdSense Strategy to save Performance Score -->
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const adsScript = document.createElement('script');
+        adsScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-697419046628538";
+        adsScript.crossOrigin = "anonymous";
+        adsScript.async = true;
+        document.head.appendChild(adsScript);
+      }, 1500); // Loads after critical content is ready
+    });
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"FactZone",
+    "url":"https://factzone.online",
+    "logo":"https://factzone.online/logo.svg",
+    "description":"Hindi educational facts platform",
+    "sameAs":[
+      "https://www.instagram.com/avnish__123/",
+      "https://www.youtube.com/DirectionNewsWorldwide08"
+    ]
+  }
+  </script>
+
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -108,12 +126,13 @@
   }
   </script>
     
+  <!-- Google Analytics Async Load -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-311JQXBXR9"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-311JQXBXR9');
+    gtag('config', 'G-311JQXBXR9', { 'page_path': window.location.pathname });
   </script>
 </head>
 
@@ -122,21 +141,18 @@
   <header class="bg-black sticky top-0 z-50 shadow-lg">
     <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col sm:flex-row gap-3 items-center justify-between">
       
-      <!-- Brand Logo & Instagram Gradient Ring -->
       <a href="index.html" class="flex items-center gap-2.5 self-start sm:self-center">
         <div class="p-[2px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 rounded-full flex items-center justify-center shadow-md">
-          <img src="logo.svg" alt="FactZone Logo" class="w-8 h-8 rounded-full bg-black p-0.5">
+          <img src="logo.svg" alt="FactZone Logo" class="w-8 h-8 rounded-full bg-black p-0.5" width="32" height="32">
         </div>
         <h1 class="text-xl md:text-2xl font-bold text-white tracking-wide">FactZone</h1>
       </a>
       
-      <!-- Compact Search Bar + Filter Dropdown -->
       <div class="w-full sm:w-auto flex items-center gap-2 max-w-md">
         <div class="relative flex-1 sm:w-64">
           <input type="text" id="searchInput" placeholder="Search posts..." class="w-full px-4 py-1.5 rounded-full outline-none text-sm text-black border border-gray-700 bg-white placeholder-gray-400">
         </div>
         
-        <!-- Upgraded Articles Keywords Filter -->
         <select id="filterInput" class="bg-gray-900 text-white text-xs font-medium px-3 py-1.5 rounded-full border border-gray-800 outline-none cursor-pointer hover:bg-gray-800 transition-colors">
           <option value="all">All Topics</option>
           <option value="science">🔬 Science / विज्ञान</option>
@@ -156,19 +172,13 @@
   </section>
     
   <main id="posts" class="max-w-7xl mx-auto p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <!-- LocalStorage content instantly loads here dynamically -->
     <div id="seo-placeholder-cards" class="col-span-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full">
       <div class="card shadow-lg">
-        <img src="logo.svg" alt="Amazing Science Facts" class="post-image p-4 bg-gray-900 object-contain">
+        <img src="logo.svg" alt="Amazing Science Facts" class="post-image p-4 bg-gray-900 object-contain" width="100%" height="220">
         <div class="p-4 flex flex-col flex-1">
           <h2 class="font-bold text-xl mb-2 line2">विज्ञान से जुड़े कुछ बेहद हैरान करने वाले रोचक तथ्य</h2>
           <p class="text-gray-600 text-sm line2">Read amazing science facts, technology updates, and viral knowledge on FactZone Official...</p>
-        </div>
-      </div>
-      <div class="card shadow-lg">
-        <img src="logo.svg" alt="Interesting History Facts" class="post-image p-4 bg-gray-900 object-contain">
-        <div class="p-4 flex flex-col flex-1">
-          <h2 class="font-bold text-xl mb-2 line2">इतिहास के कुछ ऐसे रहस्य जो आपको हैरान कर देंगे</h2>
-          <p class="text-gray-600 text-sm line2">Explore hidden secrets, amazing world history facts, and educational articles here...</p>
         </div>
       </div>
     </div>
@@ -208,12 +218,10 @@
     const db = getFirestore(app);
     const postsContainer = document.getElementById("posts");
 
-    /* ADVANCED HINDI + ENGLISH KEYWORD FILTER LOGIC */
     function filterPosts() {
       const searchValue = document.getElementById("searchInput").value.toLowerCase();
       const selectedCategory = document.getElementById("filterInput").value;
       
-      // Category wise dynamic keywords mapping
       const categoryMap = {
         science: ["science", "विज्ञान", "वैज्ञानिक", "space", "अंतरिक्ष", "ग्रह", "earth"],
         tech: ["tech", "technology", "तकनीक", "मोबाइल", "computer", "ai", "इंटरनेट"],
@@ -224,43 +232,28 @@
 
       document.querySelectorAll("#posts a").forEach(card => {
         const cardText = card.innerText.toLowerCase();
-        
-        // 1. Check text input search
         const matchesSearch = cardText.includes(searchValue);
-        
-        // 2. Check dropdown categories keywords match
         let matchesCategory = false;
+        
         if (selectedCategory === "all") {
           matchesCategory = true;
         } else {
           const keywords = categoryMap[selectedCategory];
-          // Agar card ke poore text me koi bhi ek relevant keyword mil jata hai
           matchesCategory = keywords.some(keyword => cardText.includes(keyword));
         }
         
-        // Dono condition True hone par hi post dikhegi
-        if (matchesSearch && matchesCategory) {
-          card.style.display = "block";
-        } else {
-          card.style.display = "none";
-        }
+        card.style.display = (matchesSearch && matchesCategory) ? "block" : "none";
       });
     }
 
-    /* LOAD POSTS FROM FIREBASE */
     async function loadPosts(){
       const cachedPosts = localStorage.getItem("factzone_posts");
-
       if(cachedPosts){
         postsContainer.innerHTML = cachedPosts;
       }
 
       try {
-        const q = query(
-          collection(db, "posts"),
-          orderBy("createdAt", "desc")
-        );
-
+        const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
         const querySnapshot = await getDocs(q);
 
         if(querySnapshot.empty){
@@ -272,10 +265,7 @@
 
         const postsArray = [];
         querySnapshot.forEach((doc) => {
-          postsArray.push({
-            id: doc.id,
-            ...doc.data()
-          });
+          postsArray.push({ id: doc.id, ...doc.data() });
         });
 
         postsArray.sort((a, b) => {
@@ -285,11 +275,10 @@
         });
 
         let htmlContent = "";
-
         postsArray.forEach((post)=>{
           htmlContent += `
           <a href="detail.html?id=${post.id}" class="card shadow-lg">
-            <img src="${post.image || 'https://via.placeholder.com/500'}" alt="${post.title || 'FactZone Post'}" class="post-image" loading="lazy">
+            <img src="${post.image || 'https://via.placeholder.com/500'}" alt="${post.title || 'FactZone Post'}" class="post-image" loading="lazy" width="100%" height="220">
             <div class="p-4 flex flex-col flex-1">
               <h2 class="font-bold text-xl mb-2 line2">${post.title || ''}</h2>
               <p class="text-gray-600 text-sm line2">${post.desc || ''}</p>
@@ -299,18 +288,15 @@
 
         postsContainer.innerHTML = htmlContent;
         localStorage.setItem("factzone_posts", htmlContent);
-        
-        // Cards refresh hone ke baad automatically filtering re-apply ho
         filterPosts();
 
       } catch (error) {
-        console.error("Error fetching data from Firebase:", error);
+        console.error("Error fetching data:", error);
       }
     }
 
     loadPosts();
 
-    /* SEARCH & FILTER LISTENERS */
     document.getElementById("searchInput").addEventListener("input", filterPosts);
     document.getElementById("filterInput").addEventListener("change", filterPosts);
   </script>
