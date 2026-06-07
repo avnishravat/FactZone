@@ -14,7 +14,7 @@
   <meta name="theme-color" content="#000000">
   <link class="canonical" href="https://factzone.online/">
 
-  <!-- Performance Boost: Preconnect to external servers -->
+  <!-- Super Performance Preconnect Links -->
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
   <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
@@ -32,7 +32,6 @@
 
   <link rel="icon" href="logo.svg">
 
-  <!-- Critical Styles First (Prevents Layout Shifts) -->
   <style>
     body{
       background:#f3f4f6;
@@ -81,21 +80,8 @@
     }
   </style>
 
-  <!-- Tailwind Loaded via Defer/Async Strategy to not block rendering -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Lazy Loading AdSense Strategy to save Performance Score -->
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      setTimeout(() => {
-        const adsScript = document.createElement('script');
-        adsScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-697419046628538";
-        adsScript.crossOrigin = "anonymous";
-        adsScript.async = true;
-        document.head.appendChild(adsScript);
-      }, 1500); // Loads after critical content is ready
-    });
-  </script>
+  <!-- Tailwind Script Defer loaded -->
+  <script src="https://cdn.tailwindcss.com" defer></script>
 
   <script type="application/ld+json">
   {
@@ -124,15 +110,6 @@
       "query-input":"required name=search_term_string"
     }
   }
-  </script>
-    
-  <!-- Google Analytics Async Load -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-311JQXBXR9"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-311JQXBXR9', { 'page_path': window.location.pathname });
   </script>
 </head>
 
@@ -171,17 +148,27 @@
     <p class="text-gray-600 mt-2">Read science facts, technology facts, history facts, mystery facts and educational knowledge articles.</p>
   </section>
     
+  <!-- MAIN CONTAINER (INSTANT INSTANT RENDER FROM LOCALSTORAGE) -->
   <main id="posts" class="max-w-7xl mx-auto p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-    <!-- LocalStorage content instantly loads here dynamically -->
-    <div id="seo-placeholder-cards" class="col-span-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full">
-      <div class="card shadow-lg">
-        <img src="logo.svg" alt="Amazing Science Facts" class="post-image p-4 bg-gray-900 object-contain" width="100%" height="220">
-        <div class="p-4 flex flex-col flex-1">
-          <h2 class="font-bold text-xl mb-2 line2">विज्ञान से जुड़े कुछ बेहद हैरान करने वाले रोचक तथ्य</h2>
-          <p class="text-gray-600 text-sm line2">Read amazing science facts, technology updates, and viral knowledge on FactZone Official...</p>
-        </div>
-      </div>
-    </div>
+    <script>
+      // Page render block hone se pehle local storage se posts inject kar do
+      const cached = localStorage.getItem("factzone_posts");
+      if(cached) {
+        document.write(cached);
+      } else {
+        document.write(`
+          <div id="seo-placeholder-cards" class="col-span-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full">
+            <div class="card shadow-lg">
+              <img src="logo.svg" alt="Amazing Science Facts" class="post-image p-4 bg-gray-900 object-contain" width="100%" height="220">
+              <div class="p-4 flex flex-col flex-1">
+                <h2 class="font-bold text-xl mb-2 line2">विज्ञान से जुड़े कुछ बेहद हैरान करने वाले रोचक तथ्य</h2>
+                <p class="text-gray-600 text-sm line2">Read amazing science facts on FactZone Official...</p>
+              </div>
+            </div>
+          </div>
+        `);
+      }
+    </script>
   </main>
 
   <footer class="bg-black text-white mt-10">
@@ -200,32 +187,15 @@
   </footer>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, query, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-      
-    const firebaseConfig = {
-      apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
-      authDomain: "factzone-a9ace.firebaseapp.com",
-      databaseURL: "https://factzone-a9ace-default-rtdb.firebaseio.com",
-      projectId: "factzone-a9ace",
-      storageBucket: "factzone-a9ace.firebasestorage.app",
-      messagingSenderId: "425838320650",
-      appId: "1:425838320650:web:beab18baddf818cb73d3f3",
-      measurementId: "G-311JQXBXR9"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const postsContainer = document.getElementById("posts");
-
-    function filterPosts() {
+    // Filter posts standalone function
+    window.filterPosts = function() {
       const searchValue = document.getElementById("searchInput").value.toLowerCase();
       const selectedCategory = document.getElementById("filterInput").value;
       
       const categoryMap = {
         science: ["science", "विज्ञान", "वैज्ञानिक", "space", "अंतरिक्ष", "ग्रह", "earth"],
         tech: ["tech", "technology", "तकनीक", "मोबाइल", "computer", "ai", "इंटरनेट"],
-        history: ["history", "इतिहास", "पुराना", "राजा", "किला", "प्राचीन", "mystery"],
+        history: ["history", "इતિહાસ", "पुराना", "राजा", " किला", "प्राचीन", "mystery"],
         mystery: ["mystery", "रहस्य", "अनसुलझा", "हैरान", "भूत", "रहस्यमयी"],
         viral: ["viral", "रोचक", "तथ्य", "amazing", "facts", "knowledge", "fact"]
       };
@@ -246,59 +216,104 @@
       });
     }
 
-    async function loadPosts(){
-      const cachedPosts = localStorage.getItem("factzone_posts");
-      if(cachedPosts){
-        postsContainer.innerHTML = cachedPosts;
-      }
+    document.getElementById("searchInput").addEventListener("input", window.filterPosts);
+    document.getElementById("filterInput").addEventListener("change", window.filterPosts);
 
-      try {
-        const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
-        const querySnapshot = await getDocs(q);
+    // Smart Interactivity Delay Strategy for Scripts
+    let heavyScriptsLoaded = false;
+    
+    function loadHeavyScripts() {
+      if (heavyScriptsLoaded) return;
+      heavyScriptsLoaded = true;
 
-        if(querySnapshot.empty){
-          if(!cachedPosts) {
-            postsContainer.innerHTML = `<h2 class="text-center text-2xl col-span-full">No Posts Found</h2>`;
+      // 1. Dynamic Analytics Load
+      const gaScript = document.createElement('script');
+      gaScript.src = "https://www.googletagmanager.com/gtag/js?id=G-311JQXBXR9";
+      gaScript.async = true;
+      document.head.appendChild(gaScript);
+      
+      gaScript.onload = () => {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-311JQXBXR9');
+      };
+
+      // 2. Dynamic AdSense Load
+      const adsScript = document.createElement('script');
+      adsScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-697419046628538";
+      adsScript.crossOrigin = "anonymous";
+      adsScript.async = true;
+      document.head.appendChild(adsScript);
+
+      // 3. Dynamic Firebase Import and Core Fetch
+      import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js").then((firebaseModule) => {
+        import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js").then((firestoreModule) => {
+          
+          const firebaseConfig = {
+            apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
+            authDomain: "factzone-a9ace.firebaseapp.com",
+            databaseURL: "https://factzone-a9ace-default-rtdb.firebaseio.com",
+            projectId: "factzone-a9ace",
+            storageBucket: "factzone-a9ace.firebasestorage.app",
+            messagingSenderId: "425838320650",
+            appId: "1:425838320650:web:beab18baddf818cb73d3f3",
+            measurementId: "G-311JQXBXR9"
+          };
+
+          const app = firebaseModule.initializeApp(firebaseConfig);
+          const db = firestoreModule.getFirestore(app);
+          const postsContainer = document.getElementById("posts");
+
+          async function fetchFirebaseData() {
+            try {
+              const q = firestoreModule.query(firestoreModule.collection(db, "posts"), firestoreModule.orderBy("createdAt", "desc"));
+              const querySnapshot = await firestoreModule.getDocs(q);
+
+              if(querySnapshot.empty) return;
+
+              const postsArray = [];
+              querySnapshot.forEach((doc) => {
+                postsArray.push({ id: doc.id, ...doc.data() });
+              });
+
+              postsArray.sort((a, b) => {
+                const timeA = a.createdAt?.seconds || a.createdAt || 0;
+                const timeB = b.createdAt?.seconds || b.createdAt || 0;
+                return timeB - timeA; 
+              });
+
+              let htmlContent = "";
+              postsArray.forEach((post)=>{
+                htmlContent += `
+                <a href="detail.html?id=${post.id}" class="card shadow-lg">
+                  <img src="${post.image || 'https://via.placeholder.com/500'}" alt="${post.title || 'FactZone Post'}" class="post-image" loading="lazy" width="100%" height="220">
+                  <div class="p-4 flex flex-col flex-1">
+                    <h2 class="font-bold text-xl mb-2 line2">${post.title || ''}</h2>
+                    <p class="text-gray-600 text-sm line2">${post.desc || ''}</p>
+                  </div>
+                </a>`;
+              });
+
+              postsContainer.innerHTML = htmlContent;
+              localStorage.setItem("factzone_posts", htmlContent);
+              window.filterPosts();
+            } catch (err) {
+              console.error(err);
+            }
           }
-          return;
-        }
-
-        const postsArray = [];
-        querySnapshot.forEach((doc) => {
-          postsArray.push({ id: doc.id, ...doc.data() });
+          fetchFirebaseData();
         });
-
-        postsArray.sort((a, b) => {
-          const timeA = a.createdAt?.seconds || a.createdAt || 0;
-          const timeB = b.createdAt?.seconds || b.createdAt || 0;
-          return timeB - timeA; 
-        });
-
-        let htmlContent = "";
-        postsArray.forEach((post)=>{
-          htmlContent += `
-          <a href="detail.html?id=${post.id}" class="card shadow-lg">
-            <img src="${post.image || 'https://via.placeholder.com/500'}" alt="${post.title || 'FactZone Post'}" class="post-image" loading="lazy" width="100%" height="220">
-            <div class="p-4 flex flex-col flex-1">
-              <h2 class="font-bold text-xl mb-2 line2">${post.title || ''}</h2>
-              <p class="text-gray-600 text-sm line2">${post.desc || ''}</p>
-            </div>
-          </a>`;
-        });
-
-        postsContainer.innerHTML = htmlContent;
-        localStorage.setItem("factzone_posts", htmlContent);
-        filterPosts();
-
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+      });
     }
 
-    loadPosts();
-
-    document.getElementById("searchInput").addEventListener("input", filterPosts);
-    document.getElementById("filterInput").addEventListener("change", filterPosts);
+    // Trigger loading on user movement, scroll or mouse intent
+    window.addEventListener('scroll', loadHeavyScripts, { passive: true });
+    window.addEventListener('touchstart', loadHeavyScripts, { passive: true });
+    window.addEventListener('mousemove', loadHeavyScripts, { passive: true });
+    
+    // Safety fallback: load anyway after 3.5 seconds if user is idle
+    setTimeout(loadHeavyScripts, 3500);
   </script>
 
 </body>
