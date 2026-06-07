@@ -120,12 +120,33 @@
 <body>
 
   <header class="bg-black sticky top-0 z-50 shadow-lg">
-    <div class="max-w-7xl mx-auto p-4">
-      <a href="index.html" class="flex items-center gap-3">
-        <img src="logo.svg" alt="FactZone Logo" class="w-12 h-12 rounded-full bg-white p-1">
-        <h1 class="text-3xl font-bold text-white">FactZone</h1>
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col sm:flex-row gap-3 items-center justify-between">
+      
+      <!-- Brand Logo & Instagram Gradient Ring -->
+      <a href="index.html" class="flex items-center gap-2.5 self-start sm:self-center">
+        <div class="p-[2px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 rounded-full flex items-center justify-center shadow-md">
+          <img src="logo.svg" alt="FactZone Logo" class="w-8 h-8 rounded-full bg-black p-0.5">
+        </div>
+        <h1 class="text-xl md:text-2xl font-bold text-white tracking-wide">FactZone</h1>
       </a>
-      <input type="text" id="searchInput" placeholder="🔍 Search posts..." class="w-full mt-4 px-5 py-3 rounded-full outline-none text-lg">
+      
+      <!-- Compact Search Bar + Filter Dropdown -->
+      <div class="w-full sm:w-auto flex items-center gap-2 max-w-md">
+        <div class="relative flex-1 sm:w-64">
+          <input type="text" id="searchInput" placeholder="Search posts..." class="w-full px-4 py-1.5 rounded-full outline-none text-sm text-black border border-gray-700 bg-white placeholder-gray-400">
+        </div>
+        
+        <!-- Upgraded Articles Keywords Filter -->
+        <select id="filterInput" class="bg-gray-900 text-white text-xs font-medium px-3 py-1.5 rounded-full border border-gray-800 outline-none cursor-pointer hover:bg-gray-800 transition-colors">
+          <option value="all">All Topics</option>
+          <option value="science">🔬 Science / विज्ञान</option>
+          <option value="tech">💻 Tech / तकनीक</option>
+          <option value="history">📜 History / इतिहास</option>
+          <option value="mystery">🔮 Mystery / रहस्य</option>
+          <option value="viral">🔥 Viral / रोचक तथ्य</option>
+        </select>
+      </div>
+
     </div>
   </header>
 
@@ -187,7 +208,46 @@
     const db = getFirestore(app);
     const postsContainer = document.getElementById("posts");
 
-    /* LOAD POSTS */
+    /* ADVANCED HINDI + ENGLISH KEYWORD FILTER LOGIC */
+    function filterPosts() {
+      const searchValue = document.getElementById("searchInput").value.toLowerCase();
+      const selectedCategory = document.getElementById("filterInput").value;
+      
+      // Category wise dynamic keywords mapping
+      const categoryMap = {
+        science: ["science", "विज्ञान", "वैज्ञानिक", "space", "अंतरिक्ष", "ग्रह", "earth"],
+        tech: ["tech", "technology", "तकनीक", "मोबाइल", "computer", "ai", "इंटरनेट"],
+        history: ["history", "इतिहास", "पुराना", "राजा", "किला", "प्राचीन", "mystery"],
+        mystery: ["mystery", "रहस्य", "अनसुलझा", "हैरान", "भूत", "रहस्यमयी"],
+        viral: ["viral", "रोचक", "तथ्य", "amazing", "facts", "knowledge", "fact"]
+      };
+
+      document.querySelectorAll("#posts a").forEach(card => {
+        const cardText = card.innerText.toLowerCase();
+        
+        // 1. Check text input search
+        const matchesSearch = cardText.includes(searchValue);
+        
+        // 2. Check dropdown categories keywords match
+        let matchesCategory = false;
+        if (selectedCategory === "all") {
+          matchesCategory = true;
+        } else {
+          const keywords = categoryMap[selectedCategory];
+          // Agar card ke poore text me koi bhi ek relevant keyword mil jata hai
+          matchesCategory = keywords.some(keyword => cardText.includes(keyword));
+        }
+        
+        // Dono condition True hone par hi post dikhegi
+        if (matchesSearch && matchesCategory) {
+          card.style.display = "block";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    }
+
+    /* LOAD POSTS FROM FIREBASE */
     async function loadPosts(){
       const cachedPosts = localStorage.getItem("factzone_posts");
 
@@ -227,7 +287,6 @@
         let htmlContent = "";
 
         postsArray.forEach((post)=>{
-          // सुधारा गया: यह पक्का करेगा कि हर पोस्ट इमेज में alt के तौर पर पोस्ट का टाइटल ज़रूर रहे
           htmlContent += `
           <a href="detail.html?id=${post.id}" class="card shadow-lg">
             <img src="${post.image || 'https://via.placeholder.com/500'}" alt="${post.title || 'FactZone Post'}" class="post-image" loading="lazy">
@@ -240,6 +299,9 @@
 
         postsContainer.innerHTML = htmlContent;
         localStorage.setItem("factzone_posts", htmlContent);
+        
+        // Cards refresh hone ke baad automatically filtering re-apply ho
+        filterPosts();
 
       } catch (error) {
         console.error("Error fetching data from Firebase:", error);
@@ -248,13 +310,9 @@
 
     loadPosts();
 
-    /* SEARCH */
-    document.getElementById("searchInput").addEventListener("input",(e)=>{
-      const value = e.target.value.toLowerCase();
-      document.querySelectorAll("#posts a").forEach(card=>{
-        card.style.display = card.innerText.toLowerCase().includes(value) ? "block" : "none";
-      });
-    });
+    /* SEARCH & FILTER LISTENERS */
+    document.getElementById("searchInput").addEventListener("input", filterPosts);
+    document.getElementById("filterInput").addEventListener("change", filterPosts);
   </script>
 
 </body>
