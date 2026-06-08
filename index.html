@@ -685,24 +685,64 @@
       setTimeout(() => renderPosts(false), 300);
     });
 
-    async function loadPosts() {
-      try {
-        // Clear old bloated cache that was causing QuotaExceededError
-        localStorage.removeItem('factzone_posts_v2');
-        localStorage.removeItem('factzone_posts_time');
-        localStorage.removeItem('factzone_posts');
+    // ── Session cache: only title+desc+image (lightweight, no QuotaError) ──
+    const SESSION_KEY = 'fz_session_posts';
 
+    function saveSessionCache(posts) {
+      try {
+        const slim = posts.map(p => ({
+          id: p.id,
+          title: p.title || '',
+          desc: p.desc || '',
+          image: p.image || '',
+          createdAt: p.createdAt?.seconds || p.createdAt || 0
+        }));
+        sessionStorage.setItem(SESSION_KEY, JSON.stringify(slim));
+      } catch(e) { /* ignore if session storage full */ }
+    }
+
+    function loadSessionCache() {
+      try {
+        const raw = sessionStorage.getItem(SESSION_KEY);
+        return raw ? JSON.parse(raw) : null;
+      } catch(e) { return null; }
+    }
+
+    async function loadPosts() {
+      // Clear old localStorage bloat
+      ['factzone_posts_v2','factzone_posts_time','factzone_posts'].forEach(k => localStorage.removeItem(k));
+
+      // 1. Show session cache instantly (same tab reload = instant)
+      const cached = loadSessionCache();
+      if (cached && cached.length > 0) {
+        allPosts = cached;
+        hideSkeletons();
+        renderPosts(true);
+      }
+
+      // 2. Fetch fresh from Firebase
+      try {
         const q = query(collection(db, "posts"));
         const querySnapshot = await getDocs(q);
 
         if (querySnapshot.empty) {
-          hideSkeletons();
-          postsContainer.innerHTML = `<h2 class="text-center text-2xl col-span-full dark:text-white">Koi post nahi mili</h2>`;
+          if (!cached) {
+            hideSkeletons();
+            postsContainer.innerHTML = `<h2 class="text-center text-2xl col-span-full dark:text-white">Koi post nahi mili</h2>`;
+          }
           return;
         }
 
+        // Deduplicate by doc ID to prevent double posts
+        const seenIds = new Set();
         const postsArray = [];
-        querySnapshot.forEach(doc => postsArray.push({ id: doc.id, ...doc.data() }));
+        querySnapshot.forEach(doc => {
+          if (!seenIds.has(doc.id)) {
+            seenIds.add(doc.id);
+            postsArray.push({ id: doc.id, ...doc.data() });
+          }
+        });
+
         postsArray.sort((a, b) => {
           const tA = a.createdAt?.seconds || a.createdAt || 0;
           const tB = b.createdAt?.seconds || b.createdAt || 0;
@@ -710,17 +750,20 @@
         });
 
         allPosts = postsArray;
+        saveSessionCache(postsArray);
         hideSkeletons();
         renderPosts(true);
 
       } catch (error) {
         console.error("Firebase fetch error:", error);
-        hideSkeletons();
-        postsContainer.innerHTML = `<div class="col-span-full text-center py-10">
-          <p class="text-2xl mb-3">⚠️</p>
-          <p class="text-gray-600 dark:text-gray-400 font-semibold">Posts load nahi ho sake.<br>Internet check karein aur page reload karein.</p>
-          <button onclick="location.reload()" class="mt-4 bg-black dark:bg-white text-white dark:text-black px-6 py-2 rounded-full font-bold text-sm">🔄 Reload</button>
-        </div>`;
+        if (!cached) {
+          hideSkeletons();
+          postsContainer.innerHTML = `<div class="col-span-full text-center py-10">
+            <p class="text-2xl mb-3">⚠️</p>
+            <p class="text-gray-600 dark:text-gray-400 font-semibold">Posts load nahi ho sake.<br>Internet check karein aur page reload karein.</p>
+            <button onclick="location.reload()" class="mt-4 bg-black dark:bg-white text-white dark:text-black px-6 py-2 rounded-full font-bold text-sm">🔄 Reload</button>
+          </div>`;
+        }
       }
     }
 
