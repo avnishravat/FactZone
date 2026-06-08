@@ -568,7 +568,7 @@
   <!-- Main Firebase + Load More + Reading Time Script -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, query, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getFirestore, collection, query, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
@@ -705,7 +705,8 @@
 
       // 2. Always fetch fresh from Firebase (even if cache was used)
       try {
-        const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+        // No orderBy — avoids Firestore index requirement. Sort client-side instead.
+        const q = query(collection(db, "posts"));
         const querySnapshot = await getDocs(q);
 
         if (querySnapshot.empty) {
