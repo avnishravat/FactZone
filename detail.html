@@ -4,446 +4,323 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- BASE SEO — overwritten by JS once post data loads -->
+  <!-- SEO BASE — JS updates these once post data arrives -->
   <title>FactZone - Amazing Facts & Educational Knowledge</title>
   <meta name="description" content="Read verified facts, science updates, historical mysteries, and knowledge articles on FactZone Official.">
   <meta name="robots" content="index,follow,max-image-preview:large">
-  <link rel="canonical" id="canonical" href="https://factzone.online/detail.html">
+  <link rel="canonical" id="meta-canonical" href="https://factzone.online/detail.html">
 
-  <!-- Open Graph -->
-  <meta property="og:type" content="article">
-  <meta property="og:title" content="FactZone - Amazing Facts & Educational Knowledge">
+  <meta property="og:type"        content="article">
+  <meta property="og:title"       content="FactZone - Amazing Facts & Educational Knowledge">
   <meta property="og:description" content="Read verified facts, science updates, historical mysteries, and knowledge articles.">
-  <meta property="og:image" content="https://factzone.online/logo.svg">
-  <meta property="og:url" content="https://factzone.online/detail.html">
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="FactZone - Amazing Facts & Educational Knowledge">
+  <meta property="og:image"       content="https://factzone.online/logo.svg">
+  <meta property="og:url"         content="https://factzone.online/detail.html">
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="FactZone - Amazing Facts & Educational Knowledge">
   <meta name="twitter:description" content="Read verified facts, science updates, historical mysteries, and knowledge articles.">
-  <meta name="twitter:image" content="https://factzone.online/logo.svg">
+  <meta name="twitter:image"       content="https://factzone.online/logo.svg">
+
+  <!-- JSON-LD placeholder — replaced instantly after fetch -->
+  <script type="application/ld+json" id="articleSchema">{"@context":"https://schema.org","@type":"Article","headline":"FactZone Educational Article","author":{"@type":"Person","name":"Awaneesh"},"publisher":{"@type":"Organization","name":"FactZone Official","logo":{"@type":"ImageObject","url":"https://factzone.online/logo.svg"}}}</script>
 
   <link rel="icon" href="logo.svg">
-
-  <!-- Preconnect for performance -->
-  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <!-- AdSense — load eagerly so Google can verify the site -->
+  <!-- AdSense — eager load for Google site verification -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-697419046628538" crossorigin="anonymous"></script>
 
   <style>
-    *, *::before, *::after { box-sizing: border-box; }
-
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #f5f4f0;
-      --surface: #ffffff;
-      --ink: #1a1a18;
-      --ink-muted: #5a5a55;
-      --accent: #c0392b;
-      --border: #e2e0d8;
-      --radius: 1rem;
+      --bg:       #f5f4f0;
+      --surface:  #ffffff;
+      --ink:      #1a1a18;
+      --muted:    #5a5a55;
+      --accent:   #c0392b;
+      --border:   #e2e0d8;
+      --r:        1rem;
     }
-
     body {
       background: var(--bg);
       font-family: 'DM Sans', sans-serif;
-      margin: 0;
-      padding: 0;
       color: var(--ink);
     }
+    .wrap { max-width: 860px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
 
-    /* ── Layout ── */
-    .main-wrapper {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 1.5rem 1.25rem 3rem;
-    }
-
-    /* ── Header / Nav ── */
+    /* Header */
     .site-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 2rem;
-      padding-bottom: 1.25rem;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 2rem; padding-bottom: 1.25rem;
       border-bottom: 2px solid var(--ink);
     }
-    .logo-link {
-      display: flex;
-      align-items: center;
-      gap: .75rem;
-      text-decoration: none;
-      color: inherit;
-    }
-    .logo-link img {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: #fff;
-      padding: 3px;
-      box-shadow: 0 2px 8px rgba(0,0,0,.12);
-    }
-    .logo-link span {
-      font-family: 'Merriweather', serif;
-      font-size: 1.6rem;
-      font-weight: 700;
-      letter-spacing: -.02em;
-    }
-    .back-btn {
-      background: var(--ink);
-      color: #fff;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: .875rem;
-      padding: .55rem 1.1rem;
-      border-radius: .5rem;
-      transition: background .18s;
-    }
+    .logo-link { display: flex; align-items: center; gap: .75rem; text-decoration: none; color: inherit; }
+    .logo-link img { width: 44px; height: 44px; border-radius: 50%; background: #fff; padding: 3px; box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+    .logo-link span { font-family: 'Merriweather', serif; font-size: 1.6rem; font-weight: 700; letter-spacing: -.02em; }
+    .back-btn { background: var(--ink); color: #fff; text-decoration: none; font-weight: 700; font-size: .875rem; padding: .55rem 1.1rem; border-radius: .5rem; transition: background .18s; }
     .back-btn:hover { background: #333; }
 
-    /* ── Article card ── */
-    #post {
-      background: var(--surface);
-      border-radius: var(--radius);
-      padding: 1.75rem 2rem;
-      box-shadow: 0 2px 16px rgba(0,0,0,.07);
-    }
-
-    #post img.hero {
-      width: 100%;
-      border-radius: .75rem;
-      max-height: 440px;
-      object-fit: cover;
-      margin-bottom: 1.5rem;
-      display: block;
-    }
-
-    #post h1 {
-      font-family: 'Merriweather', serif;
-      font-size: clamp(1.5rem, 4vw, 2.2rem);
-      line-height: 1.3;
-      font-weight: 700;
-      margin: 0 0 1.25rem;
-    }
-
-    #post .content {
-      font-size: 1.05rem;
-      line-height: 1.85;
-      color: #2d2d2b;
-      white-space: pre-line;
-    }
-
-    .author-box {
-      margin-top: 2rem;
-      padding-top: 1.25rem;
-      border-top: 1px solid var(--border);
-      font-size: .95rem;
-      color: var(--ink-muted);
-    }
-    .author-box strong { color: var(--ink); }
+    /* Article */
+    #post { background: var(--surface); border-radius: var(--r); padding: 1.75rem 2rem; box-shadow: 0 2px 16px rgba(0,0,0,.07); }
+    #post img.hero { width: 100%; border-radius: .75rem; max-height: 440px; object-fit: cover; margin-bottom: 1.5rem; display: block; }
+    #post h1 { font-family: 'Merriweather', serif; font-size: clamp(1.4rem, 4vw, 2.1rem); line-height: 1.3; font-weight: 700; margin-bottom: 1.25rem; }
+    #post .content { font-size: 1.05rem; line-height: 1.85; color: #2d2d2b; white-space: pre-line; }
+    .author-box { margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--border); font-size: .95rem; color: var(--muted); }
     .author-box a { color: var(--accent); text-decoration: none; font-weight: 600; }
 
-    /* ── Skeleton loader ── */
-    .skeleton {
-      background: linear-gradient(90deg, #eee 25%, #f8f8f8 50%, #eee 75%);
-      background-size: 400% 100%;
-      animation: shimmer 1.4s infinite;
-      border-radius: .5rem;
-    }
-    @keyframes shimmer { to { background-position: -400% 0; } }
-    .sk-img   { width: 100%; height: 340px; border-radius: .75rem; margin-bottom: 1.5rem; }
-    .sk-title { height: 2rem; width: 80%; margin-bottom: .75rem; }
-    .sk-line  { height: 1rem; width: 100%; margin-bottom: .6rem; }
-    .sk-line.short { width: 60%; }
+    /* Skeleton */
+    .sk { background: linear-gradient(90deg,#eee 25%,#f8f8f8 50%,#eee 75%); background-size: 400% 100%; animation: sh 1.4s infinite; border-radius: .5rem; }
+    @keyframes sh { to { background-position: -400% 0; } }
+    .sk-img   { width: 100%; height: 320px; border-radius: .75rem; margin-bottom: 1.5rem; }
+    .sk-h     { height: 2rem;   width: 75%; margin-bottom: 1rem; }
+    .sk-p     { height: 1rem;   width: 100%; margin-bottom: .65rem; }
+    .sk-p.s   { width: 55%; }
 
-    /* ── Error state ── */
-    .error-box {
-      text-align: center;
-      padding: 3rem 1rem;
-      color: var(--ink-muted);
-    }
-    .error-box h2 { font-family: 'Merriweather', serif; color: var(--ink); margin-bottom: .5rem; }
+    /* Error */
+    .err { text-align: center; padding: 3rem 1rem; color: var(--muted); }
+    .err h2 { font-family: 'Merriweather', serif; color: var(--ink); margin-bottom: .5rem; }
 
-    /* ── Related posts ── */
-    #relatedPosts {
-      margin-top: 2rem;
-      background: var(--surface);
-      border-radius: var(--radius);
-      padding: 1.75rem 2rem;
-      box-shadow: 0 2px 16px rgba(0,0,0,.07);
-    }
-    #relatedPosts h2 {
-      font-family: 'Merriweather', serif;
-      font-size: 1.3rem;
-      font-weight: 700;
-      margin: 0 0 1.25rem;
-      padding-bottom: .75rem;
-      border-bottom: 2px solid var(--ink);
-    }
-    #relatedContainer {
-      display: grid;
-      gap: .85rem;
-    }
-    .related-card {
-      display: flex;
-      align-items: center;
-      gap: .9rem;
-      padding: .85rem;
-      border: 1px solid var(--border);
-      border-radius: .75rem;
-      background: var(--bg);
-      text-decoration: none;
-      color: inherit;
-      transition: box-shadow .18s, transform .18s;
-    }
-    .related-card:hover {
-      box-shadow: 0 4px 18px rgba(0,0,0,.1);
-      transform: translateY(-2px);
-    }
-    .related-card img {
-      width: 68px;
-      height: 68px;
-      object-fit: cover;
-      border-radius: .5rem;
-      flex-shrink: 0;
-    }
-    .related-card h3 {
-      font-size: .9rem;
-      font-weight: 700;
-      margin: 0;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
+    /* Related */
+    #relatedSection { margin-top: 2rem; background: var(--surface); border-radius: var(--r); padding: 1.75rem 2rem; box-shadow: 0 2px 16px rgba(0,0,0,.07); }
+    #relatedSection h2 { font-family: 'Merriweather', serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem; padding-bottom: .75rem; border-bottom: 2px solid var(--ink); }
+    #relatedGrid { display: grid; gap: .85rem; }
+    .rc { display: flex; align-items: center; gap: .9rem; padding: .85rem; border: 1px solid var(--border); border-radius: .75rem; background: var(--bg); text-decoration: none; color: inherit; transition: box-shadow .18s, transform .18s; }
+    .rc:hover { box-shadow: 0 4px 18px rgba(0,0,0,.1); transform: translateY(-2px); }
+    .rc img { width: 68px; height: 68px; object-fit: cover; border-radius: .5rem; flex-shrink: 0; }
+    .rc h3  { font-size: .9rem; font-weight: 700; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-    @media (max-width: 600px) {
-      #post { padding: 1.25rem 1rem; }
-      #relatedPosts { padding: 1.25rem 1rem; }
-    }
+    @media(max-width:600px) { #post,#relatedSection { padding: 1.25rem 1rem; } }
   </style>
 </head>
 
 <body>
-  <div class="main-wrapper">
+<div class="wrap">
 
-    <!-- Header -->
-    <header class="site-header">
-      <a href="index.html" class="logo-link" aria-label="FactZone Home">
-        <img src="logo.svg" alt="FactZone Logo" width="44" height="44">
-        <span>FactZone</span>
-      </a>
-      <a href="index.html" class="back-btn" aria-label="Back to home">← Back</a>
-    </header>
+  <header class="site-header">
+    <a href="index.html" class="logo-link" aria-label="FactZone Home">
+      <img src="logo.svg" alt="FactZone Logo" width="44" height="44">
+      <span>FactZone</span>
+    </a>
+    <a href="index.html" class="back-btn">← Back</a>
+  </header>
 
-    <!-- Article -->
-    <article id="post">
-      <!-- Skeleton shown while content loads -->
-      <div id="skeleton">
-        <div class="skeleton sk-img"></div>
-        <div class="skeleton sk-title"></div>
-        <div class="skeleton sk-line"></div>
-        <div class="skeleton sk-line"></div>
-        <div class="skeleton sk-line short"></div>
-      </div>
-    </article>
+  <!-- Article — skeleton visible immediately to Googlebot & users -->
+  <article id="post" itemscope itemtype="https://schema.org/Article">
+    <div id="skeleton">
+      <div class="sk sk-img"></div>
+      <div class="sk sk-h"></div>
+      <div class="sk sk-p"></div>
+      <div class="sk sk-p"></div>
+      <div class="sk sk-p s"></div>
+    </div>
+    <!--
+      STATIC FALLBACK FOR GOOGLEBOT
+      Google's renderer will execute the script below and replace this,
+      but if JS fails the noscript tag provides crawlable text.
+    -->
+    <noscript>
+      <p>Please enable JavaScript to read this article on FactZone.</p>
+    </noscript>
+  </article>
 
-    <!-- Related posts -->
-    <section id="relatedPosts" aria-label="Related Facts">
-      <h2>Related Facts</h2>
-      <div id="relatedContainer"></div>
-    </section>
+  <section id="relatedSection" aria-label="Related Facts">
+    <h2>Related Facts</h2>
+    <div id="relatedGrid"></div>
+  </section>
 
-  </div>
+</div>
 
-  <!-- ════════════════════════════════════════════
-       MAIN SCRIPT  –  Firebase loads IMMEDIATELY
-       (no lazy-defer, no scroll/touch gating)
-  ════════════════════════════════════════════ -->
-  <script type="module">
-    import { initializeApp }            from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, doc, getDoc, collection, query, limit, getDocs }
-                                        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+<script>
+(function () {
+  /* ─────────────────────────────────────────────
+     CONFIG
+  ───────────────────────────────────────────── */
+  var PROJECT_ID = "factzone-a9ace";
+  var API_KEY    = "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc";
 
-    /* ── Firebase config ── */
-    const firebaseConfig = {
-      apiKey:            "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
-      authDomain:        "factzone-a9ace.firebaseapp.com",
-      databaseURL:       "https://factzone-a9ace-default-rtdb.firebaseio.com",
-      projectId:         "factzone-a9ace",
-      storageBucket:     "factzone-a9ace.firebasestorage.app",
-      messagingSenderId: "425838320650",
-      appId:             "1:425838320650:web:beab18baddf818cb73d3f3",
-      measurementId:     "G-311JQXBXR9"
+  /* Firestore REST base — NO SDK, no module import, instant */
+  var FS_BASE = "https://firestore.googleapis.com/v1/projects/"
+              + PROJECT_ID + "/databases/(default)/documents/";
+
+  /* ─────────────────────────────────────────────
+     HELPERS
+  ───────────────────────────────────────────── */
+  var params = new URLSearchParams(location.search);
+  var id     = params.get("id") || "";
+
+  function $(q) { return document.getElementById(q); }
+
+  /* Parse Firestore REST field value */
+  function parseField(val) {
+    if (!val) return "";
+    if (val.stringValue  !== undefined) return val.stringValue;
+    if (val.integerValue  !== undefined) return val.integerValue;
+    if (val.booleanValue  !== undefined) return val.booleanValue;
+    if (val.arrayValue    !== undefined) {
+      return (val.arrayValue.values || []).map(parseField);
+    }
+    if (val.mapValue      !== undefined) return parseDoc(val.mapValue.fields || {});
+    return "";
+  }
+
+  /* Convert Firestore REST fields object → plain JS object */
+  function parseDoc(fields) {
+    var obj = {};
+    Object.keys(fields || {}).forEach(function(k){ obj[k] = parseField(fields[k]); });
+    return obj;
+  }
+
+  /* Simple localStorage wrapper */
+  function lsGet(k) { try { return localStorage.getItem(k); } catch(e){ return null; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, v); } catch(e){} }
+
+  /* ─────────────────────────────────────────────
+     SEO UPDATER  (runs as soon as data is ready)
+  ───────────────────────────────────────────── */
+  function updateSEO(title, desc, image) {
+    var url = location.href;
+    document.title = title + " | FactZone";
+
+    function setMeta(sel, attr, val) {
+      var el = document.querySelector(sel);
+      if (el) el.setAttribute(attr, val);
+    }
+
+    setMeta('meta[name="description"]',         "content", desc);
+    setMeta('meta[property="og:title"]',        "content", title);
+    setMeta('meta[property="og:description"]',  "content", desc);
+    setMeta('meta[property="og:image"]',        "content", image);
+    setMeta('meta[property="og:url"]',          "content", url);
+    setMeta('meta[name="twitter:title"]',       "content", title);
+    setMeta('meta[name="twitter:description"]', "content", desc);
+    setMeta('meta[name="twitter:image"]',       "content", image);
+
+    var can = document.getElementById("meta-canonical");
+    if (can) can.href = url;
+
+    /* ── Article JSON-LD (structured data for enhancements) ── */
+    var schema = {
+      "@context":   "https://schema.org",
+      "@type":      "Article",
+      "headline":    title,
+      "description": desc,
+      "url":         url,
+      "image":      [image],
+      "datePublished": new Date().toISOString(),
+      "author":    { "@type": "Person",       "name": "Awaneesh" },
+      "publisher": {
+        "@type": "Organization",
+        "name":  "FactZone Official",
+        "logo":  { "@type": "ImageObject", "url": "https://factzone.online/logo.svg" }
+      }
     };
+    var el = document.getElementById("articleSchema");
+    if (el) el.textContent = JSON.stringify(schema);
+  }
 
-    const app = initializeApp(firebaseConfig);
-    const db  = getFirestore(app);
+  /* ─────────────────────────────────────────────
+     RENDER POST
+  ───────────────────────────────────────────── */
+  function renderPost(post) {
+    var title   = post.title   || "FactZone Educational Article";
+    var content = post.content || "Amazing facts and verified educational details.";
+    var image   = post.image   || "https://factzone.online/logo.svg";
+    var desc    = content.replace(/\n/g," ").substring(0, 160);
 
-    /* ── Helpers ── */
-    const $  = id => document.getElementById(id);
-    const qs = sel => document.querySelector(sel);
+    updateSEO(title, desc, image);
 
-    const params = new URLSearchParams(location.search);
-    const id     = params.get("id");
+    $("post").innerHTML =
+      '<img class="hero" src="' + image + '" alt="' + title.replace(/"/g,'&quot;') + '" loading="eager" width="1200" height="675">' +
+      '<h1 itemprop="headline">' + title + '</h1>' +
+      '<div class="content" itemprop="articleBody">' + content + '</div>' +
+      '<div class="author-box">Written by <a href="author.html" itemprop="author">Awaneesh</a></div>';
+  }
 
-    /* ── Update SEO meta tags ── */
-    function updateSEO(title, description, image) {
-      const url = location.href;
-      document.title = `${title} | FactZone`;
+  /* ─────────────────────────────────────────────
+     RENDER RELATED
+  ───────────────────────────────────────────── */
+  function renderRelated(items) {
+    if (!items || !items.length) {
+      $("relatedSection").style.display = "none";
+      return;
+    }
+    $("relatedGrid").innerHTML = items.map(function(item){
+      var img   = item.image || "https://factzone.online/logo.svg";
+      var ttl   = item.title || "";
+      var pid   = item._id  || "";
+      return '<a href="detail.html?id=' + pid + '" class="rc" aria-label="Read: ' + ttl.replace(/"/g,'&quot;') + '">' +
+             '<img src="' + img + '" loading="lazy" width="68" height="68" alt="">' +
+             '<h3>' + ttl + '</h3></a>';
+    }).join("");
+  }
 
-      const set = (sel, attr, val) => { const el = qs(sel); if (el) el.setAttribute(attr, val); };
-      set('meta[name="description"]',         "content", description);
-      set('meta[property="og:title"]',        "content", title);
-      set('meta[property="og:description"]',  "content", description);
-      set('meta[property="og:image"]',        "content", image);
-      set('meta[property="og:url"]',          "content", url);
-      set('meta[name="twitter:title"]',       "content", title);
-      set('meta[name="twitter:description"]', "content", description);
-      set('meta[name="twitter:image"]',       "content", image);
+  /* ─────────────────────────────────────────────
+     FETCH via Firestore REST  (no SDK = fast!)
+  ───────────────────────────────────────────── */
+  function fetchPost() {
+    if (!id) {
+      $("post").innerHTML = '<div class="err"><h2>No article ID</h2><p>Go back and pick an article.</p></div>';
+      return;
+    }
 
-      // Canonical
-      let canonical = document.getElementById("canonical");
-      if (!canonical) {
-        canonical = document.createElement("link");
-        canonical.rel = "canonical";
-        canonical.id  = "canonical";
-        document.head.appendChild(canonical);
-      }
-      canonical.href = url;
+    /* Show cached version instantly */
+    var cached = lsGet("fz_post_" + id);
+    if (cached) {
+      try { renderPost(JSON.parse(cached)); } catch(e){}
+    }
 
-      // Article schema
-      const existingSchema = document.getElementById("articleSchema");
-      if (existingSchema) existingSchema.remove();
-      const schema = {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        headline:    title,
-        description: description,
-        url:         url,
-        image:       [image],
-        author:      { "@type": "Person",       "name": "Awaneesh" },
-        publisher:   {
-          "@type": "Organization",
-          "name":  "FactZone Official",
-          logo:    { "@type": "ImageObject", url: "https://factzone.online/logo.svg" }
+    /* Fetch fresh — REST API, no heavy SDK */
+    var url = FS_BASE + "posts/" + id + "?key=" + API_KEY;
+    fetch(url)
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        if (!data.fields) {
+          if (!cached) $("post").innerHTML = '<div class="err"><h2>Post Not Found</h2><p>This article may have been removed.</p></div>';
+          return;
         }
-      };
-      const scriptEl = document.createElement("script");
-      scriptEl.type  = "application/ld+json";
-      scriptEl.id    = "articleSchema";
-      scriptEl.text  = JSON.stringify(schema);
-      document.head.appendChild(scriptEl);
-    }
+        var post = parseDoc(data.fields);
+        lsSet("fz_post_" + id, JSON.stringify(post));
+        renderPost(post);
+      })
+      .catch(function(err){
+        console.error("Post fetch error:", err);
+        if (!cached) $("post").innerHTML = '<div class="err"><h2>Failed to load</h2><p>Check your connection and refresh.</p></div>';
+      });
+  }
 
-    /* ── Render article HTML ── */
-    function renderPost(post) {
-      const title      = post.title   || "FactZone Educational Article";
-      const rawContent = post.content || "Amazing facts and verified educational details.";
-      const image      = post.image   || "https://factzone.online/logo.svg";
-      const description = rawContent.replace(/\n/g, " ").substring(0, 160);
+  function fetchRelated() {
+    /* Show cached instantly */
+    var cached = lsGet("fz_related_v3");
+    if (cached) { try { renderRelated(JSON.parse(cached)); } catch(e){} }
 
-      updateSEO(title, description, image);
-
-      $("post").innerHTML = `
-        <img class="hero" src="${image}" alt="${title}"
-             loading="eager" width="1200" height="675">
-        <h1>${title}</h1>
-        <div class="content">${rawContent}</div>
-        <div class="author-box">
-          Written by <a href="author.html">Awaneesh</a>
-        </div>
-      `;
-    }
-
-    /* ── Render related posts ── */
-    function renderRelated(posts) {
-      const container = $("relatedContainer");
-      if (!posts.length) {
-        $("relatedPosts").style.display = "none";
-        return;
-      }
-      container.innerHTML = posts.map(([pid, p]) => `
-        <a href="detail.html?id=${pid}" class="related-card"
-           aria-label="Read: ${p.title || ''}">
-          <img src="${p.image || 'https://factzone.online/logo.svg'}"
-               loading="lazy" width="68" height="68" alt="">
-          <h3>${p.title || ''}</h3>
-        </a>
-      `).join("");
-    }
-
-    /* ── Safe localStorage wrapper ── */
-    function lsGet(key) {
-      try { return localStorage.getItem(key); } catch { return null; }
-    }
-    function lsSet(key, val) {
-      try { localStorage.setItem(key, val); } catch { /* quota */ }
-    }
-
-    /* ── Load post ── */
-    async function loadPost() {
-      if (!id) {
-        $("post").innerHTML = `<div class="error-box"><h2>No article ID found</h2><p>Please go back and select an article.</p></div>`;
-        return;
-      }
-
-      // Try cache first for instant paint
-      const cacheKey = "factzone_" + id;
-      const cached   = lsGet(cacheKey);
-      if (cached) {
-        try { renderPost(JSON.parse(cached)); } catch { /* bad cache */ }
-      }
-
-      // Always fetch fresh from Firebase
-      try {
-        const snap = await getDoc(doc(db, "posts", id));
-        if (snap.exists()) {
-          const post = snap.data();
-          lsSet(cacheKey, JSON.stringify(post));
-          renderPost(post);                     // re-render with fresh data
-        } else if (!cached) {
-          $("post").innerHTML = `<div class="error-box"><h2>Post Not Found</h2><p>This article may have been removed.</p></div>`;
-        }
-      } catch (err) {
-        console.error("Firebase loadPost error:", err);
-        if (!cached) {
-          $("post").innerHTML = `<div class="error-box"><h2>Failed to load</h2><p>Please check your connection and refresh.</p></div>`;
-        }
-      }
-    }
-
-    /* ── Load related posts ── */
-    async function loadRelatedPosts() {
-      // Show cached related posts instantly
-      const cachedRelated = lsGet("factzone_related_v2");
-      if (cachedRelated) {
-        try { renderRelated(JSON.parse(cachedRelated)); } catch { /* bad */ }
-      }
-
-      try {
-        const q    = query(collection(db, "posts"), limit(6));
-        const snap = await getDocs(q);
-        const posts = [];
-        snap.forEach(docSnap => {
-          if (docSnap.id !== id && posts.length < 4) {
-            posts.push([docSnap.id, docSnap.data()]);
-          }
+    /* Fetch 6 docs, filter out current */
+    var url = FS_BASE + "posts?key=" + API_KEY + "&pageSize=6";
+    fetch(url)
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        var docs = data.documents || [];
+        var items = [];
+        docs.forEach(function(d){
+          var pid = (d.name || "").split("/").pop();
+          if (pid === id || items.length >= 4) return;
+          var post = parseDoc(d.fields);
+          post._id = pid;
+          items.push(post);
         });
-        lsSet("factzone_related_v2", JSON.stringify(posts));
-        renderRelated(posts);
-      } catch (err) {
-        console.error("Firebase related error:", err);
-      }
-    }
+        lsSet("fz_related_v3", JSON.stringify(items));
+        renderRelated(items);
+      })
+      .catch(function(e){ console.error("Related fetch error:", e); });
+  }
 
-    /* ── Run both immediately ── */
-    loadPost();
-    loadRelatedPosts();
-  </script>
+  /* ─────────────────────────────────────────────
+     BOOT — run immediately, no waiting
+  ───────────────────────────────────────────── */
+  fetchPost();
+  fetchRelated();
+
+})();
+</script>
 </body>
 </html>
