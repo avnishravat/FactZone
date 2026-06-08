@@ -591,9 +591,7 @@
     let visibleCount = 0;
     let activeSearch = '';
     let activeCategory = 'all';
-    const CACHE_KEY = 'factzone_posts_v2';
-    const CACHE_TIME_KEY = 'factzone_posts_time';
-    const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+    // localStorage cache removed — was causing QuotaExceededError
 
     function showSkeletons() {
       // Already in HTML on page load, nothing to do
@@ -688,32 +686,18 @@
     });
 
     async function loadPosts() {
-      // 1. Try cache first for instant display
-      const cachedRaw = localStorage.getItem(CACHE_KEY);
-      const cachedTime = parseInt(localStorage.getItem(CACHE_TIME_KEY) || '0');
-      const cacheValid = cachedRaw && (Date.now() - cachedTime < CACHE_TTL);
-
-      if (cachedRaw) {
-        try {
-          allPosts = JSON.parse(cachedRaw);
-          hideSkeletons();
-          renderPosts(true);
-        } catch(e) {
-          localStorage.removeItem(CACHE_KEY);
-        }
-      }
-
-      // 2. Always fetch fresh from Firebase (even if cache was used)
       try {
-        // No orderBy — avoids Firestore index requirement. Sort client-side instead.
+        // Clear old bloated cache that was causing QuotaExceededError
+        localStorage.removeItem('factzone_posts_v2');
+        localStorage.removeItem('factzone_posts_time');
+        localStorage.removeItem('factzone_posts');
+
         const q = query(collection(db, "posts"));
         const querySnapshot = await getDocs(q);
 
         if (querySnapshot.empty) {
-          if (!cachedRaw) {
-            hideSkeletons();
-            postsContainer.innerHTML = `<h2 class="text-center text-2xl col-span-full dark:text-white">No Posts Found</h2>`;
-          }
+          hideSkeletons();
+          postsContainer.innerHTML = `<h2 class="text-center text-2xl col-span-full dark:text-white">Koi post nahi mili</h2>`;
           return;
         }
 
@@ -726,23 +710,17 @@
         });
 
         allPosts = postsArray;
-        localStorage.setItem(CACHE_KEY, JSON.stringify(postsArray));
-        localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
-
         hideSkeletons();
         renderPosts(true);
 
       } catch (error) {
         console.error("Firebase fetch error:", error);
-        // If cache was shown already, keep it. Otherwise show error.
-        if (!cachedRaw) {
-          hideSkeletons();
-          postsContainer.innerHTML = `<div class="col-span-full text-center py-10">
-            <p class="text-2xl mb-3">⚠️</p>
-            <p class="text-gray-600 dark:text-gray-400 font-semibold">Posts load nahi ho sake.<br>Internet check karein aur page reload karein.</p>
-            <button onclick="location.reload()" class="mt-4 bg-black dark:bg-white text-white dark:text-black px-6 py-2 rounded-full font-bold text-sm">🔄 Reload</button>
-          </div>`;
-        }
+        hideSkeletons();
+        postsContainer.innerHTML = `<div class="col-span-full text-center py-10">
+          <p class="text-2xl mb-3">⚠️</p>
+          <p class="text-gray-600 dark:text-gray-400 font-semibold">Posts load nahi ho sake.<br>Internet check karein aur page reload karein.</p>
+          <button onclick="location.reload()" class="mt-4 bg-black dark:bg-white text-white dark:text-black px-6 py-2 rounded-full font-bold text-sm">🔄 Reload</button>
+        </div>`;
       }
     }
 
