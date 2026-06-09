@@ -1,414 +1,593 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>
-Factzone Admin Panel
-</title>
-
-<link rel="icon"
-href="logo.svg">
-
-<meta name="robots"
-content="noindex,nofollow">
-
-<script src="https://cdn.tailwindcss.com"></script>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FactZone Admin</title>
+<link rel="icon" href="logo.svg">
+<meta name="robots" content="noindex,nofollow">
 <style>
+*{box-sizing:border-box;margin:0;padding:0}
 
-body{
-background:#f3f4f6;
-font-family:Arial;
+/* ── Light theme ── */
+[data-theme="light"]{
+  --bg:#f0f0f7;
+  --surface:#ffffff;
+  --surface2:#f3f3fb;
+  --border:#e2e2f0;
+  --accent:#7c6dfa;
+  --accent2:#6366f1;
+  --green:#16a34a;
+  --red:#dc2626;
+  --blue:#2563eb;
+  --text:#1a1a2e;
+  --muted:#7070a0;
+  --radius:14px;
+  --shadow:0 2px 12px rgba(0,0,0,.08);
+}
+/* ── Dark theme ── */
+[data-theme="dark"]{
+  --bg:#0a0a0f;
+  --surface:#13131a;
+  --surface2:#1c1c26;
+  --border:#2a2a3a;
+  --accent:#7c6dfa;
+  --accent2:#a78bfa;
+  --green:#22c55e;
+  --red:#ef4444;
+  --blue:#3b82f6;
+  --text:#f1f0ff;
+  --muted:#6b6b8a;
+  --radius:14px;
+  --shadow:0 2px 12px rgba(0,0,0,.4);
 }
 
-.card{
-background:white;
-border-radius:20px;
-padding:20px;
-box-shadow:0 5px 20px rgba(0,0,0,.1);
-}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-serif;min-height:100vh;transition:background .3s,color .3s}
 
-input,
-textarea{
-width:100%;
-padding:14px;
-border:2px solid #ddd;
-border-radius:12px;
-outline:none;
-margin-top:10px;
-}
+/* ── Theme toggle button ── */
+.theme-toggle{background:var(--surface2);border:1px solid var(--border);color:var(--text);width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:.2s;flex-shrink:0}
+.theme-toggle:hover{border-color:var(--accent);transform:scale(1.05)}
 
-input:focus,
-textarea:focus{
-border-color:black;
-}
+/* ── Sidebar ── */
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:240px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;transition:background .3s,border-color .3s}
+.logo{padding:24px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border)}
+.logo img{width:36px;height:36px;border-radius:10px;border:2px solid var(--accent)}
+.logo-text{font-size:18px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav{padding:16px 12px;flex:1}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:14px;color:var(--muted);transition:.2s;margin-bottom:4px;border:1px solid transparent;background:none;width:100%;text-align:left}
+.nav-item:hover{background:var(--surface2);color:var(--text)}
+.nav-item.active{background:rgba(124,109,250,.12);color:var(--accent2);border-color:rgba(124,109,250,.2)}
+.nav-icon{font-size:18px;width:22px;text-align:center}
+.sidebar-footer{padding:16px;border-top:1px solid var(--border)}
+.sync-badge{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);padding:10px 12px;border-radius:10px;background:var(--surface2)}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex-shrink:0;transition:.3s}
+.sync-dot.connected{background:var(--green);box-shadow:0 0 6px var(--green)}
+.sync-dot.syncing{background:#facc15;box-shadow:0 0 6px #facc15;animation:pulse 1s infinite}
+.sync-dot.error{background:var(--red)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
-button{
-transition:.3s;
-}
+/* ── Main ── */
+.main{margin-left:240px;min-height:100vh}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;transition:background .3s,border-color .3s}
+.page-title{font-size:20px;font-weight:600}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.stats-row{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;padding:24px 32px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;position:relative;overflow:hidden;box-shadow:var(--shadow);transition:background .3s,border-color .3s}
+.stat-label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.stat-value{font-size:32px;font-weight:700}
+.stat-card.purple .stat-value{color:var(--accent2)}
+.stat-card.green .stat-value{color:var(--green)}
 
-button:hover{
-transform:scale(1.03);
-}
+/* ── Content ── */
+.content{padding:0 32px 32px}
+.upload-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:28px;box-shadow:var(--shadow);transition:background .3s,border-color .3s}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.section-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;background:rgba(124,109,250,.12);border:1px solid rgba(124,109,250,.2)}
+.section-title{font-size:16px;font-weight:600}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+.form-label{font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.4px}
+.form-input{background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:10px;padding:12px 14px;font-size:14px;outline:none;transition:.2s;width:100%;font-family:inherit;resize:vertical}
+.form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,109,250,.12)}
+.form-input::placeholder{color:var(--muted)}
+.btn{border:none;border-radius:10px;padding:12px 20px;font-size:14px;font-weight:600;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#6366f1);color:white;width:100%;justify-content:center;font-size:15px;padding:14px}
+.btn-primary:hover{box-shadow:0 8px 24px rgba(124,109,250,.3)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-danger{background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.2);padding:7px 12px;font-size:12px;border-radius:8px}
+.btn-danger:hover{background:rgba(239,68,68,.2)}
+.btn-edit{background:rgba(124,109,250,.1);color:var(--accent2);border:1px solid rgba(124,109,250,.2);padding:7px 12px;font-size:12px;border-radius:8px}
+.btn-edit:hover{background:rgba(124,109,250,.2)}
 
-.post-card{
-border:2px solid #e5e7eb;
-border-radius:20px;
-overflow:hidden;
-background:#fff;
-transition:.3s;
-}
+/* ── Posts grid ── */
+.posts-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.search-box{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:14px;color:var(--text);outline:none;width:240px;transition:.2s}
+.search-box:focus{border-color:var(--accent);width:280px}
+.search-box::placeholder{color:var(--muted)}
+.posts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.post-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:.2s;position:relative;box-shadow:var(--shadow)}
+.post-card:hover{border-color:rgba(124,109,250,.4);transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.15)}
+.post-thumb{width:100%;height:175px;object-fit:cover;display:block;background:var(--surface2)}
+.post-body{padding:14px}
+.post-title{font-size:15px;font-weight:600;line-height:1.4;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.post-desc{font-size:13px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:12px;line-height:1.5}
+.post-actions{display:flex;gap:8px}
+.post-meta{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.55);border-radius:20px;padding:3px 9px;font-size:11px;color:rgba(255,255,255,.85);backdrop-filter:blur(4px)}
+.post-num{position:absolute;top:10px;right:10px;background:rgba(124,109,250,.7);border-radius:20px;padding:3px 9px;font-size:11px;color:white;backdrop-filter:blur(4px);font-weight:600}
 
-.post-card:hover{
-border-color:black;
-transform:translateY(-4px);
-}
+/* ── Toast ── */
+.toast{position:fixed;bottom:28px;right:28px;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:600;z-index:1000;display:none;align-items:center;gap:10px;max-width:340px;border:1px solid transparent;box-shadow:0 8px 32px rgba(0,0,0,.3)}
+.toast.show{display:flex;animation:slideUp .3s ease}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.toast.syncing{background:var(--surface);border-color:var(--accent);color:var(--accent2)}
+.toast.success{background:var(--surface);border-color:var(--green);color:var(--green)}
+.toast.error{background:var(--surface);border-color:var(--red);color:var(--red)}
 
-.post-card img{
-width:100%;
-height:200px;
-object-fit:cover;
-}
+/* ── Empty/skeleton ── */
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty-icon{font-size:48px;margin-bottom:16px}
+.empty-text{font-size:16px;font-weight:500;margin-bottom:8px;color:var(--text)}
+.empty-sub{font-size:14px}
+.skeleton{background:linear-gradient(90deg,var(--surface2) 25%,var(--surface) 50%,var(--surface2) 75%);background-size:400% 100%;animation:shimmer 1.4s infinite linear;border-radius:8px}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
 
-.line2{
-display:-webkit-box;
--webkit-line-clamp:2;
--webkit-box-orient:vertical;
-overflow:hidden;
-}
+/* ── Modal ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal-overlay.show{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px;width:90%;max-width:580px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.4)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.modal-title{font-size:18px;font-weight:700}
+.modal-close{background:var(--surface2);border:1px solid var(--border);color:var(--muted);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:.2s}
+.modal-close:hover{color:var(--text);border-color:var(--text)}
+.modal-actions{display:flex;gap:10px;margin-top:20px}
+.btn-secondary{background:var(--surface2);border:1px solid var(--border);color:var(--muted);border-radius:10px;padding:12px 20px;font-size:14px;font-weight:600;cursor:pointer;flex:1;transition:.2s}
+.btn-secondary:hover{color:var(--text);border-color:var(--text)}
+.btn-save{background:linear-gradient(135deg,var(--accent),#6366f1);color:white;border:none;border-radius:10px;padding:12px 20px;font-size:14px;font-weight:600;cursor:pointer;flex:1;transition:.2s}
+.btn-save:hover{box-shadow:0 6px 20px rgba(124,109,250,.3)}
+.btn-save:disabled{opacity:.5;cursor:not-allowed}
 
+/* ── Preview image in modal ── */
+.img-preview{width:100%;height:140px;object-fit:cover;border-radius:10px;margin-top:8px;border:1px solid var(--border);display:none}
+.img-preview.show{display:block}
+
+.page{display:none}
+.page.active{display:block}
+
+@media(max-width:768px){
+  .sidebar{width:60px}
+  .logo-text,.nav-item span,.sidebar-footer{display:none}
+  .logo{padding:16px;justify-content:center}
+  .nav-item{justify-content:center;padding:12px}
+  .main{margin-left:60px}
+  .stats-row{grid-template-columns:1fr;padding:16px}
+  .content{padding:0 16px 24px}
+  .form-grid{grid-template-columns:1fr}
+  .topbar{padding:0 16px}
+}
 </style>
-
 </head>
-
 <body>
 
-<!-- HEADER -->
+<aside class="sidebar">
+  <div class="logo">
+    <img src="logo.svg" alt="FactZone">
+    <span class="logo-text">FactZone</span>
+  </div>
+  <nav class="nav">
+    <button id="nav-dashboard" class="nav-item active" onclick="switchPage('dashboard',this)">
+      <span class="nav-icon">📊</span><span>Dashboard</span>
+    </button>
+    <button id="nav-upload" class="nav-item" onclick="switchPage('upload',this)">
+      <span class="nav-icon">✏️</span><span>New Post</span>
+    </button>
+    <button id="nav-posts" class="nav-item" onclick="switchPage('posts',this)">
+      <span class="nav-icon">📰</span><span>All Posts</span>
+    </button>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sync-badge">
+      <div class="sync-dot" id="syncDot"></div>
+      <span id="syncText">Database Online</span>
+    </div>
+  </div>
+</aside>
 
-<header
-class="bg-black sticky top-0 z-50 shadow-lg">
+<div class="main">
+  <div class="topbar">
+    <div class="page-title" id="pageTitle">Dashboard</div>
+    <div class="topbar-right">
+      <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()" title="Toggle dark/light mode">🌙</button>
+      <a href="index.html" target="_blank" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:9px 14px;border-radius:10px;font-size:13px;font-weight:600;text-decoration:none;transition:.2s;white-space:nowrap" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">↗ View Site</a>
+    </div>
+  </div>
 
-<div
-class="max-w-7xl mx-auto p-4 flex items-center gap-3">
+  <div id="page-dashboard" class="page active">
+    <div class="stats-row">
+      <div class="stat-card purple">
+        <div class="stat-label">Total Posts</div>
+        <div class="stat-value" id="statTotal">—</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-label">Last Updated</div>
+        <div class="stat-value" id="statSync" style="font-size:20px;padding-top:6px">—</div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="upload-card">
+        <div class="section-header">
+          <div class="section-icon">⚡</div>
+          <div class="section-title">Quick Post</div>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Title *</label>
+            <input class="form-input" id="q-title" placeholder="Post ka title...">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Image URL</label>
+            <input class="form-input" id="q-image" placeholder="https://..." oninput="previewImg('q')">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Description *</label>
+            <input class="form-input" id="q-desc" placeholder="2-3 line mein summary...">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Content *</label>
+            <textarea class="form-input" id="q-content" rows="5" placeholder="Poora content yahan likho..."></textarea>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="quickUploadBtn" onclick="uploadPost('q')">
+          <span>🚀</span> Publish Post
+        </button>
+      </div>
 
-<img
-src="logo.svg"
-class="w-12 h-12 rounded-full bg-white p-1">
+      <div class="upload-card" style="padding-bottom:8px">
+        <div class="posts-header" style="margin-bottom:16px">
+          <div class="section-header" style="margin-bottom:0">
+            <div class="section-icon">📰</div>
+            <div class="section-title">Recent Posts</div>
+          </div>
+          <input class="search-box" id="dashSearch" placeholder="🔍 Search..." oninput="filterDash()">
+        </div>
+        <div id="dash-grid" class="posts-grid" style="margin-bottom:16px"></div>
+      </div>
+    </div>
+  </div>
 
-<h1
-class="text-3xl font-bold text-white">
-FactZone Admin
-</h1>
+  <div id="page-upload" class="page">
+    <div class="content" style="padding-top:24px">
+      <div class="upload-card">
+        <div class="section-header">
+          <div class="section-icon">✏️</div>
+          <div class="section-title">New Post</div>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Title *</label>
+            <input class="form-input" id="u-title" placeholder="Post ka title...">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Image URL</label>
+            <input class="form-input" id="u-image" placeholder="https://..." oninput="previewImg('u')">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Description *</label>
+            <input class="form-input" id="u-desc" placeholder="Short description...">
+          </div>
+          <div class="form-group full">
+            <img id="u-preview" class="img-preview" alt="Preview">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Content *</label>
+            <textarea class="form-input" id="u-content" rows="10" placeholder="Full post content..."></textarea>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="uploadBtn" onclick="uploadPost('u')">
+          <span>🚀</span> Publish Post
+        </button>
+      </div>
+    </div>
+  </div>
 
+  <div id="page-posts" class="page">
+    <div class="content" style="padding-top:24px">
+      <div class="posts-header">
+        <div class="section-header" style="margin-bottom:0">
+          <div class="section-icon">📰</div>
+          <div class="section-title" id="postsCount">All Posts</div>
+        </div>
+        <input class="search-box" id="searchBox" placeholder="🔍 Search posts..." oninput="filterPosts()">
+      </div>
+      <div id="posts-grid" class="posts-grid"></div>
+    </div>
+  </div>
 </div>
 
-</header>
-
-<!-- MAIN -->
-
-<div
-class="max-w-7xl mx-auto p-5">
-
-<!-- FORM -->
-
-<div class="card mb-10">
-
-<h2
-class="text-2xl font-bold mb-5">
-Upload New Post
-</h2>
-
-<input
-type="text"
-id="title"
-placeholder="Post Title">
-
-<input
-type="text"
-id="desc"
-placeholder="Short Description">
-
-<input
-type="text"
-id="image"
-placeholder="Image URL">
-
-<textarea
-id="content"
-rows="8"
-placeholder="Full Post Content">
-</textarea>
-
-<button
-id="uploadBtn"
-class="bg-black text-white px-6 py-3 rounded-xl mt-5 w-full text-lg">
-
-Upload Post
-
-</button>
-
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">✏️ Edit Post</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="form-group" style="margin-bottom:14px">
+      <label class="form-label">Title</label>
+      <input class="form-input" id="e-title">
+    </div>
+    <div class="form-group" style="margin-bottom:14px">
+      <label class="form-label">Description</label>
+      <input class="form-input" id="e-desc">
+    </div>
+    <div class="form-group" style="margin-bottom:14px">
+      <label class="form-label">Image URL</label>
+      <input class="form-input" id="e-image" oninput="previewImg('e')">
+      <img id="e-preview" class="img-preview" alt="Preview">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Content</label>
+      <textarea class="form-input" id="e-content" rows="8"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" id="saveEditBtn" onclick="saveEdit()">💾 Save Changes</button>
+    </div>
+  </div>
 </div>
 
-<!-- POSTS -->
-
-<h2
-class="text-3xl font-bold mb-5">
-All Posts
-</h2>
-
-<div
-id="posts"
-class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-
-</div>
-
-</div>
-
-<!-- FIREBASE -->
+<div class="toast" id="toast"></div>
 
 <script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-
-getFirestore,
-collection,
-addDoc,
-getDocs,
-deleteDoc,
-doc,
-updateDoc,
-query,
-orderBy
-
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-
-apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
-
-authDomain: "factzone-a9ace.firebaseapp.com",
-
-databaseURL: "https://factzone-a9ace-default-rtdb.firebaseio.com",
-
-projectId: "factzone-a9ace",
-
-storageBucket: "factzone-a9ace.firebasestorage.app",
-
-messagingSenderId: "425838320650",
-
-appId: "1:425838320650:web:beab18baddf818cb73d3f3",
-
-measurementId: "G-311JQXBXR9"
-
+  apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
+  authDomain: "factzone-a9ace.firebaseapp.com",
+  projectId: "factzone-a9ace",
+  storageBucket: "factzone-a9ace.firebasestorage.app",
+  messagingSenderId: "425838320650",
+  appId: "1:425838320650:web:beab18baddf818cb73d3f3"
 };
 
-const app =
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
 
-const db =
-getFirestore(app);
+let allPostsCache = [];
+let currentEditId = null;
 
-const postsDiv =
-document.getElementById("posts");
+// ── Theme ──
+window.toggleTheme = function() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeBtn').textContent = isDark ? '🌙' : '☀️';
+  localStorage.setItem('fz-admin-theme', isDark ? 'light' : 'dark');
+};
+(function initTheme() {
+  const saved = localStorage.getItem('fz-admin-theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  document.getElementById('themeBtn').textContent = saved === 'dark' ? '☀️' : '🌙';
+})();
 
-/* LOAD POSTS */
-
-async function loadPosts(){
-
-postsDiv.innerHTML =
-"<h2 class='text-2xl'>Loading...</h2>";
-
-const q =
-query(
-collection(db,"posts"),
-orderBy("createdAt","desc")
-);
-
-const querySnapshot =
-await getDocs(q);
-
-postsDiv.innerHTML = "";
-
-if(querySnapshot.empty){
-
-postsDiv.innerHTML =
-"<h2>No Posts Found</h2>";
-
-return;
-
-}
-
-querySnapshot.forEach((document)=>{
-
-const post =
-document.data();
-
-postsDiv.innerHTML += `
-
-<div class="post-card shadow-lg">
-
-<img
-src="${post.image || 'https://via.placeholder.com/500'}">
-
-<div class="p-4">
-
-<h2 class="text-xl font-bold mb-2 line2">
-${post.title || ''}
-</h2>
-
-<p class="text-gray-600 text-sm mb-4 line2">
-${post.desc || ''}
-</p>
-
-<div class="flex gap-3">
-
-<button
-onclick="editPost('${document.id}','${post.title}','${post.desc}','${post.image}','${post.content}')"
-class="bg-blue-600 text-white px-4 py-2 rounded-lg w-full">
-
-Edit
-
-</button>
-
-<button
-onclick="deletePost('${document.id}')"
-class="bg-red-600 text-white px-4 py-2 rounded-lg w-full">
-
-Delete
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-`;
-
-});
-
-}
-
-/* UPLOAD POST */
-
-document.getElementById("uploadBtn")
-.addEventListener("click",async()=>{
-
-const title =
-document.getElementById("title").value;
-
-const desc =
-document.getElementById("desc").value;
-
-const image =
-document.getElementById("image").value;
-
-const content =
-document.getElementById("content").value;
-
-if(!title || !desc || !content){
-
-alert("Please fill all fields");
-
-return;
-
-}
-
-await addDoc(
-collection(db,"posts"),
-{
-
-title:title,
-
-desc:desc,
-
-image:image,
-
-content:content,
-
-createdAt:Date.now()
-
-}
-);
-
-alert("Post Uploaded");
-
-document.getElementById("title").value="";
-document.getElementById("desc").value="";
-document.getElementById("image").value="";
-document.getElementById("content").value="";
-
-loadPosts();
-
-});
-
-/* DELETE */
-
-window.deletePost =
-async(id)=>{
-
-if(confirm("Delete this post?")){
-
-await deleteDoc(doc(db,"posts",id));
-
-loadPosts();
-
-}
-
+// ── Image preview ──
+window.previewImg = function(prefix) {
+  const url = document.getElementById(`${prefix}-image`)?.value;
+  const prev = document.getElementById(`${prefix}-preview`);
+  if (!prev) return;
+  if (url) { prev.src = url; prev.classList.add('show'); }
+  else prev.classList.remove('show');
 };
 
-/* EDIT */
-
-window.editPost =
-async(id,title,desc,image,content)=>{
-
-const newTitle =
-prompt("Edit Title",title);
-
-const newDesc =
-prompt("Edit Description",desc);
-
-const newImage =
-prompt("Edit Image URL",image);
-
-const newContent =
-prompt("Edit Content",content);
-
-if(newTitle){
-
-await updateDoc(
-doc(db,"posts",id),
-{
-
-title:newTitle,
-desc:newDesc,
-image:newImage,
-content:newContent
-
-}
-);
-
-alert("Post Updated");
-
-loadPosts();
-
+// ── Toast ──
+function showToast(msg, type = 'success') {
+  const el = document.getElementById('toast');
+  el.innerHTML = msg;
+  el.className = `toast show ${type}`;
+  setTimeout(() => el.classList.remove('show'), 3500);
 }
 
+// ── Sync status ──
+function setSyncStatus(state, text) {
+  document.getElementById('syncDot').className = `sync-dot ${state}`;
+  document.getElementById('syncText').textContent = text;
+}
+
+// ── Build post card HTML ──
+function buildCard(post, index) {
+  const date = post.createdAt
+    ? new Date(post.createdAt?.seconds ? post.createdAt.seconds*1000 : post.createdAt).toLocaleDateString('en-IN')
+    : '';
+  return `
+  <div class="post-card">
+    <img class="post-thumb" src="${post.image||'https://placehold.co/400x175/1c1c26/6b6b8a?text=No+Image'}"
+      onerror="this.src='https://placehold.co/400x175/1c1c26/6b6b8a?text=No+Image'" loading="lazy">
+    ${date ? `<div class="post-meta">${date}</div>` : ''}
+    <div class="post-num">#${index+1}</div>
+    <div class="post-body">
+      <div class="post-title">${post.title||'Untitled'}</div>
+      <div class="post-desc">${post.desc||'No description'}</div>
+      <div class="post-actions">
+        <button class="btn btn-edit" onclick="openEditModal('${post.id}')">✏️ Edit</button>
+        <button class="btn btn-danger" onclick="deletePost('${post.id}')">🗑 Delete</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── Render grids ──
+function renderGrid(containerId, posts) {
+  const grid = document.getElementById(containerId);
+  if (!posts.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+      <div class="empty-icon">📭</div>
+      <div class="empty-text">Koi post nahi mili</div>
+      <div class="empty-sub">Pehli post upload karo!</div>
+    </div>`;
+    return;
+  }
+  grid.innerHTML = posts.map((p,i) => buildCard(p,i)).join('');
+}
+
+// ── Load Posts ──
+async function loadPosts() {
+  const skeletons = [...Array(4)].map(() => `
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden">
+      <div class="skeleton" style="height:175px"></div>
+      <div style="padding:14px">
+        <div class="skeleton" style="height:14px;margin-bottom:8px"></div>
+        <div class="skeleton" style="height:12px;width:70%"></div>
+      </div>
+    </div>`).join('');
+  document.getElementById('dash-grid').innerHTML = skeletons;
+  document.getElementById('posts-grid').innerHTML = skeletons + skeletons;
+
+  try {
+    const snap = await getDocs(collection(db, "posts"));
+    const seenIds = new Set();
+    const posts = [];
+    snap.forEach(d => {
+      if (seenIds.has(d.id)) return;
+      seenIds.add(d.id);
+      posts.push({ id:d.id, ...d.data() });
+    });
+    posts.sort((a,b) => (b.createdAt?.seconds||b.createdAt||0) - (a.createdAt?.seconds||a.createdAt||0));
+    allPostsCache = posts;
+
+    document.getElementById('statTotal').textContent = posts.length;
+    document.getElementById('statSync').textContent = new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+    renderGrid('dash-grid', posts);
+    renderGrid('posts-grid', posts);
+    setSyncStatus('connected', 'Database Online');
+  } catch(e) {
+    ['dash-grid','posts-grid'].forEach(id => {
+      document.getElementById(id).innerHTML = `<div style="color:var(--red);padding:20px;grid-column:1/-1">❌ Error: ${e.message}</div>`;
+    });
+    setSyncStatus('error', 'Firebase error');
+  }
+}
+
+// ── Search ──
+window.filterPosts = function() {
+  const q = document.getElementById('searchBox').value.toLowerCase();
+  renderGrid('posts-grid', q ? allPostsCache.filter(p => (p.title+p.desc).toLowerCase().includes(q)) : allPostsCache);
+};
+window.filterDash = function() {
+  const q = document.getElementById('dashSearch').value.toLowerCase();
+  renderGrid('dash-grid', q ? allPostsCache.filter(p => (p.title+p.desc).toLowerCase().includes(q)) : allPostsCache);
 };
 
-loadPosts();
+// ── Upload ──
+window.uploadPost = async function(prefix) {
+  const title   = document.getElementById(`${prefix}-title`).value.trim();
+  const desc    = document.getElementById(`${prefix}-desc`).value.trim();
+  const image   = document.getElementById(`${prefix}-image`).value.trim();
+  const content = document.getElementById(`${prefix}-content`).value.trim();
+  if (!title || !desc || !content) { showToast('⚠️ Title, description aur content required hai!', 'error'); return; }
+  
+  const btnId = prefix === 'q' ? 'quickUploadBtn' : 'uploadBtn';
+  const btn = document.getElementById(btnId);
+  btn.disabled = true; btn.innerHTML = '<span>⏳</span> Publishing...';
+  
+  try {
+    await addDoc(collection(db,"posts"), { title, desc, image, content, createdAt: Date.now() });
+    
+    // Clear Form inputs
+    ['title','desc','image','content'].forEach(f => { 
+      const inputEl = document.getElementById(`${prefix}-${f}`);
+      if(inputEl) inputEl.value=''; 
+    });
+    
+    const prev = document.getElementById(`${prefix}-preview`);
+    if (prev) prev.classList.remove('show');
+    
+    btn.innerHTML = '<span>✅</span> Published!';
+    showToast('🚀 Post successfully publish ho gayi!', 'success');
+    
+    // Switch automatic to Dashboard (Home Page)
+    setTimeout(() => { 
+      btn.disabled = false; 
+      btn.innerHTML = '<span>🚀</span> Publish Post'; 
+      const dashBtn = document.getElementById('nav-dashboard');
+      window.switchPage('dashboard', dashBtn);
+    }, 1000);
+    
+    await loadPosts();
+  } catch(e) {
+    btn.disabled=false; btn.innerHTML='<span>🚀</span> Publish Post';
+    showToast('❌ Upload failed: ' + e.message, 'error');
+  }
+};
 
+// ── Delete ──
+window.deletePost = async function(id) {
+  if (!confirm('Yeh post delete karein?')) return;
+  try {
+    await deleteDoc(doc(db,"posts",id));
+    showToast('🗑 Post delete ho gayi', 'success');
+    await loadPosts();
+  } catch(e) { showToast('❌ ' + e.message, 'error'); }
+};
+
+// ── Edit Modal ──
+window.openEditModal = function(id) {
+  const post = allPostsCache.find(p => p.id === id);
+  if (!post) return;
+  currentEditId = id;
+  document.getElementById('e-title').value   = post.title   || '';
+  document.getElementById('e-desc').value    = post.desc    || '';
+  document.getElementById('e-image').value   = post.image   || '';
+  document.getElementById('e-content').value = post.content || '';
+  const prev = document.getElementById('e-preview');
+  if (post.image) { prev.src = post.image; prev.classList.add('show'); }
+  else prev.classList.remove('show');
+  document.getElementById('editModal').classList.add('show');
+};
+
+window.closeModal = function() {
+  document.getElementById('editModal').classList.remove('remove');
+  document.getElementById('editModal').classList.remove('show');
+  currentEditId = null;
+};
+
+window.saveEdit = async function() {
+  if (!currentEditId) return;
+  const btn = document.getElementById('saveEditBtn');
+  btn.textContent = 'Saving...'; btn.disabled = true;
+  try {
+    await updateDoc(doc(db,"posts",currentEditId), {
+      title:   document.getElementById('e-title').value,
+      desc:    document.getElementById('e-desc').value,
+      image:   document.getElementById('e-image').value,
+      content: document.getElementById('e-content').value
+    });
+    closeModal();
+    showToast('✅ Post update ho gayi!', 'success');
+    await loadPosts();
+  } catch(e) { showToast('❌ ' + e.message, 'error'); }
+  btn.textContent = '💾 Save Changes'; btn.disabled = false;
+};
+
+// ── Page switch ──
+window.switchPage = function(page, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  
+  const targetPage = document.getElementById(`page-${page}`);
+  if(targetPage) targetPage.classList.add('active');
+  if(btn) btn.classList.add('active');
+  
+  const titles = {dashboard:'Dashboard', upload:'New Post', posts:'All Posts'};
+  document.getElementById('pageTitle').textContent = titles[page] || 'Dashboard';
+};
+
+// ── Init ──
+async function init() {
+  setSyncStatus('connected', 'Database Online');
+  await loadPosts();
+}
+init();
 </script>
-
 </body>
 </html>
