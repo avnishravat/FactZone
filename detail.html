@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- SEO BASE — JS updates these once post data arrives -->
   <title>FactZone - Amazing Facts & Educational Knowledge</title>
   <meta name="description" content="Read verified facts, science updates, historical mysteries, and knowledge articles on FactZone Official.">
   <meta name="robots" content="index,follow,max-image-preview:large">
@@ -20,7 +19,6 @@
   <meta name="twitter:description" content="Read verified facts, science updates, historical mysteries, and knowledge articles.">
   <meta name="twitter:image"       content="https://factzone.online/logo.svg">
 
-  <!-- JSON-LD placeholder — replaced instantly after fetch -->
   <script type="application/ld+json" id="articleSchema">{"@context":"https://schema.org","@type":"Article","headline":"FactZone Educational Article","author":{"@type":"Person","name":"Awaneesh"},"publisher":{"@type":"Organization","name":"FactZone Official","logo":{"@type":"ImageObject","url":"https://factzone.online/logo.svg"}}}</script>
 
   <link rel="icon" href="logo.svg">
@@ -28,7 +26,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <!-- AdSense — eager load for Google site verification -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-697419046628538" crossorigin="anonymous"></script>
 
   <style>
@@ -70,12 +67,24 @@
     .author-box { margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--border); font-size: .95rem; color: var(--muted); }
     .author-box a { color: var(--accent); text-decoration: none; font-weight: 600; }
 
+    /* Share Buttons CSS */
+    .share-container { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px dashed var(--border); }
+    .share-title { font-size: 0.95rem; font-weight: 700; color: var(--ink); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .share-buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .share-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.85rem; border-radius: 0.375rem; font-size: 0.85rem; font-weight: 700; text-decoration: none; color: #fff; transition: opacity 0.15s, transform 0.1s; cursor: pointer; border: none; }
+    .share-btn:hover { opacity: 0.9; }
+    .share-btn:active { transform: scale(0.97); }
+    .btn-wa { background-color: #25D366; }
+    .btn-fb { background-color: #1877F2; }
+    .btn-tw { background-color: #000000; }
+    .btn-cp { background-color: var(--muted); }
+
     /* Skeleton */
     .sk { background: linear-gradient(90deg,#eee 25%,#f8f8f8 50%,#eee 75%); background-size: 400% 100%; animation: sh 1.4s infinite; border-radius: .5rem; }
     @keyframes sh { to { background-position: -400% 0; } }
     .sk-img   { width: 100%; height: 320px; border-radius: .75rem; margin-bottom: 1.5rem; }
-    .sk-h     { height: 2rem;   width: 75%; margin-bottom: 1rem; }
-    .sk-p     { height: 1rem;   width: 100%; margin-bottom: .65rem; }
+    .sk-h      { height: 2rem;   width: 75%; margin-bottom: 1rem; }
+    .sk-p      { height: 1rem;   width: 100%; margin-bottom: .65rem; }
     .sk-p.s   { width: 55%; }
 
     /* Error */
@@ -106,7 +115,6 @@
     <a href="index.html" class="back-btn">← Back</a>
   </header>
 
-  <!-- Article — skeleton visible immediately to Googlebot & users -->
   <article id="post" itemscope itemtype="https://schema.org/Article">
     <div id="skeleton">
       <div class="sk sk-img"></div>
@@ -115,11 +123,6 @@
       <div class="sk sk-p"></div>
       <div class="sk sk-p s"></div>
     </div>
-    <!--
-      STATIC FALLBACK FOR GOOGLEBOT
-      Google's renderer will execute the script below and replace this,
-      but if JS fails the noscript tag provides crawlable text.
-    -->
     <noscript>
       <p>Please enable JavaScript to read this article on FactZone.</p>
     </noscript>
@@ -135,7 +138,7 @@
 <script>
 (function () {
   /* ─────────────────────────────────────────────
-     CONFIG
+      CONFIG
   ───────────────────────────────────────────── */
   var PROJECT_ID = "factzone-a9ace";
   var API_KEY    = "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc";
@@ -145,7 +148,7 @@
               + PROJECT_ID + "/databases/(default)/documents/";
 
   /* ─────────────────────────────────────────────
-     HELPERS
+      HELPERS
   ───────────────────────────────────────────── */
   var params = new URLSearchParams(location.search);
   var id     = params.get("id") || "";
@@ -177,7 +180,7 @@
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch(e){} }
 
   /* ─────────────────────────────────────────────
-     SEO UPDATER  (runs as soon as data is ready)
+      SEO UPDATER  (runs as soon as data is ready)
   ───────────────────────────────────────────── */
   function updateSEO(title, desc, image) {
     var url = location.href;
@@ -204,7 +207,7 @@
     var schema = {
       "@context":   "https://schema.org",
       "@type":      "Article",
-      "headline":    title,
+      "headline":   title,
       "description": desc,
       "url":         url,
       "image":      [image],
@@ -220,8 +223,20 @@
     if (el) el.textContent = JSON.stringify(schema);
   }
 
+  /* Global function for copy link handler */
+  window.copyArticleLink = function(btn) {
+    var currentUrl = location.href;
+    navigator.clipboard.writeText(currentUrl).then(function() {
+      var oldText = btn.innerHTML;
+      btn.innerHTML = '✓ Copied!';
+      setTimeout(function() { btn.innerHTML = oldText; }, 2000);
+    }).catch(function() {
+      alert("Link copied: " + currentUrl);
+    });
+  };
+
   /* ─────────────────────────────────────────────
-     RENDER POST
+      RENDER POST
   ───────────────────────────────────────────── */
   function renderPost(post) {
     var title   = post.title   || "FactZone Educational Article";
@@ -231,15 +246,30 @@
 
     updateSEO(title, desc, image);
 
+    var shareUrl = encodeURIComponent(location.href);
+    var shareText = encodeURIComponent(title + " - Read more on FactZone:\n");
+
     $("post").innerHTML =
       '<div class="hero-wrap"><img class="hero" src="' + image + '" alt="' + title.replace(/"/g,'&quot;') + '" loading="eager" width="360" height="202"></div>' +
       '<h1 itemprop="headline">' + title + '</h1>' +
       '<div class="content" itemprop="articleBody">' + content + '</div>' +
+      
+      '' +
+      '<div class="share-container">' +
+        '<div class="share-title">Share this Fact:</div>' +
+        '<div class="share-buttons">' +
+          '<a href="https://api.whatsapp.com/send?text=' + shareText + shareUrl + '" target="_blank" rel="noopener" class="share-btn btn-wa">WhatsApp</a>' +
+          '<a href="https://www.facebook.com/sharer/sharer.php?u=' + shareUrl + '" target="_blank" rel="noopener" class="share-btn btn-fb">Facebook</a>' +
+          '<a href="https://twitter.com/intent/tweet?text=' + shareText + '&url=' + shareUrl + '" target="_blank" rel="noopener" class="share-btn btn-tw">X / Twitter</a>' +
+          '<button onclick="window.copyArticleLink(this)" class="share-btn btn-cp">Copy Link</button>' +
+        '</div>' +
+      '</div>' +
+
       '<div class="author-box">Written by <a href="author.html" itemprop="author">Awaneesh</a></div>';
   }
 
   /* ─────────────────────────────────────────────
-     RENDER RELATED
+      RENDER RELATED
   ───────────────────────────────────────────── */
   function renderRelated(items) {
     if (!items || !items.length) {
@@ -257,7 +287,7 @@
   }
 
   /* ─────────────────────────────────────────────
-     FETCH via Firestore REST  (no SDK = fast!)
+      FETCH via Firestore REST  (no SDK = fast!)
   ───────────────────────────────────────────── */
   function fetchPost() {
     if (!id) {
@@ -316,7 +346,7 @@
   }
 
   /* ─────────────────────────────────────────────
-     BOOT — run immediately, no waiting
+      BOOT — run immediately, no waiting
   ───────────────────────────────────────────── */
   fetchPost();
   fetchRelated();
