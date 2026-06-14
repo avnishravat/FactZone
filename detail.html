@@ -141,12 +141,19 @@
   var FS_BASE = "https://firestore.googleapis.com/v1/projects/"
               + PROJECT_ID + "/databases/(default)/documents";
 
-  // 🛠️ SMART LOOKUP: Purana ID aur Naya Slug dono detect karega
+  // 🛠️ SMART LOOKUP FOR GITHUB PAGES REDIRECT
   var params = new URLSearchParams(location.search);
-  var oldId  = params.get("id") || ""; // Check if ?id= exists (Google search traffic)
+  var oldId  = params.get("id") || ""; 
   
   var pathParams = location.pathname.split("/");
   var currentSlug = pathParams.pop() || pathParams.pop();
+
+  // GitHub Pages 404 handler fallback system
+  var redirectedSlug = sessionStorage.getItem('redirect_slug');
+  if (redirectedSlug) {
+    currentSlug = redirectedSlug;
+    sessionStorage.removeItem('redirect_slug'); 
+  }
 
   function $(q) { return document.getElementById(q); }
 
@@ -172,7 +179,7 @@
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch(e){} }
  
   function updateSEO(title, desc, image) {
-    var url = location.href;
+    var url = "https://factzone.online/" + (currentSlug && currentSlug !== "detail.html" ? currentSlug : "");
     document.title = title + " | FactZone";
 
     function setMeta(sel, attr, val) {
@@ -212,7 +219,7 @@
   }
 
   window.copyArticleLink = function(btn) {
-    var currentUrl = location.href;
+    var currentUrl = "https://factzone.online/" + currentSlug;
     navigator.clipboard.writeText(currentUrl).then(function() {
       var oldText = btn.innerHTML;
       btn.innerHTML = '✓ Copied!';
@@ -230,7 +237,7 @@
 
     updateSEO(title, desc, image);
 
-    var shareUrl = encodeURIComponent(location.href);
+    var shareUrl = encodeURIComponent("https://factzone.online/" + currentSlug);
     var shareText = encodeURIComponent(title + " - Read more on FactZone:\n");
 
     $("post").innerHTML =
@@ -258,14 +265,15 @@
       var img   = item.image || "https://factzone.online/logo.png";
       var ttl   = item.title || "";
       var slug  = item.slug || "";
-      return '<a href="/' + slug + '" class="rc" aria-label="Read: ' + ttl.replace(/"/g,'&quot;') + '">' +
+      var link  = slug ? ("/" + slug) : ("detail.html?id=" + item.id);
+      return '<a href="' + link + '" class="rc" aria-label="Read: ' + ttl.replace(/"/g,'&quot;') + '">' +
              '<img src="' + img + '" loading="lazy" width="68" height="68" alt="">' +
              '<h3>' + ttl + '</h3></a>';
     }).join("");
   }
  
   function fetchPost() {
-    // 🛠️ FALLBACK CHECK: Agar user purane Google Index link (?id=...) se aaya hai
+    // 🛠️ FALLBACK CHECK: Google search ya purane URLs ke liye (?id=...)
     if (oldId) {
       var cachedOld = lsGet("fz_post_" + oldId);
       if (cachedOld) { try { renderPost(JSON.parse(cachedOld)); } catch(e){} }
@@ -280,20 +288,16 @@
           }
           var post = parseDoc(data.fields);
           lsSet("fz_post_" + oldId, JSON.stringify(post));
+          if (post.slug) { currentSlug = post.slug; }
           renderPost(post);
-
-          // 🚀 SEO MAGIC REDIRECT: Purane link ko naye slug link par client-side redirect kar dega
-          if (post.slug) {
-            history.replaceState(null, "", "/" + post.slug);
-          }
         })
         .catch(function(err){
           if (!cachedOld) $("post").innerHTML = '<div class="err"><h2>Failed to load</h2><p>Check connection.</p></div>';
         });
-      return; // Purana fetch execution complete, exit function
+      return;
     }
 
-    // 🛠️ NAYA SYSTEM: Agar user direct clean URL (/slug) par aaya hai
+    // NAYA SYSTEM (Slug parsing)
     if (!currentSlug || currentSlug === "detail.html") {
       $("post").innerHTML = '<div class="err"><h2>No article selected</h2><p>Go back to home.</p></div>';
       return;
@@ -349,7 +353,10 @@
         var docs = data.documents || [];
         var items = [];
         docs.forEach(function(d){
+          var parts = d.name.split('/');
+          var docId = parts[parts.length - 1];
           var post = parseDoc(d.fields);
+          post.id = docId;
           if (post.slug === currentSlug || items.length >= 4) return;
           items.push(post);
         });
