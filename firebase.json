@@ -2,9 +2,10 @@
   "hosting": {
     "public": "public",
     "cleanUrls": true,
+    "trailingSlash": false,
     "rewrites": [
       {
-        "source": "/:article_slug",
+        "source": "/!(index.html|detail.html|404.html|about.html|contact.html|privacy.html|terms.html|disclaimer.html|author.html|*.js|*.css|*.png|*.jpg|*.jpeg|*.svg|*.json|robots.txt|sitemap.xml|humans.txt)*",
         "destination": "/detail.html"
       }
     ]
