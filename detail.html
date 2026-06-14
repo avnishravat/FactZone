@@ -49,7 +49,6 @@
     }
     .wrap { max-width: 860px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
 
-  
     .site-header {
       display: flex; align-items: center; justify-content: space-between;
       margin-bottom: 2rem; padding-bottom: 1.25rem;
@@ -61,7 +60,6 @@
     .back-btn { background: var(--ink); color: #fff; text-decoration: none; font-weight: 700; font-size: .875rem; padding: .55rem 1.1rem; border-radius: .5rem; transition: background .18s; }
     .back-btn:hover { background: #333; }
 
-   
     #post { background: var(--surface); border-radius: var(--r); padding: 1.75rem 2rem; box-shadow: 0 2px 16px rgba(0,0,0,.07); }
     .hero-wrap { display: flex; justify-content: center; margin-bottom: 1.5rem; }
     #post img.hero { width: 100%; max-width: 360px; aspect-ratio: 16/9; border-radius: .6rem; object-fit: cover; display: block; box-shadow: 0 4px 18px rgba(0,0,0,.18); }
@@ -69,7 +67,6 @@
     #post .content { font-size: 1.05rem; line-height: 1.85; color: #2d2d2b; white-space: pre-line; }
     .author-box { margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--border); font-size: .95rem; color: var(--muted); }
     .author-box a { color: var(--accent); text-decoration: none; font-weight: 600; }
-
 
     .share-container { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px dashed var(--border); }
     .share-title { font-size: 0.95rem; font-weight: 700; color: var(--ink); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
@@ -82,7 +79,6 @@
     .btn-tw { background-color: #000000; }
     .btn-cp { background-color: var(--muted); }
 
-
     .sk { background: linear-gradient(90deg,#eee 25%,#f8f8f8 50%,#eee 75%); background-size: 400% 100%; animation: sh 1.4s infinite; border-radius: .5rem; }
     @keyframes sh { to { background-position: -400% 0; } }
     .sk-img   { width: 100%; height: 320px; border-radius: .75rem; margin-bottom: 1.5rem; }
@@ -90,11 +86,9 @@
     .sk-p      { height: 1rem;   width: 100%; margin-bottom: .65rem; }
     .sk-p.s   { width: 55%; }
 
- 
     .err { text-align: center; padding: 3rem 1rem; color: var(--muted); }
     .err h2 { font-family: 'Merriweather', serif; color: var(--ink); margin-bottom: .5rem; }
 
-  
     #relatedSection { margin-top: 2rem; background: var(--surface); border-radius: var(--r); padding: 1.75rem 2rem; box-shadow: 0 2px 16px rgba(0,0,0,.07); }
     #relatedSection h2 { font-family: 'Merriweather', serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem; padding-bottom: .75rem; border-bottom: 2px solid var(--ink); }
     #relatedGrid { display: grid; gap: .85rem; }
@@ -112,7 +106,7 @@
 
   <header class="site-header">
     <a href="index.html" class="logo-link" aria-label="FactZone Home">
-      <img src="logo.png" alt="FactZone Logo" width="44" height="44">
+      <img src="https://factzone.online/logo.png" alt="FactZone Logo" width="44" height="44">
       <span>FactZone</span>
     </a>
     <a href="index.html" class="back-btn">← Back</a>
@@ -144,16 +138,17 @@
   var PROJECT_ID = "factzone-a9ace";
   var API_KEY    = "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc";
 
-  /* Firestore REST base — NO SDK, no module import, instant */
   var FS_BASE = "https://firestore.googleapis.com/v1/projects/"
-              + PROJECT_ID + "/databases/(default)/documents/";
+              + PROJECT_ID + "/databases/(default)/documents";
 
- 
+  // 🛠️ SMART LOOKUP: Purana ID aur Naya Slug dono detect karega
   var params = new URLSearchParams(location.search);
-  var id     = params.get("id") || "";
+  var oldId  = params.get("id") || ""; // Check if ?id= exists (Google search traffic)
+  
+  var pathParams = location.pathname.split("/");
+  var currentSlug = pathParams.pop() || pathParams.pop();
 
   function $(q) { return document.getElementById(q); }
-
 
   function parseField(val) {
     if (!val) return "";
@@ -167,17 +162,14 @@
     return "";
   }
 
-
   function parseDoc(fields) {
     var obj = {};
     Object.keys(fields || {}).forEach(function(k){ obj[k] = parseField(fields[k]); });
     return obj;
   }
 
-
   function lsGet(k) { try { return localStorage.getItem(k); } catch(e){ return null; } }
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch(e){} }
-
  
   function updateSEO(title, desc, image) {
     var url = location.href;
@@ -199,7 +191,6 @@
 
     var can = document.getElementById("meta-canonical");
     if (can) can.href = url;
-
   
     var schema = {
       "@context":   "https://schema.org",
@@ -220,7 +211,6 @@
     if (el) el.textContent = JSON.stringify(schema);
   }
 
-  /* Global function for copy link handler */
   window.copyArticleLink = function(btn) {
     var currentUrl = location.href;
     navigator.clipboard.writeText(currentUrl).then(function() {
@@ -232,7 +222,6 @@
     });
   };
 
- 
   function renderPost(post) {
     var title   = post.title   || "FactZone Educational Article";
     var content = post.content || "Amazing facts and verified educational details.";
@@ -248,8 +237,6 @@
       '<div class="hero-wrap"><img class="hero" src="' + image + '" alt="' + title.replace(/"/g,'&quot;') + '" loading="eager" width="360" height="202"></div>' +
       '<h1 itemprop="headline">' + title + '</h1>' +
       '<div class="content" itemprop="articleBody">' + content + '</div>' +
-      
-      '' +
       '<div class="share-container">' +
         '<div class="share-title">Share this Fact:</div>' +
         '<div class="share-buttons">' +
@@ -259,10 +246,8 @@
           '<button onclick="window.copyArticleLink(this)" class="share-btn btn-cp">Copy Link</button>' +
         '</div>' +
       '</div>' +
-
       '<div class="author-box">Written by <a href="author.html" itemprop="author">Awaneesh</a></div>';
   }
-
 
   function renderRelated(items) {
     if (!items || !items.length) {
@@ -272,62 +257,100 @@
     $("relatedGrid").innerHTML = items.map(function(item){
       var img   = item.image || "https://factzone.online/logo.png";
       var ttl   = item.title || "";
-      var pid   = item._id  || "";
-      return '<a href="detail.html?id=' + pid + '" class="rc" aria-label="Read: ' + ttl.replace(/"/g,'&quot;') + '">' +
+      var slug  = item.slug || "";
+      return '<a href="/' + slug + '" class="rc" aria-label="Read: ' + ttl.replace(/"/g,'&quot;') + '">' +
              '<img src="' + img + '" loading="lazy" width="68" height="68" alt="">' +
              '<h3>' + ttl + '</h3></a>';
     }).join("");
   }
-
  
   function fetchPost() {
-    if (!id) {
-      $("post").innerHTML = '<div class="err"><h2>No article ID</h2><p>Go back and pick an article.</p></div>';
+    // 🛠️ FALLBACK CHECK: Agar user purane Google Index link (?id=...) se aaya hai
+    if (oldId) {
+      var cachedOld = lsGet("fz_post_" + oldId);
+      if (cachedOld) { try { renderPost(JSON.parse(cachedOld)); } catch(e){} }
+
+      var urlOld = FS_BASE + "/posts/" + oldId + "?key=" + API_KEY;
+      fetch(urlOld)
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          if (!data.fields) {
+            if (!cachedOld) $("post").innerHTML = '<div class="err"><h2>Post Not Found</h2><p>This article may have been removed.</p></div>';
+            return;
+          }
+          var post = parseDoc(data.fields);
+          lsSet("fz_post_" + oldId, JSON.stringify(post));
+          renderPost(post);
+
+          // 🚀 SEO MAGIC REDIRECT: Purane link ko naye slug link par client-side redirect kar dega
+          if (post.slug) {
+            history.replaceState(null, "", "/" + post.slug);
+          }
+        })
+        .catch(function(err){
+          if (!cachedOld) $("post").innerHTML = '<div class="err"><h2>Failed to load</h2><p>Check connection.</p></div>';
+        });
+      return; // Purana fetch execution complete, exit function
+    }
+
+    // 🛠️ NAYA SYSTEM: Agar user direct clean URL (/slug) par aaya hai
+    if (!currentSlug || currentSlug === "detail.html") {
+      $("post").innerHTML = '<div class="err"><h2>No article selected</h2><p>Go back to home.</p></div>';
       return;
     }
 
+    var cached = lsGet("fz_post_" + currentSlug);
+    if (cached) { try { renderPost(JSON.parse(cached)); } catch(e){} }
 
-    var cached = lsGet("fz_post_" + id);
-    if (cached) {
-      try { renderPost(JSON.parse(cached)); } catch(e){}
-    }
+    var url = FS_BASE + ":runQuery?key=" + API_KEY;
+    var queryPayload = {
+      "structuredQuery": {
+        "from": [{"collectionId": "posts"}],
+        "where": {
+          "fieldFilter": {
+            "field": {"fieldPath": "slug"},
+            "op": "EQUAL",
+            "value": {"stringValue": currentSlug}
+          }
+        },
+        "limit": 1
+      }
+    };
 
-  
-    var url = FS_BASE + "posts/" + id + "?key=" + API_KEY;
-    fetch(url)
+    fetch(url, {
+      method: "POST",
+      body: JSON.stringify(queryPayload),
+      headers: { "Content-Type": "application/json" }
+    })
       .then(function(r){ return r.json(); })
       .then(function(data){
-        if (!data.fields) {
+        var responseDoc = data[0] && data[0].document;
+        if (!responseDoc || !responseDoc.fields) {
           if (!cached) $("post").innerHTML = '<div class="err"><h2>Post Not Found</h2><p>This article may have been removed.</p></div>';
           return;
         }
-        var post = parseDoc(data.fields);
-        lsSet("fz_post_" + id, JSON.stringify(post));
+        var post = parseDoc(responseDoc.fields);
+        lsSet("fz_post_" + currentSlug, JSON.stringify(post));
         renderPost(post);
       })
       .catch(function(err){
-        console.error("Post fetch error:", err);
-        if (!cached) $("post").innerHTML = '<div class="err"><h2>Failed to load</h2><p>Check your connection and refresh.</p></div>';
+        if (!cached) $("post").innerHTML = '<div class="err"><h2>Failed to load</h2><p>Check connection.</p></div>';
       });
   }
 
   function fetchRelated() {
-    /* Show cached instantly */
     var cached = lsGet("fz_related_v3");
     if (cached) { try { renderRelated(JSON.parse(cached)); } catch(e){} }
 
-
-    var url = FS_BASE + "posts?key=" + API_KEY + "&pageSize=6";
+    var url = FS_BASE + "/posts?key=" + API_KEY + "&pageSize=10";
     fetch(url)
       .then(function(r){ return r.json(); })
       .then(function(data){
         var docs = data.documents || [];
         var items = [];
         docs.forEach(function(d){
-          var pid = (d.name || "").split("/").pop();
-          if (pid === id || items.length >= 4) return;
           var post = parseDoc(d.fields);
-          post._id = pid;
+          if (post.slug === currentSlug || items.length >= 4) return;
           items.push(post);
         });
         lsSet("fz_related_v3", JSON.stringify(items));
@@ -335,7 +358,6 @@
       })
       .catch(function(e){ console.error("Related fetch error:", e); });
   }
-
 
   fetchPost();
   fetchRelated();
