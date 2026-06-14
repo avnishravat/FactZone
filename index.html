@@ -226,10 +226,10 @@
     <div class="max-w-7xl mx-auto px-5 py-8 text-center">
       <div class="flex flex-wrap gap-5 justify-center text-sm mb-5">
         <a href="about.html" class="hover:text-gray-300">About</a>
-        <a href="contact.html" class="hover:text-gray-300">Contact</a>
-        <a href="privacy.html" class="hover:text-gray-300">Privacy</a>
-        <a href="terms.html" class="hover:text-gray-300">Terms</a>
-        <a href="disclaimer.html" class="hover:text-gray-300">Disclaimer</a>
+          <a href="contact.html" class="hover:text-gray-300">Contact</a>
+          <a href="privacy.html" class="hover:text-gray-300">Privacy</a>
+          <a href="terms.html" class="hover:text-gray-300">Terms</a>
+          <a href="disclaimer.html" class="hover:text-gray-300">Disclaimer</a>
       </div>
       <p class="text-gray-400">
         © 2026 FactZone • <a href="author.html" class="hover:text-white underline transition">Awaneesh</a>
@@ -283,7 +283,7 @@
         science: ["science", "विज्ञान", "वैज्ञानिक", "space", "अंतरिक्ष", "ग्रह", "earth"],
         tech: ["tech", "technology", "तकनीक", "मोबाइल", "computer", "ai", "इंटरनेट"],
         history: ["history", "इतिहास", "पुराना", "राजा", "किला", "प्राचीन", "mystery"],
-        mystery: ["mystery", "रहस्य", "अनसुलझा", "हैरान", "भूत", "रहस्यमयी"],
+        mystery: ["mystery", "रहस्य", "अनसुलझा", "हैरان", "भूत", "रहस्यमयी"],
         viral: ["viral", "रोचक", "तथ्य", "amazing", "facts", "knowledge", "fact"]
       };
 
@@ -333,8 +333,11 @@
 
         let htmlContent = "";
         postsArray.forEach((post)=>{
+          // 🚀 HYBRID LINK ROUTING WITH FALLBACK SAFE SYSTEM
+          let targetLink = post.slug ? ("/" + post.slug) : ("detail.html?id=" + post.id);
+
           htmlContent += `
-          <a href="detail.html?id=${post.id}" class="card shadow-lg">
+          <a href="${targetLink}" class="card shadow-lg">
             <img src="${post.image || 'https://via.placeholder.com/500'}" alt="${post.title || 'FactZone Post'}" class="post-image" loading="lazy" width="100%" height="220">
             <div class="p-4 flex flex-col flex-1">
               <h2 class="font-bold text-xl mb-2 line2 dark:text-white">${post.title || ''}</h2>
