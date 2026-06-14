@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Redirecting to FactZone...</title>
+  <script>
+    // Yeh script naye slug ko detect karke use index.html ke paas processing ke liye bhej degi
+    (function() {
+      var currentPath = window.location.pathname;
+      // Agar path khali nahi hai, toh ise detail page ki tarah treat karein
+      if (currentPath && currentPath !== "/") {
+        // Purane id wale format ko check karein ya naye slug ko extract karein
+        var slug = currentPath.substring(1); // '/' hatao
+        
+        // Session storage mein slug save karo taaki detail.html use read kar sake
+        sessionStorage.setItem('redirect_slug', slug);
+        
+        // Waapas detail.html par safely redirect kar do
+        window.location.replace('/detail.html');
+      } else {
+        window.location.replace('/');
+      }
+    })();
+  </script>
+</head>
+<body>
+  <p>Redirecting to article, please wait...</p>
+</body>
+</html>
