@@ -29,14 +29,16 @@
   <script>
     (function() {
       var currentPath = window.location.pathname;
+      
       if (currentPath && currentPath !== "/") {
-        // Path se slug extract karein (jaise: smartphone-ko-hacking-se-kaise-bachaye)
-        var slug = currentPath.split("/").pop();
-        
+        // Path ke saare hisse nikaalein aur khali segments hatayein
+        var segments = currentPath.split('/').filter(Boolean);
+        var slug = segments[segments.length - 1];
+
+        // Agar slug valid hai aur koi static page nahi hai
         if (slug && slug !== "detail.html" && slug !== "index.html") {
-          // Session storage mein slug save karein taaki detail.html isse read kar sake
-          sessionStorage.setItem('redirect_slug', slug);
-          window.location.replace('/detail.html');
+          // GitHub Pages par routing safe rakhne ke liye query parameter bna kar bhejein
+          window.location.replace('/detail.html?slug=' + encodeURIComponent(slug));
           return;
         }
       }
