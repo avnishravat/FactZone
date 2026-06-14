@@ -141,18 +141,21 @@
   var FS_BASE = "https://firestore.googleapis.com/v1/projects/"
               + PROJECT_ID + "/databases/(default)/documents";
 
-  // 🛠️ SMART LOOKUP FOR GITHUB PAGES REDIRECT
   var params = new URLSearchParams(location.search);
   var oldId  = params.get("id") || ""; 
-  
-  var pathParams = location.pathname.split("/");
-  var currentSlug = pathParams.pop() || pathParams.pop();
+  var currentSlug = params.get("slug") || "";
 
-  // GitHub Pages 404 handler fallback system
-  var redirectedSlug = sessionStorage.getItem('redirect_slug');
-  if (redirectedSlug) {
-    currentSlug = redirectedSlug;
-    sessionStorage.removeItem('redirect_slug'); 
+  // 🛠️ DYNAMIC ADDRESS CLEANER: Address bar se query string (?slug=...) hatao aur clean path set karo
+  if (currentSlug) {
+    var cleanUrl = window.location.protocol + "//" + window.location.host + "/" + currentSlug;
+    window.history.replaceState({ path: cleanUrl }, '', cleanUrl);
+  } else {
+    // Agar direct detail.html par user bina params ke aaya hai, toh url path check karo
+    var pathParams = location.pathname.split("/").filter(Boolean);
+    var lastParam = pathParams.pop();
+    if (lastParam && lastParam !== "detail.html" && lastParam !== "index.html") {
+      currentSlug = lastParam;
+    }
   }
 
   function $(q) { return document.getElementById(q); }
@@ -179,7 +182,7 @@
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch(e){} }
  
   function updateSEO(title, desc, image) {
-    var url = "https://factzone.online/" + (currentSlug && currentSlug !== "detail.html" ? currentSlug : "");
+    var url = "https://factzone.online/" + (currentSlug ? currentSlug : "");
     document.title = title + " | FactZone";
 
     function setMeta(sel, attr, val) {
@@ -230,10 +233,10 @@
   };
 
   function renderPost(post) {
-    var title   = post.title   || "FactZone Educational Article";
+    var title = post.title || "FactZone Educational Article";
     var content = post.content || "Amazing facts and verified educational details.";
-    var image   = post.image   || "https://factzone.online/logo.png";
-    var desc    = content.replace(/\n/g," ").substring(0, 160);
+    var image = post.image || "https://factzone.online/logo.png";
+    var desc = content.replace(/\n/g," ").substring(0, 160);
 
     updateSEO(title, desc, image);
 
@@ -262,10 +265,10 @@
       return;
     }
     $("relatedGrid").innerHTML = items.map(function(item){
-      var img   = item.image || "https://factzone.online/logo.png";
-      var ttl   = item.title || "";
-      var slug  = item.slug || "";
-      var link  = slug ? ("/" + slug) : ("detail.html?id=" + item.id);
+      var img = item.image || "https://factzone.online/logo.png";
+      var ttl = item.title || "";
+      var slug = item.slug || "";
+      var link = slug ? ("/" + slug) : ("detail.html?id=" + item.id);
       return '<a href="' + link + '" class="rc" aria-label="Read: ' + ttl.replace(/"/g,'&quot;') + '">' +
              '<img src="' + img + '" loading="lazy" width="68" height="68" alt="">' +
              '<h3>' + ttl + '</h3></a>';
@@ -273,7 +276,7 @@
   }
  
   function fetchPost() {
-    // 🛠️ FALLBACK CHECK: Google search ya purane URLs ke liye (?id=...)
+    // OLD ID FALLBACK (?id=...)
     if (oldId) {
       var cachedOld = lsGet("fz_post_" + oldId);
       if (cachedOld) { try { renderPost(JSON.parse(cachedOld)); } catch(e){} }
@@ -297,7 +300,7 @@
       return;
     }
 
-    // NAYA SYSTEM (Slug parsing)
+    // NEW SLUG PROCESSING
     if (!currentSlug || currentSlug === "detail.html") {
       $("post").innerHTML = '<div class="err"><h2>No article selected</h2><p>Go back to home.</p></div>';
       return;
