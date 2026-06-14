@@ -9,100 +9,69 @@
   </url>
 
   <!-- 📄 Static Pages -->
-  <url>
-    <loc>https://factzone.online/about.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://factzone.online/contact.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://factzone.online/privacy.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://factzone.online/terms.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://factzone.online/disclaimer.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-  </url>
+  <url><loc>https://factzone.online/about.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://factzone.online/contact.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://factzone.online/privacy.html</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://factzone.online/terms.html</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://factzone.online/disclaimer.html</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
 
-  <!-- 🚀 LIVE 10 ARTICLES LINKS -->
-
-  <!-- 1. Internet se paise kaise kamaye -->
+  <!-- 🚀 LIVE 10 ARTICLES LINKS WITH POSTS FOLDER -->
   <url>
-    <loc>https://factzone.online/internet-se-paise-kaise-kamaye-5-asli-tarike</loc>
+    <loc>https://factzone.online/posts/?id=internet-se-paise-kaise-kamaye-5-asli-tarike</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
-  <!-- 2. Digital Mayajal -->
   <url>
-    <loc>https://factzone.online/digital-mayajal-technology-facts</loc>
+    <loc>https://factzone.online/posts/?id=digital-mayajal-technology-facts</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
-  <!-- 3. Rahasyo se bhari duniya -->
   <url>
-    <loc>https://factzone.online/rahasyo-se-bhari-duniya-10-aise-hairan-karne-wale-tathya</loc>
+    <loc>https://factzone.online/posts/?id=rahasyo-se-bhari-duniya-10-aise-hairan-karne-wale-tathya</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
-  <!-- 4. Wow Signal -->
   <url>
-    <loc>https://factzone.online/wow-signal-antariksh-ka-ansuljha-message</loc>
+    <loc>https://factzone.online/posts/?id=wow-signal-antariksh-ka-ansuljha-message</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
-  <!-- 5. The Walking Tree -->
   <url>
-    <loc>https://factzone.online/the-walking-tree-anokha-ped-jo-chal-sakta-hai</loc>
+    <loc>https://factzone.online/posts/?id=the-walking-tree-anokha-ped-jo-chal-sakta-hai</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
-  <!-- 6. Sabse Rahasyamayi Kitab -->
   <url>
-    <loc>https://factzone.online/duniya-ki-sabse-rahasyamayi-kitab</loc>
+    <loc>https://factzone.online/posts/?id=duniya-ki-sabse-rahasyamayi-kitab</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
-  <!-- 7. Mobile Hacking Settings -->
   <url>
-    <loc>https://factzone.online/smartphone-ko-hacking-se-kaise-bachaye</loc>
+    <loc>https://factzone.online/posts/?id=smartphone-ko-hacking-se-kaise-bachaye</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
-  <!-- 8. Antariksh mein rone par aansu -->
   <url>
-    <loc>https://factzone.online/antariksh-mein-rone-par-aansu-neeche-kyun-nahi-girte</loc>
+    <loc>https://factzone.online/posts/?id=antariksh-mein-rone-par-aansu-neeche-kyun-nahi-girte</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
-  <!-- 9. 5 Technology Facts -->
   <url>
-    <loc>https://factzone.online/5-technology-facts-jo-aapko-super-smart-bana-denge</loc>
+    <loc>https://factzone.online/posts/?id=5-technology-facts-jo-aapko-super-smart-bana-denge</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
-  <!-- 10. Skill-Based Income -->
   <url>
-    <loc>https://factzone.online/skill-based-income-bina-investment-online-tarika</loc>
+    <loc>https://factzone.online/posts/?id=skill-based-income-bina-investment-online-tarika</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
