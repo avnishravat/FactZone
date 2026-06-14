@@ -2,28 +2,52 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Redirecting to FactZone...</title>
+  <style>
+    body {
+      background: #f5f4f0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      color: #1a1a18;
+    }
+    .loader-box { text-align: center; }
+    .spinner {
+      border: 4px solid rgba(0,0,0,.1);
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border-left-color: #c0392b;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 10px;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  </style>
   <script>
-    // Yeh script naye slug ko detect karke use index.html ke paas processing ke liye bhej degi
     (function() {
       var currentPath = window.location.pathname;
-      // Agar path khali nahi hai, toh ise detail page ki tarah treat karein
       if (currentPath && currentPath !== "/") {
-        // Purane id wale format ko check karein ya naye slug ko extract karein
-        var slug = currentPath.substring(1); // '/' hatao
+        // Path se slug extract karein (jaise: smartphone-ko-hacking-se-kaise-bachaye)
+        var slug = currentPath.split("/").pop();
         
-        // Session storage mein slug save karo taaki detail.html use read kar sake
-        sessionStorage.setItem('redirect_slug', slug);
-        
-        // Waapas detail.html par safely redirect kar do
-        window.location.replace('/detail.html');
-      } else {
-        window.location.replace('/');
+        if (slug && slug !== "detail.html" && slug !== "index.html") {
+          // Session storage mein slug save karein taaki detail.html isse read kar sake
+          sessionStorage.setItem('redirect_slug', slug);
+          window.location.replace('/detail.html');
+          return;
+        }
       }
+      window.location.replace('/');
     })();
   </script>
 </head>
 <body>
-  <p>Redirecting to article, please wait...</p>
+  <div class="loader-box">
+    <div class="spinner"></div>
+    <p>Loading article, please wait...</p>
+  </div>
 </body>
 </html>
