@@ -9,13 +9,14 @@
   </url>
 
   <!-- 📄 Static Pages -->
+  <url><loc>https://factzone.online/author.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://factzone.online/about.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://factzone.online/contact.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://factzone.online/privacy.html</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
   <url><loc>https://factzone.online/terms.html</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
   <url><loc>https://factzone.online/disclaimer.html</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
 
-  <!-- 🚀 FIRESTORE IDs BASED LINKS (PEHLE KI TARAH) -->
+  <!-- 🚀 FIRESTORE IDs BASED LINKS  -->
   <!-- 1. Internet se paise kaise kamaye -->
   <url>
     <loc>https://factzone.online/detail.html?id=HiNFmr1Qo6z4j9GGQtZh</loc>
