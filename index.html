@@ -14,6 +14,7 @@
   <meta name="theme-color" content="#000000">
   <link rel="canonical" href="https://factzone.online/">
 
+  <!-- Performance Boost: Preconnect to external servers -->
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
   <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
@@ -32,6 +33,7 @@
   <link rel="icon" href="https://factzone.online/logo.png" sizes="48x48" type="image/png">
   <link rel="apple-touch-icon" href="https://factzone.online/logo.png"> 
 
+  <!-- Critical Styles First (Prevents Layout Shifts) -->
   <style>
     body{
       background:#f3f4f6;
@@ -42,7 +44,7 @@
       transition: background-color 0.3s, color 0.3s;
     }
     html.dark body {
-      background: #111827;
+      background: #111827; /* Dark background */
     }
     .card{
       transition:.3s;
@@ -91,6 +93,7 @@
     }
   </style>
 
+  <!-- Inline Script to prevent Theme Flash on Load -->
   <script>
     if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       document.documentElement.classList.add('dark');
@@ -99,38 +102,24 @@
     }
   </script>
 
-  <script src="https://cdn.tailwindcss.com" defer></script>
+  <!-- Tailwind Config for Class-based Dark Mode -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      tailwind.config = {
-        darkMode: 'class',
-      }
-    });
+    tailwind.config = {
+      darkMode: 'class',
+    }
   </script>
 
+  <!-- Lazy Loading AdSense Strategy -->
   <script>
-    window.addEventListener('load', () => {
-      // Lazy Load Google AdSense After Interactivity
+    window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         const adsScript = document.createElement('script');
         adsScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-697419046628538";
         adsScript.crossOrigin = "anonymous";
         adsScript.async = true;
         document.head.appendChild(adsScript);
-      }, 2000);
-
-      // Lazy Load Google Analytics
-      const gaScript = document.createElement('script');
-      gaScript.src = "https://www.googletagmanager.com/gtag/js?id=G-311JQXBXR9";
-      gaScript.async = true;
-      document.head.appendChild(gaScript);
-      
-      gaScript.onload = () => {
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-311JQXBXR9', { 'page_path': window.location.pathname });
-      };
+      }, 1500);
     });
   </script>
 
@@ -162,6 +151,15 @@
     }
   }
   </script>
+    
+  <!-- Google Analytics Async Load -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-311JQXBXR9"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-311JQXBXR9', { 'page_path': window.location.pathname });
+  </script>
 </head>
 
 <body class="dark:text-white">
@@ -177,6 +175,7 @@
           <h1 class="text-xl md:text-2xl font-bold text-white tracking-wide">FactZone</h1>
         </a>
 
+        <!-- Dark Mode Toggle Button for Mobile (Hidden on Desktop) -->
         <button id="themeToggleMobile" class="sm:hidden text-white p-2 rounded-full bg-gray-900 hover:bg-gray-800 border border-gray-700 transition-colors">
           <span class="dark:hidden">🌙</span><span class="hidden dark:inline">☀️</span>
         </button>
@@ -196,6 +195,7 @@
           <option value="viral">🔥 Viral / रोचक तथ्य</option>
         </select>
 
+        <!-- Dark Mode Toggle Button for Desktop -->
         <button id="themeToggle" class="hidden sm:block text-white p-2 rounded-full bg-gray-900 hover:bg-gray-800 border border-gray-800 transition-colors">
           <span class="dark:hidden">🌙</span><span class="hidden dark:inline">☀️</span>
         </button>
@@ -210,9 +210,10 @@
   </section>
     
   <main id="posts" class="max-w-7xl mx-auto p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <!-- LocalStorage content instantly loads here dynamically -->
     <div id="seo-placeholder-cards" class="col-span-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full">
       <div class="card shadow-lg">
-        <img src="logo.png" alt="Amazing Science Facts" class="post-image p-4 bg-gray-900 object-contain" width="380" height="220">
+        <img src="logo.png" alt="Amazing Science Facts" class="post-image p-4 bg-gray-900 object-contain" width="100%" height="220">
         <div class="p-4 flex flex-col flex-1">
           <h2 class="font-bold text-xl mb-2 line2 dark:text-white">विज्ञान से जुड़े कुछ बेहद हैरान करने वाले रोचक तथ्य</h2>
           <p class="text-gray-600 dark:text-gray-400 text-sm line2">Read amazing science facts, technology updates, and viral knowledge on FactZone Official...</p>
@@ -236,6 +237,7 @@
     </div>
   </footer>
 
+  <!-- Dark Mode Toggle Script -->
   <script>
     const toggleBtn = document.getElementById('themeToggle');
     const toggleBtnMobile = document.getElementById('themeToggleMobile');
@@ -333,7 +335,7 @@
         postsArray.forEach((post)=>{
           htmlContent += `
           <a href="detail.html?id=${post.id}" class="card shadow-lg">
-            <img src="${post.image || 'https://via.placeholder.com/500'}" alt="${post.title || 'FactZone Post'}" class="post-image" loading="lazy" width="380" height="220">
+            <img src="${post.image || 'https://via.placeholder.com/500'}" alt="${post.title || 'FactZone Post'}" class="post-image" loading="lazy" width="100%" height="220">
             <div class="p-4 flex flex-col flex-1">
               <h2 class="font-bold text-xl mb-2 line2 dark:text-white">${post.title || ''}</h2>
               <p class="text-gray-600 dark:text-gray-400 text-sm line2">${post.desc || ''}</p>
