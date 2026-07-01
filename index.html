@@ -14,6 +14,7 @@
   <meta name="theme-color" content="#000000">
   <link rel="canonical" href="https://factzone.online/">
 
+  <!-- Performance Boost: Preconnect to external servers -->
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
   <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
@@ -32,6 +33,7 @@
   <link rel="icon" href="https://factzone.online/logo.png" sizes="48x48" type="image/png">
   <link rel="apple-touch-icon" href="https://factzone.online/logo.png"> 
 
+  <!-- Critical Styles First (Prevents Layout Shifts) -->
   <style>
     body{
       background:#f3f4f6;
@@ -91,6 +93,7 @@
     }
   </style>
 
+  <!-- Inline Script to prevent Theme Flash on Load -->
   <script>
     if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       document.documentElement.classList.add('dark');
@@ -99,6 +102,7 @@
     }
   </script>
 
+  <!-- Tailwind Config for Class-based Dark Mode -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -106,6 +110,7 @@
     }
   </script>
 
+  <!-- Lazy Loading AdSense Strategy -->
   <script>
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
@@ -147,6 +152,7 @@
   }
   </script>
     
+  <!-- Google Analytics Async Load -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-311JQXBXR9"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -169,6 +175,7 @@
           <h1 class="text-xl md:text-2xl font-bold text-white tracking-wide">FactZone</h1>
         </a>
 
+        <!-- Dark Mode Toggle Button for Mobile (Hidden on Desktop) -->
         <button id="themeToggleMobile" class="sm:hidden text-white p-2 rounded-full bg-gray-900 hover:bg-gray-800 border border-gray-700 transition-colors">
           <span class="dark:hidden">🌙</span><span class="hidden dark:inline">☀️</span>
         </button>
@@ -188,6 +195,7 @@
           <option value="viral">🔥 Viral / रोचक तथ्य</option>
         </select>
 
+        <!-- Dark Mode Toggle Button for Desktop -->
         <button id="themeToggle" class="hidden sm:block text-white p-2 rounded-full bg-gray-900 hover:bg-gray-800 border border-gray-800 transition-colors">
           <span class="dark:hidden">🌙</span><span class="hidden dark:inline">☀️</span>
         </button>
@@ -197,11 +205,13 @@
   </header>
 
   <section class="max-w-7xl mx-auto px-5 py-4">
+    <!-- छोटा और सुंदर हेडिंग टेक्स्ट (text-xl और font-semibold) -->
     <h2 class="text-xl font-semibold dark:text-white">Amazing Facts, Science Facts & Knowledge</h2>
     <p class="text-gray-600 dark:text-gray-400 mt-1 text-sm">Read science facts, technology facts, history facts, mystery facts and educational knowledge articles.</p>
   </section>
     
   <main id="posts" class="max-w-7xl mx-auto p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <!-- Initial Loader (यह डेटा लोड होने तक स्क्रीन पर दिखेगा) -->
     <div id="loading-spinner" class="col-span-full flex flex-col items-center justify-center py-16">
       <div class="animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-purple-600 dark:border-gray-700 dark:border-t-purple-500"></div>
       <p class="mt-4 text-gray-600 dark:text-gray-400 font-medium">Loading amazing facts...</p>
@@ -223,6 +233,7 @@
     </div>
   </footer>
 
+  <!-- Dark Mode Toggle Script -->
   <script>
     const toggleBtn = document.getElementById('themeToggle');
     const toggleBtnMobile = document.getElementById('themeToggleMobile');
