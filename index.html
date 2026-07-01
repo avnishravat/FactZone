@@ -115,7 +115,7 @@
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         const adsScript = document.createElement('script');
-        adsScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6974190466298538";
+        adsScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-697419046628538";
         adsScript.crossOrigin = "anonymous";
         adsScript.async = true;
         document.head.appendChild(adsScript);
@@ -205,16 +205,20 @@
   </header>
 
   <section class="max-w-7xl mx-auto px-5 py-4">
-    <!-- छोटा और सुंदर हेडिंग टेक्स्ट (text-xl और font-semibold) -->
-    <h2 class="text-xl font-semibold dark:text-white">Amazing Facts, Science Facts & Knowledge</h2>
-    <p class="text-gray-600 dark:text-gray-400 mt-1 text-sm">Read science facts, technology facts, history facts, mystery facts and educational knowledge articles.</p>
+    <h2 class="text-2xl font-bold dark:text-white">Amazing Facts, Science Facts & Knowledge</h2>
+    <p class="text-gray-600 dark:text-gray-400 mt-2">Read science facts, technology facts, history facts, mystery facts and educational knowledge articles.</p>
   </section>
     
   <main id="posts" class="max-w-7xl mx-auto p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-    <!-- Initial Loader (यह डेटा लोड होने तक स्क्रीन पर दिखेगा) -->
-    <div id="loading-spinner" class="col-span-full flex flex-col items-center justify-center py-16">
-      <div class="animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-purple-600 dark:border-gray-700 dark:border-t-purple-500"></div>
-      <p class="mt-4 text-gray-600 dark:text-gray-400 font-medium">Loading amazing facts...</p>
+    <!-- LocalStorage content instantly loads here dynamically -->
+    <div id="seo-placeholder-cards" class="col-span-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full">
+      <div class="card shadow-lg">
+        <img src="logo.png" alt="Amazing Science Facts" class="post-image p-4 bg-gray-900 object-contain" width="100%" height="220">
+        <div class="p-4 flex flex-col flex-1">
+          <h2 class="font-bold text-xl mb-2 line2 dark:text-white">विज्ञान से जुड़े कुछ बेहद हैरान करने वाले रोचक तथ्य</h2>
+          <p class="text-gray-600 dark:text-gray-400 text-sm line2">Read amazing science facts, technology updates, and viral knowledge on FactZone Official...</p>
+        </div>
+      </div>
     </div>
   </main>
 
@@ -271,13 +275,6 @@
     const db = getFirestore(app);
     const postsContainer = document.getElementById("posts");
 
-    const loadingSpinnerHtml = `
-      <div id="loading-spinner" class="col-span-full flex flex-col items-center justify-center py-16">
-        <div class="animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-purple-600 dark:border-gray-700 dark:border-t-purple-500"></div>
-        <p class="mt-4 text-gray-600 dark:text-gray-400 font-medium">Loading amazing facts...</p>
-      </div>
-    `;
-
     function filterPosts() {
       const searchValue = document.getElementById("searchInput").value.toLowerCase();
       const selectedCategory = document.getElementById("filterInput").value;
@@ -310,8 +307,6 @@
       const cachedPosts = localStorage.getItem("factzone_posts");
       if(cachedPosts){
         postsContainer.innerHTML = cachedPosts;
-      } else {
-        postsContainer.innerHTML = loadingSpinnerHtml;
       }
 
       try {
@@ -320,7 +315,7 @@
 
         if(querySnapshot.empty){
           if(!cachedPosts) {
-            postsContainer.innerHTML = `<h2 class="text-center text-2xl col-span-full dark:text-white py-10">No Posts Found</h2>`;
+            postsContainer.innerHTML = `<h2 class="text-center text-2xl col-span-full dark:text-white">No Posts Found</h2>`;
           }
           return;
         }
@@ -354,9 +349,6 @@
 
       } catch (error) {
         console.error("Error fetching data:", error);
-        if(!cachedPosts) {
-          postsContainer.innerHTML = `<h2 class="text-center text-xl col-span-full text-red-500 py-10">Failed to load posts. Please refresh.</h2>`;
-        }
       }
     }
 
