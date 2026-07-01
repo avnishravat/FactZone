@@ -34,13 +34,13 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg:       #f5f4f0;
+      --bg:      #f5f4f0;
       --surface:  #ffffff;
       --ink:      #1a1a18;
       --muted:    #5a5a55;
-      --accent:   #c0392b;
-      --border:   #e2e0d8;
-      --r:        1rem;
+      --accent:    #c0392b;
+      --border:    #e2e0d8;
+      --r:         1rem;
     }
     body {
       background: var(--bg);
@@ -49,7 +49,6 @@
     }
     .wrap { max-width: 860px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
 
-  
     .site-header {
       display: flex; align-items: center; justify-content: space-between;
       margin-bottom: 2rem; padding-bottom: 1.25rem;
@@ -61,7 +60,6 @@
     .back-btn { background: var(--ink); color: #fff; text-decoration: none; font-weight: 700; font-size: .875rem; padding: .55rem 1.1rem; border-radius: .5rem; transition: background .18s; }
     .back-btn:hover { background: #333; }
 
-   
     #post { background: var(--surface); border-radius: var(--r); padding: 1.75rem 2rem; box-shadow: 0 2px 16px rgba(0,0,0,.07); }
     .hero-wrap { display: flex; justify-content: center; margin-bottom: 1.5rem; }
     #post img.hero { width: 100%; max-width: 360px; aspect-ratio: 16/9; border-radius: .6rem; object-fit: cover; display: block; box-shadow: 0 4px 18px rgba(0,0,0,.18); }
@@ -69,7 +67,6 @@
     #post .content { font-size: 1.05rem; line-height: 1.85; color: #2d2d2b; white-space: pre-line; }
     .author-box { margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--border); font-size: .95rem; color: var(--muted); }
     .author-box a { color: var(--accent); text-decoration: none; font-weight: 600; }
-
 
     .share-container { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px dashed var(--border); }
     .share-title { font-size: 0.95rem; font-weight: 700; color: var(--ink); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
@@ -82,7 +79,6 @@
     .btn-tw { background-color: #000000; }
     .btn-cp { background-color: var(--muted); }
 
-
     .sk { background: linear-gradient(90deg,#eee 25%,#f8f8f8 50%,#eee 75%); background-size: 400% 100%; animation: sh 1.4s infinite; border-radius: .5rem; }
     @keyframes sh { to { background-position: -400% 0; } }
     .sk-img   { width: 100%; height: 320px; border-radius: .75rem; margin-bottom: 1.5rem; }
@@ -90,11 +86,9 @@
     .sk-p      { height: 1rem;   width: 100%; margin-bottom: .65rem; }
     .sk-p.s   { width: 55%; }
 
- 
     .err { text-align: center; padding: 3rem 1rem; color: var(--muted); }
     .err h2 { font-family: 'Merriweather', serif; color: var(--ink); margin-bottom: .5rem; }
 
-  
     #relatedSection { margin-top: 2rem; background: var(--surface); border-radius: var(--r); padding: 1.75rem 2rem; box-shadow: 0 2px 16px rgba(0,0,0,.07); }
     #relatedSection h2 { font-family: 'Merriweather', serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem; padding-bottom: .75rem; border-bottom: 2px solid var(--ink); }
     #relatedGrid { display: grid; gap: .85rem; }
@@ -111,11 +105,11 @@
 <div class="wrap">
 
   <header class="site-header">
-    <a href="index.html" class="logo-link" aria-label="FactZone Home">
-      <img src="logo.png" alt="FactZone Logo" width="44" height="44">
+    <a href="/index.html" class="logo-link" aria-label="FactZone Home">
+      <img src="/logo.png" alt="FactZone Logo" width="44" height="44">
       <span>FactZone</span>
     </a>
-    <a href="index.html" class="back-btn">← Back</a>
+    <a href="/index.html" class="back-btn">← Back</a>
   </header>
 
   <article id="post" itemscope itemtype="https://schema.org/Article">
@@ -144,29 +138,45 @@
   var PROJECT_ID = "factzone-a9ace";
   var API_KEY    = "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc";
 
-  /* Firestore REST base — NO SDK, no module import, instant */
   var FS_BASE = "https://firestore.googleapis.com/v1/projects/"
               + PROJECT_ID + "/databases/(default)/documents/";
 
- 
   var params = new URLSearchParams(location.search);
   var id     = params.get("id") || "";
+  var slug   = "";
+
+  // अगर URL में ?id= नहीं है, तो पाथ से ऑटोमैटिक स्लग निकालो
+  if (!id && location.pathname.includes("/posts/")) {
+    var parts = location.pathname.split("/posts/");
+    if (parts.length > 1) {
+      slug = parts[1].replace(/\/$/, "");
+    }
+  }
 
   function $(q) { return document.getElementById(q); }
 
+  // 🔥 यह फंक्शन टाइटल से ऑटोमैटिक स्लग बनाएगा (बिना डेटाबेस में लिखे)
+  function generateSlug(text) {
+    if (!text) return "";
+    return text.toString().toLowerCase().trim()
+      .replace(/\s+/g, '-')           // स्पेस को डैश में बदलेगा
+      .replace(/[^\w\-]+/g, '')       // स्पेशल कैरेक्टर्स हटाएगा
+      .replace(/\-\-+/g, '-')         // डबल डैश को सिंगल करेगा
+      .replace(/^-+/, '')             // शुरुआत से डैश हटाएगा
+      .replace(/-+$/, '');            // अंत से डैश हटाएगा
+  }
 
   function parseField(val) {
     if (!val) return "";
     if (val.stringValue  !== undefined) return val.stringValue;
-    if (val.integerValue  !== undefined) return val.integerValue;
-    if (val.booleanValue  !== undefined) return val.booleanValue;
-    if (val.arrayValue    !== undefined) {
+    if (val.integerValue !== undefined) return val.integerValue;
+    if (val.booleanValue !== undefined) return val.booleanValue;
+    if (val.arrayValue   !== undefined) {
       return (val.arrayValue.values || []).map(parseField);
     }
-    if (val.mapValue      !== undefined) return parseDoc(val.mapValue.fields || {});
+    if (val.mapValue     !== undefined) return parseDoc(val.mapValue.fields || {});
     return "";
   }
-
 
   function parseDoc(fields) {
     var obj = {};
@@ -174,13 +184,10 @@
     return obj;
   }
 
-
   function lsGet(k) { try { return localStorage.getItem(k); } catch(e){ return null; } }
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch(e){} }
 
- 
-  function updateSEO(title, desc, image) {
-    var url = location.href;
+  function updateSEO(title, desc, image, currentUrl) {
     document.title = title + " | FactZone";
 
     function setMeta(sel, attr, val) {
@@ -188,25 +195,24 @@
       if (el) el.setAttribute(attr, val);
     }
 
-    setMeta('meta[name="description"]',         "content", desc);
+    setMeta('meta[name="description"]',          "content", desc);
     setMeta('meta[property="og:title"]',        "content", title);
     setMeta('meta[property="og:description"]',  "content", desc);
     setMeta('meta[property="og:image"]',        "content", image);
-    setMeta('meta[property="og:url"]',          "content", url);
+    setMeta('meta[property="og:url"]',          "content", currentUrl);
     setMeta('meta[name="twitter:title"]',       "content", title);
     setMeta('meta[name="twitter:description"]', "content", desc);
     setMeta('meta[name="twitter:image"]',       "content", image);
 
     var can = document.getElementById("meta-canonical");
-    if (can) can.href = url;
-
+    if (can) can.href = currentUrl;
   
     var schema = {
       "@context":   "https://schema.org",
       "@type":      "Article",
       "headline":   title,
       "description": desc,
-      "url":         url,
+      "url":          currentUrl,
       "image":      [image],
       "datePublished": new Date().toISOString(),
       "author":    { "@type": "Person",       "name": "Awaneesh" },
@@ -220,7 +226,6 @@
     if (el) el.textContent = JSON.stringify(schema);
   }
 
-  /* Global function for copy link handler */
   window.copyArticleLink = function(btn) {
     var currentUrl = location.href;
     navigator.clipboard.writeText(currentUrl).then(function() {
@@ -232,24 +237,32 @@
     });
   };
 
- 
   function renderPost(post) {
     var title   = post.title   || "FactZone Educational Article";
     var content = post.content || "Amazing facts and verified educational details.";
     var image   = post.image   || "https://factzone.online/logo.png";
     var desc    = content.replace(/\n/g," ").substring(0, 160);
 
-    updateSEO(title, desc, image);
+    // 🔥 अगर यूआरएल में ?id= नहीं है, तो टाइटल से खुद स्लग बनाकर यूआरएल बार को चमका दो
+    if (!id) {
+      var finalSlug = post.slug || generateSlug(post.title);
+      if (finalSlug && !location.pathname.includes("/posts/")) {
+        var newUrl = window.location.origin + "/posts/" + finalSlug;
+        window.history.pushState({}, '', newUrl);
+      }
+    }
 
-    var shareUrl = encodeURIComponent(location.href);
+    var currentUrl = location.href;
+    updateSEO(title, desc, image, currentUrl);
+
+    var shareUrl = encodeURIComponent(currentUrl);
     var shareText = encodeURIComponent(title + " - Read more on FactZone:\n");
 
     $("post").innerHTML =
       '<div class="hero-wrap"><img class="hero" src="' + image + '" alt="' + title.replace(/"/g,'&quot;') + '" loading="eager" width="360" height="202"></div>' +
       '<h1 itemprop="headline">' + title + '</h1>' +
       '<div class="content" itemprop="articleBody">' + content + '</div>' +
-      
-      '' +
+      ' ' +
       '<div class="share-container">' +
         '<div class="share-title">Share this Fact:</div>' +
         '<div class="share-buttons">' +
@@ -260,9 +273,8 @@
         '</div>' +
       '</div>' +
 
-      '<div class="author-box">Written by <a href="author.html" itemprop="author">Awaneesh</a></div>';
+      '<div class="author-box">Written by <a href="/author.html" itemprop="author">Awaneesh</a></div>';
   }
-
 
   function renderRelated(items) {
     if (!items || !items.length) {
@@ -273,49 +285,110 @@
       var img   = item.image || "https://factzone.online/logo.png";
       var ttl   = item.title || "";
       var pid   = item._id  || "";
-      return '<a href="detail.html?id=' + pid + '" class="rc" aria-label="Read: ' + ttl.replace(/"/g,'&quot;') + '">' +
+      
+      // 🔥 रिलेटेड पोस्ट्स के लिए भी ऑटोमैटिक स्लग जनरेट होगा
+      var finalSlug = item.slug || generateSlug(ttl);
+      var targetLink = finalSlug ? ('/posts/' + finalSlug) : ('/detail.html?id=' + pid);
+
+      return '<a href="' + targetLink + '" class="rc" aria-label="Read: ' + ttl.replace(/"/g,'&quot;') + '">' +
              '<img src="' + img + '" loading="lazy" width="68" height="68" alt="">' +
              '<h3>' + ttl + '</h3></a>';
     }).join("");
   }
 
- 
   function fetchPost() {
-    if (!id) {
-      $("post").innerHTML = '<div class="err"><h2>No article ID</h2><p>Go back and pick an article.</p></div>';
+    if (!id && !slug) {
+      $("post").innerHTML = '<div class="err"><h2>No article specifier</h2><p>Go back and pick an article.</p></div>';
       return;
     }
 
-
-    var cached = lsGet("fz_post_" + id);
-    if (cached) {
-      try { renderPost(JSON.parse(cached)); } catch(e){}
-    }
-
+    var cacheKey = id ? ("fz_post_" + id) : ("fz_slug_" + slug);
+    var cached = lsGet(cacheKey);
+    if (cached) { try { renderPost(JSON.parse(cached)); } catch(e){} }
   
-    var url = FS_BASE + "posts/" + id + "?key=" + API_KEY;
-    fetch(url)
+    var url = "";
+    if (id) {
+      url = FS_BASE + "posts/" + id + "?key=" + API_KEY;
+      fetch(url)
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          if (!data.fields) {
+            if (!cached) $("post").innerHTML = '<div class="err"><h2>Post Not Found</h2><p>This article may have been removed.</p></div>';
+            return;
+          }
+          var post = parseDoc(data.fields);
+          lsSet(cacheKey, JSON.stringify(post));
+          renderPost(post);
+        }).catch(handleErr);
+    } else if (slug) {
+      // 🔥 अगर स्लग से आ रहा है और डेटाबेस में स्推ग नहीं है, तो यह सीधा फ़ॉलकैक पर जाकर टाइटल मैच करेगा!
+      url = "https://firestore.googleapis.com/v1/projects/" + PROJECT_ID + "/databases/(default)/documents:runQuery?key=" + API_KEY;
+      var queryBody = {
+        "structuredQuery": {
+          "from": [{"collectionId": "posts"}],
+          "where": {
+            "fieldFilter": {
+              "field": {"fieldPath": "slug"},
+              "op": "EQUAL",
+              "value": {"stringValue": slug}
+            }
+          },
+          "limit": 1
+        }
+      };
+
+      fetch(url, {
+        method: "POST",
+        body: JSON.stringify(queryBody)
+      })
       .then(function(r){ return r.json(); })
       .then(function(data){
-        if (!data.fields) {
-          if (!cached) $("post").innerHTML = '<div class="err"><h2>Post Not Found</h2><p>This article may have been removed.</p></div>';
+        if (!data || !data[0] || !data[0].document) {
+          fetchFallbackAll();
           return;
         }
-        var post = parseDoc(data.fields);
-        lsSet("fz_post_" + id, JSON.stringify(post));
+        var doc = data[0].document;
+        var post = parseDoc(doc.fields);
+        post._id = (doc.name || "").split("/").pop();
+        lsSet(cacheKey, JSON.stringify(post));
         renderPost(post);
-      })
-      .catch(function(err){
-        console.error("Post fetch error:", err);
-        if (!cached) $("post").innerHTML = '<div class="err"><h2>Failed to load</h2><p>Check your connection and refresh.</p></div>';
-      });
+      }).catch(handleErr);
+    }
+
+    function fetchFallbackAll() {
+      var fallbackUrl = FS_BASE + "posts?key=" + API_KEY + "&pageSize=50";
+      fetch(fallbackUrl)
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          var docs = data.documents || [];
+          var found = null;
+          for(var i=0; i<docs.length; i++) {
+            var p = parseDoc(docs[i].fields);
+            var generated = generateSlug(p.title);
+            if (generated === slug) {
+              p._id = (docs[i].name || "").split("/").pop();
+              found = p;
+              break;
+            }
+          }
+          if (found) {
+            lsSet(cacheKey, JSON.stringify(found));
+            renderPost(found);
+          } else {
+            if (!cached) $("post").innerHTML = '<div class="err"><h2>Post Not Found</h2><p>The requested article does not exist.</p></div>';
+          }
+        }).catch(handleErr);
+    }
+
+    function handleErr(err) {
+      console.error("Fetch error:", err);
+      if (!cached) $("post").innerHTML = '<div class="err"><h2>Failed to load</h2><p>Check your connection and refresh.</p></div>';
+    }
   }
 
   function fetchRelated() {
-    /* Show cached instantly */
     var cached = lsGet("fz_related_v3");
     if (cached) { try { renderRelated(JSON.parse(cached)); } catch(e){} }
-
 
     var url = FS_BASE + "posts?key=" + API_KEY + "&pageSize=6";
     fetch(url)
@@ -325,8 +398,9 @@
         var items = [];
         docs.forEach(function(d){
           var pid = (d.name || "").split("/").pop();
-          if (pid === id || items.length >= 4) return;
           var post = parseDoc(d.fields);
+          var finalSlug = post.slug || generateSlug(post.title);
+          if (pid === id || (slug && finalSlug === slug) || items.length >= 4) return;
           post._id = pid;
           items.push(post);
         });
@@ -335,7 +409,6 @@
       })
       .catch(function(e){ console.error("Related fetch error:", e); });
   }
-
 
   fetchPost();
   fetchRelated();
