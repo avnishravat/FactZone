@@ -91,7 +91,6 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
 .section-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;background:rgba(124,109,250,.12);border:1px solid rgba(124,109,250,.2)}
 .section-title{font-size:16px;font-weight:600}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
 .form-group{display:flex;flex-direction:column;gap:6px}
 .form-group.full{grid-column:1/-1}
 .form-label{font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.4px}
@@ -164,7 +163,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
 
 /* ── Hide Content Before Auth ── */
 #auth-view { display: none; }
-#login-view { display: none; }
+#login-view { display: flex; }
 .page{display:none}
 .page.active{display:block}
 
@@ -228,12 +227,9 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
       <img class="user-asset" src="logo.png" alt="FactZone">
       <span class="logo-text" style="font-size:24px;">FactZone Admin</span>
     </div>
-    <p style="color:var(--muted); font-size:14px; margin-bottom:20px;">Please login to access dashboard</p>
-    <div class="form-group" style="margin-bottom:12px;">
-      <input type="email" id="adminEmail" class="form-input" placeholder="Admin Email" required>
-    </div>
+    <p style="color:var(--muted); font-size:14px; margin-bottom:20px;">Enter your password to log in</p>
     <div class="form-group" style="margin-bottom:20px;">
-      <input type="password" id="adminPassword" class="form-input" placeholder="Password" required>
+      <input type="password" id="adminPassword" class="form-input" placeholder="Type password here..." required>
     </div>
     <button class="btn btn-primary" id="loginSubmitBtn">🔐 Authenticate</button>
   </div>
@@ -260,7 +256,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
     <div class="sidebar-footer">
       <div class="sync-badge">
         <div class="sync-dot" id="syncDot"></div>
-        <span id="syncText">Database Online</span>
+        <span id="syncText">Database Connected</span>
       </div>
       <button class="btn btn-logout" id="logoutBtn">🚪 Logout</button>
     </div>
@@ -295,7 +291,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
           <div class="form-grid">
             <div class="form-group">
               <label class="form-label">Title *</label>
-              <input class="form-input" id="q-title" placeholder="Post ka title...">
+              <input class="form-input" id="q-title" placeholder="Post title...">
             </div>
             <div class="form-group">
               <label class="form-label">Image URL</label>
@@ -303,11 +299,11 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
             </div>
             <div class="form-group full">
               <label class="form-label">Description *</label>
-              <input class="form-input" id="q-desc" placeholder="2-3 line mein summary...">
+              <input class="form-input" id="q-desc" placeholder="Write a brief 2-3 line summary...">
             </div>
             <div class="form-group full">
               <label class="form-label">Content *</label>
-              <textarea class="form-input" id="q-content" rows="5" placeholder="Poora content yahan likho..."></textarea>
+              <textarea class="form-input" id="q-content" rows="5" placeholder="Write the full content here..."></textarea>
             </div>
           </div>
           <button class="btn btn-primary" id="quickUploadBtn" onclick="uploadPost('q')">
@@ -338,7 +334,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
           <div class="form-grid">
             <div class="form-group">
               <label class="form-label">Title *</label>
-              <input class="form-input" id="u-title" placeholder="Post ka title...">
+              <input class="form-input" id="u-title" placeholder="Post title...">
             </div>
             <div class="form-group">
               <label class="form-label">Image URL</label>
@@ -373,7 +369,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
                     <button class="ql-list" value="bullet"></button>
                   </span>
                   <span class="ql-formats">
-                    <button id="custom-fullscreen" type="button" title="Full Screen" style="width:auto; font-size:13px; font-weight:bold; padding:0 6px;">全 Fullscreen</button>
+                    <button id="custom-fullscreen" type="button" title="Full Screen" style="width:auto; font-size:13px; font-weight:bold; padding:0 6px;">Fullscreen</button>
                   </span>
                 </div>
                 <div id="u-content" class="editor-container"></div>
@@ -444,7 +440,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
             <button class="ql-list" value="bullet"></button>
           </span>
           <span class="ql-formats">
-            <button id="edit-fullscreen" type="button" title="Full Screen" style="width:auto; font-size:13px; font-weight:bold; padding:0 6px;">全 Fullscreen</button>
+            <button id="edit-fullscreen" type="button" title="Full Screen" style="width:auto; font-size:13px; font-weight:bold; padding:0 6px;">Fullscreen</button>
           </span>
         </div>
         <div id="e-content" class="editor-container"></div>
@@ -465,7 +461,6 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
@@ -478,7 +473,9 @@ const firebaseConfig = {
 
 const app  = initializeApp(firebaseConfig);
 const db   = getFirestore(app);
-const auth = getAuth(app);
+
+// Your master fixed password
+const MASTER_PASSWORD = "Admin@FactZone123";
 
 let allPostsCache = [];
 let currentEditId = null;
@@ -490,13 +487,13 @@ function initQuill() {
   quillEditor = new Quill('#u-content', {
     modules: { toolbar: '#u-toolbar' },
     theme: 'snow',
-    placeholder: 'Poora content yahan likho...'
+    placeholder: 'Write your full content here...'
   });
 
   editQuillEditor = new Quill('#e-content', {
     modules: { toolbar: '#e-toolbar' },
     theme: 'snow',
-    placeholder: 'Content edit karein...'
+    placeholder: 'Edit your content here...'
   });
 
   // Handle Fullscreen for New Post
@@ -505,7 +502,7 @@ function initQuill() {
   fsBtn.addEventListener('click', () => {
     if(editorWrapper.classList.contains('ql-fullscreen')) {
       editorWrapper.classList.remove('ql-fullscreen');
-      fsBtn.textContent = "全 Fullscreen";
+      fsBtn.textContent = "Fullscreen";
       fsBtn.style.color = "var(--text)";
     } else {
       editorWrapper.classList.add('ql-fullscreen');
@@ -520,7 +517,7 @@ function initQuill() {
   editFsBtn.addEventListener('click', () => {
     if(editWrapper.classList.contains('ql-fullscreen')) {
       editWrapper.classList.remove('ql-fullscreen');
-      editFsBtn.textContent = "全 Fullscreen";
+      editFsBtn.textContent = "Fullscreen";
       editFsBtn.style.color = "var(--text)";
     } else {
       editWrapper.classList.add('ql-fullscreen');
@@ -530,55 +527,45 @@ function initQuill() {
   });
 }
 
-// ── Authentication Monitor (UID चेकिंग हटा दी गई है) ──
-onAuthStateChanged(auth, (user) => {
-  const loginView = document.getElementById('login-view');
-  const authView = document.getElementById('auth-view');
-  
-  if (user) {
-    loginView.style.display = 'none';
-    authView.style.display = 'block';
-    loadPosts(); 
-  } else {
-    authView.style.display = 'none';
-    loginView.style.display = 'flex';
-    setSyncStatus('muted', 'Database Offline');
+// Check session on load
+window.addEventListener('DOMContentLoaded', () => {
+  initQuill();
+  if (sessionStorage.getItem('isAdminLoggedIn') === 'true') {
+    document.getElementById('login-view').style.display = 'none';
+    document.getElementById('auth-view').style.display = 'block';
+    setSyncStatus('connected', 'Database Online');
+    loadPosts();
   }
 });
 
 // ── Login Submit Function ──
 document.getElementById('loginSubmitBtn').addEventListener('click', () => {
-  const email = document.getElementById('adminEmail').value.trim();
   const password = document.getElementById('adminPassword').value.trim();
-  const btn = document.getElementById('loginSubmitBtn');
 
-  if (!email || !password) {
-    showToast('⚠️ Email aur Password ज़रूरी हैं!', 'error');
+  if (!password) {
+    showToast('⚠️ Please enter a password!', 'error');
     return;
   }
 
-  btn.disabled = true;
-  btn.textContent = '⏳ Verifying...';
-
-  signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-         showToast('🔐 Auth Verification Success!', 'success');
-    })
-    .catch((error) => {
-      showToast('❌ Wrong credentials or server error!', 'error');
-      console.error(error.message);
-    })
-    .finally(() => {
-      btn.disabled = false;
-      btn.textContent = '🔐 Authenticate';
-    });
+  if (password === MASTER_PASSWORD) {
+    sessionStorage.setItem('isAdminLoggedIn', 'true');
+    showToast('🔐 Login successful!', 'success');
+    document.getElementById('login-view').style.display = 'none';
+    document.getElementById('auth-view').style.display = 'block';
+    setSyncStatus('connected', 'Database Online');
+    loadPosts();
+  } else {
+    showToast('❌ Incorrect password!', 'error');
+  }
 });
 
 // ── Logout Function ──
 document.getElementById('logoutBtn').addEventListener('click', () => {
-  signOut(auth).then(() => {
-    showToast('🚪 Logged out successfully', 'success');
-  }).catch((e) => showToast('❌ Logout Failed: ' + e.message, 'error'));
+  sessionStorage.removeItem('isAdminLoggedIn');
+  showToast('🚪 Successfully logged out', 'success');
+  document.getElementById('auth-view').style.display = 'none';
+  document.getElementById('login-view').style.display = 'flex';
+  setSyncStatus('muted', 'Database Offline');
 });
 
 // ── Theme ──
@@ -621,7 +608,7 @@ function setSyncStatus(state, text) {
 // ── Build post card HTML ──
 function buildCard(post, index) {
   const date = post.createdAt
-    ? new Date(post.createdAt?.seconds ? post.createdAt.seconds*1000 : post.createdAt).toLocaleDateString('en-IN')
+    ? new Date(post.createdAt?.seconds ? post.createdAt.seconds*1000 : post.createdAt).toLocaleDateString('en-US')
     : '';
   return `
   <div class="post-card">
@@ -646,8 +633,8 @@ function renderGrid(containerId, posts) {
   if (!posts.length) {
     grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
       <div class="empty-icon">📭</div>
-      <div class="empty-text">Koi post nahi mili</div>
-      <div class="empty-sub">Pehli post upload karo!</div>
+      <div class="empty-text">No posts found</div>
+      <div class="empty-sub">Publish your first post!</div>
     </div>`;
     return;
   }
@@ -680,7 +667,7 @@ async function loadPosts() {
     allPostsCache = posts;
 
     document.getElementById('statTotal').textContent = posts.length;
-    document.getElementById('statSync').textContent = new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+    document.getElementById('statSync').textContent = new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
     renderGrid('dash-grid', posts);
     renderGrid('posts-grid', posts);
     setSyncStatus('connected', 'Database Online');
@@ -717,7 +704,7 @@ window.uploadPost = async function(prefix) {
     content = document.getElementById(`${prefix}-content`).value.trim();
   }
 
-  if (!title || !desc || !content) { showToast('⚠️ Title, description aur content required hai!', 'error'); return; }
+  if (!title || !desc || !content) { showToast('⚠️ Title, description, and content are required!', 'error'); return; }
   
   const btnId = prefix === 'q' ? 'quickUploadBtn' : 'uploadBtn';
   const btn = document.getElementById(btnId);
@@ -734,7 +721,7 @@ window.uploadPost = async function(prefix) {
     if (prefix === 'u' && quillEditor) {
       quillEditor.setContents([]);
       document.getElementById('u-editor-wrapper').classList.remove('ql-fullscreen');
-      document.getElementById('custom-fullscreen').textContent = "全 Fullscreen";
+      document.getElementById('custom-fullscreen').textContent = "Fullscreen";
       document.getElementById('custom-fullscreen').style.color = "var(--text)";
     } else {
       document.getElementById(`${prefix}-content`).value = '';
@@ -744,7 +731,7 @@ window.uploadPost = async function(prefix) {
     if (prev) prev.classList.remove('show');
     
     btn.innerHTML = '<span>✅</span> Published!';
-    showToast('🚀 Post successfully publish ho gayi!', 'success');
+    showToast('🚀 Post published successfully!', 'success');
     
     setTimeout(() => { 
       btn.disabled = false; 
@@ -762,10 +749,10 @@ window.uploadPost = async function(prefix) {
 
 // ── Delete ──
 window.deletePost = async function(id) {
-  if (!confirm('Yeh post delete karein?')) return;
+  if (!confirm('Are you sure you want to delete this post?')) return;
   try {
     await deleteDoc(doc(db,"posts",id));
-    showToast('🗑 Post delete ho gayi', 'success');
+    showToast('🗑 Post deleted successfully', 'success');
     await loadPosts();
   } catch(e) { showToast('❌ ' + e.message, 'error'); }
 };
@@ -792,7 +779,7 @@ window.openEditModal = function(id) {
 window.closeModal = function() {
   document.getElementById('editModal').classList.remove('show');
   document.getElementById('e-editor-wrapper').classList.remove('ql-fullscreen');
-  document.getElementById('edit-fullscreen').textContent = "全 Fullscreen";
+  document.getElementById('edit-fullscreen').textContent = "Fullscreen";
   document.getElementById('edit-fullscreen').style.color = "var(--text)";
   currentEditId = null;
 };
@@ -815,7 +802,7 @@ window.saveEdit = async function() {
       content: content
     });
     closeModal();
-    showToast('✅ Post update ho gayi!', 'success');
+    showToast('✅ Post updated successfully!', 'success');
     await loadPosts();
   } catch(e) { showToast('❌ ' + e.message, 'error'); }
   btn.textContent = '💾 Save Changes'; btn.disabled = false;
@@ -833,13 +820,6 @@ window.switchPage = function(page, btn) {
   const titles = {dashboard:'Dashboard', upload:'New Post', posts:'All Posts'};
   document.getElementById('pageTitle').textContent = titles[page] || 'Dashboard';
 };
-
-// ── Init ──
-async function init() {
-  setSyncStatus('muted', 'Database Offline');
-  initQuill(); 
-}
-init();
 </script>
 </body>
 </html>
