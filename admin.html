@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FactZone Admin</title>
-<link rel="icon" href="logo.png">
+<link class="user-asset" rel="icon" href="logo.png">
 <meta name="robots" content="noindex,nofollow">
 <!-- Quill CSS (For Rich Text Editor) -->
 <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
@@ -50,6 +50,10 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
 .theme-toggle{background:var(--surface2);border:1px solid var(--border);color:var(--text);width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:.2s;flex-shrink:0}
 .theme-toggle:hover{border-color:var(--accent);transform:scale(1.05)}
 
+/* ── Login Box Custom CSS ── */
+.login-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: var(--bg); }
+.login-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; width: 100%; max-width: 400px; box-shadow: var(--shadow); text-align: center; }
+
 /* ── Sidebar ── */
 .sidebar{position:fixed;left:0;top:0;bottom:0;width:240px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;transition:background .3s,border-color .3s}
 .logo{padding:24px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border)}
@@ -60,7 +64,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
 .nav-item:hover{background:var(--surface2);color:var(--text)}
 .nav-item.active{background:rgba(124,109,250,.12);color:var(--accent2);border-color:rgba(124,109,250,.2)}
 .nav-icon{font-size:18px;width:22px;text-align:center}
-.sidebar-footer{padding:16px;border-top:1px solid var(--border)}
+.sidebar-footer{padding:16px;border-top:1px solid var(--border); display: flex; flex-direction: column; gap: 8px;}
 .sync-badge{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);padding:10px 12px;border-radius:10px;background:var(--surface2)}
 .sync-dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex-shrink:0;transition:.3s}
 .sync-dot.connected{background:var(--green);box-shadow:0 0 6px var(--green)}
@@ -73,7 +77,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
 .topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;transition:background .3s,border-color .3s}
 .page-title{font-size:20px;font-weight:600}
 .topbar-right{display:flex;align-items:center;gap:10px}
-.stats-row{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;padding:24px 32px}
+.stats-row{grid-template-columns:repeat(2,1fr);gap:16px;padding:24px 32px;display:grid}
 .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;position:relative;overflow:hidden;box-shadow:var(--shadow);transition:background .3s,border-color .3s}
 .stat-label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
 .stat-value{font-size:32px;font-weight:700}
@@ -103,6 +107,8 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
 .btn-danger:hover{background:rgba(239,68,68,.2)}
 .btn-edit{background:rgba(124,109,250,.1);color:var(--accent2);border:1px solid rgba(124,109,250,.2);padding:7px 12px;font-size:12px;border-radius:8px}
 .btn-edit:hover{background:rgba(124,109,250,.2)}
+.btn-logout{background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.2);width:100%;justify-content:center;font-size:13px;padding:10px;border-radius:10px}
+.btn-logout:hover{background:var(--red);color:white}
 
 /* ── Posts grid ── */
 .posts-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
@@ -155,6 +161,9 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
 .img-preview{width:100%;height:140px;object-fit:cover;border-radius:10px;margin-top:8px;border:1px solid var(--border);display:none}
 .img-preview.show{display:block}
 
+/* ── Hide Content Before Auth ── */
+#auth-view { display: none; }
+#login-view { display: none; }
 .page{display:none}
 .page.active{display:block}
 
@@ -211,161 +220,183 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
 </head>
 <body>
 
-<aside class="sidebar">
-  <div class="logo">
-    <img src="logo.png" alt="FactZone">
-    <span class="logo-text">FactZone</span>
-  </div>
-  <nav class="nav">
-    <button id="nav-dashboard" class="nav-item active" onclick="switchPage('dashboard',this)">
-      <span class="nav-icon">📊</span><span>Dashboard</span>
-    </button>
-    <button id="nav-upload" class="nav-item" onclick="switchPage('upload',this)">
-      <span class="nav-icon">✏️</span><span>New Post</span>
-    </button>
-    <button id="nav-posts" class="nav-item" onclick="switchPage('posts',this)">
-      <span class="nav-icon">📰</span><span>All Posts</span>
-    </button>
-  </nav>
-  <div class="sidebar-footer">
-    <div class="sync-badge">
-      <div class="sync-dot" id="syncDot"></div>
-      <span id="syncText">Database Online</span>
+<!-- ── 1. LOGIN INTERFACE (शुरुआत में सिर्फ यह दिखेगा) ── -->
+<div id="login-view" class="login-container">
+  <div class="login-card">
+    <div class="logo" style="justify-content:center; border:none; padding-bottom:10px;">
+      <img class="user-asset" src="logo.png" alt="FactZone">
+      <span class="logo-text" style="font-size:24px;">FactZone Admin</span>
     </div>
-  </div>
-</aside>
-
-<div class="main">
-  <div class="topbar">
-    <div class="page-title" id="pageTitle">Dashboard</div>
-    <div class="topbar-right">
-      <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()" title="Toggle dark/light mode">🌙</button>
-      <a href="https://factzone.online/" target="_blank" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:9px 14px;border-radius:10px;font-size:13px;font-weight:600;text-decoration:none;transition:.2s;white-space:nowrap" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">↗ View Site</a>
+    <p style="color:var(--muted); font-size:14px; margin-bottom:20px;">Please login to access dashboard</p>
+    <div class="form-group" style="margin-bottom:12px;">
+      <input type="email" id="adminEmail" class="form-input" placeholder="Admin Email" required>
     </div>
-  </div>
-
-  <div id="page-dashboard" class="page active">
-    <div class="stats-row">
-      <div class="stat-card purple">
-        <div class="stat-label">Total Posts</div>
-        <div class="stat-value" id="statTotal">—</div>
-      </div>
-      <div class="stat-card green">
-        <div class="stat-label">Last Updated</div>
-        <div class="stat-value" id="statSync" style="font-size:20px;padding-top:6px">—</div>
-      </div>
+    <div class="form-group" style="margin-bottom:20px;">
+      <input type="password" id="adminPassword" class="form-input" placeholder="Password" required>
     </div>
-    <div class="content">
-      <div class="upload-card">
-        <div class="section-header">
-          <div class="section-icon">⚡</div>
-          <div class="section-title">Quick Post</div>
-        </div>
-        <div class="form-grid">
-          <div class="form-group">
-            <label class="form-label">Title *</label>
-            <input class="form-input" id="q-title" placeholder="Post ka title...">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Image URL</label>
-            <input class="form-input" id="q-image" placeholder="https://..." oninput="previewImg('q')">
-          </div>
-          <div class="form-group full">
-            <label class="form-label">Description *</label>
-            <input class="form-input" id="q-desc" placeholder="2-3 line mein summary...">
-          </div>
-          <div class="form-group full">
-            <label class="form-label">Content *</label>
-            <textarea class="form-input" id="q-content" rows="5" placeholder="Poora content yahan likho..."></textarea>
-          </div>
-        </div>
-        <button class="btn btn-primary" id="quickUploadBtn" onclick="uploadPost('q')">
-          <span>🚀</span> Publish Post
-        </button>
-      </div>
+    <button class="btn btn-primary" id="loginSubmitBtn">🔐 Authenticate</button>
+  </div>
+</div>
 
-      <div class="upload-card" style="padding-bottom:8px">
-        <div class="posts-header" style="margin-bottom:16px">
-          <div class="section-header" style="margin-bottom:0">
-            <div class="section-icon">📰</div>
-            <div class="section-title">Recent Posts</div>
-          </div>
-          <input class="search-box" id="dashSearch" placeholder="🔍 Search..." oninput="filterDash()">
-        </div>
-        <div id="dash-grid" class="posts-grid" style="margin-bottom:16px"></div>
+<!-- ── 2. ACTUAL DASHBOARD CONTENT (लॉगिन होने के बाद एक्टिव होगा) ── -->
+<div id="auth-view">
+  <aside class="sidebar">
+    <div class="logo">
+      <img class="user-asset" src="logo.png" alt="FactZone">
+      <span class="logo-text">FactZone</span>
+    </div>
+    <nav class="nav">
+      <button id="nav-dashboard" class="nav-item active" onclick="switchPage('dashboard',this)">
+        <span class="nav-icon">📊</span><span>Dashboard</span>
+      </button>
+      <button id="nav-upload" class="nav-item" onclick="switchPage('upload',this)">
+        <span class="nav-icon">✏️</span><span>New Post</span>
+      </button>
+      <button id="nav-posts" class="nav-item" onclick="switchPage('posts',this)">
+        <span class="nav-icon">📰</span><span>All Posts</span>
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sync-badge">
+        <div class="sync-dot" id="syncDot"></div>
+        <span id="syncText">Database Online</span>
+      </div>
+      <button class="btn btn-logout" id="logoutBtn">🚪 Logout</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="page-title" id="pageTitle">Dashboard</div>
+      <div class="topbar-right">
+        <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()" title="Toggle dark/light mode">🌙</button>
+        <a href="https://factzone.online/" target="_blank" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:9px 14px;border-radius:10px;font-size:13px;font-weight:600;text-decoration:none;transition:.2s;white-space:nowrap" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">↗ View Site</a>
       </div>
     </div>
-  </div>
 
-  <div id="page-upload" class="page">
-    <div class="content" style="padding-top:24px">
-      <div id="u-wrapper" class="upload-card">
-        <div class="section-header">
-          <div class="section-icon">✏️</div>
-          <div class="section-title">New Post</div>
+    <div id="page-dashboard" class="page active">
+      <div class="stats-row">
+        <div class="stat-card purple">
+          <div class="stat-label">Total Posts</div>
+          <div class="stat-value" id="statTotal">—</div>
         </div>
-        <div class="form-grid">
-          <div class="form-group">
-            <label class="form-label">Title *</label>
-            <input class="form-input" id="u-title" placeholder="Post ka title...">
+        <div class="stat-card green">
+          <div class="stat-label">Last Updated</div>
+          <div class="stat-value" id="statSync" style="font-size:20px;padding-top:6px">—</div>
+        </div>
+      </div>
+      <div class="content">
+        <div class="upload-card">
+          <div class="section-header">
+            <div class="section-icon">⚡</div>
+            <div class="section-title">Quick Post</div>
           </div>
-          <div class="form-group">
-            <label class="form-label">Image URL</label>
-            <input class="form-input" id="u-image" placeholder="https://..." oninput="previewImg('u')">
-          </div>
-          <div class="form-group full">
-            <label class="form-label">Description *</label>
-            <input class="form-input" id="u-desc" placeholder="Short description...">
-          </div>
-          <div class="form-group full">
-            <img id="u-preview" class="img-preview" alt="Preview">
-          </div>
-          <div class="form-group full">
-            <label class="form-label">Content *</label>
-            <div id="u-editor-wrapper">
-              <div id="u-toolbar">
-                <span class="ql-formats">
-                  <select class="ql-size">
-                    <option value="small">Small</option>
-                    <option selected>Normal</option>
-                    <option value="large">Large</option>
-                    <option value="huge">Huge</option>
-                  </select>
-                </span>
-                <span class="ql-formats">
-                  <button class="ql-bold"></button>
-                  <button class="ql-italic"></button>
-                  <button class="ql-underline"></button>
-                </span>
-                <span class="ql-formats">
-                  <button class="ql-list" value="ordered"></button>
-                  <button class="ql-list" value="bullet"></button>
-                </span>
-                <span class="ql-formats">
-                  <button id="custom-fullscreen" type="button" title="Full Screen" style="width:auto; font-size:13px; font-weight:bold; padding:0 6px;">全 Fullscreen</button>
-                </span>
-              </div>
-              <div id="u-content" class="editor-container"></div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Title *</label>
+              <input class="form-input" id="q-title" placeholder="Post ka title...">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Image URL</label>
+              <input class="form-input" id="q-image" placeholder="https://..." oninput="previewImg('q')">
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Description *</label>
+              <input class="form-input" id="q-desc" placeholder="2-3 line mein summary...">
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Content *</label>
+              <textarea class="form-input" id="q-content" rows="5" placeholder="Poora content yahan likho..."></textarea>
             </div>
           </div>
+          <button class="btn btn-primary" id="quickUploadBtn" onclick="uploadPost('q')">
+            <span>🚀</span> Publish Post
+          </button>
         </div>
-        <button class="btn btn-primary" id="uploadBtn" onclick="uploadPost('u')">
-          <span>🚀</span> Publish Post
-        </button>
+
+        <div class="upload-card" style="padding-bottom:8px">
+          <div class="posts-header" style="margin-bottom:16px">
+            <div class="section-header" style="margin-bottom:0">
+              <div class="section-icon">📰</div>
+              <div class="section-title">Recent Posts</div>
+            </div>
+            <input class="search-box" id="dashSearch" placeholder="🔍 Search..." oninput="filterDash()">
+          </div>
+          <div id="dash-grid" class="posts-grid" style="margin-bottom:16px"></div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div id="page-posts" class="page">
-    <div class="content" style="padding-top:24px">
-      <div class="posts-header">
-        <div class="section-header" style="margin-bottom:0">
-          <div class="section-icon">📰</div>
-          <div class="section-title" id="postsCount">All Posts</div>
+    <div id="page-upload" class="page">
+      <div class="content" style="padding-top:24px">
+        <div id="u-wrapper" class="upload-card">
+          <div class="section-header">
+            <div class="section-icon">✏️</div>
+            <div class="section-title">New Post</div>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Title *</label>
+              <input class="form-input" id="u-title" placeholder="Post ka title...">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Image URL</label>
+              <input class="form-input" id="u-image" placeholder="https://..." oninput="previewImg('u')">
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Description *</label>
+              <input class="form-input" id="u-desc" placeholder="Short description...">
+            </div>
+            <div class="form-group full">
+              <img id="u-preview" class="img-preview" alt="Preview">
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Content *</label>
+              <div id="u-editor-wrapper">
+                <div id="u-toolbar">
+                  <span class="ql-formats">
+                    <select class="ql-size">
+                      <option value="small">Small</option>
+                      <option selected>Normal</option>
+                      <option value="large">Large</option>
+                      <option value="huge">Huge</option>
+                    </select>
+                  </span>
+                  <span class="ql-formats">
+                    <button class="ql-bold"></button>
+                    <button class="ql-italic"></button>
+                    <button class="ql-underline"></button>
+                  </span>
+                  <span class="ql-formats">
+                    <button class="ql-list" value="ordered"></button>
+                    <button class="ql-list" value="bullet"></button>
+                  </span>
+                  <span class="ql-formats">
+                    <button id="custom-fullscreen" type="button" title="Full Screen" style="width:auto; font-size:13px; font-weight:bold; padding:0 6px;">全 Fullscreen</button>
+                  </span>
+                </div>
+                <div id="u-content" class="editor-container"></div>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary" id="uploadBtn" onclick="uploadPost('u')">
+            <span>🚀</span> Publish Post
+          </button>
         </div>
-        <input class="search-box" id="searchBox" placeholder="🔍 Search posts..." oninput="filterPosts()">
       </div>
-      <div id="posts-grid" class="posts-grid"></div>
+    </div>
+
+    <div id="page-posts" class="page">
+      <div class="content" style="padding-top:24px">
+        <div class="posts-header">
+          <div class="section-header" style="margin-bottom:0">
+            <div class="section-icon">📰</div>
+            <div class="section-title" id="postsCount">All Posts</div>
+          </div>
+          <input class="search-box" id="searchBox" placeholder="🔍 Search posts..." oninput="filterPosts()">
+        </div>
+        <div id="posts-grid" class="posts-grid"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -433,6 +464,8 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+// Firebase Authentication मॉड्यूल इम्पोर्ट किया गया
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
@@ -443,8 +476,12 @@ const firebaseConfig = {
   appId: "1:425838320650:web:beab18baddf818cb73d3f3"
 };
 
-const app = initializeApp(firebaseConfig);
-const db  = getFirestore(app);
+const app  = initializeApp(firebaseConfig);
+const db   = getFirestore(app);
+const auth = getAuth(app); // Auth इनिशियलाइज किया गया
+
+// आपकी विशिष्ट एडमिन UID
+const ADMIN_UID = "KZ6MqsJxEKMgB65GwjBvrYZ2w2d2";
 
 let allPostsCache = [];
 let currentEditId = null;
@@ -453,14 +490,12 @@ let editQuillEditor = null; // Edit Post Editor
 
 // Initialize Editors
 function initQuill() {
-  // New Post Editor
   quillEditor = new Quill('#u-content', {
     modules: { toolbar: '#u-toolbar' },
     theme: 'snow',
     placeholder: 'Poora content yahan likho...'
   });
 
-  // Edit Post Editor
   editQuillEditor = new Quill('#e-content', {
     modules: { toolbar: '#e-toolbar' },
     theme: 'snow',
@@ -497,6 +532,65 @@ function initQuill() {
     }
   });
 }
+
+// ── Authentication Monitor (Real-time Status Tracking) ──
+onAuthStateChanged(auth, (user) => {
+  const loginView = document.getElementById('login-view');
+  const authView = document.getElementById('auth-view');
+  
+  if (user && user.uid === ADMIN_UID) {
+    // अगर सही एडमिन लॉग इन है, तो डैशबोर्ड एक्टिव करें
+    loginView.style.display = 'none';
+    authView.style.display = 'block';
+    loadPosts(); 
+  } else {
+    // अगर लॉग आउट है या कोई गलत यूजर है, तो तुरंत लॉगआउट मारकर लॉगिन स्क्रीन दिखाएं
+    if (user) signOut(auth);
+    authView.style.display = 'none';
+    loginView.style.display = 'flex';
+    setSyncStatus('muted', 'Database Offline');
+  }
+});
+
+// ── Login Submit Core Function ──
+document.getElementById('loginSubmitBtn').addEventListener('click', () => {
+  const email = document.getElementById('adminEmail').value.trim();
+  const password = document.getElementById('adminPassword').value.trim();
+  const btn = document.getElementById('loginSubmitBtn');
+
+  if (!email || !password) {
+    showToast('⚠️ Email aur Password ज़रूरी हैं!', 'error');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '⏳ Verifying...';
+
+  signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      if(userCredential.user.uid !== ADMIN_UID) {
+         showToast('❌ Unauthorized Access Denied!', 'error');
+         signOut(auth);
+      } else {
+         showToast('🔐 Auth Verification Success!', 'success');
+      }
+    })
+    .catch((error) => {
+      showToast('❌ Wrong credentials or server error!', 'error');
+      console.error(error.message);
+    })
+    .finally(() => {
+      btn.disabled = false;
+      btn.textContent = '🔐 Authenticate';
+    });
+});
+
+// ── Logout Core Function ──
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  signOut(auth).then(() => {
+    showToast('🚪 Logged out successfully', 'success');
+  }).catch((e) => showToast('❌ Logout Failed: ' + e.message, 'error'));
+});
 
 // ── Theme ──
 window.toggleTheme = function() {
@@ -603,7 +697,8 @@ async function loadPosts() {
     setSyncStatus('connected', 'Database Online');
   } catch(e) {
     ['dash-grid','posts-grid'].forEach(id => {
-      document.getElementById(id).innerHTML = `<div style="color:var(--red);padding:20px;grid-column:1/-1">❌ Error: ${e.message}</div>`;
+      const el = document.getElementById(id);
+      if(el) el.innerHTML = `<div style="color:var(--red);padding:20px;grid-column:1/-1">❌ Error: ${e.message}</div>`;
     });
     setSyncStatus('error', 'Firebase error');
   }
@@ -695,7 +790,6 @@ window.openEditModal = function(id) {
   document.getElementById('e-desc').value    = post.desc    || '';
   document.getElementById('e-image').value   = post.image   || '';
   
-  // Set content in Quill editor for Editing
   if (editQuillEditor) {
     editQuillEditor.root.innerHTML = post.content || '';
   }
@@ -708,7 +802,6 @@ window.openEditModal = function(id) {
 
 window.closeModal = function() {
   document.getElementById('editModal').classList.remove('show');
-  // Exit fullscreen on close if it was left open
   document.getElementById('e-editor-wrapper').classList.remove('ql-fullscreen');
   document.getElementById('edit-fullscreen').textContent = "全 Fullscreen";
   document.getElementById('edit-fullscreen').style.color = "var(--text)";
@@ -754,9 +847,8 @@ window.switchPage = function(page, btn) {
 
 // ── Init ──
 async function init() {
-  setSyncStatus('connected', 'Database Online');
-  initQuill(); // Initialize both editors
-  await loadPosts();
+  setSyncStatus('muted', 'Database Offline');
+  initQuill(); 
 }
 init();
 </script>
