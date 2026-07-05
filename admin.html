@@ -6,7 +6,6 @@
 <title>FactZone Admin</title>
 <link class="user-asset" rel="icon" href="logo.png">
 <meta name="robots" content="noindex,nofollow">
-<!-- Quill CSS (For Rich Text Editor) -->
 <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -220,7 +219,6 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
 </head>
 <body>
 
-<!-- ── 1. LOGIN INTERFACE (शुरुआत में सिर्फ यह दिखेगा) ── -->
 <div id="login-view" class="login-container">
   <div class="login-card">
     <div class="logo" style="justify-content:center; border:none; padding-bottom:10px;">
@@ -238,7 +236,6 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
   </div>
 </div>
 
-<!-- ── 2. ACTUAL DASHBOARD CONTENT (लॉगिन होने के बाद एक्टिव होगा) ── -->
 <div id="auth-view">
   <aside class="sidebar">
     <div class="logo">
@@ -422,7 +419,6 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
     </div>
     <div class="form-group" style="margin-bottom:14px">
       <label class="form-label">Content</label>
-      <!-- Rich Text Editor for Edit Modal -->
       <div id="e-editor-wrapper">
         <div id="e-toolbar">
           <span class="ql-formats">
@@ -458,13 +454,11 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
 
 <div class="toast" id="toast"></div>
 
-<!-- Quill Library JS -->
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-// Firebase Authentication मॉड्यूल इम्पोर्ट किया गया
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
@@ -478,15 +472,15 @@ const firebaseConfig = {
 
 const app  = initializeApp(firebaseConfig);
 const db   = getFirestore(app);
-const auth = getAuth(app); // Auth इनिशियलाइज किया गया
+const auth = getAuth(app);
 
-// आपकी विशिष्ट एडमिन UID
-const ADMIN_UID = "KZ6MqsJxEKMgB65GwjBvrYZ2w2d2";
+// आपकी नई एडमिन UID यहाँ अपडेट कर दी गई है
+const ADMIN_UID = "J4AR9ZfzvyLOXZIihEuZ0DtvaIi1";
 
 let allPostsCache = [];
 let currentEditId = null;
-let quillEditor = null;     // New Post Editor
-let editQuillEditor = null; // Edit Post Editor
+let quillEditor = null;     
+let editQuillEditor = null; 
 
 // Initialize Editors
 function initQuill() {
@@ -533,18 +527,16 @@ function initQuill() {
   });
 }
 
-// ── Authentication Monitor (Real-time Status Tracking) ──
+// ── Authentication Monitor ──
 onAuthStateChanged(auth, (user) => {
   const loginView = document.getElementById('login-view');
   const authView = document.getElementById('auth-view');
   
   if (user && user.uid === ADMIN_UID) {
-    // अगर सही एडमिन लॉग इन है, तो डैशबोर्ड एक्टिव करें
     loginView.style.display = 'none';
     authView.style.display = 'block';
     loadPosts(); 
   } else {
-    // अगर लॉग आउट है या कोई गलत यूजर है, तो तुरंत लॉगआउट मारकर लॉगिन स्क्रीन दिखाएं
     if (user) signOut(auth);
     authView.style.display = 'none';
     loginView.style.display = 'flex';
@@ -552,7 +544,7 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-// ── Login Submit Core Function ──
+// ── Login Submit Function ──
 document.getElementById('loginSubmitBtn').addEventListener('click', () => {
   const email = document.getElementById('adminEmail').value.trim();
   const password = document.getElementById('adminPassword').value.trim();
@@ -585,7 +577,7 @@ document.getElementById('loginSubmitBtn').addEventListener('click', () => {
     });
 });
 
-// ── Logout Core Function ──
+// ── Logout Function ──
 document.getElementById('logoutBtn').addEventListener('click', () => {
   signOut(auth).then(() => {
     showToast('🚪 Logged out successfully', 'success');
