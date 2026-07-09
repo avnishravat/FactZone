@@ -213,6 +213,21 @@
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch(e){} }
 
 
+  function toSafeDate(val) {
+    if (val === undefined || val === null || val === "") return null;
+    var d;
+    if (typeof val === 'number') {
+      d = new Date(val);
+    } else if (typeof val === 'string' && /^\d+$/.test(val)) {
+      var num = Number(val);
+      if (val.length <= 10) num = num * 1000; // seconds -> ms
+      d = new Date(num);
+    } else {
+      d = new Date(val);
+    }
+    return isNaN(d.getTime()) ? null : d;
+  }
+
   function readingTime(text) {
     var words = (text || "").trim().split(/\s+/).filter(Boolean).length;
     var mins = Math.max(1, Math.round(words / 200));
@@ -318,8 +333,10 @@
     var contentRaw = post.content || "Amazing facts and verified educational details.";
     var image      = post.image   || "https://factzone.online/logo.png";
     var desc       = contentRaw.replace(/\n/g," ").substring(0, 160);
-    var publishedISO = post.createdAt ? new Date(post.createdAt).toISOString() : new Date().toISOString();
-    var updatedISO   = post.updatedAt ? new Date(post.updatedAt).toISOString() : publishedISO;
+    var createdDate  = toSafeDate(post.createdAt);
+    var publishedISO = createdDate ? createdDate.toISOString() : new Date().toISOString();
+    var updatedDate  = toSafeDate(post.updatedAt);
+    var updatedISO   = updatedDate ? updatedDate.toISOString() : publishedISO;
     var keywords   = Array.isArray(post.tags) && post.tags.length ? post.tags.join(", ") : "amazing facts, science facts, hindi facts";
 
     updateSEO(titleRaw, desc, image, publishedISO, updatedISO, keywords);
