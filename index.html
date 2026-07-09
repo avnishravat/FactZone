@@ -1,37 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
   <link rel="author" href="humans.txt">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>FactZone Official | Amazing Facts, Science Facts & Viral Knowledge</title>
-  <meta name="description" content="FactZone Official is a Hindi educational platform sharing amazing facts, science facts, technology facts, history facts and viral knowledge.">
-  <meta name="keywords" content="facts, amazing facts, science facts, technology facts, history facts, viral facts, hindi facts">
-  <meta name="robots" content="index,follow,max-image-preview:large">
+  <title>Amazing Facts in Hindi | विज्ञान, टेक्नोलॉजी, इतिहास के रोचक तथ्य - FactZone</title>
+  <meta name="description" content="FactZone पर पढ़ें विज्ञान, टेक्नोलॉजी, इतिहास और रहस्य से जुड़े हैरान कर देने वाले रोचक तथ्य। Amazing facts, science facts और viral knowledge हिंदी में।">
+  <meta name="keywords" content="amazing facts hindi, रोचक तथ्य, science facts hindi, विज्ञान तथ्य, technology facts, history facts hindi, mystery facts, viral facts">
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
   <meta name="googlebot" content="index,follow,max-image-preview:large">
   <meta name="author" content="Awaneesh">
   <meta name="theme-color" content="#000000">
   <link rel="canonical" href="https://factzone.online/">
+  <link rel="sitemap" type="application/xml" href="https://factzone.online/sitemap.xml">
+  <link rel="alternate" hreflang="hi" href="https://factzone.online/">
+  <link rel="alternate" hreflang="x-default" href="https://factzone.online/">
 
   <!-- Performance Boost: Preconnect to external servers -->
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
   <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+  <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
+  <link rel="dns-prefetch" href="https://firestore.googleapis.com">
 
   <meta property="og:type" content="website">
-  <meta property="og:title" content="FactZone Official | Amazing Facts">
-  <meta property="og:description" content="Amazing facts, science facts, technology facts and educational knowledge.">
+  <meta property="og:site_name" content="FactZone">
+  <meta property="og:locale" content="hi_IN">
+  <meta property="og:title" content="Amazing Facts in Hindi | विज्ञान, टेक्नोलॉजी, इतिहास के रोचक तथ्य - FactZone">
+  <meta property="og:description" content="विज्ञान, टेक्नोलॉजी, इतिहास और रहस्य से जुड़े रोचक तथ्य हिंदी में। रोज नए Amazing Facts पढ़ें।">
   <meta property="og:url" content="https://factzone.online/">
   <meta property="og:image" content="https://factzone.online/logo.png">
+  <meta property="og:image:width" content="512">
+  <meta property="og:image:height" content="512">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="FactZone Official">
-  <meta name="twitter:description" content="Amazing facts and educational platform">
+  <meta name="twitter:title" content="Amazing Facts in Hindi - FactZone">
+  <meta name="twitter:description" content="विज्ञान, टेक्नोलॉजी, इतिहास और रहस्य से जुड़े रोचक तथ्य हिंदी में।">
   <meta name="twitter:image" content="https://factzone.online/logo.png">
 
   <link rel="icon" href="https://factzone.online/logo.png" sizes="48x48" type="image/png">
-  <link rel="apple-touch-icon" href="https://factzone.online/logo.png"> 
+  <link rel="apple-touch-icon" href="https://factzone.online/logo.png">
 
   <!-- Critical Styles First (Prevents Layout Shifts) -->
   <style>
@@ -44,7 +53,7 @@
       transition: background-color 0.3s, color 0.3s;
     }
     html.dark body {
-      background: #111827; /* Dark background */
+      background: #111827;
     }
     .card{
       transition:.3s;
@@ -91,6 +100,28 @@
       background:#888;
       border-radius:20px;
     }
+    .visually-hidden{
+      position:absolute;
+      width:1px;height:1px;
+      padding:0;margin:-1px;
+      overflow:hidden;
+      clip:rect(0,0,0,0);
+      white-space:nowrap;border:0;
+    }
+    .no-scrollbar::-webkit-scrollbar{ display:none; }
+    .no-scrollbar{ -ms-overflow-style:none; scrollbar-width:none; }
+    .filter-tab{
+      background:#111827;
+      cursor:pointer;
+    }
+    .filter-tab:hover{
+      background:#1f2937;
+    }
+    .filter-tab.active-tab{
+      background:linear-gradient(90deg,#f59e0b,#ec4899,#8b5cf6);
+      border-color:transparent !important;
+      color:#fff !important;
+    }
   </style>
 
   <!-- Inline Script to prevent Theme Flash on Load -->
@@ -130,7 +161,7 @@
     "name":"FactZone",
     "url":"https://factzone.online",
     "logo":"https://factzone.online/logo.png",
-    "description":"Hindi educational facts platform",
+    "description":"Hindi educational facts platform sharing amazing science, technology, history and mystery facts.",
     "sameAs":[
       "https://www.instagram.com/avnish__123/",
       "https://www.youtube.com/DirectionNewsWorldwide08"
@@ -144,6 +175,7 @@
     "@type":"WebSite",
     "name":"FactZone Official",
     "url":"https://factzone.online",
+    "inLanguage":"hi",
     "potentialAction":{
       "@type":"SearchAction",
       "target":"https://factzone.online/?search={search_term_string}",
@@ -151,7 +183,22 @@
     }
   }
   </script>
-    
+
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"BreadcrumbList",
+    "itemListElement":[
+      {
+        "@type":"ListItem",
+        "position":1,
+        "name":"Home",
+        "item":"https://factzone.online/"
+      }
+    ]
+  }
+  </script>
+
   <!-- Google Analytics Async Load -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-311JQXBXR9"></script>
   <script>
@@ -166,61 +213,73 @@
 
   <header class="bg-black sticky top-0 z-50 shadow-lg border-b dark:border-gray-800">
     <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col sm:flex-row gap-3 items-center justify-between">
-      
+
       <div class="flex items-center justify-between w-full sm:w-auto">
-        <a href="index.html" class="flex items-center gap-2.5">
+        <a href="index.html" class="flex items-center gap-2.5" aria-label="FactZone होमपेज पर जाएं">
           <div class="p-[2px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 rounded-full flex items-center justify-center shadow-md">
             <img src="logo.png" alt="FactZone Logo" class="w-8 h-8 rounded-full bg-black p-0.5" width="32" height="32">
           </div>
-          <h1 class="text-xl md:text-2xl font-bold text-white tracking-wide">FactZone</h1>
+          <span class="text-xl md:text-2xl font-bold text-white tracking-wide">FactZone</span>
         </a>
 
         <!-- Dark Mode Toggle Button for Mobile (Hidden on Desktop) -->
-        <button id="themeToggleMobile" class="sm:hidden text-white p-2 rounded-full bg-gray-900 hover:bg-gray-800 border border-gray-700 transition-colors">
+        <button id="themeToggleMobile" type="button" aria-label="Dark mode टॉगल करें" class="sm:hidden text-white p-2 rounded-full bg-gray-900 hover:bg-gray-800 border border-gray-700 transition-colors">
           <span class="dark:hidden">🌙</span><span class="hidden dark:inline">☀️</span>
         </button>
       </div>
-      
+
       <div class="w-full sm:w-auto flex items-center gap-2 max-w-md">
         <div class="relative flex-1 sm:w-64">
-          <input type="text" id="searchInput" placeholder="Search posts..." class="w-full px-4 py-1.5 rounded-full outline-none text-sm text-black border border-gray-700 bg-white placeholder-gray-400 dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder-gray-500">
+          <label for="searchInput" class="visually-hidden">Posts खोजें</label>
+          <input type="text" id="searchInput" placeholder="Search posts..." aria-label="Posts खोजें" class="w-full px-4 py-1.5 rounded-full outline-none text-sm text-black border border-gray-700 bg-white placeholder-gray-400 dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder-gray-500">
         </div>
-        
-        <select id="filterInput" class="bg-gray-900 text-white text-xs font-medium px-3 py-1.5 rounded-full border border-gray-800 outline-none cursor-pointer hover:bg-gray-800 transition-colors dark:border-gray-700">
-          <option value="all">All Topics</option>
-          <option value="science">🔬 Science / विज्ञान</option>
-          <option value="tech">💻 Tech / तकनीक</option>
-          <option value="history">📜 History / इतिहास</option>
-          <option value="mystery">🔮 Mystery / रहस्य</option>
-          <option value="viral">🔥 Viral / रोचक तथ्य</option>
-        </select>
 
         <!-- Dark Mode Toggle Button for Desktop -->
-        <button id="themeToggle" class="hidden sm:block text-white p-2 rounded-full bg-gray-900 hover:bg-gray-800 border border-gray-800 transition-colors">
+        <button id="themeToggle" type="button" aria-label="Dark mode टॉगल करें" class="hidden sm:block text-white p-2 rounded-full bg-gray-900 hover:bg-gray-800 border border-gray-800 transition-colors">
           <span class="dark:hidden">🌙</span><span class="hidden dark:inline">☀️</span>
         </button>
       </div>
 
     </div>
+
+    <!-- Category Tabs: fully visible navigation, no dropdown -->
+    <nav aria-label="Topic navigation" class="border-t border-gray-800">
+      <div id="filterScrollArea" class="max-w-7xl mx-auto px-4 overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing">
+        <div id="filterTabs" class="flex items-center gap-2 py-2 whitespace-nowrap w-max">
+          <button type="button" data-value="all" class="filter-tab active-tab text-white text-xs sm:text-sm font-semibold px-4 py-1.5 rounded-full border border-gray-700 transition-colors">All Topics</button>
+          <button type="button" data-value="science" class="filter-tab text-gray-300 text-xs sm:text-sm font-semibold px-4 py-1.5 rounded-full border border-gray-800 transition-colors">🔬 Science / विज्ञान</button>
+          <button type="button" data-value="tech" class="filter-tab text-gray-300 text-xs sm:text-sm font-semibold px-4 py-1.5 rounded-full border border-gray-800 transition-colors">💻 Tech / तकनीक</button>
+          <button type="button" data-value="history" class="filter-tab text-gray-300 text-xs sm:text-sm font-semibold px-4 py-1.5 rounded-full border border-gray-800 transition-colors">📜 History / इतिहास</button>
+          <button type="button" data-value="mystery" class="filter-tab text-gray-300 text-xs sm:text-sm font-semibold px-4 py-1.5 rounded-full border border-gray-800 transition-colors">🔮 Mystery / रहस्य</button>
+          <button type="button" data-value="viral" class="filter-tab text-gray-300 text-xs sm:text-sm font-semibold px-4 py-1.5 rounded-full border border-gray-800 transition-colors">🔥 Viral / रोचक तथ्य</button>
+        </div>
+      </div>
+    </nav>
   </header>
 
   <section class="max-w-7xl mx-auto px-5 py-4">
-    <h2 class="text-2xl font-bold dark:text-white">Amazing Facts, Science Facts & Knowledge</h2>
-    <p class="text-gray-600 dark:text-gray-400 mt-2">Read science facts, technology facts, history facts, mystery facts and educational knowledge articles.</p>
+    <h1 class="text-2xl font-bold dark:text-white">Amazing Facts, Science Facts &amp; रोचक ज्ञान (Hindi)</h1>
+    <p class="text-gray-600 dark:text-gray-400 mt-2">विज्ञान, तकनीक, इतिहास, रहस्य और वायरल तथ्यों से जुड़े हिंदी लेख पढ़ें — रोज नई जानकारी FactZone पर।</p>
   </section>
-    
+
   <main id="posts" class="max-w-7xl mx-auto p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-    <!-- LocalStorage content instantly loads here dynamically -->
+    <!-- SEO fallback content: visible to crawlers/no-JS users instantly, replaced once Firestore data loads -->
     <div id="seo-placeholder-cards" class="col-span-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full">
-      <div class="card shadow-lg">
-        <img src="logo.png" alt="Amazing Science Facts" class="post-image p-4 bg-gray-900 object-contain" width="100%" height="220">
+      <a href="about.html" class="card shadow-lg">
+        <img src="logo.png" alt="विज्ञान से जुड़े रोचक तथ्य" class="post-image p-4 bg-gray-900 object-contain" loading="eager" width="500" height="220">
         <div class="p-4 flex flex-col flex-1">
           <h2 class="font-bold text-xl mb-2 line2 dark:text-white">विज्ञान से जुड़े कुछ बेहद हैरान करने वाले रोचक तथ्य</h2>
-          <p class="text-gray-600 dark:text-gray-400 text-sm line2">Read amazing science facts, technology updates, and viral knowledge on FactZone Official...</p>
+          <p class="text-gray-600 dark:text-gray-400 text-sm line2">विज्ञान, टेक्नोलॉजी और वायरल जानकारी से जुड़े Amazing Facts पढ़ें FactZone Official पर...</p>
         </div>
-      </div>
+      </a>
     </div>
   </main>
+
+  <noscript>
+    <div class="max-w-7xl mx-auto px-5 pb-10 dark:text-white">
+      <p>यह वेबसाइट पूरी तरह देखने के लिए JavaScript enable करें। FactZone पर विज्ञान, टेक्नोलॉजी, इतिहास और रहस्य से जुड़े रोचक तथ्य पढ़ें।</p>
+    </div>
+  </noscript>
 
   <footer class="bg-black text-white mt-10 border-t dark:border-gray-900">
     <div class="max-w-7xl mx-auto px-5 py-8 text-center">
@@ -254,12 +313,47 @@
 
     toggleBtn.addEventListener('click', toggleTheme);
     toggleBtnMobile.addEventListener('click', toggleTheme);
+
+    // Side-scroll for filter tabs: mouse drag + wheel support (desktop)
+    const scrollArea = document.getElementById('filterScrollArea');
+    let isDown = false;
+    let startX;
+    let scrollLeftStart;
+    let dragged = false;
+
+    scrollArea.addEventListener('mousedown', (e) => {
+      isDown = true;
+      dragged = false;
+      startX = e.pageX - scrollArea.offsetLeft;
+      scrollLeftStart = scrollArea.scrollLeft;
+    });
+    window.addEventListener('mouseup', () => { isDown = false; });
+    scrollArea.addEventListener('mouseleave', () => { isDown = false; });
+    scrollArea.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - scrollArea.offsetLeft;
+      const walk = x - startX;
+      if (Math.abs(walk) > 5) dragged = true;
+      scrollArea.scrollLeft = scrollLeftStart - walk;
+    });
+    // Prevent a drag from accidentally triggering a tab click
+    scrollArea.addEventListener('click', (e) => {
+      if (dragged) { e.stopPropagation(); e.preventDefault(); }
+    }, true);
+
+    // Convert vertical wheel scroll into horizontal scroll over the tab bar
+    scrollArea.addEventListener('wheel', (e) => {
+      if (e.deltaY === 0) return;
+      e.preventDefault();
+      scrollArea.scrollLeft += e.deltaY;
+    }, { passive: false });
   </script>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getFirestore, collection, query, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-      
+
     const firebaseConfig = {
       apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
       authDomain: "factzone-a9ace.firebaseapp.com",
@@ -275,10 +369,11 @@
     const db = getFirestore(app);
     const postsContainer = document.getElementById("posts");
 
+    let selectedCategory = "all";
+
     function filterPosts() {
       const searchValue = document.getElementById("searchInput").value.toLowerCase();
-      const selectedCategory = document.getElementById("filterInput").value;
-      
+
       const categoryMap = {
         science: ["science", "विज्ञान", "वैज्ञानिक", "space", "अंतरिक्ष", "ग्रह", "earth"],
         tech: ["tech", "technology", "तकनीक", "मोबाइल", "computer", "ai", "इंटरनेट"],
@@ -291,14 +386,14 @@
         const cardText = card.innerText.toLowerCase();
         const matchesSearch = cardText.includes(searchValue);
         let matchesCategory = false;
-        
+
         if (selectedCategory === "all") {
           matchesCategory = true;
         } else {
           const keywords = categoryMap[selectedCategory];
           matchesCategory = keywords.some(keyword => cardText.includes(keyword));
         }
-        
+
         card.style.display = (matchesSearch && matchesCategory) ? "block" : "none";
       });
     }
@@ -328,16 +423,17 @@
         postsArray.sort((a, b) => {
           const timeA = a.createdAt?.seconds || a.createdAt || 0;
           const timeB = b.createdAt?.seconds || b.createdAt || 0;
-          return timeB - timeA; 
+          return timeB - timeA;
         });
 
         let htmlContent = "";
         postsArray.forEach((post)=>{
+          const safeTitle = post.title || 'FactZone Post';
           htmlContent += `
           <a href="detail.html?id=${post.id}" class="card shadow-lg">
-            <img src="${post.image || 'https://via.placeholder.com/500'}" alt="${post.title || 'FactZone Post'}" class="post-image" loading="lazy" width="100%" height="220">
+            <img src="${post.image || 'https://via.placeholder.com/500'}" alt="${safeTitle}" class="post-image" loading="lazy" width="500" height="220">
             <div class="p-4 flex flex-col flex-1">
-              <h2 class="font-bold text-xl mb-2 line2 dark:text-white">${post.title || ''}</h2>
+              <h2 class="font-bold text-xl mb-2 line2 dark:text-white">${safeTitle}</h2>
               <p class="text-gray-600 dark:text-gray-400 text-sm line2">${post.desc || ''}</p>
             </div>
           </a>`;
@@ -355,7 +451,21 @@
     loadPosts();
 
     document.getElementById("searchInput").addEventListener("input", filterPosts);
-    document.getElementById("filterInput").addEventListener("change", filterPosts);
+
+    document.querySelectorAll(".filter-tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll(".filter-tab").forEach(t => {
+          t.classList.remove("active-tab");
+          t.classList.remove("text-white");
+          t.classList.add("text-gray-300");
+        });
+        tab.classList.add("active-tab");
+        tab.classList.remove("text-gray-300");
+        tab.classList.add("text-white");
+        selectedCategory = tab.dataset.value;
+        filterPosts();
+      });
+    });
   </script>
 
 </body>
