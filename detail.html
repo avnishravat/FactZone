@@ -63,7 +63,6 @@
     }
     .wrap { max-width: 860px; margin: 0 auto; padding: 1rem 1rem 2rem; }
 
-
     .site-header {
       display: flex; align-items: center; justify-content: space-between;
       margin-bottom: 1.25rem; padding-bottom: .85rem;
@@ -75,7 +74,6 @@
     .back-btn { background: var(--ink); color: #fff; text-decoration: none; font-weight: 700; font-size: .8rem; padding: .45rem .95rem; border-radius: .5rem; transition: background .18s; }
     .back-btn:hover { background: #333; }
 
-
     #post { background: var(--surface); border-radius: var(--r); padding: 1.25rem 1.5rem; box-shadow: 0 2px 16px rgba(0,0,0,.07); }
     .hero-wrap { display: flex; justify-content: center; margin-bottom: .85rem; }
     #post img.hero { width: 100%; max-width: 300px; aspect-ratio: 16/9; border-radius: .6rem; object-fit: cover; display: block; box-shadow: 0 4px 18px rgba(0,0,0,.18); }
@@ -84,7 +82,6 @@
     #post .content { font-size: 1.02rem; line-height: 1.7; color: #2d2d2b; white-space: pre-line; }
     .author-box { margin-top: 1.25rem; padding-top: .85rem; border-top: 1px solid var(--border); font-size: .9rem; color: var(--muted); }
     .author-box a { color: var(--accent); text-decoration: none; font-weight: 600; }
-
 
     .share-container { margin-top: 1rem; padding-top: .85rem; border-top: 1px dashed var(--border); }
     .share-title { font-size: 0.95rem; font-weight: 700; color: var(--ink); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
@@ -97,18 +94,15 @@
     .btn-tw { background-color: #000000; }
     .btn-cp { background-color: var(--muted); }
 
-
     .sk { background: linear-gradient(90deg,#eee 25%,#f8f8f8 50%,#eee 75%); background-size: 400% 100%; animation: sh 1.4s infinite; border-radius: .5rem; }
     @keyframes sh { to { background-position: -400% 0; } }
-    .sk-img   { width: 100%; height: 320px; border-radius: .75rem; margin-bottom: 1.5rem; }
+    .sk-img   { width: 100%; height: 200px; border-radius: .75rem; margin-bottom: 1.5rem; }
     .sk-h      { height: 2rem;   width: 75%; margin-bottom: 1rem; }
     .sk-p      { height: 1rem;   width: 100%; margin-bottom: .65rem; }
     .sk-p.s   { width: 55%; }
 
-
     .err { text-align: center; padding: 3rem 1rem; color: var(--muted); }
     .err h2 { font-family: 'Merriweather', serif; color: var(--ink); margin-bottom: .5rem; }
-
 
     #relatedSection { margin-top: 1.25rem; background: var(--surface); border-radius: var(--r); padding: 1.25rem 1.5rem; box-shadow: 0 2px 16px rgba(0,0,0,.07); }
     #relatedSection h2 { font-family: 'Merriweather', serif; font-size: 1.15rem; font-weight: 700; margin-bottom: .85rem; padding-bottom: .5rem; border-bottom: 2px solid var(--ink); }
@@ -120,7 +114,6 @@
 
     @media(max-width:600px) { #post,#relatedSection { padding: 1rem .85rem; } }
   </style>
-    <!-- Google Analytics Async Load -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-311JQXBXR9"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -142,15 +135,17 @@
   </header>
 
   <article id="post" itemscope itemtype="https://schema.org/Article">
-    <div id="skeleton">
-      <div class="sk sk-img"></div>
-      <div class="sk sk-h"></div>
-      <div class="sk sk-p"></div>
-      <div class="sk sk-p"></div>
-      <div class="sk sk-p s"></div>
+    <div id="post-content">
+      <div id="skeleton">
+        <div class="sk sk-img"></div>
+        <div class="sk sk-h"></div>
+        <div class="sk sk-p"></div>
+        <div class="sk sk-p"></div>
+        <div class="sk sk-p s"></div>
+      </div>
     </div>
     <noscript>
-      <p>Please enable JavaScript to read this article on FactZone. यह लेख पढ़ने के लिए JavaScript enable करें।</p>
+      <p>Please enable JavaScript to read this article on FactZone. यह लेख पढ़ने के लिए JavaScript enable करें।</p>
     </noscript>
   </article>
 
@@ -166,19 +161,13 @@
 
   var PROJECT_ID = "factzone-a9ace";
   var API_KEY    = "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc";
-
-  /* Firestore REST base — NO SDK, no module import, instant */
-  var FS_BASE = "https://firestore.googleapis.com/v1/projects/"
-              + PROJECT_ID + "/databases/(default)/documents/";
-
+  var FS_BASE = "https://firestore.googleapis.com/v1/projects/" + PROJECT_ID + "/databases/(default)/documents/";
 
   var params = new URLSearchParams(location.search);
   var id     = params.get("id") || "";
 
   function $(q) { return document.getElementById(q); }
 
-  /* Escape HTML entities before any innerHTML insertion — prevents
-     stored-content from ever being interpreted as markup/script. */
   function escapeHtml(str) {
     return String(str == null ? "" : str)
       .replace(/&/g, "&amp;")
@@ -201,17 +190,14 @@
     return "";
   }
 
-
   function parseDoc(fields) {
     var obj = {};
     Object.keys(fields || {}).forEach(function(k){ obj[k] = parseField(fields[k]); });
     return obj;
   }
 
-
   function lsGet(k) { try { return localStorage.getItem(k); } catch(e){ return null; } }
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch(e){} }
-
 
   function toSafeDate(val) {
     if (val === undefined || val === null || val === "") return null;
@@ -220,7 +206,7 @@
       d = new Date(val);
     } else if (typeof val === 'string' && /^\d+$/.test(val)) {
       var num = Number(val);
-      if (val.length <= 10) num = num * 1000; // seconds -> ms
+      if (val.length <= 10) num = num * 1000;
       d = new Date(num);
     } else {
       d = new Date(val);
@@ -265,7 +251,6 @@
     var can = document.getElementById("meta-canonical");
     if (can) can.href = url;
 
-    /* Article schema — full field set */
     var schema = {
       "@context":   "https://schema.org",
       "@type":      "Article",
@@ -298,7 +283,6 @@
     var el = document.getElementById("articleSchema");
     if (el) el.textContent = JSON.stringify(schema);
 
-    /* Breadcrumb schema — fill in the real article title as level 3 */
     var breadcrumb = {
       "@context": "https://schema.org",
       "@type":    "BreadcrumbList",
@@ -310,12 +294,8 @@
     };
     var bc = document.getElementById("breadcrumbSchema");
     if (bc) bc.textContent = JSON.stringify(breadcrumb);
-
-    var sectionMeta = document.getElementById("meta-section");
-    if (sectionMeta) sectionMeta.setAttribute("content", "Amazing Facts");
   }
 
-  /* Global function for copy link handler */
   window.copyArticleLink = function(btn) {
     var currentUrl = location.href;
     navigator.clipboard.writeText(currentUrl).then(function() {
@@ -326,7 +306,6 @@
       alert("Link copied: " + currentUrl);
     });
   };
-
 
   function renderPost(post) {
     var titleRaw   = post.title   || "FactZone Educational Article";
@@ -355,13 +334,12 @@
     var shareUrl = encodeURIComponent(location.href);
     var shareText = encodeURIComponent(titleRaw + " - Read more on FactZone:\n");
 
-    $("post").innerHTML =
+    // यहाँ "post" की जगह "post-content" को अपडेट किया जा रहा है
+    $("post-content").innerHTML =
       '<div class="hero-wrap"><img class="hero" src="' + escapeHtml(image) + '" alt="' + title + '" loading="eager" width="300" height="169"></div>' +
       '<h1 itemprop="headline">' + title + '</h1>' +
       '<p class="meta-line">' + metaLine + '</p>' +
       '<div class="content" itemprop="articleBody">' + content + '</div>' +
-
-      '' +
       '<div class="share-container">' +
         '<div class="share-title">Share this Fact:</div>' +
         '<div class="share-buttons">' +
@@ -371,10 +349,8 @@
           '<button onclick="window.copyArticleLink(this)" class="share-btn btn-cp">Copy Link</button>' +
         '</div>' +
       '</div>' +
-
       '<div class="author-box">Written by <a href="author.html" itemprop="author">Awaneesh</a></div>';
   }
-
 
   function renderRelated(items) {
     if (!items || !items.length) {
@@ -391,43 +367,39 @@
     }).join("");
   }
 
-
   function fetchPost() {
     if (!id) {
-      $("post").innerHTML = '<div class="err"><h2>No article ID</h2><p>Go back and pick an article.</p></div>';
+      $("post-content").innerHTML = '<div class="err"><h2>No article ID</h2><p>Go back and pick an article.</p></div>';
       return;
     }
-
 
     var cached = lsGet("fz_post_" + id);
     if (cached) {
       try { renderPost(JSON.parse(cached)); } catch(e){}
     }
 
-
     var url = FS_BASE + "posts/" + id + "?key=" + API_KEY;
     fetch(url)
       .then(function(r){ return r.json(); })
       .then(function(data){
         if (!data.fields) {
-          if (!cached) $("post").innerHTML = '<div class="err"><h2>Post Not Found</h2><p>This article may have been removed.</p></div>';
+          if (!cached) $("post-content").innerHTML = '<div class="err"><h2>Post Not Found</h2><p>This article may have been removed.</p></div>';
           return;
         }
         var post = parseDoc(data.fields);
+        post._id = id; // यहाँ सुरक्षित रूप से ID बाइंड कर दी गई है
         lsSet("fz_post_" + id, JSON.stringify(post));
         renderPost(post);
       })
       .catch(function(err){
         console.error("Post fetch error:", err);
-        if (!cached) $("post").innerHTML = '<div class="err"><h2>Failed to load</h2><p>Check your connection and refresh.</p></div>';
+        if (!cached) $("post-content").innerHTML = '<div class="err"><h2>Failed to load</h2><p>Check your connection and refresh.</p></div>';
       });
   }
 
   function fetchRelated() {
-    /* Show cached instantly */
     var cached = lsGet("fz_related_v3");
     if (cached) { try { renderRelated(JSON.parse(cached)); } catch(e){} }
-
 
     var url = FS_BASE + "posts?key=" + API_KEY + "&pageSize=8";
     fetch(url)
@@ -447,7 +419,6 @@
       })
       .catch(function(e){ console.error("Related fetch error:", e); });
   }
-
 
   fetchPost();
   fetchRelated();
