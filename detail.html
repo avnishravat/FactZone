@@ -79,7 +79,13 @@
     #post img.hero { width: 100%; max-width: 300px; aspect-ratio: 16/9; border-radius: .6rem; object-fit: cover; display: block; box-shadow: 0 4px 18px rgba(0,0,0,.18); }
     #post h1 { font-family: 'Merriweather', serif; font-size: clamp(1.3rem, 4vw, 1.9rem); line-height: 1.25; font-weight: 700; margin-bottom: .5rem; }
     .meta-line { font-size: .82rem; color: var(--muted); margin-bottom: .85rem; display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; }
-    #post .content { font-size: 1.02rem; line-height: 1.7; color: #2d2d2b; white-space: pre-line; }
+    
+    /* white-space को normal किया ताकि रिच टेक्स्ट एडिटर का HTML सही दिखे */
+    #post .content { font-size: 1.02rem; line-height: 1.7; color: #2d2d2b; white-space: normal; }
+    
+    /* कोड ब्लॉक के लिए स्टाइलिंग */
+    .ql-code-block-container { background: #282c34; color: #abb2bf; padding: 1rem; border-radius: 0.5rem; font-family: monospace; margin: 1rem 0; overflow-x: auto; }
+    
     .author-box { margin-top: 1.25rem; padding-top: .85rem; border-top: 1px solid var(--border); font-size: .9rem; color: var(--muted); }
     .author-box a { color: var(--accent); text-decoration: none; font-weight: 600; }
 
@@ -311,7 +317,11 @@
     var titleRaw   = post.title   || "FactZone Educational Article";
     var contentRaw = post.content || "Amazing facts and verified educational details.";
     var image      = post.image   || "https://factzone.online/logo.png";
-    var desc       = contentRaw.replace(/\n/g," ").substring(0, 160);
+    
+    // SEO के लिए क्लीन टेक्स्ट डिस्क्रिप्शन बनाएं
+    var descRaw    = contentRaw.replace(/<[^>]*>/g, '').replace(/\n/g," ");
+    var desc       = descRaw.substring(0, 160);
+    
     var createdDate  = toSafeDate(post.createdAt);
     var publishedISO = createdDate ? createdDate.toISOString() : new Date().toISOString();
     var updatedDate  = toSafeDate(post.updatedAt);
@@ -321,8 +331,14 @@
     updateSEO(titleRaw, desc, image, publishedISO, updatedISO, keywords);
 
     var title   = escapeHtml(titleRaw);
-    var content = escapeHtml(contentRaw);
-    var minsRead = readingTime(contentRaw);
+    
+    // **FIX**: HTML टैग्स को एस्केप न करें ताकि वे रेंडर हो सकें
+    var content = contentRaw; 
+    
+    // पढ़ने का समय निकालने से पहले HTML टैग्स हटाएं
+    var cleanTextForReadTime = contentRaw.replace(/<[^>]*>/g, '');
+    var minsRead = readingTime(cleanTextForReadTime);
+    
     var author  = escapeHtml(post.author || "Awaneesh");
 
     var metaBits = ['📅 ' + formatDate(publishedISO), '📖 ' + minsRead, '👤 ' + author];
@@ -334,7 +350,7 @@
     var shareUrl = encodeURIComponent(location.href);
     var shareText = encodeURIComponent(titleRaw + " - Read more on FactZone:\n");
 
-    // यहाँ "post" की जगह "post-content" को अपडेट किया जा रहा है
+    // "post-content" कंटेनर को रेंडर करें
     $("post-content").innerHTML =
       '<div class="hero-wrap"><img class="hero" src="' + escapeHtml(image) + '" alt="' + title + '" loading="eager" width="300" height="169"></div>' +
       '<h1 itemprop="headline">' + title + '</h1>' +
@@ -387,7 +403,7 @@
           return;
         }
         var post = parseDoc(data.fields);
-        post._id = id; // यहाँ सुरक्षित रूप से ID बाइंड कर दी गई है
+        post._id = id;
         lsSet("fz_post_" + id, JSON.stringify(post));
         renderPost(post);
       })
