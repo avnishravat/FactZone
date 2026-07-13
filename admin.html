@@ -479,6 +479,9 @@ const app  = initializeApp(firebaseConfig);
 const db   = getFirestore(app);
 const auth = getAuth(app);
 
+// Only this Firebase account may access the admin dashboard.
+const ADMIN_UID = "Hfs04Qras4MVMzSe2DpZNJZHPwD2";
+
 let allPostsCache = [];
 let currentEditId = null;
 let quillEditor = null;     
@@ -534,9 +537,9 @@ window.addEventListener('DOMContentLoaded', () => {
   initQuill();
 });
 
-// ── React to auth state: show dashboard only for signed-in admins ──
+// ── React to auth state: show dashboard only for the designated admin ──
 onAuthStateChanged(auth, (user) => {
-  if (user) {
+  if (user && user.uid === ADMIN_UID) {
     document.getElementById('login-view').style.display = 'none';
     document.getElementById('auth-view').style.display = 'block';
     setSyncStatus('connected', 'Database Online');
@@ -545,6 +548,11 @@ onAuthStateChanged(auth, (user) => {
     document.getElementById('auth-view').style.display = 'none';
     document.getElementById('login-view').style.display = 'flex';
     setSyncStatus('muted', 'Database Offline');
+    // A valid but non-admin account must not stay signed in.
+    if (user) {
+      signOut(auth);
+      showToast('❌ This account is not authorized for admin access.', 'error');
+    }
   }
 });
 
