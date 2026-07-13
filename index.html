@@ -371,6 +371,15 @@
 
     let selectedCategory = "all";
 
+    function escapeHtml(str) {
+      return String(str == null ? "" : str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
     function filterPosts() {
       const searchValue = document.getElementById("searchInput").value.toLowerCase();
 
@@ -428,13 +437,16 @@
 
         let htmlContent = "";
         postsArray.forEach((post)=>{
-          const safeTitle = post.title || 'FactZone Post';
+          const safeTitle = escapeHtml(post.title || 'FactZone Post');
+          const safeImage = escapeHtml(post.image || 'https://via.placeholder.com/500');
+          const safeDesc  = escapeHtml(post.desc || '');
+          const safeId    = encodeURIComponent(post.id);
           htmlContent += `
-          <a href="detail.html?id=${post.id}" class="card shadow-lg">
-            <img src="${post.image || 'https://via.placeholder.com/500'}" alt="${safeTitle}" class="post-image" loading="lazy" width="500" height="220">
+          <a href="detail.html?id=${safeId}" class="card shadow-lg">
+            <img src="${safeImage}" alt="${safeTitle}" class="post-image" loading="lazy" width="500" height="220">
             <div class="p-4 flex flex-col flex-1">
               <h2 class="font-bold text-xl mb-2 line2 dark:text-white">${safeTitle}</h2>
-              <p class="text-gray-600 dark:text-gray-400 text-sm line2">${post.desc || ''}</p>
+              <p class="text-gray-600 dark:text-gray-400 text-sm line2">${safeDesc}</p>
             </div>
           </a>`;
         });
