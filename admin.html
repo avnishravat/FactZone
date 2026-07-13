@@ -227,9 +227,12 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
       <img class="user-asset" src="logo.png" alt="FactZone">
       <span class="logo-text" style="font-size:24px;">FactZone Admin</span>
     </div>
-    <p style="color:var(--muted); font-size:14px; margin-bottom:20px;">Enter your password to log in</p>
+    <p style="color:var(--muted); font-size:14px; margin-bottom:20px;">Sign in with your admin account</p>
+    <div class="form-group" style="margin-bottom:14px;">
+      <input type="email" id="adminEmail" class="form-input" placeholder="Email address" autocomplete="username" required>
+    </div>
     <div class="form-group" style="margin-bottom:20px;">
-      <input type="password" id="adminPassword" class="form-input" placeholder="Type password here..." required>
+      <input type="password" id="adminPassword" class="form-input" placeholder="Password" autocomplete="current-password" required>
     </div>
     <button class="btn btn-primary" id="loginSubmitBtn">🔐 Authenticate</button>
   </div>
@@ -461,6 +464,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
@@ -473,9 +477,10 @@ const firebaseConfig = {
 
 const app  = initializeApp(firebaseConfig);
 const db   = getFirestore(app);
+const auth = getAuth(app);
 
-// Your master fixed password
-const MASTER_PASSWORD = "Admin@FactZone123";
+// Only this Firebase account may access the admin dashboard.
+const ADMIN_UID = "Hfs04Qras4MVMzSe2DpZNJZHPwD2";
 
 let allPostsCache = [];
 let currentEditId = null;
@@ -527,45 +532,69 @@ function initQuill() {
   });
 }
 
-// Check session on load
+// Initialize editors on load
 window.addEventListener('DOMContentLoaded', () => {
   initQuill();
-  if (sessionStorage.getItem('isAdminLoggedIn') === 'true') {
-    document.getElementById('login-view').style.display = 'none';
-    document.getElementById('auth-view').style.display = 'block';
-    setSyncStatus('connected', 'Database Online');
-    loadPosts();
-  }
 });
 
-// ── Login Submit Function ──
-document.getElementById('loginSubmitBtn').addEventListener('click', () => {
-  const password = document.getElementById('adminPassword').value.trim();
-
-  if (!password) {
-    showToast('⚠️ Please enter a password!', 'error');
-    return;
-  }
-
-  if (password === MASTER_PASSWORD) {
-    sessionStorage.setItem('isAdminLoggedIn', 'true');
-    showToast('🔐 Login successful!', 'success');
+// ── React to auth state: show dashboard only for the designated admin ──
+onAuthStateChanged(auth, (user) => {
+  if (user && user.uid === ADMIN_UID) {
     document.getElementById('login-view').style.display = 'none';
     document.getElementById('auth-view').style.display = 'block';
     setSyncStatus('connected', 'Database Online');
     loadPosts();
   } else {
-    showToast('❌ Incorrect password!', 'error');
+    document.getElementById('auth-view').style.display = 'none';
+    document.getElementById('login-view').style.display = 'flex';
+    setSyncStatus('muted', 'Database Offline');
+    // A valid but non-admin account must not stay signed in.
+    if (user) {
+      signOut(auth);
+      showToast('❌ This account is not authorized for admin access.', 'error');
+    }
   }
 });
 
+// ── Login Submit Function (Firebase Authentication) ──
+async function handleLogin() {
+  const email    = document.getElementById('adminEmail').value.trim();
+  const password = document.getElementById('adminPassword').value;
+
+  if (!email || !password) {
+    showToast('⚠️ Please enter your email and password!', 'error');
+    return;
+  }
+
+  const btn = document.getElementById('loginSubmitBtn');
+  btn.disabled = true;
+
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    document.getElementById('adminPassword').value = '';
+    showToast('🔐 Login successful!', 'success');
+    // onAuthStateChanged handles showing the dashboard
+  } catch (e) {
+    showToast('❌ Login failed: ' + (e.code || e.message), 'error');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+document.getElementById('loginSubmitBtn').addEventListener('click', handleLogin);
+document.getElementById('adminPassword').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') handleLogin();
+});
+
 // ── Logout Function ──
-document.getElementById('logoutBtn').addEventListener('click', () => {
-  sessionStorage.removeItem('isAdminLoggedIn');
-  showToast('🚪 Successfully logged out', 'success');
-  document.getElementById('auth-view').style.display = 'none';
-  document.getElementById('login-view').style.display = 'flex';
-  setSyncStatus('muted', 'Database Offline');
+document.getElementById('logoutBtn').addEventListener('click', async () => {
+  try {
+    await signOut(auth);
+    showToast('🚪 Successfully logged out', 'success');
+    // onAuthStateChanged handles returning to the login view
+  } catch (e) {
+    showToast('❌ ' + e.message, 'error');
+  }
 });
 
 // ── Theme ──
@@ -605,23 +634,37 @@ function setSyncStatus(state, text) {
   document.getElementById('syncText').textContent = text;
 }
 
+// ── Escape untrusted values before injecting into HTML ──
+function escapeHtml(str) {
+  return String(str == null ? "" : str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 // ── Build post card HTML ──
 function buildCard(post, index) {
   const date = post.createdAt
     ? new Date(post.createdAt?.seconds ? post.createdAt.seconds*1000 : post.createdAt).toLocaleDateString('en-US')
     : '';
+  const image = escapeHtml(post.image || 'https://placehold.co/400x175/1c1c26/6b6b8a?text=No+Image');
+  const title = escapeHtml(post.title || 'Untitled');
+  const desc  = escapeHtml(post.desc || 'No description');
+  const id    = escapeHtml(post.id);
   return `
   <div class="post-card">
-    <img class="post-thumb" src="${post.image||'https://placehold.co/400x175/1c1c26/6b6b8a?text=No+Image'}"
+    <img class="post-thumb" src="${image}"
       onerror="this.src='https://placehold.co/400x175/1c1c26/6b6b8a?text=No+Image'" loading="lazy">
-    ${date ? `<div class="post-meta">${date}</div>` : ''}
+    ${date ? `<div class="post-meta">${escapeHtml(date)}</div>` : ''}
     <div class="post-num">#${index+1}</div>
     <div class="post-body">
-      <div class="post-title">${post.title||'Untitled'}</div>
-      <div class="post-desc">${post.desc||'No description'}</div>
+      <div class="post-title">${title}</div>
+      <div class="post-desc">${desc}</div>
       <div class="post-actions">
-        <button class="btn btn-edit" onclick="openEditModal('${post.id}')">✏️ Edit</button>
-        <button class="btn btn-danger" onclick="deletePost('${post.id}')">🗑 Delete</button>
+        <button class="btn btn-edit" onclick="openEditModal('${id}')">✏️ Edit</button>
+        <button class="btn btn-danger" onclick="deletePost('${id}')">🗑 Delete</button>
       </div>
     </div>
   </div>`;

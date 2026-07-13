@@ -45,6 +45,8 @@
 
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6974190466298538" crossorigin="anonymous"></script>
 
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -332,8 +334,10 @@
 
     var title   = escapeHtml(titleRaw);
     
-    // **FIX**: HTML टैग्स को एस्केप न करें ताकि वे रेंडर हो सकें
-    var content = contentRaw; 
+    // रिच टेक्स्ट HTML को रेंडर करने से पहले DOMPurify से sanitize करें (XSS से बचाव)
+    var content = (typeof DOMPurify !== "undefined")
+      ? DOMPurify.sanitize(contentRaw)
+      : escapeHtml(contentRaw); 
     
     // पढ़ने का समय निकालने से पहले HTML टैग्स हटाएं
     var cleanTextForReadTime = contentRaw.replace(/<[^>]*>/g, '');
