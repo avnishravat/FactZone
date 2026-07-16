@@ -160,7 +160,7 @@
 
   <!-- BOTTOM NATIVE BANNER (Related section ke pehle) -->
   <div class="ad-slot" style="margin: 1.5rem 0;">
-    <div id="container-7ff4b1b157bf01a56609549fe359888b" style="width:100%;"></div>
+    <div id="container-7ff4b1b157bf01a56609549fe359888b" class="native-banner-slot" style="width:100%;"></div>
   </div>
 
   <section id="relatedSection" aria-label="Related Facts">
@@ -331,9 +331,14 @@
      - Har unique container id ke liye alag function call, taaki future
        me dusra ad-zone code aasani se add ho sake.
   --------------------------------------------------------------- */
-  function injectSingleAd(containerId, scriptSrc) {
+  var NATIVE_BANNER_ZONE = "7ff4b1b157bf01a56609549fe359888b";
+  var NATIVE_BANNER_SRC  = "https://pl30385025.effectivecpmnetwork.com/" + NATIVE_BANNER_ZONE + "/invoke.js";
+
+  // Class-based loader: ek hi zone ke multiple placements (bottom + inline)
+  // ek saath page par kaam karein, isliye ID ke bajaye class se dhoondte hain,
+  // taaki duplicate id se koi container skip na ho.
+  function injectSingleAd(container, scriptSrc) {
     try {
-      var container = document.getElementById(containerId);
       if (!container) return;
       if (container.dataset.adLoaded === "true") return; // duplicate-load guard
 
@@ -345,21 +350,19 @@
       container.appendChild(adScript);
       container.dataset.adLoaded = "true";
     } catch (e) {
-      console.error("Ad script embedding error (" + containerId + "):", e);
+      console.error("Ad script embedding error:", e);
     }
   }
 
   function injectAdNetworkScripts() {
-    // Bottom native banner
-    injectSingleAd(
-      'container-7ff4b1b157bf01a56609549fe359888b',
-      'https://pl30385025.effectivecpmnetwork.com/7ff4b1b157bf01a56609549fe359888b/invoke.js'
-    );
-
-    // NOTE: Agar inline (article ke beech me) ad bhi chahiye, to ad
-    // network dashboard se ek NAYA/SECOND zone banao — ek hi zone code
-    // do alag containers ke liye kaam nahi karta. Naya code milne par:
-    // injectSingleAd('inline-container-XXXXXXXX', 'https://.../XXXXXXXX/invoke.js');
+    // Native Banner ka har placement (bottom + article ke beech wala inline)
+    // isi ek zone code se render hoga — dashboard note ke mutabik "Native
+    // Banner can be placed anywhere in the page body", yaani same snippet
+    // multiple jagah paste karna hi supported tareeka hai.
+    var slots = document.querySelectorAll('.native-banner-slot');
+    slots.forEach(function(slot) {
+      injectSingleAd(slot, NATIVE_BANNER_SRC);
+    });
   }
 
   function renderPost(post) {
@@ -398,10 +401,20 @@
     var shareUrl = encodeURIComponent(location.href);
     var shareText = encodeURIComponent(titleRaw + " - Read more on FactZone:\n");
 
-    // NOTE: inline ad placeholder is intentionally NOT injected here
-    // any more, kyunki uska apna ad-zone code nahi hai (see comment
-    // in injectAdNetworkScripts). Content ab bina placeholder ke jaata hai.
-    var contentWithAd = content;
+    // Article ke pehle paragraph ke baad ek inline Native Banner slot
+    // insert karo (same zone, "native-banner-slot" class ke through
+    // injectAdNetworkScripts() dono placements ko handle karta hai).
+    var contentWithAd = (function() {
+      var paragraphs = content.split('</p>');
+      if (paragraphs.length > 1) {
+        var inlineAdPlaceholder = '<div class="ad-slot" style="margin: 1.5rem 0;">' +
+                                   '<div class="native-banner-slot" style="width:100%;"></div>' +
+                                   '</div>';
+        paragraphs.splice(1, 0, inlineAdPlaceholder);
+        return paragraphs.join('</p>');
+      }
+      return content;
+    })();
 
     $("post-content").innerHTML =
       '<div class="hero-wrap"><img class="hero" src="' + escapeHtml(image) + '" alt="' + title + '" loading="eager" width="300" height="169"></div>' +
