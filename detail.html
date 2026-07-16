@@ -401,20 +401,7 @@
     var shareUrl = encodeURIComponent(location.href);
     var shareText = encodeURIComponent(titleRaw + " - Read more on FactZone:\n");
 
-    // Article ke pehle paragraph ke baad ek inline Native Banner slot
-    // insert karo (same zone, "native-banner-slot" class ke through
-    // injectAdNetworkScripts() dono placements ko handle karta hai).
-    var contentWithAd = (function() {
-      var paragraphs = content.split('</p>');
-      if (paragraphs.length > 1) {
-        var inlineAdPlaceholder = '<div class="ad-slot" style="margin: 1.5rem 0;">' +
-                                   '<div class="native-banner-slot" style="width:100%;"></div>' +
-                                   '</div>';
-        paragraphs.splice(1, 0, inlineAdPlaceholder);
-        return paragraphs.join('</p>');
-      }
-      return content;
-    })();
+    var contentWithAd = content;
 
     $("post-content").innerHTML =
       '<div class="hero-wrap"><img class="hero" src="' + escapeHtml(image) + '" alt="' + title + '" loading="eager" width="300" height="169"></div>' +
