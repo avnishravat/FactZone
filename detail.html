@@ -82,10 +82,8 @@
     #post h1 { font-family: 'Merriweather', serif; font-size: clamp(1.3rem, 4vw, 1.9rem); line-height: 1.25; font-weight: 700; margin-bottom: .5rem; }
     .meta-line { font-size: .82rem; color: var(--muted); margin-bottom: .85rem; display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; }
     
-    /* white-space को normal किया ताकि रिच टेक्स्ट एडिटर का HTML सही दिखे */
     #post .content { font-size: 1.02rem; line-height: 1.7; color: #2d2d2b; white-space: normal; }
     
-    /* कोड ब्लॉक के लिए स्टाइलिंग */
     .ql-code-block-container { background: #282c34; color: #abb2bf; padding: 1rem; border-radius: 0.5rem; font-family: monospace; margin: 1rem 0; overflow-x: auto; }
     
     .author-box { margin-top: 1.25rem; padding-top: .85rem; border-top: 1px solid var(--border); font-size: .9rem; color: var(--muted); }
@@ -156,6 +154,12 @@
       <p>Please enable JavaScript to read this article on FactZone. यह लेख पढ़ने के लिए JavaScript enable करें।</p>
     </noscript>
   </article>
+
+  <!-- NATIVE BANNER (Related section ke pehle) -->
+  <div style="margin: 1.5rem 0; text-align: center;">
+    <script async="async" data-cfasync="false" src="https://pl30385025.effectivecpmnetwork.com/7ff4b1b57bf01a56609549fe3598888b/invoke.js"></script>
+    <div id="container-7ff4b1b57bf01a56609549fe3598888b"></div>
+  </div>
 
   <section id="relatedSection" aria-label="Related Facts">
     <h2>Related Facts</h2>
@@ -320,7 +324,6 @@
     var contentRaw = post.content || "Amazing facts and verified educational details.";
     var image      = post.image   || "https://factzone.online/logo.png";
     
-    // SEO के लिए क्लीन टेक्स्ट डिस्क्रिप्शन बनाएं
     var descRaw    = contentRaw.replace(/<[^>]*>/g, '').replace(/\n/g," ");
     var desc       = descRaw.substring(0, 160);
     
@@ -334,12 +337,10 @@
 
     var title   = escapeHtml(titleRaw);
     
-    // रिच टेक्स्ट HTML को रेंडर करने से पहले DOMPurify से sanitize करें (XSS से बचाव)
     var content = (typeof DOMPurify !== "undefined")
       ? DOMPurify.sanitize(contentRaw)
       : escapeHtml(contentRaw); 
     
-    // पढ़ने का समय निकालने से पहले HTML टैग्स हटाएं
     var cleanTextForReadTime = contentRaw.replace(/<[^>]*>/g, '');
     var minsRead = readingTime(cleanTextForReadTime);
     
@@ -354,12 +355,25 @@
     var shareUrl = encodeURIComponent(location.href);
     var shareText = encodeURIComponent(titleRaw + " - Read more on FactZone:\n");
 
-    // "post-content" कंटेनर को रेंडर करें
+    // Dynamic Article Content with Integrated Native Ad inside the body
+    var contentWithAd = (function() {
+      var paragraphs = content.split('</p>');
+      if (paragraphs.length > 1) {
+        var inlineAd = '<div style="margin: 1.5rem 0; text-align: center;">' +
+                       '<script async=\"async\" data-cfasync=\"false\" src=\"https://pl30385025.effectivecpmnetwork.com/7ff4b1b57bf01a56609549fe3598888b/invoke.js\"><\/script>' +
+                       '<div id=\"container-7ff4b1b57bf01a56609549fe3598888b\"><\/div>' +
+                       '</div>';
+        paragraphs.splice(1, 0, inlineAd);
+        return paragraphs.join('</p>');
+      }
+      return content;
+    })();
+
     $("post-content").innerHTML =
       '<div class="hero-wrap"><img class="hero" src="' + escapeHtml(image) + '" alt="' + title + '" loading="eager" width="300" height="169"></div>' +
       '<h1 itemprop="headline">' + title + '</h1>' +
       '<p class="meta-line">' + metaLine + '</p>' +
-      '<div class="content" itemprop="articleBody">' + content + '</div>' +
+      '<div class="content" itemprop="articleBody">' + contentWithAd + '</div>' +
       '<div class="share-container">' +
         '<div class="share-title">Share this Fact:</div>' +
         '<div class="share-buttons">' +
