@@ -54,8 +54,8 @@
       --surface:  #ffffff;
       --ink:      #1a1a18;
       --muted:    #5a5a55;
-      --accent:   #c0392b;
-      --border:   #e2e0d8;
+      --accent:    #c0392b;
+      --border:    #e2e0d8;
       --r:        1rem;
     }
     body {
@@ -151,13 +151,12 @@
       </div>
     </div>
     <noscript>
-      <p>Please enable JavaScript to read this article on FactZone. यह लेख पढ़ने के लिए JavaScript enable करें।</p>
+      <p>Please enable JavaScript to read this article on FactZone. यह लेख पढ़ने के लिए JavaScript enable करें।</p>
     </noscript>
   </article>
 
-  <!-- NATIVE BANNER (Related section ke pehle) -->
+  <!-- BOTTOM NATIVE BANNER (Related section ke pehle) -->
   <div style="margin: 1.5rem 0; text-align: center;">
-    <script async="async" data-cfasync="false" src="https://pl30385025.effectivecpmnetwork.com/7ff4b1b57bf01a56609549fe3598888b/invoke.js"></script>
     <div id="container-7ff4b1b57bf01a56609549fe3598888b"></div>
   </div>
 
@@ -319,6 +318,21 @@
     });
   };
 
+  // Safe Dynamic Ad Loader Function
+  function injectAdNetworkScripts() {
+    try {
+      // 1. Native ad container trigger script load
+      var adScript = document.createElement('script');
+      adScript.type = 'text/javascript';
+      adScript.async = true;
+      adScript.setAttribute('data-cfasync', 'false');
+      adScript.src = 'https://pl30385025.effectivecpmnetwork.com/7ff4b1b57bf01a56609549fe3598888b/invoke.js';
+      document.head.appendChild(adScript);
+    } catch(e) { 
+      console.error("Ad script embedding standard error:", e); 
+    }
+  }
+
   function renderPost(post) {
     var titleRaw   = post.title   || "FactZone Educational Article";
     var contentRaw = post.content || "Amazing facts and verified educational details.";
@@ -355,15 +369,15 @@
     var shareUrl = encodeURIComponent(location.href);
     var shareText = encodeURIComponent(titleRaw + " - Read more on FactZone:\n");
 
-    // Dynamic Article Content with Integrated Native Ad inside the body
+    // Dynamic Article Content with safe inline container placeholder inside the body
     var contentWithAd = (function() {
       var paragraphs = content.split('</p>');
       if (paragraphs.length > 1) {
-        var inlineAd = '<div style="margin: 1.5rem 0; text-align: center;">' +
-                       '<script async=\"async\" data-cfasync=\"false\" src=\"https://pl30385025.effectivecpmnetwork.com/7ff4b1b57bf01a56609549fe3598888b/invoke.js\"><\/script>' +
-                       '<div id=\"container-7ff4b1b57bf01a56609549fe3598888b\"><\/div>' +
-                       '</div>';
-        paragraphs.splice(1, 0, inlineAd);
+        // Hamein yahan inline string me script block nahi likhna chahiye tha, isliye ab placeholder div banaya hai
+        var inlineAdPlaceholder = '<div style="margin: 1.5rem 0; text-align: center;">' +
+                                  '<div id="inline-container-7ff4b1b57bf01a56609549fe3598888b"></div>' +
+                                  '</div>';
+        paragraphs.splice(1, 0, inlineAdPlaceholder);
         return paragraphs.join('</p>');
       }
       return content;
@@ -384,6 +398,9 @@
         '</div>' +
       '</div>' +
       '<div class="author-box">Written by <a href="author.html" itemprop="author">Awaneesh</a></div>';
+
+      // HTML Render hone ke baad ads script ko load aur assign karne ka dynamic tarika execute karein
+      injectAdNetworkScripts();
   }
 
   function renderRelated(items) {
