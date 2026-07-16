@@ -81,11 +81,11 @@
     #post img.hero { width: 100%; max-width: 300px; aspect-ratio: 16/9; border-radius: .6rem; object-fit: cover; display: block; box-shadow: 0 4px 18px rgba(0,0,0,.18); }
     #post h1 { font-family: 'Merriweather', serif; font-size: clamp(1.3rem, 4vw, 1.9rem); line-height: 1.25; font-weight: 700; margin-bottom: .5rem; }
     .meta-line { font-size: .82rem; color: var(--muted); margin-bottom: .85rem; display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; }
-    
+
     #post .content { font-size: 1.02rem; line-height: 1.7; color: #2d2d2b; white-space: normal; }
-    
+
     .ql-code-block-container { background: #282c34; color: #abb2bf; padding: 1rem; border-radius: 0.5rem; font-family: monospace; margin: 1rem 0; overflow-x: auto; }
-    
+
     .author-box { margin-top: 1.25rem; padding-top: .85rem; border-top: 1px solid var(--border); font-size: .9rem; color: var(--muted); }
     .author-box a { color: var(--accent); text-decoration: none; font-weight: 600; }
 
@@ -109,6 +109,9 @@
 
     .err { text-align: center; padding: 3rem 1rem; color: var(--muted); }
     .err h2 { font-family: 'Merriweather', serif; color: var(--ink); margin-bottom: .5rem; }
+
+    /* Ad container minimum height reserve karo - CLS aur "no space to render" issue avoid karne ke liye */
+    .ad-slot { min-height: 100px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
 
     #relatedSection { margin-top: 1.25rem; background: var(--surface); border-radius: var(--r); padding: 1.25rem 1.5rem; box-shadow: 0 2px 16px rgba(0,0,0,.07); }
     #relatedSection h2 { font-family: 'Merriweather', serif; font-size: 1.15rem; font-weight: 700; margin-bottom: .85rem; padding-bottom: .5rem; border-bottom: 2px solid var(--ink); }
@@ -156,8 +159,8 @@
   </article>
 
   <!-- BOTTOM NATIVE BANNER (Related section ke pehle) -->
-  <div style="margin: 1.5rem 0; text-align: center;">
-    <div id="container-7ff4b1b57bf01a56609549fe3598888b"></div>
+  <div class="ad-slot" style="margin: 1.5rem 0;">
+    <div id="container-7ff4b1b57bf01a56609549fe3598888b" style="width:100%;"></div>
   </div>
 
   <section id="relatedSection" aria-label="Related Facts">
@@ -318,29 +321,55 @@
     });
   };
 
-  // Safe Dynamic Ad Loader Function
-  function injectAdNetworkScripts() {
+  /* ---------------------------------------------------------------
+     FIXED AD LOADER
+     - Ab script container ke ANDAR jaata hai (head mein nahi), kyunki
+       invoke.js jaise native-ad scripts apni <script> tag ki position
+       ke relative DOM mein render karte hain.
+     - Ek dataset flag se duplicate-injection रोका gaya hai, taaki
+       cache-render + fresh-render dono baar ad dobara load na ho.
+     - Har unique container id ke liye alag function call, taaki future
+       me dusra ad-zone code aasani se add ho sake.
+  --------------------------------------------------------------- */
+  function injectSingleAd(containerId, scriptSrc) {
     try {
-      // 1. Native ad container trigger script load
+      var container = document.getElementById(containerId);
+      if (!container) return;
+      if (container.dataset.adLoaded === "true") return; // duplicate-load guard
+
       var adScript = document.createElement('script');
       adScript.type = 'text/javascript';
       adScript.async = true;
       adScript.setAttribute('data-cfasync', 'false');
-      adScript.src = 'https://pl30385025.effectivecpmnetwork.com/7ff4b1b57bf01a56609549fe3598888b/invoke.js';
-      document.head.appendChild(adScript);
-    } catch(e) { 
-      console.error("Ad script embedding standard error:", e); 
+      adScript.src = scriptSrc;
+      container.appendChild(adScript);
+      container.dataset.adLoaded = "true";
+    } catch (e) {
+      console.error("Ad script embedding error (" + containerId + "):", e);
     }
+  }
+
+  function injectAdNetworkScripts() {
+    // Bottom native banner
+    injectSingleAd(
+      'container-7ff4b1b57bf01a56609549fe3598888b',
+      'https://pl30385025.effectivecpmnetwork.com/7ff4b1b57bf01a56609549fe3598888b/invoke.js'
+    );
+
+    // NOTE: Agar inline (article ke beech me) ad bhi chahiye, to ad
+    // network dashboard se ek NAYA/SECOND zone banao — ek hi zone code
+    // do alag containers ke liye kaam nahi karta. Naya code milne par:
+    // injectSingleAd('inline-container-XXXXXXXX', 'https://.../XXXXXXXX/invoke.js');
   }
 
   function renderPost(post) {
     var titleRaw   = post.title   || "FactZone Educational Article";
     var contentRaw = post.content || "Amazing facts and verified educational details.";
     var image      = post.image   || "https://factzone.online/logo.png";
-    
+
     var descRaw    = contentRaw.replace(/<[^>]*>/g, '').replace(/\n/g," ");
     var desc       = descRaw.substring(0, 160);
-    
+
     var createdDate  = toSafeDate(post.createdAt);
     var publishedISO = createdDate ? createdDate.toISOString() : new Date().toISOString();
     var updatedDate  = toSafeDate(post.updatedAt);
@@ -350,14 +379,14 @@
     updateSEO(titleRaw, desc, image, publishedISO, updatedISO, keywords);
 
     var title   = escapeHtml(titleRaw);
-    
+
     var content = (typeof DOMPurify !== "undefined")
       ? DOMPurify.sanitize(contentRaw)
-      : escapeHtml(contentRaw); 
-    
+      : escapeHtml(contentRaw);
+
     var cleanTextForReadTime = contentRaw.replace(/<[^>]*>/g, '');
     var minsRead = readingTime(cleanTextForReadTime);
-    
+
     var author  = escapeHtml(post.author || "Awaneesh");
 
     var metaBits = ['📅 ' + formatDate(publishedISO), '📖 ' + minsRead, '👤 ' + author];
@@ -369,19 +398,10 @@
     var shareUrl = encodeURIComponent(location.href);
     var shareText = encodeURIComponent(titleRaw + " - Read more on FactZone:\n");
 
-    // Dynamic Article Content with safe inline container placeholder inside the body
-    var contentWithAd = (function() {
-      var paragraphs = content.split('</p>');
-      if (paragraphs.length > 1) {
-        // Hamein yahan inline string me script block nahi likhna chahiye tha, isliye ab placeholder div banaya hai
-        var inlineAdPlaceholder = '<div style="margin: 1.5rem 0; text-align: center;">' +
-                                  '<div id="inline-container-7ff4b1b57bf01a56609549fe3598888b"></div>' +
-                                  '</div>';
-        paragraphs.splice(1, 0, inlineAdPlaceholder);
-        return paragraphs.join('</p>');
-      }
-      return content;
-    })();
+    // NOTE: inline ad placeholder is intentionally NOT injected here
+    // any more, kyunki uska apna ad-zone code nahi hai (see comment
+    // in injectAdNetworkScripts). Content ab bina placeholder ke jaata hai.
+    var contentWithAd = content;
 
     $("post-content").innerHTML =
       '<div class="hero-wrap"><img class="hero" src="' + escapeHtml(image) + '" alt="' + title + '" loading="eager" width="300" height="169"></div>' +
@@ -399,8 +419,8 @@
       '</div>' +
       '<div class="author-box">Written by <a href="author.html" itemprop="author">Awaneesh</a></div>';
 
-      // HTML Render hone ke baad ads script ko load aur assign karne ka dynamic tarika execute karein
-      injectAdNetworkScripts();
+    // HTML render hone ke baad hi ads script inject karo (container ab DOM me exist karta hai)
+    injectAdNetworkScripts();
   }
 
   function renderRelated(items) {
