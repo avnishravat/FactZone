@@ -207,7 +207,6 @@
     gtag('js', new Date());
     gtag('config', 'G-311JQXBXR9', { 'page_path': window.location.pathname });
   </script>
-  <script src="https://pl30385024.effectivecpmnetwork.com/fd/88/71/fd887169bab94d3ea4b503b36006e03d.js"></script>
 </head>
 
 <body class="dark:text-white">
@@ -223,7 +222,7 @@
           <span class="text-xl md:text-2xl font-bold text-white tracking-wide">FactZone</span>
         </a>
 
-        <!-- Dark Mode Toggle Button for Mobile (Hidden on Desktop) -->
+        <!-- Dark Mode Toggle Button for Mobile -->
         <button id="themeToggleMobile" type="button" aria-label="Dark mode टॉगल करें" class="sm:hidden text-white p-2 rounded-full bg-gray-900 hover:bg-gray-800 border border-gray-700 transition-colors">
           <span class="dark:hidden">🌙</span><span class="hidden dark:inline">☀️</span>
         </button>
@@ -243,7 +242,7 @@
 
     </div>
 
-    <!-- Category Tabs: fully visible navigation, no dropdown -->
+    <!-- Category Tabs -->
     <nav aria-label="Topic navigation" class="border-t border-gray-800">
       <div id="filterScrollArea" class="max-w-7xl mx-auto px-4 overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing">
         <div id="filterTabs" class="flex items-center gap-2 py-2 whitespace-nowrap w-max">
@@ -264,13 +263,12 @@
   </section>
 
   <main id="posts" class="max-w-7xl mx-auto p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-    <!-- SEO fallback content: visible to crawlers/no-JS users instantly, replaced once Firestore data loads -->
     <div id="seo-placeholder-cards" class="col-span-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full">
       <a href="about.html" class="card shadow-lg">
         <img src="logo.png" alt="विज्ञान से जुड़े रोचक तथ्य" class="post-image p-4 bg-gray-900 object-contain" loading="eager" width="500" height="220">
         <div class="p-4 flex flex-col flex-1">
           <h2 class="font-bold text-xl mb-2 line2 dark:text-white">विज्ञान से जुड़े कुछ बेहद हैरान करने वाले रोचक तथ्य</h2>
-          <p class="text-gray-600 dark:text-gray-400 text-sm line2">विज्ञान, टेक्नोलॉजी और वायरल जानकारी से जुड़े Amazing Facts पढ़ें FactZone Official पर...</p>
+          <p class="text-gray-600 dark:text-gray-400 text-sm line2">विज्ञान, टेक्नोलॉजी aur viral jaankari se jude Amazing Facts padhein FactZone Official par...</p>
         </div>
       </a>
     </div>
@@ -315,7 +313,6 @@
     toggleBtn.addEventListener('click', toggleTheme);
     toggleBtnMobile.addEventListener('click', toggleTheme);
 
-    // Side-scroll for filter tabs: mouse drag + wheel support (desktop)
     const scrollArea = document.getElementById('filterScrollArea');
     let isDown = false;
     let startX;
@@ -338,12 +335,10 @@
       if (Math.abs(walk) > 5) dragged = true;
       scrollArea.scrollLeft = scrollLeftStart - walk;
     });
-    // Prevent a drag from accidentally triggering a tab click
     scrollArea.addEventListener('click', (e) => {
       if (dragged) { e.stopPropagation(); e.preventDefault(); }
     }, true);
 
-    // Convert vertical wheel scroll into horizontal scroll over the tab bar
     scrollArea.addEventListener('wheel', (e) => {
       if (e.deltaY === 0) return;
       e.preventDefault();
@@ -480,7 +475,10 @@
       });
     });
   </script>
-<script src="https://pl30385026.effectivecpmnetwork.com/c8/65/da/c865dac59f2fef8825e792ef3b7f91f4.js"></script>
+
+  <!-- ADS CODES AT THE BOTTOM (Popunder & Social bar scripts placed right before closing body tag) -->
+  <script src="https://pl30385024.effectivecpmnetwork.com/fd/88/71/fd887169bab94d3ea4b503b36006e03d.js"></script>
+  <script src="https://pl30385026.effectivecpmnetwork.com/c8/65/da/c865dac59f2fef8825e792ef3b7f91f4.js"></script>
 
 </body>
 </html>
