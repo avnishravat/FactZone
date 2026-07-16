@@ -112,6 +112,7 @@
 
     /* Ad container minimum height reserve karo - CLS aur "no space to render" issue avoid karne ke liye */
     .ad-slot { min-height: 100px; margin: 2rem 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .banner-300x250-slot { width: 300px; height: 250px; max-width: 100%; }
 
     #relatedSection { margin-top: 2rem; background: var(--surface); border-radius: var(--r); padding: 1.25rem 1.5rem; box-shadow: 0 2px 16px rgba(0,0,0,.07); }
     #relatedSection h2 { font-family: 'Merriweather', serif; font-size: 1.15rem; font-weight: 700; margin-bottom: .85rem; padding-bottom: .5rem; border-bottom: 2px solid var(--ink); }
@@ -355,14 +356,46 @@
   }
 
   function injectAdNetworkScripts() {
-    // Native Banner ka har placement (bottom + article ke beech wala inline)
-    // isi ek zone code se render hoga — dashboard note ke mutabik "Native
-    // Banner can be placed anywhere in the page body", yaani same snippet
-    // multiple jagah paste karna hi supported tareeka hai.
-    var slots = document.querySelectorAll('.native-banner-slot');
-    slots.forEach(function(slot) {
+    // Native Banner ka bottom placement
+    var nativeSlots = document.querySelectorAll('.native-banner-slot');
+    nativeSlots.forEach(function(slot) {
       injectSingleAd(slot, NATIVE_BANNER_SRC);
     });
+
+    // Article ke beech wala Banner 300x250 (alag dedicated ad unit,
+    // document.write() use karta hai isliye ise safe iframe ke andar
+    // isolate karke load karte hain — warna poora page overwrite ho sakta hai).
+    var bannerSlots = document.querySelectorAll('.banner-300x250-slot');
+    bannerSlots.forEach(function(slot) {
+      injectBanner300x250(slot);
+    });
+  }
+
+  function injectBanner300x250(container) {
+    try {
+      if (!container) return;
+      if (container.dataset.adLoaded === "true") return; // duplicate-load guard
+
+      var iframe = document.createElement('iframe');
+      iframe.style.width = '300px';
+      iframe.style.height = '250px';
+      iframe.style.border = '0';
+      iframe.style.overflow = 'hidden';
+      iframe.style.maxWidth = '100%';
+      iframe.scrolling = 'no';
+      iframe.title = 'Advertisement';
+
+      var doc = '<!DOCTYPE html><html><head><style>*{margin:0;padding:0;}</style></head><body>' +
+        '<script>atOptions = {"key":"d7218ad0d4e9095bb4a145457bc7bea2","format":"iframe","height":250,"width":300,"params":{}};</' + 'script>' +
+        '<script src="https://www.highperformanceformat.com/d7218ad0d4e9095bb4a145457bc7bea2/invoke.js"></' + 'script>' +
+        '</body></html>';
+
+      iframe.srcdoc = doc;
+      container.appendChild(iframe);
+      container.dataset.adLoaded = "true";
+    } catch (e) {
+      console.error("Banner 300x250 ad error:", e);
+    }
   }
 
   function renderPost(post) {
@@ -401,15 +434,14 @@
     var shareUrl = encodeURIComponent(location.href);
     var shareText = encodeURIComponent(titleRaw + " - Read more on FactZone:\n");
 
-    // Article ke pehle paragraph ke baad ek inline Native Banner slot
-    // insert karo (same zone code, jaisa dashboard mein diya gaya hai).
-    // "native-banner-slot" class ke through injectAdNetworkScripts()
-    // dono placements (bottom + inline) ko independently handle karta hai.
+    // Article ke pehle paragraph ke baad ek inline Banner 300x250 slot
+    // insert karo — ye ALAG dedicated ad unit hai (key: d7218ad0...),
+    // isliye bottom wale Native Banner se independently fill hoga.
     var contentWithAd = (function() {
       var paragraphs = content.split('</p>');
       if (paragraphs.length > 1) {
         var inlineAdPlaceholder = '<div class="ad-slot" style="margin: 1.5rem 0;">' +
-                                   '<div class="native-banner-slot" style="width:100%;"></div>' +
+                                   '<div class="banner-300x250-slot"></div>' +
                                    '</div>';
         paragraphs.splice(1, 0, inlineAdPlaceholder);
         return paragraphs.join('</p>');
