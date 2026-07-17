@@ -477,24 +477,31 @@
     var shareUrl = encodeURIComponent(location.href);
     var shareText = encodeURIComponent(titleRaw + " - Read more on FactZone:\n");
 
-    // Article ke pehle paragraph ke baad se shuru karke har 10 paragraphs
-    // ke baad Banner 320x50 repeat hota hai (ab top wala bada 300x250
-    // hata diya gaya hai, sirf ye chhota banner use hoga).
+    // Article mein total 6 Banner 320x50 ads evenly spaced honge, chahe
+    // article chhota ho ya bada — paragraphs ko 7 hisso mein baant kar
+    // har gap ke baad ek ad daala jaata hai (bottom wala Native Banner
+    // isse alag, apni jagah bottom mein hamesha rehta hai).
     var contentWithAd = (function() {
       var paragraphs = content.split('</p>');
-      if (paragraphs.length <= 1) return content;
+      var total = paragraphs.length;
+      if (total <= 1) return content;
 
       var midAd = '<div class="ad-slot" style="margin: 1rem 0;">' +
                   '<div class="banner-320x50-slot"></div>' +
                   '</div>';
 
+      var ADS_COUNT = 6;
+      var segments = ADS_COUNT + 1;
+      var step = Math.max(1, Math.floor(total / segments));
+
       var result = [];
-      var count = 0;
-      for (var i = 0; i < paragraphs.length; i++) {
+      var adsInserted = 0;
+      for (var i = 0; i < total; i++) {
         result.push(paragraphs[i]);
-        count++;
-        if (count % 10 === 0) {
+        var isBoundary = (i + 1) % step === 0;
+        if (isBoundary && adsInserted < ADS_COUNT && (i + 1) < total) {
           result.push(midAd);
+          adsInserted++;
         }
       }
       return result.join('</p>');
