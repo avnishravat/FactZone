@@ -111,11 +111,11 @@
     .err h2 { font-family: 'Merriweather', serif; color: var(--ink); margin-bottom: .5rem; }
 
     /* Ad container minimum height reserve karo - CLS aur "no space to render" issue avoid karne ke liye */
-    .ad-slot { min-height: 100px; margin: 2rem 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .ad-slot { min-height: 60px; margin: 1rem 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
     .banner-300x250-slot { width: 300px; height: 250px; max-width: 100%; }
     .banner-320x50-slot { width: 320px; height: 50px; max-width: 100%; }
 
-    #relatedSection { margin-top: 2rem; background: var(--surface); border-radius: var(--r); padding: 1.25rem 1.5rem; box-shadow: 0 2px 16px rgba(0,0,0,.07); }
+    #relatedSection { margin-top: 1.25rem; background: var(--surface); border-radius: var(--r); padding: 1.25rem 1.5rem; box-shadow: 0 2px 16px rgba(0,0,0,.07); }
     #relatedSection h2 { font-family: 'Merriweather', serif; font-size: 1.15rem; font-weight: 700; margin-bottom: .85rem; padding-bottom: .5rem; border-bottom: 2px solid var(--ink); }
     #relatedGrid { display: grid; gap: .65rem; }
     .rc { display: flex; align-items: center; gap: .75rem; padding: .65rem; border: 1px solid var(--border); border-radius: .75rem; background: var(--bg); text-decoration: none; color: inherit; transition: box-shadow .18s, transform .18s; }
@@ -161,7 +161,7 @@
   </article>
 
   <!-- BOTTOM NATIVE BANNER (Related section ke pehle) -->
-  <div class="ad-slot" style="margin: 1.5rem 0;">
+  <div class="ad-slot" style="margin: 1rem 0;">
     <div id="container-7ff4b1b157bf01a56609549fe359888b" class="native-banner-slot" style="width:100%;"></div>
   </div>
 
@@ -475,10 +475,10 @@
       var paragraphs = content.split('</p>');
       if (paragraphs.length <= 1) return content;
 
-      var topAd = '<div class="ad-slot" style="margin: 1.5rem 0;">' +
+      var topAd = '<div class="ad-slot" style="margin: 1rem 0;">' +
                   '<div class="banner-300x250-slot"></div>' +
                   '</div>';
-      var midAd = '<div class="ad-slot" style="margin: 1.5rem 0;">' +
+      var midAd = '<div class="ad-slot" style="margin: 1rem 0;">' +
                   '<div class="banner-320x50-slot"></div>' +
                   '</div>';
 
