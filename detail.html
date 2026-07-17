@@ -113,6 +113,7 @@
     /* Ad container minimum height reserve karo - CLS aur "no space to render" issue avoid karne ke liye */
     .ad-slot { min-height: 100px; margin: 2rem 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
     .banner-300x250-slot { width: 300px; height: 250px; max-width: 100%; }
+    .banner-320x50-slot { width: 320px; height: 50px; max-width: 100%; }
 
     #relatedSection { margin-top: 2rem; background: var(--surface); border-radius: var(--r); padding: 1.25rem 1.5rem; box-shadow: 0 2px 16px rgba(0,0,0,.07); }
     #relatedSection h2 { font-family: 'Merriweather', serif; font-size: 1.15rem; font-weight: 700; margin-bottom: .85rem; padding-bottom: .5rem; border-bottom: 2px solid var(--ink); }
@@ -369,6 +370,12 @@
     bannerSlots.forEach(function(slot) {
       injectBanner300x250(slot);
     });
+
+    // Article ke EXACT beech (middle paragraph) wala Banner 320x50
+    var midBannerSlots = document.querySelectorAll('.banner-320x50-slot');
+    midBannerSlots.forEach(function(slot) {
+      injectBanner320x50(slot);
+    });
   }
 
   function injectBanner300x250(container) {
@@ -395,6 +402,33 @@
       container.dataset.adLoaded = "true";
     } catch (e) {
       console.error("Banner 300x250 ad error:", e);
+    }
+  }
+
+  function injectBanner320x50(container) {
+    try {
+      if (!container) return;
+      if (container.dataset.adLoaded === "true") return; // duplicate-load guard
+
+      var iframe = document.createElement('iframe');
+      iframe.style.width = '320px';
+      iframe.style.height = '50px';
+      iframe.style.border = '0';
+      iframe.style.overflow = 'hidden';
+      iframe.style.maxWidth = '100%';
+      iframe.scrolling = 'no';
+      iframe.title = 'Advertisement';
+
+      var doc = '<!DOCTYPE html><html><head><style>*{margin:0;padding:0;}</style></head><body>' +
+        '<script>atOptions = {"key":"3012ad1961449518ada204e09cdbceef","format":"iframe","height":50,"width":320,"params":{}};</' + 'script>' +
+        '<script src="https://www.highperformanceformat.com/3012ad1961449518ada204e09cdbceef/invoke.js"></' + 'script>' +
+        '</body></html>';
+
+      iframe.srcdoc = doc;
+      container.appendChild(iframe);
+      container.dataset.adLoaded = "true";
+    } catch (e) {
+      console.error("Banner 320x50 ad error:", e);
     }
   }
 
@@ -434,19 +468,28 @@
     var shareUrl = encodeURIComponent(location.href);
     var shareText = encodeURIComponent(titleRaw + " - Read more on FactZone:\n");
 
-    // Article ke pehle paragraph ke baad ek inline Banner 300x250 slot
-    // insert karo — ye ALAG dedicated ad unit hai (key: d7218ad0...),
-    // isliye bottom wale Native Banner se independently fill hoga.
+    // Article ke pehle paragraph ke baad Banner 300x250, aur article ke
+    // EXACT beech (middle paragraph) ke baad Banner 320x50 — dono alag
+    // dedicated ad units hain, isliye independently fill honge.
     var contentWithAd = (function() {
       var paragraphs = content.split('</p>');
-      if (paragraphs.length > 1) {
-        var inlineAdPlaceholder = '<div class="ad-slot" style="margin: 1.5rem 0;">' +
-                                   '<div class="banner-300x250-slot"></div>' +
-                                   '</div>';
-        paragraphs.splice(1, 0, inlineAdPlaceholder);
-        return paragraphs.join('</p>');
-      }
-      return content;
+      if (paragraphs.length <= 1) return content;
+
+      var topAd = '<div class="ad-slot" style="margin: 1.5rem 0;">' +
+                  '<div class="banner-300x250-slot"></div>' +
+                  '</div>';
+      var midAd = '<div class="ad-slot" style="margin: 1.5rem 0;">' +
+                  '<div class="banner-320x50-slot"></div>' +
+                  '</div>';
+
+      // Middle index (top ad ke insert hone se pehle ke original paragraph count par based)
+      var midIndex = Math.floor(paragraphs.length / 2);
+      if (midIndex <= 1) midIndex = 1; // agar bahut chhota article ho, top ad se clash na ho
+
+      paragraphs.splice(midIndex, 0, midAd);
+      paragraphs.splice(1, 0, topAd);
+
+      return paragraphs.join('</p>');
     })();
 
     $("post-content").innerHTML =
