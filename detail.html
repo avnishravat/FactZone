@@ -477,9 +477,9 @@
     var shareUrl = encodeURIComponent(location.href);
     var shareText = encodeURIComponent(titleRaw + " - Read more on FactZone:\n");
 
-    // Article ke pehle paragraph ke baad Banner 300x250, aur article ke
-    // EXACT beech (middle paragraph) ke baad Banner 320x50 — dono alag
-    // dedicated ad units hain, isliye independently fill honge.
+    // Article ke pehle paragraph ke baad Banner 300x250, aur uske baad
+    // har 10 paragraphs ke baad Banner 320x50 repeat hota hai — dono
+    // alag dedicated ad units hain, isliye independently fill honge.
     var contentWithAd = (function() {
       var paragraphs = content.split('</p>');
       if (paragraphs.length <= 1) return content;
@@ -491,14 +491,20 @@
                   '<div class="banner-320x50-slot"></div>' +
                   '</div>';
 
-      // Middle index (top ad ke insert hone se pehle ke original paragraph count par based)
-      var midIndex = Math.floor(paragraphs.length / 2);
-      if (midIndex <= 1) midIndex = 1; // agar bahut chhota article ho, top ad se clash na ho
-
-      paragraphs.splice(midIndex, 0, midAd);
       paragraphs.splice(1, 0, topAd);
 
-      return paragraphs.join('</p>');
+      var result = [];
+      var count = 0;
+      for (var i = 0; i < paragraphs.length; i++) {
+        result.push(paragraphs[i]);
+        if (paragraphs[i] !== topAd) {
+          count++;
+          if (count % 10 === 0) {
+            result.push(midAd);
+          }
+        }
+      }
+      return result.join('</p>');
     })();
 
     $("post-content").innerHTML =
