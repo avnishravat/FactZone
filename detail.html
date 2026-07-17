@@ -477,31 +477,24 @@
     var shareUrl = encodeURIComponent(location.href);
     var shareText = encodeURIComponent(titleRaw + " - Read more on FactZone:\n");
 
-    // Article ke pehle paragraph ke baad Banner 300x250, aur uske baad
-    // har 10 paragraphs ke baad Banner 320x50 repeat hota hai — dono
-    // alag dedicated ad units hain, isliye independently fill honge.
+    // Article ke pehle paragraph ke baad se shuru karke har 10 paragraphs
+    // ke baad Banner 320x50 repeat hota hai (ab top wala bada 300x250
+    // hata diya gaya hai, sirf ye chhota banner use hoga).
     var contentWithAd = (function() {
       var paragraphs = content.split('</p>');
       if (paragraphs.length <= 1) return content;
 
-      var topAd = '<div class="ad-slot" style="margin: 1rem 0;">' +
-                  '<div class="banner-300x250-slot"></div>' +
-                  '</div>';
       var midAd = '<div class="ad-slot" style="margin: 1rem 0;">' +
                   '<div class="banner-320x50-slot"></div>' +
                   '</div>';
-
-      paragraphs.splice(1, 0, topAd);
 
       var result = [];
       var count = 0;
       for (var i = 0; i < paragraphs.length; i++) {
         result.push(paragraphs[i]);
-        if (paragraphs[i] !== topAd) {
-          count++;
-          if (count % 10 === 0) {
-            result.push(midAd);
-          }
+        count++;
+        if (count % 10 === 0) {
+          result.push(midAd);
         }
       }
       return result.join('</p>');
