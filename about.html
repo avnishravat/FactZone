@@ -1,104 +1,193 @@
-<!-- ========================= -->
-<!-- about.html -->
-<!-- ========================= -->
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | FactZone</title>
 
-<title>About Us | FactZone</title>
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Learn about FactZone - a modern knowledge platform dedicated to exploring amazing facts, technology updates, and educational content.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://factzone.online/about.html">
 
-<meta name="description" content="About FactZone">
+    <!-- Icons -->
+    <link rel="icon" href="https://factzone.online/logo.png" sizes="48x48" type="image/png">
+    <link rel="apple-touch-icon" href="https://factzone.online/logo.png">
 
-<link rel="icon" href="https://factzone.online/logo.png" sizes="48x48" type="image/png">
-<link rel="apple-touch-icon" href="https://factzone.online/logo.png">
- 
-<script src="https://cdn.tailwindcss.com"></script>
- 
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6974190466298538" crossorigin="anonymous"></script>
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="About Us | FactZone">
+    <meta property="og:description" content="Explore amazing facts, technology updates, and educational content on FactZone.">
+    <meta property="og:url" content="https://factzone.online/about.html">
+    <meta property="og:site_name" content="FactZone">
 
-   <!-- Google Analytics Async Load -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-311JQXBXR9"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-311JQXBXR9', { 'page_path': window.location.pathname });
-  </script>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- AdSense & Google Analytics -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6974190466298538" crossorigin="anonymous"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-311JQXBXR9"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-311JQXBXR9', { 'page_path': window.location.pathname });
+    </script>
+
+    <!-- STRICT VALID SCHEMA (Fixes GSC Invalid Items) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "AboutPage",
+          "@id": "https://factzone.online/about.html",
+          "url": "https://factzone.online/about.html",
+          "name": "About FactZone",
+          "isPartOf": {
+            "@type": "WebSite",
+            "@id": "https://factzone.online/#website",
+            "url": "https://factzone.online/",
+            "name": "FactZone"
+          },
+          "mainEntity": {
+            "@type": "Person",
+            "@id": "https://factzone.online/about.html#person",
+            "name": "Awaneesh",
+            "jobTitle": "Developer and Founder",
+            "email": "mailto:avnishravat20@gmail.com",
+            "image": "https://factzone.online/profile.jpeg",
+            "sameAs": [
+              "https://instagram.com/avnish__1203"
+            ]
+          }
+        }
+      ]
+    }
+    </script>
+
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        .premium-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        .premium-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+        }
+    </style>
 </head>
+<body class="min-h-screen flex flex-col justify-between">
 
-<body class="bg-black text-white">
+    <!-- Header Navigation Bar -->
+    <header class="sticky top-0 z-50 bg-white border-b border-slate-200">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+            <a href="index.html" class="text-2xl font-black tracking-wider text-emerald-600 flex items-center gap-2">
+                <i class="fa-solid fa-lightbulb text-xl"></i>
+                Fact<span class="text-slate-900">Zone</span>
+            </a>
+            <div class="flex items-center gap-6 text-sm font-medium text-slate-600">
+                <a href="index.html" class="hover:text-emerald-600 transition-colors">Home</a>
+                <a href="about.html" class="text-emerald-600 border-b-2 border-emerald-600 pb-1 font-semibold">About</a>
+                <a href="contact.html" class="hover:text-emerald-600 transition-colors">Contact</a>
+            </div>
+        </div>
+    </header>
 
-<!-- Top Navigation Bar -->
-<nav class="border-b border-gray-800 bg-gray-950 sticky top-0 z-50">
-  <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
-    <div class="text-xl font-bold tracking-wider text-emerald-400">FactZone</div>
-    <div class="flex gap-6 text-sm font-medium">
-      <a href="index.html" class="text-gray-300 hover:text-white transition-colors">Home</a>
-      <a href="about.html" class="text-emerald-400 border-b-2 border-emerald-400 pb-1">About</a>
-      <a href="contact.html" class="text-gray-300 hover:text-white transition-colors">Contact</a>
-    </div>
-  </div>
-</nav>
+    <!-- Main Content Container -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 py-10 w-full flex-grow">
+        
+        <!-- Breadcrumb UI -->
+        <nav class="flex text-slate-500 text-sm mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-2">
+                <li><a href="index.html" class="hover:text-emerald-600"><i class="fa-solid fa-house text-xs mr-1"></i> Home</a></li>
+                <li><i class="fa-solid fa-chevron-right text-xs text-slate-300"></i></li>
+                <li class="text-emerald-600 font-semibold">About Us</li>
+            </ol>
+        </nav>
 
-<div class="max-w-4xl mx-auto p-6">
+        <!-- About Hero Card -->
+        <section class="premium-card rounded-2xl p-6 sm:p-10 mb-8 bg-white">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
+                    <i class="fa-solid fa-circle-info text-2xl"></i>
+                </span>
+                <h1 class="text-3xl sm:text-4xl font-bold text-slate-900">About FactZone</h1>
+            </div>
 
-<h1 class="text-4xl font-bold mb-6">
-About FactZone
-</h1>
+            <p class="text-slate-600 text-base sm:text-lg leading-relaxed mb-4">
+                FactZone is a modern knowledge and facts platform where users can explore amazing facts, technology updates, educational content, and interesting information.
+            </p>
 
-<p class="text-gray-300 leading-8 mb-4">
-FactZone is a modern knowledge and facts platform where users can explore amazing facts, technology updates, educational content, and interesting information.
-</p>
+            <p class="text-slate-600 text-base sm:text-lg leading-relaxed mb-4">
+                Our mission is to make learning fun, simple, and engaging for everyone. We believe that curiosity drives innovation, and our goal is to deliver accurate, bite-sized information every day.
+            </p>
 
-<p class="text-gray-300 leading-8 mb-4">
-Our mission is to make learning fun, simple, and engaging for everyone.
-</p>
+            <p class="text-slate-700 font-medium text-base sm:text-lg">
+                Thank you for visiting FactZone!
+            </p>
+        </section>
 
-<p class="text-gray-300 leading-8 mb-8">
-Thank you for visiting FactZone.
-</p>
+        <!-- Developer Info Card -->
+        <section class="premium-card rounded-2xl p-6 sm:p-8 bg-white">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-6 flex items-center gap-2">
+                <i class="fa-solid fa-code text-emerald-600"></i> Developer & Founder
+            </h2>
 
-<!-- --- Developer & Connect Section --- -->
-<div class="border-t border-gray-800 pt-6 mt-8">
-<h2 class="text-xl font-semibold mb-6 text-gray-400">Developer Info</h2>
+            <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+                <!-- Profile Image -->
+                <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-white shadow-md ring-2 ring-emerald-100 flex-shrink-0 bg-slate-100">
+                    <img 
+                        src="profile.jpg" 
+                        onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Awaneesh&background=10b981&color=fff&size=200';"
+                        alt="Awaneesh" 
+                        class="w-full h-full object-cover object-[center_22%]"
+                    />
+                </div>
 
-<div class="flex flex-col md:flex-row items-start md:items-center gap-6 bg-gray-900/50 p-6 rounded-2xl border border-gray-800">
-  
-  <!-- Image Container tailored for profile.jpeg -->
-  <div class="relative w-28 h-28 rounded-full overflow-hidden border-2 border-emerald-500/50 flex-shrink-0 bg-gray-800">
-    <!-- Extension ko 'profile.jpeg' kar diya hai aur profile alignment ko shift kiya hai -->
-    <img 
-      src="profile.jpg" 
-      alt="Awaneesh" 
-      class="w-full h-full object-cover object-[center_22%]"
-    />
-  </div>
+                <!-- Profile Details -->
+                <div class="flex-1 text-center sm:text-left">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-900">Awaneesh</h3>
+                            <p class="text-emerald-600 font-medium text-sm">Developer and Founder</p>
+                        </div>
+                    </div>
 
-  <!-- Developer Details -->
-  <div class="flex-1">
-    <p class="text-2xl font-semibold text-white mb-0.5">
-      Awaneesh
-    </p>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                        Passionate content creator and developer behind FactZone, focusing on delivering valuable insights, tech updates, and educational facts.
+                    </p>
 
-    <p class="text-md text-emerald-400 font-medium mb-4">Developer and Founder</p>
+                    <!-- Contact & Social Links -->
+                    <div class="flex flex-wrap items-center justify-center sm:justify-start gap-3">
+                        <a href="mailto:avnishravat20@gmail.com" class="bg-slate-100 hover:bg-slate-200 text-slate-800 px-4 py-2 rounded-full text-xs font-medium transition border border-slate-200 flex items-center gap-2">
+                            <i class="fa-solid fa-envelope text-slate-600 text-sm"></i> avnishravat20@gmail.com
+                        </a>
+                        <a href="https://instagram.com/avnish__1203" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-full text-xs font-medium transition shadow-sm hover:opacity-90 flex items-center gap-2">
+                            <i class="fa-brands fa-instagram text-sm"></i> @avnish__1203
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <div class="flex flex-col sm:flex-row gap-4 text-sm text-gray-400">
-      <a href="https://instagram.com/avnish__1203" target="_blank" class="hover:text-pink-500 transition-colors flex items-center gap-1.5">
-        <span>📸 Instagram:</span> <span class="text-gray-200 font-mono">@avnish__1203</span>
-      </a>
-      <a href="https://youtube.com/@DirectionNewsWorldwide08" target="_blank" class="hover:text-red-500 transition-colors flex items-center gap-1.5">
-        <span>🎥 YouTube:</span> <span class="text-gray-200">@DirectionNewsWorldwide08</span>
-      </a>
-    </div>
-  </div>
+    </main>
 
-</div>
-</div>
-
-</div>
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 py-6 bg-white">
+        <div class="max-w-5xl mx-auto px-4 text-center text-xs text-slate-500">
+            <p class="font-medium mb-1">&copy; 2026 FactZone. All rights reserved.</p>
+        </div>
+    </footer>
 
 </body>
 </html>
