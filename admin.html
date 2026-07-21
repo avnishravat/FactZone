@@ -110,6 +110,11 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
 .btn-logout{background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.2);width:100%;justify-content:center;font-size:13px;padding:10px;border-radius:10px}
 .btn-logout:hover{background:var(--red);color:white}
 
+/* ── Image Upload/Paste Button UI ── */
+.input-with-btns{display:flex;gap:8px;align-items:center}
+.btn-opt{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:.2s;display:flex;align-items:center;gap:6px}
+.btn-opt:hover{border-color:var(--accent);background:rgba(124,109,250,.1)}
+
 /* ── Posts grid ── */
 .posts-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
 .search-box{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:14px;color:var(--text);outline:none;width:240px;transition:.2s}
@@ -215,6 +220,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
   .content{padding:0 16px 24px}
   .form-grid{grid-template-columns:1fr}
   .topbar{padding:0 16px}
+  .input-with-btns{flex-direction:column;align-items:stretch}
 }
 </style>
 </head>
@@ -298,7 +304,12 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
             </div>
             <div class="form-group">
               <label class="form-label">Image URL</label>
-              <input class="form-input" id="q-image" placeholder="https://..." oninput="previewImg('q')">
+              <div class="input-with-btns">
+                <input class="form-input" id="q-image" placeholder="https://..." oninput="previewImg('q')">
+                <button type="button" class="btn-opt" onclick="triggerImgUpload('q')">📁 Upload</button>
+                <button type="button" class="btn-opt" onclick="pasteImgFromClipboard('q')">📋 Paste</button>
+                <input type="file" id="q-file-input" accept="image/*" style="display:none" onchange="uploadImageFile('q', this.files[0])">
+              </div>
             </div>
             <div class="form-group full">
               <label class="form-label">Description *</label>
@@ -341,7 +352,12 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
             </div>
             <div class="form-group">
               <label class="form-label">Image URL</label>
-              <input class="form-input" id="u-image" placeholder="https://..." oninput="previewImg('u')">
+              <div class="input-with-btns">
+                <input class="form-input" id="u-image" placeholder="https://..." oninput="previewImg('u')">
+                <button type="button" class="btn-opt" onclick="triggerImgUpload('u')">📁 Upload</button>
+                <button type="button" class="btn-opt" onclick="pasteImgFromClipboard('u')">📋 Paste</button>
+                <input type="file" id="u-file-input" accept="image/*" style="display:none" onchange="uploadImageFile('u', this.files[0])">
+              </div>
             </div>
             <div class="form-group full">
               <label class="form-label">Description *</label>
@@ -417,7 +433,12 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
     </div>
     <div class="form-group" style="margin-bottom:14px">
       <label class="form-label">Image URL</label>
-      <input class="form-input" id="e-image" oninput="previewImg('e')">
+      <div class="input-with-btns">
+        <input class="form-input" id="e-image" oninput="previewImg('e')">
+        <button type="button" class="btn-opt" onclick="triggerImgUpload('e')">📁 Upload</button>
+        <button type="button" class="btn-opt" onclick="pasteImgFromClipboard('e')">📋 Paste</button>
+        <input type="file" id="e-file-input" accept="image/*" style="display:none" onchange="uploadImageFile('e', this.files[0])">
+      </div>
       <img id="e-preview" class="img-preview" alt="Preview">
     </div>
     <div class="form-group" style="margin-bottom:14px">
@@ -479,6 +500,8 @@ const app  = initializeApp(firebaseConfig);
 const db   = getFirestore(app);
 const auth = getAuth(app);
 
+const IMGBB_API_KEY = "f1bdb9735d4cd84dd8a265b7d092d2eb";
+
 // Only this Firebase account may access the admin dashboard.
 const ADMIN_UID = "Hfs04Qras4MVMzSe2DpZNJZHPwD2";
 
@@ -486,6 +509,64 @@ let allPostsCache = [];
 let currentEditId = null;
 let quillEditor = null;     
 let editQuillEditor = null; 
+
+// ── ImgBB Upload Helpers ──
+window.triggerImgUpload = function(prefix) {
+  const fileInput = document.getElementById(`${prefix}-file-input`);
+  if(fileInput) fileInput.click();
+};
+
+window.uploadImageFile = async function(prefix, file) {
+  if(!file) return;
+  showToast('⏳ Uploading Image...', 'syncing');
+  const formData = new FormData();
+  formData.append('image', file);
+
+  try {
+    const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+    if(data.success) {
+      const url = data.data.url;
+      const input = document.getElementById(`${prefix}-image`);
+      if(input) {
+        input.value = url;
+        previewImg(prefix);
+      }
+      showToast('✅ Image uploaded successfully!', 'success');
+    } else {
+      throw new Error(data.error?.message || 'Upload failed');
+    }
+  } catch(e) {
+    console.error(e);
+    showToast('❌ Upload failed: ' + e.message, 'error');
+  }
+};
+
+window.pasteImgFromClipboard = async function(prefix) {
+  try {
+    const items = await navigator.clipboard.read();
+    let file = null;
+    for (const item of items) {
+      const imageType = item.types.find(type => type.startsWith('image/'));
+      if (imageType) {
+        const blob = await item.getType(imageType);
+        file = new File([blob], 'clipboard_image.png', { type: imageType });
+        break;
+      }
+    }
+    if (file) {
+      uploadImageFile(prefix, file);
+    } else {
+      showToast('⚠️ No image found in clipboard!', 'error');
+    }
+  } catch(e) {
+    console.error(e);
+    showToast('⚠️ Clipboard access permission needed!', 'error');
+  }
+};
 
 // Initialize Editors
 function initQuill() {
