@@ -13,13 +13,35 @@
   <link rel="alternate" hreflang="x-default" href="https://factzone.online/detail.html">
   <link rel="sitemap" type="application/xml" href="https://factzone.online/sitemap.xml">
 
+  <!-- ============================================================
+       CRITICAL FIX: Canonical + og:url ko IMMEDIATELY (Firestore
+       fetch ka wait kiye bina) current URL (with ?id=...) par set
+       karo. Pehle ye sirf updateSEO() ke andar, Firestore response
+       aane ke BAAD set hota tha. Agar Googlebot render snapshot
+       Firestore response se pehle le leta, to canonical hamesha
+       plain "detail.html" (bina id) hi reh jaata — isliye Search
+       Console mein saare id-pages "Alternative page with proper
+       canonical tag" dikha rahe the (Google inhe generic detail.html
+       ka duplicate maan raha tha). Ye inline script yahan turant
+       chalta hai, kisi network call ka wait nahi karta.
+  ============================================================ -->
+  <script>
+    (function () {
+      try {
+        var fullUrl = window.location.origin + window.location.pathname + window.location.search;
+        var canEl = document.getElementById('meta-canonical');
+        if (canEl) canEl.setAttribute('href', fullUrl);
+      } catch (e) {}
+    })();
+  </script>
+
   <meta property="og:type"        content="article">
   <meta property="og:site_name"   content="FactZone">
   <meta property="og:locale"      content="hi_IN">
   <meta property="og:title"       content="FactZone Article">
   <meta property="og:description" content="Read this verified fact and educational article on FactZone Official.">
   <meta property="og:image"       content="https://factzone.online/logo.png">
-  <meta property="og:url"         content="https://factzone.online/detail.html">
+  <meta property="og:url"         id="meta-og-url" content="https://factzone.online/detail.html">
   <meta property="article:published_time" id="meta-published" content="">
   <meta property="article:modified_time"  id="meta-modified"  content="">
   <meta property="article:author" content="Awaneesh">
@@ -28,6 +50,16 @@
   <meta name="twitter:title"       content="FactZone Article">
   <meta name="twitter:description" content="Read this verified fact and educational article on FactZone Official.">
   <meta name="twitter:image"       content="https://factzone.online/logo.png">
+
+  <script>
+    (function () {
+      try {
+        var fullUrl = window.location.origin + window.location.pathname + window.location.search;
+        var ogUrlEl = document.getElementById('meta-og-url');
+        if (ogUrlEl) ogUrlEl.setAttribute('content', fullUrl);
+      } catch (e) {}
+    })();
+  </script>
 
   <script type="application/ld+json" id="articleSchema">{"@context":"https://schema.org","@type":"Article","headline":"FactZone Educational Article","author":{"@type":"Person","name":"Awaneesh"},"publisher":{"@type":"Organization","name":"FactZone Official","logo":{"@type":"ImageObject","url":"https://factzone.online/logo.png"}}}</script>
 
@@ -254,7 +286,7 @@
   }
 
   function updateSEO(title, desc, image, publishedISO, updatedISO, keywords) {
-    var url = location.href;
+    var url = location.origin + location.pathname + location.search;
     document.title = title + " | FactZone";
 
     function setMeta(sel, attr, val) {
