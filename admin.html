@@ -97,6 +97,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
 .form-input{background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:10px;padding:12px 14px;font-size:14px;outline:none;transition:.2s;width:100%;font-family:inherit;resize:vertical}
 .form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,109,250,.12)}
 .form-input::placeholder{color:var(--muted)}
+select.form-input{cursor:pointer; appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b6b8a' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; padding-right:34px}
 .btn{border:none;border-radius:10px;padding:12px 20px;font-size:14px;font-weight:600;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:8px}
 .btn:hover{transform:translateY(-1px)}
 .btn:active{transform:translateY(0)}
@@ -130,6 +131,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
 .post-actions{display:flex;gap:8px}
 .post-meta{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.55);border-radius:20px;padding:3px 9px;font-size:11px;color:rgba(255,255,255,.85);backdrop-filter:blur(4px)}
 .post-num{position:absolute;top:10px;right:10px;background:rgba(124,109,250,.7);border-radius:20px;padding:3px 9px;font-size:11px;color:white;backdrop-filter:blur(4px);font-weight:600}
+.post-cat{display:inline-block;margin-bottom:8px;background:rgba(124,109,250,.12);border:1px solid rgba(124,109,250,.25);color:var(--accent2);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
 
 /* ── Toast ── */
 .toast{position:fixed;bottom:28px;right:28px;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:600;z-index:1000;display:none;align-items:center;gap:10px;max-width:340px;border:1px solid transparent;box-shadow:0 8px 32px rgba(0,0,0,.3)}
@@ -303,6 +305,16 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
               <input class="form-input" id="q-title" placeholder="Post title...">
             </div>
             <div class="form-group">
+              <label class="form-label">Category *</label>
+              <select class="form-input" id="q-category">
+                <option value="science">Science / विज्ञान</option>
+                <option value="tech">Tech / तकनीक</option>
+                <option value="history">History / इतिहास</option>
+                <option value="mystery">Mystery / रहस्य</option>
+                <option value="viral">Viral / रोचक तथ्य</option>
+              </select>
+            </div>
+            <div class="form-group full">
               <label class="form-label">Image URL</label>
               <div class="input-with-btns">
                 <input class="form-input" id="q-image" placeholder="https://..." oninput="previewImg('q')">
@@ -351,6 +363,16 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
               <input class="form-input" id="u-title" placeholder="Post title...">
             </div>
             <div class="form-group">
+              <label class="form-label">Category *</label>
+              <select class="form-input" id="u-category">
+                <option value="science">Science / विज्ञान</option>
+                <option value="tech">Tech / तकनीक</option>
+                <option value="history">History / इतिहास</option>
+                <option value="mystery">Mystery / रहस्य</option>
+                <option value="viral">Viral / रोचक तथ्य</option>
+              </select>
+            </div>
+            <div class="form-group full">
               <label class="form-label">Image URL</label>
               <div class="input-with-btns">
                 <input class="form-input" id="u-image" placeholder="https://..." oninput="previewImg('u')">
@@ -426,6 +448,16 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
     <div class="form-group" style="margin-bottom:14px">
       <label class="form-label">Title</label>
       <input class="form-input" id="e-title">
+    </div>
+    <div class="form-group" style="margin-bottom:14px">
+      <label class="form-label">Category</label>
+      <select class="form-input" id="e-category">
+        <option value="science">Science / विज्ञान</option>
+        <option value="tech">Tech / तकनीक</option>
+        <option value="history">History / इतिहास</option>
+        <option value="mystery">Mystery / रहस्य</option>
+        <option value="viral">Viral / रोचक तथ्य</option>
+      </select>
     </div>
     <div class="form-group" style="margin-bottom:14px">
       <label class="form-label">Description</label>
@@ -504,6 +536,15 @@ const IMGBB_API_KEY = "f1bdb9735d4cd84dd8a265b7d092d2eb";
 
 // Only this Firebase account may access the admin dashboard.
 const ADMIN_UID = "Hfs04Qras4MVMzSe2DpZNJZHPwD2";
+
+// ── Category labels (id -> display label used in badges) ──
+const CATEGORY_LABELS = {
+  science: "Science / विज्ञान",
+  tech:    "Tech / तकनीक",
+  history: "History / इतिहास",
+  mystery: "Mystery / रहस्य",
+  viral:   "Viral / रोचक तथ्य"
+};
 
 let allPostsCache = [];
 let currentEditId = null;
@@ -734,6 +775,7 @@ function buildCard(post, index) {
   const title = escapeHtml(post.title || 'Untitled');
   const desc  = escapeHtml(post.desc || 'No description');
   const id    = escapeHtml(post.id);
+  const catLabel = CATEGORY_LABELS[post.category] || null;
   return `
   <div class="post-card">
     <img class="post-thumb" src="${image}"
@@ -741,6 +783,7 @@ function buildCard(post, index) {
     ${date ? `<div class="post-meta">${escapeHtml(date)}</div>` : ''}
     <div class="post-num">#${index+1}</div>
     <div class="post-body">
+      ${catLabel ? `<div class="post-cat">${escapeHtml(catLabel)}</div>` : ''}
       <div class="post-title">${title}</div>
       <div class="post-desc">${desc}</div>
       <div class="post-actions">
@@ -816,9 +859,10 @@ window.filterDash = function() {
 
 // ── Upload ──
 window.uploadPost = async function(prefix) {
-  const title   = document.getElementById(`${prefix}-title`).value.trim();
-  const desc    = document.getElementById(`${prefix}-desc`).value.trim();
-  const image   = document.getElementById(`${prefix}-image`).value.trim();
+  const title    = document.getElementById(`${prefix}-title`).value.trim();
+  const desc     = document.getElementById(`${prefix}-desc`).value.trim();
+  const image    = document.getElementById(`${prefix}-image`).value.trim();
+  const category = document.getElementById(`${prefix}-category`)?.value || '';
   
   let content = '';
   if (prefix === 'u' && quillEditor) {
@@ -835,12 +879,14 @@ window.uploadPost = async function(prefix) {
   btn.disabled = true; btn.innerHTML = '<span>⏳</span> Publishing...';
   
   try {
-    await addDoc(collection(db,"posts"), { title, desc, image, content, createdAt: Date.now() });
+    await addDoc(collection(db,"posts"), { title, desc, image, content, category, createdAt: Date.now() });
     
     ['title','desc','image'].forEach(f => { 
       const inputEl = document.getElementById(`${prefix}-${f}`);
       if(inputEl) inputEl.value=''; 
     });
+    const catEl = document.getElementById(`${prefix}-category`);
+    if (catEl) catEl.selectedIndex = 0;
     
     if (prefix === 'u' && quillEditor) {
       quillEditor.setContents([]);
@@ -889,6 +935,8 @@ window.openEditModal = function(id) {
   document.getElementById('e-title').value   = post.title   || '';
   document.getElementById('e-desc').value    = post.desc    || '';
   document.getElementById('e-image').value   = post.image   || '';
+  const catEl = document.getElementById('e-category');
+  if (catEl) catEl.value = post.category || 'science';
   
   if (editQuillEditor) {
     editQuillEditor.root.innerHTML = post.content || '';
@@ -920,10 +968,11 @@ window.saveEdit = async function() {
 
   try {
     await updateDoc(doc(db,"posts",currentEditId), {
-      title:   document.getElementById('e-title').value,
-      desc:    document.getElementById('e-desc').value,
-      image:   document.getElementById('e-image').value,
-      content: content
+      title:    document.getElementById('e-title').value,
+      desc:     document.getElementById('e-desc').value,
+      image:    document.getElementById('e-image').value,
+      category: document.getElementById('e-category')?.value || '',
+      content:  content
     });
     closeModal();
     showToast('✅ Post updated successfully!', 'success');
