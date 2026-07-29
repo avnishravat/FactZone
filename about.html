@@ -1,47 +1,111 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-311JQXBXR9"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-311JQXBXR9');
+    </script>
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6974190466298538" crossorigin="anonymous"></script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us | FactZone</title>
-    
-    <!-- Standard SEO Meta Tags -->
-    <meta name="description" content="Official About Us page on FactZone. Discover amazing facts, technology updates, and educational content.">
-    <meta name="keywords" content="Awaneesh, FactZone, Amazing Facts, Tech Updates, Educational Facts, Founder FactZone">
-    <meta name="author" content="Awaneesh">
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-    <link rel="canonical" href="https://factzone.online/about.html">
 
-    <!-- Favicon & Icons -->
-    <link rel="icon" href="https://factzone.online/logo.png" sizes="48x48" type="image/png">
+    <title>About Us | FactZone - Amazing Facts & Tech Updates</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Discover FactZone, a modern knowledge platform founded by Awaneesh, offering amazing facts, technology updates, and educational content.">
+    <meta name="keywords" content="About FactZone, FactZone Mission, Awaneesh, Amazing Facts, Tech Updates, Educational Information">
+    <meta name="author" content="Awaneesh">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+
+    <link rel="canonical" href="https://factzone.online/about">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="FactZone">
+    <meta property="og:title" content="About Us | FactZone">
+    <meta property="og:description" content="Learn more about FactZone and our mission to provide amazing facts and engaging knowledge content.">
+    <meta property="og:url" content="https://factzone.online/about">
+    <meta property="og:image" content="https://factzone.online/logo.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="About Us | FactZone">
+    <meta name="twitter:description" content="Discover FactZone, your destination for amazing facts and tech updates by Awaneesh.">
+    <meta name="twitter:image" content="https://factzone.online/logo.png">
+
+    <meta name="theme-color" content="#059669">
+
+    <!-- Icons -->
+    <link rel="icon" href="https://factzone.online/logo.png" type="image/png">
+    <link rel="shortcut icon" href="https://factzone.online/logo.png" type="image/png">
     <link rel="apple-touch-icon" href="https://factzone.online/logo.png">
 
-    <!-- Open Graph / Facebook / WhatsApp SEO -->
-    <meta property="og:type" content="profile">
-    <meta property="og:title" content="About Us - FactZone">
-    <meta property="og:description" content="Explore amazing facts, technology updates, and educational content by Awaneesh on FactZone.">
-    <meta property="og:url" content="https://factzone.online/about.html">
-    <meta property="og:site_name" content="FactZone">
-
-    <!-- Twitter Card SEO -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="About Us - FactZone">
-    <meta name="twitter:description" content="Explore amazing facts, technology updates, and educational content by Awaneesh on FactZone.">
-    
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- AdSense & Google Analytics -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6974190466298538" crossorigin="anonymous"></script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-311JQXBXR9"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-311JQXBXR9', { 'page_path': window.location.pathname });
+    <!-- Advanced Schema Markup (AboutPage, Organization & BreadcrumbList) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "AboutPage",
+          "@id": "https://factzone.online/about/#webpage",
+          "url": "https://factzone.online/about",
+          "name": "About Us | FactZone",
+          "description": "Learn about FactZone, our content standards and commitment to amazing facts and educational content.",
+          "isPartOf": {
+            "@type": "WebSite",
+            "@id": "https://factzone.online/#website",
+            "name": "FactZone",
+            "url": "https://factzone.online/"
+          }
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://factzone.online/#organization",
+          "name": "FactZone",
+          "url": "https://factzone.online/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://factzone.online/logo.png"
+          },
+          "founder": {
+            "@type": "Person",
+            "name": "Awaneesh"
+          }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://factzone.online/about/#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://factzone.online/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "About Us",
+              "item": "https://factzone.online/about"
+            }
+          ]
+        }
+      ]
+    }
     </script>
 
     <style>
@@ -66,14 +130,14 @@
     <!-- Header Navigation Bar -->
     <header class="sticky top-0 z-50 bg-white border-b border-slate-200">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-            <a href="index.html" class="text-2xl font-black tracking-wider text-emerald-600 flex items-center gap-2">
+            <a href="/" class="text-2xl font-black tracking-wider text-emerald-600 flex items-center gap-2">
                 <i class="fa-solid fa-lightbulb text-xl"></i>
                 Fact<span class="text-slate-900">Zone</span>
             </a>
             <div class="flex items-center gap-6 text-sm font-medium text-slate-600">
-                <a href="index.html" class="hover:text-emerald-600 transition-colors">Home</a>
-                <a href="about.html" class="text-emerald-600 border-b-2 border-emerald-600 pb-1 font-semibold">About</a>
-                <a href="contact.html" class="hover:text-emerald-600 transition-colors">Contact</a>
+                <a href="/" class="hover:text-emerald-600 transition-colors">Home</a>
+                <a href="/about" class="text-emerald-600 border-b-2 border-emerald-600 pb-1 font-semibold">About</a>
+                <a href="/contact" class="hover:text-emerald-600 transition-colors">Contact</a>
             </div>
         </div>
     </header>
@@ -81,10 +145,10 @@
     <!-- Main Content Container -->
     <main class="max-w-4xl mx-auto px-4 sm:px-6 py-10 w-full flex-grow">
         
-        <!-- Breadcrumb UI -->
+        <!-- Visible Breadcrumb Navigation -->
         <nav class="flex text-slate-500 text-sm mb-6" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-2">
-                <li><a href="index.html" class="hover:text-emerald-600"><i class="fa-solid fa-house text-xs mr-1"></i> Home</a></li>
+                <li><a href="/" class="hover:text-emerald-600"><i class="fa-solid fa-house text-xs mr-1"></i> Home</a></li>
                 <li><i class="fa-solid fa-chevron-right text-xs text-slate-300"></i></li>
                 <li class="text-emerald-600 font-semibold">About Us</li>
             </ol>
@@ -100,24 +164,72 @@
             </div>
 
             <p class="text-slate-600 text-base sm:text-lg leading-relaxed mb-4">
-                FactZone is a modern knowledge and facts platform where users can explore amazing facts, technology updates, educational content, and interesting information.
+                Welcome to <strong>FactZone</strong>, your premier destination for mind-blowing facts, technology updates, educational content, and fascinating information from around the world. Founded by Awaneesh, our platform is designed for curious minds eager to learn something new every day.
             </p>
 
-            <p class="text-slate-600 text-base sm:text-lg leading-relaxed mb-4">
-                Our mission is to make learning fun, simple, and engaging for everyone. We believe that curiosity drives innovation, and our goal is to deliver accurate, bite-sized information every day.
+            <div class="bg-emerald-50 border-l-4 border-emerald-600 p-4 my-6 rounded-r-xl">
+                <p class="text-emerald-900 font-medium">
+                    Our mission is to make learning fun, simple, and engaging for everyone. We believe that curiosity drives innovation, and our goal is to deliver accurate, bite-sized knowledge.
+                </p>
+            </div>
+
+            <h2 class="text-2xl font-bold text-slate-900 mt-8 mb-4">What We Offer</h2>
+            <ul class="space-y-3 mb-6 text-slate-600 text-base">
+                <li class="flex items-start gap-3">
+                    <i class="fa-solid fa-check text-emerald-600 mt-1"></i>
+                    <div><strong>Amazing Facts:</strong> Unbelievable, weird, and interesting facts about science, history, nature, and the universe.</div>
+                </li>
+                <li class="flex items-start gap-3">
+                    <i class="fa-solid fa-check text-emerald-600 mt-1"></i>
+                    <div><strong>Tech Updates:</strong> The latest innovations, tech breakthroughs, gadget insights, and digital trends.</div>
+                </li>
+                <li class="flex items-start gap-3">
+                    <i class="fa-solid fa-check text-emerald-600 mt-1"></i>
+                    <div><strong>Educational Content:</strong> Informative articles designed to expand your horizon and answer everyday curiosities.</div>
+                </li>
+            </ul>
+
+            <h2 class="text-2xl font-bold text-slate-900 mt-8 mb-4">Our Core Values</h2>
+            <p class="text-slate-600 text-base leading-relaxed mb-4">
+                At FactZone, we prioritize accuracy, reliability, and engaging storytelling. Every fact and piece of information is thoroughly reviewed to ensure our readers receive top-quality content without misleading claims.
             </p>
 
-            <p class="text-slate-700 font-medium text-base sm:text-lg">
-                Thank you for visiting FactZone!
+            <p class="text-slate-700 font-medium text-base sm:text-lg mt-6">
+                Thank you for visiting FactZone! Keep exploring and feeding your curiosity.
             </p>
         </section>
+
+        <!-- Quick Links Section -->
+        <div class="mb-10 text-center">
+            <h3 class="text-lg font-bold text-slate-800 mb-4">Quick Navigation</h3>
+            <div class="flex flex-wrap justify-center gap-3">
+                <a href="/" class="px-4 py-2 bg-white border border-slate-200 rounded-full text-sm font-semibold text-emerald-600 hover:bg-emerald-600 hover:text-white transition shadow-sm">🏠 Home</a>
+                <a href="/about" class="px-4 py-2 bg-white border border-slate-200 rounded-full text-sm font-semibold text-emerald-600 hover:bg-emerald-600 hover:text-white transition shadow-sm">📄 About Us</a>
+                <a href="/contact" class="px-4 py-2 bg-white border border-slate-200 rounded-full text-sm font-semibold text-emerald-600 hover:bg-emerald-600 hover:text-white transition shadow-sm">📞 Contact</a>
+                <a href="/privacy" class="px-4 py-2 bg-white border border-slate-200 rounded-full text-sm font-semibold text-emerald-600 hover:bg-emerald-600 hover:text-white transition shadow-sm">🔒 Privacy Policy</a>
+                <a href="/terms" class="px-4 py-2 bg-white border border-slate-200 rounded-full text-sm font-semibold text-emerald-600 hover:bg-emerald-600 hover:text-white transition shadow-sm">📜 Terms</a>
+                <a href="/disclaimer" class="px-4 py-2 bg-white border border-slate-200 rounded-full text-sm font-semibold text-emerald-600 hover:bg-emerald-600 hover:text-white transition shadow-sm">⚠️ Disclaimer</a>
+            </div>
+        </div>
        
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-slate-200 py-6 bg-white">
+    <footer class="border-t border-slate-200 py-8 bg-white">
         <div class="max-w-5xl mx-auto px-4 text-center text-xs text-slate-500">
-            <p class="font-medium mb-1">&copy; 2026 FactZone. All rights reserved.</p>
+            <p class="font-bold text-slate-800 text-sm mb-2">FactZone</p>
+            <p class="text-slate-600 mb-4">Your daily destination for amazing facts, technology updates, and educational insights.</p>
+            
+            <div class="flex justify-center flex-wrap gap-4 mb-4 text-sm font-medium">
+                <a href="/" class="text-emerald-600 hover:underline">Home</a>
+                <a href="/about" class="text-emerald-600 hover:underline">About</a>
+                <a href="/contact" class="text-emerald-600 hover:underline">Contact</a>
+                <a href="/privacy" class="text-emerald-600 hover:underline">Privacy</a>
+                <a href="/terms" class="text-emerald-600 hover:underline">Terms</a>
+                <a href="/disclaimer" class="text-emerald-600 hover:underline">Disclaimer</a>
+            </div>
+
+            <p class="font-medium text-slate-500">&copy; 2026 FactZone. All rights reserved.</p>
         </div>
     </footer>
 
