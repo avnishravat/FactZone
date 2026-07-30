@@ -15,15 +15,11 @@
 
   <!-- ============================================================
        CRITICAL FIX: Canonical + og:url ko IMMEDIATELY (Firestore
-       fetch ka wait kiye bina) current URL (with ?id=...) par set
-       karo. Pehle ye sirf updateSEO() ke andar, Firestore response
-       aane ke BAAD set hota tha. Agar Googlebot render snapshot
-       Firestore response se pehle le leta, to canonical hamesha
-       plain "detail.html" (bina id) hi reh jaata — isliye Search
-       Console mein saare id-pages "Alternative page with proper
-       canonical tag" dikha rahe the (Google inhe generic detail.html
-       ka duplicate maan raha tha). Ye inline script yahan turant
-       chalta hai, kisi network call ka wait nahi karta.
+       fetch ka wait kiye bina) current URL (with ?id=... ya ?slug=...)
+       par set karo. Pehle ye sirf updateSEO() ke andar, Firestore
+       response aane ke BAAD set hota tha. Agar Googlebot render
+       snapshot Firestore response se pehle le leta, to canonical
+       hamesha plain "detail.html" (bina id) hi reh jaata.
   ============================================================ -->
   <script>
     (function () {
@@ -61,11 +57,70 @@
     })();
   </script>
 
-  <script type="application/ld+json" id="articleSchema">{"@context":"https://schema.org","@type":"Article","headline":"FactZone Educational Article","author":{"@type":"Person","name":"Awaneesh"},"publisher":{"@type":"Organization","name":"FactZone Official","logo":{"@type":"ImageObject","url":"https://factzone.online/logo.png"}}}</script>
+  <!-- ============================================================
+       SCHEMA FIX: Sabhi structured data ab EK HI @graph ke andar hai
+       (ek hi <script> tag mein), alag-alag script tags mein nahi.
 
-  <script type="application/ld+json" id="breadcrumbSchema">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://factzone.online/"},{"@type":"ListItem","position":2,"name":"Amazing Facts","item":"https://factzone.online/"},{"@type":"ListItem","position":3,"name":"FactZone Article","item":"https://factzone.online/detail.html"}]}</script>
+       WAJAH: Google ka Rich Results Test har <script type="application/
+       ld+json"> tag ko ALAG, independent JSON document ki tarah parse
+       karta hai. Pehle Organization/Person alag tags mein the aur
+       Article schema unhe sirf {"@id":"..."} se reference karta tha —
+       ye reference ek doosre tag ke andar kabhi resolve hi nahi hota,
+       isliye Rich Results Test mein author "Person" ke bajaye generic
+       "Thing" dikhta tha aur "name" field "missing" aata tha (jaisa
+       screenshot mein dikha). Ab Organization + Person + WebSite +
+       Article + Breadcrumb sab EK @graph array mein hain, isliye @id
+       cross-references sahi se resolve hote hain.
 
-  <script type="application/ld+json" id="organizationSchema">{"@context":"https://schema.org","@type":"Organization","name":"FactZone","url":"https://factzone.online","logo":{"@type":"ImageObject","url":"https://factzone.online/logo.png","width":512,"height":512},"sameAs":["https://www.instagram.com/avnish__123/","https://www.youtube.com/DirectionNewsWorldwide08"]}</script>
+       Is tag ko khaali kabhi mat rakhna (empty <script type="application/
+       ld+json"> invalid JSON hota hai) — isliye valid default diya hai,
+       JS load hote hi real data se replace ho jaata hai.
+  ============================================================ -->
+  <script id="ldJsonGraph" type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://factzone.online/#organization",
+        "name": "FactZone",
+        "url": "https://factzone.online/",
+        "logo": { "@type": "ImageObject", "url": "https://factzone.online/logo.png", "width": 512, "height": 512 },
+        "sameAs": ["https://www.instagram.com/avnish__123/", "https://www.youtube.com/DirectionNewsWorldwide08"]
+      },
+      {
+        "@type": "Person",
+        "@id": "https://factzone.online/#person-awaneesh",
+        "name": "Awaneesh",
+        "url": "https://factzone.online/author.html",
+        "worksFor": { "@id": "https://factzone.online/#organization" }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://factzone.online/#website",
+        "name": "FactZone",
+        "url": "https://factzone.online/",
+        "inLanguage": "hi",
+        "publisher": { "@id": "https://factzone.online/#organization" }
+      },
+      {
+        "@type": "Article",
+        "@id": "https://factzone.online/detail.html#article",
+        "headline": "FactZone Educational Article",
+        "author": { "@id": "https://factzone.online/#person-awaneesh" },
+        "publisher": { "@id": "https://factzone.online/#organization" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://factzone.online/" },
+          { "@type": "ListItem", "position": 2, "name": "Amazing Facts", "item": "https://factzone.online/" },
+          { "@type": "ListItem", "position": 3, "name": "FactZone Article", "item": "https://factzone.online/detail.html" }
+        ]
+      }
+    ]
+  }
+  </script>
 
   <link rel="icon" href="https://factzone.online/logo.png" sizes="48x48" type="image/png">
   <link rel="apple-touch-icon" href="https://factzone.online/logo.png">
@@ -218,12 +273,21 @@
 
   var PROJECT_ID = "factzone-a9ace";
   var API_KEY    = "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc";
-  var FS_BASE = "https://firestore.googleapis.com/v1/projects/" + PROJECT_ID + "/databases/(default)/documents/";
+  var FS_BASE    = "https://firestore.googleapis.com/v1/projects/" + PROJECT_ID + "/databases/(default)/documents";
 
-  var params = new URLSearchParams(location.search);
-  var id     = params.get("id") || "";
+  // ============================================================
+  // HYBRID URL SUPPORT: purane posts "?id=..." se khulte hain
+  // (direct document fetch), naye posts "?slug=..." se (query by
+  // slug field, NewsFriend jaisa). Dono ek saath supported hain,
+  // taaki 34 already-indexed ?id= URLs kabhi na tootein.
+  // ============================================================
+  var params    = new URLSearchParams(location.search);
+  var idParam   = params.get("id") || "";
+  var slugParam = params.get("slug") || "";
 
   function $(q) { return document.getElementById(q); }
+
+  function sleep(ms) { return new Promise(function (resolve) { setTimeout(resolve, ms); }); }
 
   function escapeHtml(str) {
     return String(str == null ? "" : str)
@@ -253,8 +317,39 @@
     return obj;
   }
 
-  function lsGet(k) { try { return localStorage.getItem(k); } catch(e){ return null; } }
-  function lsSet(k, v) { try { localStorage.setItem(k, v); } catch(e){} }
+  // ============================================================
+  // sessionStorage CACHE + TTL (5 min) + purane entries clean karna
+  // Pehle localStorage use hota tha, jo KABHI expire nahi hota tha —
+  // agar koi post edit hoti, purane visitors ko hamesha stale
+  // (purana) content dikhta rehta, jab tak wo manually browser
+  // storage clear na karein. Ab sessionStorage + TTL se ye theek ho
+  // gaya, aur cleanOldCacheEntries purane keys hata deta hai taaki
+  // storage bloat na ho.
+  // ============================================================
+  var CACHE_PREFIX      = "fz-post-";
+  var CACHE_TTL_MS       = 5 * 60 * 1000;
+  var RELATED_CACHE_KEY  = "fz-related-v1";
+  var RELATED_TTL_MS     = 5 * 60 * 1000;
+
+  function ssGet(k) { try { return sessionStorage.getItem(k); } catch(e){ return null; } }
+  function ssSet(k, v) { try { sessionStorage.setItem(k, v); } catch(e){} }
+
+  function cleanOldCacheEntries(currentActiveKey) {
+    try {
+      var keysToClean = [];
+      for (var i = 0; i < sessionStorage.length; i++) {
+        var k = sessionStorage.key(i);
+        if (k && k.indexOf(CACHE_PREFIX) === 0 && k !== currentActiveKey) {
+          keysToClean.push(k);
+        }
+      }
+      keysToClean.forEach(function(k){ sessionStorage.removeItem(k); });
+    } catch (e) { console.error("Cache clean warning:", e); }
+  }
+
+  function currentCacheKey() {
+    return CACHE_PREFIX + (slugParam ? ("slug-" + slugParam) : ("id-" + idParam));
+  }
 
   function toSafeDate(val) {
     if (val === undefined || val === null || val === "") return null;
@@ -285,7 +380,12 @@
     } catch (e) { return ""; }
   }
 
-  function updateSEO(title, desc, image, publishedISO, updatedISO, keywords) {
+  // ============================================================
+  // SEO + SCHEMA update — single @graph, dynamic Article + Breadcrumb,
+  // conditional FAQ/Video entities only when the post actually has
+  // that data.
+  // ============================================================
+  function updateSEO(post, title, desc, image, publishedISO, updatedISO, keywords) {
     var url = location.origin + location.pathname + location.search;
     document.title = title + " | FactZone";
 
@@ -308,49 +408,92 @@
     var can = document.getElementById("meta-canonical");
     if (can) can.href = url;
 
-    var schema = {
-      "@context":   "https://schema.org",
-      "@type":      "Article",
-      "mainEntityOfPage": { "@type": "WebPage", "@id": url },
-      "headline":   title,
-      "description": desc,
-      "url":         url,
-      "image": {
-        "@type": "ImageObject",
-        "url":    image,
-        "width":  1200,
-        "height": 630
-      },
-      "datePublished": publishedISO,
-      "dateModified":  updatedISO,
-      "inLanguage":    "hi",
-      "articleSection": "Amazing Facts",
-      "keywords":      keywords,
-      "author": {
-        "@type": "Person",
-        "name":  "Awaneesh",
-        "url":   "https://factzone.online/author.html"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name":  "FactZone Official",
-        "logo":  { "@type": "ImageObject", "url": "https://factzone.online/logo.png", "width": 512, "height": 512 }
-      }
-    };
-    var el = document.getElementById("articleSchema");
-    if (el) el.textContent = JSON.stringify(schema);
+    var authorName = post.author || "Awaneesh";
+    var authorEntity = (authorName === "Awaneesh")
+      ? { "@id": "https://factzone.online/#person-awaneesh" }
+      : { "@type": "Person", "name": authorName };
 
-    var breadcrumb = {
-      "@context": "https://schema.org",
-      "@type":    "BreadcrumbList",
+    var articleEntity = {
+      "@type": "Article",
+      "@id": url + "#article",
+      "mainEntityOfPage": { "@type": "WebPage", "@id": url },
+      "headline": title,
+      "description": desc,
+      "url": url,
+      "image": { "@type": "ImageObject", "url": image, "width": 1200, "height": 630 },
+      "datePublished": publishedISO,
+      "dateModified": updatedISO,
+      "inLanguage": "hi",
+      "articleSection": "Amazing Facts",
+      "keywords": keywords,
+      "author": authorEntity,
+      "publisher": { "@id": "https://factzone.online/#organization" }
+    };
+
+    var breadcrumbEntity = {
+      "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Home",          "item": "https://factzone.online/" },
         { "@type": "ListItem", "position": 2, "name": "Amazing Facts", "item": "https://factzone.online/" },
         { "@type": "ListItem", "position": 3, "name": title,           "item": url }
       ]
     };
-    var bc = document.getElementById("breadcrumbSchema");
-    if (bc) bc.textContent = JSON.stringify(breadcrumb);
+
+    var graph = [
+      {
+        "@type": "Organization",
+        "@id": "https://factzone.online/#organization",
+        "name": "FactZone",
+        "url": "https://factzone.online/",
+        "logo": { "@type": "ImageObject", "url": "https://factzone.online/logo.png", "width": 512, "height": 512 },
+        "sameAs": ["https://www.instagram.com/avnish__123/", "https://www.youtube.com/DirectionNewsWorldwide08"]
+      },
+      {
+        "@type": "Person",
+        "@id": "https://factzone.online/#person-awaneesh",
+        "name": "Awaneesh",
+        "url": "https://factzone.online/author.html",
+        "worksFor": { "@id": "https://factzone.online/#organization" }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://factzone.online/#website",
+        "name": "FactZone",
+        "url": "https://factzone.online/",
+        "inLanguage": "hi",
+        "publisher": { "@id": "https://factzone.online/#organization" }
+      },
+      articleEntity,
+      breadcrumbEntity
+    ];
+
+    // ── FAQPage: sirf tab jab post.faq array ho ──
+    if (Array.isArray(post.faq) && post.faq.length) {
+      var faqItems = post.faq.filter(function(f){ return f && f.question && f.answer; });
+      if (faqItems.length) {
+        graph.push({
+          "@type": "FAQPage",
+          "mainEntity": faqItems.map(function(f){
+            return { "@type": "Question", "name": f.question, "acceptedAnswer": { "@type": "Answer", "text": f.answer } };
+          })
+        });
+      }
+    }
+
+    // ── VideoObject: sirf tab jab post.videoUrl ho ──
+    if (post.videoUrl) {
+      graph.push({
+        "@type": "VideoObject",
+        "name": title,
+        "description": desc,
+        "thumbnailUrl": image,
+        "contentUrl": post.videoUrl,
+        "uploadDate": publishedISO
+      });
+    }
+
+    var graphEl = document.getElementById("ldJsonGraph");
+    if (graphEl) graphEl.textContent = JSON.stringify({ "@context": "https://schema.org", "@graph": graph });
   }
 
   window.copyArticleLink = function(btn) {
@@ -365,26 +508,16 @@
   };
 
   /* ---------------------------------------------------------------
-     FIXED AD LOADER
-     - Ab script container ke ANDAR jaata hai (head mein nahi), kyunki
-       invoke.js jaise native-ad scripts apni <script> tag ki position
-       ke relative DOM mein render karte hain.
-     - Ek dataset flag se duplicate-injection रोका gaya hai, taaki
-       cache-render + fresh-render dono baar ad dobara load na ho.
-     - Har unique container id ke liye alag function call, taaki future
-       me dusra ad-zone code aasani se add ho sake.
+     AD LOADER (unchanged network logic, still container-scoped +
+     duplicate-load guarded)
   --------------------------------------------------------------- */
   var NATIVE_BANNER_ZONE = "7ff4b1b157bf01a56609549fe359888b";
   var NATIVE_BANNER_SRC  = "https://pl30385025.effectivecpmnetwork.com/" + NATIVE_BANNER_ZONE + "/invoke.js";
 
-  // Class-based loader: ek hi zone ke multiple placements (bottom + inline)
-  // ek saath page par kaam karein, isliye ID ke bajaye class se dhoondte hain,
-  // taaki duplicate id se koi container skip na ho.
   function injectSingleAd(container, scriptSrc) {
     try {
       if (!container) return;
-      if (container.dataset.adLoaded === "true") return; // duplicate-load guard
-
+      if (container.dataset.adLoaded === "true") return;
       var adScript = document.createElement('script');
       adScript.type = 'text/javascript';
       adScript.async = true;
@@ -392,29 +525,17 @@
       adScript.src = scriptSrc;
       container.appendChild(adScript);
       container.dataset.adLoaded = "true";
-    } catch (e) {
-      console.error("Ad script embedding error:", e);
-    }
+    } catch (e) { console.error("Ad script embedding error:", e); }
   }
 
   function injectAdNetworkScripts() {
-    // Native Banner ka bottom placement
-    var nativeSlots = document.querySelectorAll('.native-banner-slot');
-    nativeSlots.forEach(function(slot) {
+    document.querySelectorAll('.native-banner-slot').forEach(function(slot) {
       injectSingleAd(slot, NATIVE_BANNER_SRC);
     });
-
-    // Article ke beech wala Banner 300x250 (alag dedicated ad unit,
-    // document.write() use karta hai isliye ise safe iframe ke andar
-    // isolate karke load karte hain — warna poora page overwrite ho sakta hai).
-    var bannerSlots = document.querySelectorAll('.banner-300x250-slot');
-    bannerSlots.forEach(function(slot) {
+    document.querySelectorAll('.banner-300x250-slot').forEach(function(slot) {
       injectBanner300x250(slot);
     });
-
-    // Article ke EXACT beech (middle paragraph) wala Banner 320x50
-    var midBannerSlots = document.querySelectorAll('.banner-320x50-slot');
-    midBannerSlots.forEach(function(slot) {
+    document.querySelectorAll('.banner-320x50-slot').forEach(function(slot) {
       injectBanner320x50(slot);
     });
   }
@@ -422,55 +543,78 @@
   function injectBanner300x250(container) {
     try {
       if (!container) return;
-      if (container.dataset.adLoaded === "true") return; // duplicate-load guard
-
+      if (container.dataset.adLoaded === "true") return;
       var iframe = document.createElement('iframe');
-      iframe.style.width = '300px';
-      iframe.style.height = '250px';
-      iframe.style.border = '0';
-      iframe.style.overflow = 'hidden';
-      iframe.style.maxWidth = '100%';
-      iframe.scrolling = 'no';
+      iframe.style.width = '300px'; iframe.style.height = '250px'; iframe.style.border = '0';
+      iframe.style.overflow = 'hidden'; iframe.style.maxWidth = '100%'; iframe.scrolling = 'no';
       iframe.title = 'Advertisement';
-
       var doc = '<!DOCTYPE html><html><head><style>*{margin:0;padding:0;}</style></head><body>' +
         '<script>atOptions = {"key":"d7218ad0d4e9095bb4a145457bc7bea2","format":"iframe","height":250,"width":300,"params":{}};</' + 'script>' +
         '<script src="https://www.highperformanceformat.com/d7218ad0d4e9095bb4a145457bc7bea2/invoke.js"></' + 'script>' +
         '</body></html>';
-
       iframe.srcdoc = doc;
       container.appendChild(iframe);
       container.dataset.adLoaded = "true";
-    } catch (e) {
-      console.error("Banner 300x250 ad error:", e);
-    }
+    } catch (e) { console.error("Banner 300x250 ad error:", e); }
   }
 
   function injectBanner320x50(container) {
     try {
       if (!container) return;
-      if (container.dataset.adLoaded === "true") return; // duplicate-load guard
-
+      if (container.dataset.adLoaded === "true") return;
       var iframe = document.createElement('iframe');
-      iframe.style.width = '320px';
-      iframe.style.height = '50px';
-      iframe.style.border = '0';
-      iframe.style.overflow = 'hidden';
-      iframe.style.maxWidth = '100%';
-      iframe.scrolling = 'no';
+      iframe.style.width = '320px'; iframe.style.height = '50px'; iframe.style.border = '0';
+      iframe.style.overflow = 'hidden'; iframe.style.maxWidth = '100%'; iframe.scrolling = 'no';
       iframe.title = 'Advertisement';
-
       var doc = '<!DOCTYPE html><html><head><style>*{margin:0;padding:0;}</style></head><body>' +
         '<script>atOptions = {"key":"3012ad1961449518ada204e09cdbceef","format":"iframe","height":50,"width":320,"params":{}};</' + 'script>' +
         '<script src="https://www.highperformanceformat.com/3012ad1961449518ada204e09cdbceef/invoke.js"></' + 'script>' +
         '</body></html>';
-
       iframe.srcdoc = doc;
       container.appendChild(iframe);
       container.dataset.adLoaded = "true";
-    } catch (e) {
-      console.error("Banner 320x50 ad error:", e);
+    } catch (e) { console.error("Banner 320x50 ad error:", e); }
+  }
+
+  // ============================================================
+  // DOM-based inline ad injection (NewsFriend ka nfInjectInlineAds
+  // jaisa) — purana tarika raw HTML string ko literal "</p>" text
+  // se split karta tha, jo tootta agar content lists/headings/nested
+  // tags use kare bina exact </p> boundary ke. Ab asli DOM nodes
+  // parse karke top-level blocks ke beech evenly ads daalte hain —
+  // content structure kaisi bhi ho, hamesha safely kaam karega aur
+  // Layout Shift (CLS) kam rahega kyunki ad wahi margin-rhythm use
+  // karta hai jo paragraphs already use kar rahe hain.
+  // ============================================================
+  function injectInlineAdsDom(rawHtml, count, adHtmlString) {
+    if (!rawHtml) return rawHtml;
+    var tmp = document.createElement('div');
+    tmp.innerHTML = rawHtml;
+    var children = Array.prototype.slice.call(tmp.childNodes).filter(function(n) {
+      return n.nodeType === 1 || (n.nodeType === 3 && n.textContent.trim() !== '');
+    });
+    if (children.length < 2) return rawHtml;
+
+    var totalGaps = children.length - 1;
+    var slots = Math.min(count, totalGaps);
+    if (slots < 1) return rawHtml;
+
+    var insertAfter = [];
+    var used = {};
+    for (var i = 1; i <= slots; i++) {
+      var pos = Math.round((i * totalGaps) / (slots + 1)) - 1;
+      pos = Math.max(0, Math.min(totalGaps - 1, pos));
+      while (used[pos] && pos < totalGaps - 1) pos++;
+      used[pos] = true;
+      insertAfter.push(pos);
     }
+
+    var out = '';
+    children.forEach(function(node, idx) {
+      out += (node.nodeType === 1) ? node.outerHTML : node.textContent;
+      if (insertAfter.indexOf(idx) !== -1) out += adHtmlString;
+    });
+    return out;
   }
 
   function renderPost(post) {
@@ -487,7 +631,7 @@
     var updatedISO   = updatedDate ? updatedDate.toISOString() : publishedISO;
     var keywords   = Array.isArray(post.tags) && post.tags.length ? post.tags.join(", ") : "amazing facts, science facts, hindi facts";
 
-    updateSEO(titleRaw, desc, image, publishedISO, updatedISO, keywords);
+    updateSEO(post, titleRaw, desc, image, publishedISO, updatedISO, keywords);
 
     var title   = escapeHtml(titleRaw);
 
@@ -509,35 +653,8 @@
     var shareUrl = encodeURIComponent(location.href);
     var shareText = encodeURIComponent(titleRaw + " - Read more on FactZone:\n");
 
-    // Article mein total 6 Banner 320x50 ads evenly spaced honge, chahe
-    // article chhota ho ya bada — paragraphs ko 7 hisso mein baant kar
-    // har gap ke baad ek ad daala jaata hai (bottom wala Native Banner
-    // isse alag, apni jagah bottom mein hamesha rehta hai).
-    var contentWithAd = (function() {
-      var paragraphs = content.split('</p>');
-      var total = paragraphs.length;
-      if (total <= 1) return content;
-
-      var midAd = '<div class="ad-slot" style="margin: 1rem 0;">' +
-                  '<div class="banner-320x50-slot"></div>' +
-                  '</div>';
-
-      var ADS_COUNT = 6;
-      var segments = ADS_COUNT + 1;
-      var step = Math.max(1, Math.floor(total / segments));
-
-      var result = [];
-      var adsInserted = 0;
-      for (var i = 0; i < total; i++) {
-        result.push(paragraphs[i]);
-        var isBoundary = (i + 1) % step === 0;
-        if (isBoundary && adsInserted < ADS_COUNT && (i + 1) < total) {
-          result.push(midAd);
-          adsInserted++;
-        }
-      }
-      return result.join('</p>');
-    })();
+    var midAdHtml = '<div class="ad-slot" style="margin: 1rem 0;"><div class="banner-320x50-slot"></div></div>';
+    var contentWithAd = injectInlineAdsDom(content, 6, midAdHtml);
 
     $("post-content").innerHTML =
       '<div class="hero-wrap"><img class="hero" src="' + escapeHtml(image) + '" alt="' + title + '" loading="eager" width="300" height="169"></div>' +
@@ -555,7 +672,6 @@
       '</div>' +
       '<div class="author-box">Written by <a href="author.html" itemprop="author">Awaneesh</a></div>';
 
-    // HTML render hone ke baad hi ads script inject karo (container ab DOM me exist karta hai)
     injectAdNetworkScripts();
   }
 
@@ -567,48 +683,121 @@
     $("relatedGrid").innerHTML = items.map(function(item){
       var img   = escapeHtml(item.image || "https://factzone.online/logo.png");
       var ttl   = escapeHtml(item.title || "");
-      var pid   = encodeURIComponent(item._id || "");
-      return '<a href="detail.html?id=' + pid + '" class="rc" aria-label="Read: ' + ttl + '">' +
+      // Hybrid link: naye posts jinke paas slug hai unhe ?slug= se link karo,
+      // purane posts (slug nahi hai) ko ?id= se — dono future-proof aur safe.
+      var linkQuery = item.slug ? ("slug=" + encodeURIComponent(item.slug)) : ("id=" + encodeURIComponent(item._id || ""));
+      return '<a href="detail.html?' + linkQuery + '" class="rc" aria-label="Read: ' + ttl + '">' +
              '<img src="' + img + '" loading="lazy" width="68" height="68" alt="' + ttl + '">' +
              '<h3>' + ttl + '</h3></a>';
     }).join("");
   }
 
+  // ============================================================
+  // HYBRID FETCH: id ho to direct document path se, slug ho to
+  // runQuery se where("slug","==",...) — dono retry-with-backoff
+  // ke saath, taaki slow/flaky internet par bhi post load ho jaaye.
+  // ============================================================
+  function fetchPostByIdOnce(idVal) {
+    var url = FS_BASE + "/posts/" + idVal + "?key=" + API_KEY;
+    return fetch(url).then(function(r){ return r.json(); }).then(function(data){
+      if (!data.fields) return null;
+      var post = parseDoc(data.fields);
+      post._id = idVal;
+      return post;
+    });
+  }
+
+  function fetchPostBySlugOnce(slugVal) {
+    var url = FS_BASE + ":runQuery?key=" + API_KEY;
+    var body = {
+      structuredQuery: {
+        from: [{ collectionId: "posts" }],
+        where: { fieldFilter: { field: { fieldPath: "slug" }, op: "EQUAL", value: { stringValue: slugVal } } },
+        limit: 1
+      }
+    };
+    return fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        var found = (Array.isArray(data) ? data : []).find(function(r){ return r.document; });
+        if (!found) return null;
+        var post = parseDoc(found.document.fields);
+        post._id = found.document.name.split("/").pop();
+        return post;
+      });
+  }
+
+  function fetchPostOnce() {
+    if (slugParam) return fetchPostBySlugOnce(slugParam);
+    if (idParam)   return fetchPostByIdOnce(idParam);
+    return Promise.resolve(null);
+  }
+
+  function fetchPostWithRetry(maxAttempts) {
+    maxAttempts = maxAttempts || 4;
+    var attempt = 1;
+    function tryOnce() {
+      return fetchPostOnce().catch(function(e) {
+        console.warn("fetchPost attempt " + attempt + " failed:", e.message);
+        return null;
+      }).then(function(post) {
+        if (post) return post;
+        if (attempt >= maxAttempts) return null;
+        attempt++;
+        return sleep(400 + Math.pow(attempt, 2) * 300).then(tryOnce);
+      });
+    }
+    return tryOnce();
+  }
+
   function fetchPost() {
-    if (!id) {
+    if (!idParam && !slugParam) {
       $("post-content").innerHTML = '<div class="err"><h2>No article ID</h2><p>Go back and pick an article.</p></div>';
       return;
     }
 
-    var cached = lsGet("fz_post_" + id);
-    if (cached) {
-      try { renderPost(JSON.parse(cached)); } catch(e){}
+    var cacheKey = currentCacheKey();
+    var cachedRaw = ssGet(cacheKey);
+    var cachedPost = null;
+    if (cachedRaw) {
+      try {
+        var parsed = JSON.parse(cachedRaw);
+        if (Date.now() - parsed.ts < CACHE_TTL_MS) {
+          cachedPost = parsed.data;
+          renderPost(cachedPost);
+        }
+      } catch (e) {}
     }
 
-    var url = FS_BASE + "posts/" + id + "?key=" + API_KEY;
-    fetch(url)
-      .then(function(r){ return r.json(); })
-      .then(function(data){
-        if (!data.fields) {
-          if (!cached) $("post-content").innerHTML = '<div class="err"><h2>Post Not Found</h2><p>This article may have been removed.</p></div>';
-          return;
-        }
-        var post = parseDoc(data.fields);
-        post._id = id;
-        lsSet("fz_post_" + id, JSON.stringify(post));
-        renderPost(post);
-      })
-      .catch(function(err){
-        console.error("Post fetch error:", err);
-        if (!cached) $("post-content").innerHTML = '<div class="err"><h2>Failed to load</h2><p>Check your connection and refresh.</p></div>';
-      });
+    cleanOldCacheEntries(cacheKey);
+
+    fetchPostWithRetry().then(function(post) {
+      if (!post) {
+        if (!cachedPost) $("post-content").innerHTML = '<div class="err"><h2>Post Not Found</h2><p>This article may have been removed.</p></div>';
+        return;
+      }
+      ssSet(cacheKey, JSON.stringify({ ts: Date.now(), data: post }));
+      renderPost(post);
+    }).catch(function(err) {
+      console.error("Post fetch error:", err);
+      if (!cachedPost) $("post-content").innerHTML = '<div class="err"><h2>Failed to load</h2><p>Check your connection and refresh.</p></div>';
+    });
   }
 
   function fetchRelated() {
-    var cached = lsGet("fz_related_v3");
-    if (cached) { try { renderRelated(JSON.parse(cached)); } catch(e){} }
+    var cachedRaw = ssGet(RELATED_CACHE_KEY);
+    var cachedItems = null;
+    if (cachedRaw) {
+      try {
+        var parsed = JSON.parse(cachedRaw);
+        if (Date.now() - parsed.ts < RELATED_TTL_MS) {
+          cachedItems = parsed.data;
+          renderRelated(cachedItems);
+        }
+      } catch (e) {}
+    }
 
-    var url = FS_BASE + "posts?key=" + API_KEY + "&pageSize=8";
+    var url = FS_BASE + "/posts?key=" + API_KEY + "&pageSize=8";
     fetch(url)
       .then(function(r){ return r.json(); })
       .then(function(data){
@@ -616,15 +805,19 @@
         var items = [];
         docs.forEach(function(d){
           var pid = (d.name || "").split("/").pop();
-          if (pid === id || items.length >= 6) return;
+          if (items.length >= 6) return;
           var post = parseDoc(d.fields);
           post._id = pid;
+          if ((slugParam && post.slug === slugParam) || (idParam && pid === idParam)) return;
           items.push(post);
         });
-        lsSet("fz_related_v3", JSON.stringify(items));
+        ssSet(RELATED_CACHE_KEY, JSON.stringify({ ts: Date.now(), data: items }));
         renderRelated(items);
       })
-      .catch(function(e){ console.error("Related fetch error:", e); });
+      .catch(function(e){
+        console.error("Related fetch error:", e);
+        if (!cachedItems) { /* leave section as-is, non-critical */ }
+      });
   }
 
   fetchPost();
