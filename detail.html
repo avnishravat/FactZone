@@ -107,8 +107,8 @@
         "@type": "Article",
         "@id": "https://factzone.online/detail.html#article",
         "headline": "FactZone Educational Article",
-        "author": { "@id": "https://factzone.online/#person-awaneesh" },
-        "publisher": { "@id": "https://factzone.online/#organization" }
+        "author": { "@type": "Person", "name": "Awaneesh", "url": "https://factzone.online/author.html" },
+        "publisher": { "@type": "Organization", "name": "FactZone", "logo": { "@type": "ImageObject", "url": "https://factzone.online/logo.png", "width": 512, "height": 512 } }
       },
       {
         "@type": "BreadcrumbList",
@@ -409,9 +409,19 @@
     if (can) can.href = url;
 
     var authorName = post.author || "Awaneesh";
-    var authorEntity = (authorName === "Awaneesh")
-      ? { "@id": "https://factzone.online/#person-awaneesh" }
-      : { "@type": "Person", "name": authorName };
+    // FIX: Google ka Rich Results Test @graph ke andar bhi {"@id":"..."}
+    // references ko hamesha reliably resolve nahi karta (ye unke tool ki
+    // apni limitation hai, JSON-LD spec ke hisaab se valid hone ke bawajood).
+    // Isliye author aur publisher ab Article entity ke andar POORI TARAH
+    // inline hain — koi bhi @id shortcut nahi — taaki "name"/"logo" fields
+    // hamesha turant dikhein, kisi cross-reference resolution par depend
+    // kiye bina.
+    var authorEntity = { "@type": "Person", "name": authorName, "url": "https://factzone.online/author.html" };
+    var publisherEntity = {
+      "@type": "Organization",
+      "name": "FactZone",
+      "logo": { "@type": "ImageObject", "url": "https://factzone.online/logo.png", "width": 512, "height": 512 }
+    };
 
     var articleEntity = {
       "@type": "Article",
@@ -427,7 +437,7 @@
       "articleSection": "Amazing Facts",
       "keywords": keywords,
       "author": authorEntity,
-      "publisher": { "@id": "https://factzone.online/#organization" }
+      "publisher": publisherEntity
     };
 
     var breadcrumbEntity = {
