@@ -404,6 +404,7 @@ select.form-input{cursor:pointer; appearance:none; background-image:url("data:im
                     <button class="ql-bold"></button>
                     <button class="ql-italic"></button>
                     <button class="ql-underline"></button>
+                    <button class="ql-link"></button> <!-- Internal / External Link Button -->
                   </span>
                   <span class="ql-formats">
                     <button class="ql-list" value="ordered"></button>
@@ -490,6 +491,7 @@ select.form-input{cursor:pointer; appearance:none; background-image:url("data:im
             <button class="ql-bold"></button>
             <button class="ql-italic"></button>
             <button class="ql-underline"></button>
+            <button class="ql-link"></button> <!-- Internal / External Link Button -->
           </span>
           <span class="ql-formats">
             <button class="ql-list" value="ordered"></button>
@@ -611,14 +613,33 @@ window.pasteImgFromClipboard = async function(prefix) {
 
 // Initialize Editors
 function initQuill() {
+  const linkHandler = function(value) {
+    if (value) {
+      let href = prompt('Enter the Link URL (e.g., https://... or /slug):');
+      if (href) this.quill.format('link', href);
+    } else {
+      this.quill.format('link', false);
+    }
+  };
+
   quillEditor = new Quill('#u-content', {
-    modules: { toolbar: '#u-toolbar' },
+    modules: {
+      toolbar: {
+        container: '#u-toolbar',
+        handlers: { link: linkHandler }
+      }
+    },
     theme: 'snow',
     placeholder: 'Write your full content here...'
   });
 
   editQuillEditor = new Quill('#e-content', {
-    modules: { toolbar: '#e-toolbar' },
+    modules: {
+      toolbar: {
+        container: '#e-toolbar',
+        handlers: { link: linkHandler }
+      }
+    },
     theme: 'snow',
     placeholder: 'Edit your content here...'
   });
