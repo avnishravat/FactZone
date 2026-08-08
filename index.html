@@ -88,7 +88,7 @@
     .post-image-container {
       width: 100%;
       height: 120px;
-      background: #334155;
+      background: #1e293b;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -379,8 +379,8 @@
     const postsContainer = document.getElementById("posts");
     let selectedCategory = "all";
 
-    const CACHE_KEY = "factzone_posts_v6";
-    const FALLBACK_IMAGE = "https://via.placeholder.com/300x120/1e293b/ffffff?text=FactZone";
+    const CACHE_KEY = "factzone_posts_v7";
+    const SVG_FALLBACK = "data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22300%22%20height%3D%22120%22%20viewBox%3D%220%200%20300%20120%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%231e293b%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22%2394a3b8%22%20font-family%3D%22sans-serif%22%20font-size%3D%2216%22%3EFactZone%3C%2Ftext%3E%3C%2Fsvg%3E";
 
     function escapeHtml(str) {
       return String(str == null ? "" : str)
@@ -478,13 +478,16 @@
         }
 
         let htmlContent = "";
-        postsArray.forEach((post)=>{
+        postsArray.forEach((post, index)=>{
           const safeTitle    = escapeHtml(post.title || 'FactZone Post');
-          const safeImage    = (post.image && post.image.trim() !== '') ? escapeHtml(post.image) : FALLBACK_IMAGE;
+          const safeImage    = (post.image && post.image.trim() !== '') ? escapeHtml(post.image) : SVG_FALLBACK;
           const safeDesc     = escapeHtml(post.desc || '');
           const safeId       = encodeURIComponent(post.id);
           const safeCategory = escapeHtml(post.category || '');
           
+          // शुरुआत की 4 इमेजिस के लिए eagers loading ताकि यूज़र को तुरंत दिखे
+          const loadingAttr = index < 4 ? 'eager' : 'lazy';
+
           const descHtml = safeDesc 
             ? `<p class="text-gray-500 dark:text-gray-400 text-xs line-clamp-3 opacity-80 mt-1">${safeDesc}</p>` 
             : '';
@@ -492,7 +495,7 @@
           htmlContent += `
           <a href="detail.html?id=${safeId}" class="card" data-category="${safeCategory}">
             <div class="post-image-container">
-              <img src="${safeImage}" alt="${safeTitle}" class="post-image" loading="lazy" width="300" height="120" onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}';">
+              <img src="${safeImage}" alt="${safeTitle}" class="post-image" loading="${loadingAttr}" decoding="async" width="300" height="120" onerror="this.onerror=null;this.src='${SVG_FALLBACK}';">
             </div>
             <div class="p-2.5 flex flex-col flex-1">
               <h2 class="font-bold text-xs sm:text-sm text-gray-900 dark:text-white leading-snug">${safeTitle}</h2>
