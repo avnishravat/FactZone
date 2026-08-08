@@ -164,7 +164,7 @@
         "description": "Hindi educational facts platform sharing amazing science, technology, history and mystery facts.",
         "sameAs": [
           "https://www.instagram.com/avnish__123/",
-          "https://www.youtube.com/FinupFact"
+          "https://www.youtube.com/DirectionNewsWorldwide08"
         ]
       },
       {
@@ -367,23 +367,18 @@
     }, { passive: false });
   </script>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, query, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  <script>
+    // ── Plain Firestore REST API (no Firebase JS SDK) ──────────────────────
+    // Reason: the Firebase JS SDK silently opens a persistent long-polling
+    // "Listen" channel in the background (even when only getDocs() is used),
+    // and that channel times out / errors inside Googlebot's crawl sandbox
+    // (see "Other error" on firestore.googleapis.com/.../Listen/channel in
+    // URL Inspection → MORE INFO → Page resources). Calling :runQuery via a
+    // one-shot fetch() avoids opening that channel entirely, so there's
+    // nothing left for the crawler to fail on.
+    const FIRESTORE_PROJECT_ID = "factzone-a9ace";
+    const FIRESTORE_QUERY_URL = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT_ID}/databases/(default)/documents:runQuery`;
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
-      authDomain: "factzone-a9ace.firebaseapp.com",
-      databaseURL: "https://factzone-a9ace-default-rtdb.firebaseio.com",
-      projectId: "factzone-a9ace",
-      storageBucket: "factzone-a9ace.firebasestorage.app",
-      messagingSenderId: "425838320650",
-      appId: "1:425838320650:web:beab18baddf818cb73d3f3",
-      measurementId: "G-311JQXBXR9"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
     const postsContainer = document.getElementById("posts");
 
     let selectedCategory = "all";
@@ -412,6 +407,29 @@
       });
     }
 
+    // ── Converts a single Firestore REST "Value" object into a plain JS value
+    function parseFirestoreValue(value) {
+      if (!value) return null;
+      if (value.stringValue !== undefined) return value.stringValue;
+      if (value.integerValue !== undefined) return parseInt(value.integerValue, 10);
+      if (value.doubleValue !== undefined) return value.doubleValue;
+      if (value.booleanValue !== undefined) return value.booleanValue;
+      if (value.timestampValue !== undefined) return value.timestampValue;
+      if (value.nullValue !== undefined) return null;
+      if (value.mapValue !== undefined) return parseFirestoreFields(value.mapValue.fields || {});
+      if (value.arrayValue !== undefined) return (value.arrayValue.values || []).map(parseFirestoreValue);
+      return null;
+    }
+
+    // ── Converts a Firestore REST "fields" map into a plain JS object
+    function parseFirestoreFields(fields) {
+      const obj = {};
+      for (const key in fields) {
+        obj[key] = parseFirestoreValue(fields[key]);
+      }
+      return obj;
+    }
+
     async function loadPosts(){
       const cachedPosts = localStorage.getItem("factzone_posts_v2");
       if(cachedPosts){
@@ -420,26 +438,40 @@
       }
 
       try {
-        const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
-        const querySnapshot = await getDocs(q);
+        const requestBody = {
+          structuredQuery: {
+            from: [{ collectionId: "posts" }],
+            orderBy: [{ field: { fieldPath: "createdAt" }, direction: "DESCENDING" }]
+          }
+        };
 
-        if(querySnapshot.empty){
-          if(!cachedPosts) {
+        const response = await fetch(FIRESTORE_QUERY_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(requestBody)
+        });
+
+        if (!response.ok) {
+          throw new Error(`Firestore REST query failed: ${response.status}`);
+        }
+
+        const results = await response.json();
+
+        const postsArray = [];
+        (Array.isArray(results) ? results : []).forEach((item) => {
+          if (!item.document) return; // skip empty progress entries
+          const docName = item.document.name;
+          const id = docName.substring(docName.lastIndexOf("/") + 1);
+          const data = parseFirestoreFields(item.document.fields || {});
+          postsArray.push({ id, ...data });
+        });
+
+        if (postsArray.length === 0) {
+          if (!cachedPosts) {
             postsContainer.innerHTML = `<h2 class="text-center text-2xl col-span-full dark:text-white">No Posts Found</h2>`;
           }
           return;
         }
-
-        const postsArray = [];
-        querySnapshot.forEach((doc) => {
-          postsArray.push({ id: doc.id, ...doc.data() });
-        });
-
-        postsArray.sort((a, b) => {
-          const timeA = a.createdAt?.seconds || a.createdAt || 0;
-          const timeB = b.createdAt?.seconds || b.createdAt || 0;
-          return timeB - timeA;
-        });
 
         let htmlContent = "";
         postsArray.forEach((post)=>{
