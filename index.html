@@ -83,33 +83,29 @@
     .post-image-container {
       width: 100%;
       height: 110px;
-      background: #f1f5f9;
+      background: #0f172a;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      border-bottom: 1px solid #f1f5f9;
-    }
-    html.dark .post-image-container {
-      background: #0f172a;
-      border-bottom-color: #1e293b;
+      border-bottom: 1px solid #1e293b;
     }
     .post-image{
       width:100%;
       height:100%;
       object-fit:contain;
       display:block;
-      padding: 4px;
     }
-    .line2{
+    /* Description max lines styling so it fills up empty spaces nicely */
+    .line-clamp-2{
       display:-webkit-box;
       -webkit-line-clamp:2;
       -webkit-box-orient:vertical;
       overflow:hidden;
     }
-    .line-clamp-1{
+    .line-clamp-3{
       display:-webkit-box;
-      -webkit-line-clamp:1;
+      -webkit-line-clamp:3;
       -webkit-box-orient:vertical;
       overflow:hidden;
     }
@@ -335,11 +331,9 @@
       <div class="post-image-container">
         <img src="logo.png" alt="विज्ञान से जुड़े रोचक तथ्य" class="post-image" loading="eager" width="300" height="110">
       </div>
-      <div class="p-2.5 flex flex-col flex-1 justify-between gap-1">
-        <!-- Title: Shows Full Text without cutting -->
-        <h2 class="font-bold text-sm text-gray-900 dark:text-white leading-snug">विज्ञान से जुड़े कुछ बेहद हैरान करने वाले रोचक तथ्य</h2>
-        <!-- Optional Description: Shows only if space allows or as 1-line preview -->
-        <p class="text-gray-500 dark:text-gray-400 text-xs line-clamp-1 opacity-80">विज्ञान, टेक्नोलॉजी aur viral jaankari se jude Amazing Facts padhein FactZone Official par...</p>
+      <div class="p-2.5 flex flex-col flex-1 gap-1.5">
+        <h2 class="font-bold text-xs sm:text-sm text-gray-900 dark:text-white leading-snug">विज्ञान से जुड़े कुछ बेहद हैरान करने वाले रोचक तथ्य</h2>
+        <p class="text-gray-500 dark:text-gray-400 text-xs line-clamp-3 opacity-80 mt-auto">विज्ञान, टेक्नोलॉजी और वायरल जानकारी से जुड़े Amazing Facts पढ़ें FactZone Official पर...</p>
       </div>
     </a>
 
@@ -431,8 +425,8 @@
     const postsContainer = document.getElementById("posts");
     let selectedCategory = "all";
 
-    // Standardized versioning key to bypass stale caches
-    const CACHE_KEY = "factzone_posts_v4";
+    // Version updated to force fresh load of grid & card styling
+    const CACHE_KEY = "factzone_posts_v5";
 
     function escapeHtml(str) {
       return String(str == null ? "" : str)
@@ -477,7 +471,6 @@
       return obj;
     }
 
-    // Helper function to extract a valid Date object for accurate sorting
     function parseDate(val) {
       if (!val) return new Date(0);
       if (typeof val === 'string') return new Date(val);
@@ -486,9 +479,10 @@
     }
 
     async function loadPosts(){
-      // Clean up old cached versions to force newest posts order
+      // Clean up old cached versions
       localStorage.removeItem("factzone_posts_v2");
       localStorage.removeItem("factzone_posts_v3");
+      localStorage.removeItem("factzone_posts_v4");
       
       const cachedPosts = localStorage.getItem(CACHE_KEY);
       if(cachedPosts){
@@ -525,7 +519,6 @@
           postsArray.push({ id, ...data });
         });
 
-        // Client-side strict sorting check (Newest Date First)
         postsArray.sort((a, b) => parseDate(b.createdAt) - parseDate(a.createdAt));
 
         if (postsArray.length === 0) {
@@ -543,16 +536,18 @@
           const safeId       = encodeURIComponent(post.id);
           const safeCategory = escapeHtml(post.category || '');
           
-          // Optional description block HTML (renders if description exists)
-          const descHtml = safeDesc ? `<p class="text-gray-500 dark:text-gray-400 text-xs line-clamp-1 opacity-80">${safeDesc}</p>` : '';
+          // Description fills up the bottom gap cleanly using mt-auto & line-clamp-3
+          const descHtml = safeDesc 
+            ? `<p class="text-gray-500 dark:text-gray-400 text-xs line-clamp-3 opacity-80 mt-auto">${safeDesc}</p>` 
+            : '';
 
           htmlContent += `
           <a href="detail.html?id=${safeId}" class="card" data-category="${safeCategory}">
             <div class="post-image-container">
               <img src="${safeImage}" alt="${safeTitle}" class="post-image" loading="lazy" width="300" height="110">
             </div>
-            <div class="p-2.5 flex flex-col flex-1 justify-between gap-1">
-              <h2 class="font-bold text-sm text-gray-900 dark:text-white leading-snug">${safeTitle}</h2>
+            <div class="p-2.5 flex flex-col flex-1 gap-1.5">
+              <h2 class="font-bold text-xs sm:text-sm text-gray-900 dark:text-white leading-snug">${safeTitle}</h2>
               ${descHtml}
             </div>
           </a>`;
