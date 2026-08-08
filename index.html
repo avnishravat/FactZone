@@ -150,46 +150,60 @@
     });
   </script>
 
+  <!-- Unified @graph JSON-LD: Organization + WebSite + BreadcrumbList + ItemList (Carousel) -->
   <script type="application/ld+json">
   {
-    "@context":"https://schema.org",
-    "@type":"Organization",
-    "name":"FactZone",
-    "url":"https://factzone.online",
-    "logo":"https://factzone.online/logo.png",
-    "description":"Hindi educational facts platform sharing amazing science, technology, history and mystery facts.",
-    "sameAs":[
-      "https://www.instagram.com/avnish__123/",
-      "https://www.youtube.com/DirectionNewsWorldwide08"
-    ]
-  }
-  </script>
-
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"WebSite",
-    "name":"FactZone Official",
-    "url":"https://factzone.online",
-    "inLanguage":"hi",
-    "potentialAction":{
-      "@type":"SearchAction",
-      "target":"https://factzone.online/?search={search_term_string}",
-      "query-input":"required name=search_term_string"
-    }
-  }
-  </script>
-
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"BreadcrumbList",
-    "itemListElement":[
+    "@context": "https://schema.org",
+    "@graph": [
       {
-        "@type":"ListItem",
-        "position":1,
-        "name":"Home",
-        "item":"https://factzone.online/"
+        "@type": "Organization",
+        "@id": "https://factzone.online/#organization",
+        "name": "FactZone",
+        "url": "https://factzone.online",
+        "logo": "https://factzone.online/logo.png",
+        "description": "Hindi educational facts platform sharing amazing science, technology, history and mystery facts.",
+        "sameAs": [
+          "https://www.instagram.com/avnish__123/",
+          "https://www.youtube.com/FinupFact"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://factzone.online/#website",
+        "name": "FactZone Official",
+        "url": "https://factzone.online",
+        "inLanguage": "hi",
+        "publisher": { "@id": "https://factzone.online/#organization" },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://factzone.online/?search={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://factzone.online/#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://factzone.online/"
+          }
+        ]
+      },
+      {
+        "@type": "ItemList",
+        "@id": "https://factzone.online/#itemlist",
+        "name": "FactZone Amazing Facts",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "url": "https://factzone.online/detail.html?id=NpID1utbz7FkCuJzbSnz",
+            "name": "विज्ञान से जुड़े कुछ बेहद हैरान करने वाले रोचक तथ्य"
+          }
+        ]
       }
     ]
   }
@@ -259,7 +273,11 @@
   </section>
 
   <main id="posts" class="max-w-7xl mx-auto p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-    <div id="seo-placeholder-cards" class="col-span-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full">
+    <!-- SEO-only placeholder: visually hidden so it never appears to real users or in
+         rendered screenshots (Rich Results Test etc). It stays in the raw HTML source
+         so crawlers can match it against the ItemList schema in <head>. It is wiped out
+         automatically once Firestore posts load, via postsContainer.innerHTML below. -->
+    <div id="seo-placeholder-cards" class="visually-hidden col-span-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full">
       <a href="https://factzone.online/detail.html?id=NpID1utbz7FkCuJzbSnz" class="card shadow-lg" data-category="science">
         <img src="logo.png" alt="विज्ञान से जुड़े रोचक तथ्य" class="post-image p-4 bg-gray-900 object-contain" loading="eager" width="500" height="220">
         <div class="p-4 flex flex-col flex-1">
