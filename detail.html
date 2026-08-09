@@ -13,13 +13,31 @@
   <link rel="alternate" hreflang="x-default" href="https://factzone.online/detail.html">
   <link rel="sitemap" type="application/xml" href="https://factzone.online/sitemap.xml">
 
+  <!-- ============================================================
+       CRITICAL FIX: Canonical + og:url ko IMMEDIATELY (Firestore
+       fetch ka wait kiye bina) current URL (with ?id=... ya ?slug=...)
+       par set karo. Pehle ye sirf updateSEO() ke andar, Firestore
+       response aane ke BAAD set hota tha. Agar Googlebot render
+       snapshot Firestore response se pehle le leta, to canonical
+       hamesha plain "detail.html" (bina id) hi reh jaata.
+  ============================================================ -->
+  <script>
+    (function () {
+      try {
+        var fullUrl = window.location.origin + window.location.pathname + window.location.search;
+        var canEl = document.getElementById('meta-canonical');
+        if (canEl) canEl.setAttribute('href', fullUrl);
+      } catch (e) {}
+    })();
+  </script>
+
   <meta property="og:type"        content="article">
   <meta property="og:site_name"   content="FactZone">
   <meta property="og:locale"      content="hi_IN">
   <meta property="og:title"       content="FactZone Article">
   <meta property="og:description" content="Read this verified fact and educational article on FactZone Official.">
   <meta property="og:image"       content="https://factzone.online/logo.png">
-  <meta property="og:url"         content="https://factzone.online/detail.html">
+  <meta property="og:url"         id="meta-og-url" content="https://factzone.online/detail.html">
   <meta property="article:published_time" id="meta-published" content="">
   <meta property="article:modified_time"  id="meta-modified"  content="">
   <meta property="article:author" content="Awaneesh">
@@ -29,11 +47,135 @@
   <meta name="twitter:description" content="Read this verified fact and educational article on FactZone Official.">
   <meta name="twitter:image"       content="https://factzone.online/logo.png">
 
-  <script type="application/ld+json" id="articleSchema">{"@context":"https://schema.org","@type":"Article","headline":"FactZone Educational Article","author":{"@type":"Person","name":"Awaneesh"},"publisher":{"@type":"Organization","name":"FactZone Official","logo":{"@type":"ImageObject","url":"https://factzone.online/logo.png"}}}</script>
+  <script>
+    (function () {
+      try {
+        var fullUrl = window.location.origin + window.location.pathname + window.location.search;
+        var ogUrlEl = document.getElementById('meta-og-url');
+        if (ogUrlEl) ogUrlEl.setAttribute('content', fullUrl);
+      } catch (e) {}
+    })();
+  </script>
 
-  <script type="application/ld+json" id="breadcrumbSchema">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://factzone.online/"},{"@type":"ListItem","position":2,"name":"Amazing Facts","item":"https://factzone.online/"},{"@type":"ListItem","position":3,"name":"FactZone Article","item":"https://factzone.online/detail.html"}]}</script>
+  <!-- ============================================================
+       SCHEMA FIX: Sabhi structured data ab EK HI @graph ke andar hai
+       (ek hi <script> tag mein), alag-alag script tags mein nahi.
 
-  <script type="application/ld+json" id="organizationSchema">{"@context":"https://schema.org","@type":"Organization","name":"FactZone","url":"https://factzone.online","logo":{"@type":"ImageObject","url":"https://factzone.online/logo.png","width":512,"height":512},"sameAs":["https://www.instagram.com/avnish__123/","https://www.youtube.com/DirectionNewsWorldwide08"]}</script>
+       WAJAH: Google ka Rich Results Test har <script type="application/
+       ld+json"> tag ko ALAG, independent JSON document ki tarah parse
+       karta hai. Pehle Organization/Person alag tags mein the aur
+       Article schema unhe sirf {"@id":"..."} se reference karta tha —
+       ye reference ek doosre tag ke andar kabhi resolve hi nahi hota,
+       isliye Rich Results Test mein author "Person" ke bajaye generic
+       "Thing" dikhta tha aur "name" field "missing" aata tha (jaisa
+       screenshot mein dikha). Ab Organization + Person + WebSite +
+       Article + Breadcrumb sab EK @graph array mein hain, isliye @id
+       cross-references sahi se resolve hote hain.
+
+       Is tag ko khaali kabhi mat rakhna (empty <script type="application/
+       ld+json"> invalid JSON hota hai) — isliye valid default diya hai,
+       JS load hote hi real data se replace ho jaata hai.
+  ============================================================ -->
+  <!-- ============================================================
+       SCHEMA UPGRADE (v2): Ye default/placeholder graph hai — JS load
+       hote hi updateSEO() isse real post data se replace kar deta hai.
+       Naye additions: WebPage entity, ImageObject entity (bina fixed
+       width/height ke, taaki asli image dimensions se mismatch na ho),
+       Organization.contactPoint, Person.sameAs, WebSite.potentialAction
+       (SearchAction), Article.wordCount / isAccessibleForFree / about /
+       copyrightHolder. Author aur Publisher ab duplicate inline objects
+       ki jagah sirf @id se Person/Organization ko reference karte hain
+       — ek hi jagah definition, poore graph me consistent.
+
+       INSTAGRAM URL FIX: Organization aur Person dono ab EK HI URL use
+       karte hain (https://www.instagram.com/avnish__1203/) — pehle
+       Organization me "avnish__123" (galat/typo) tha jabki Author Page
+       par "avnish__1203" dikhta tha. Ab dono jagah match karta hai.
+  ============================================================ -->
+  <script id="ldJsonGraph" type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://factzone.online/#organization",
+        "name": "FactZone",
+        "url": "https://factzone.online/",
+        "logo": { "@type": "ImageObject", "url": "https://factzone.online/logo.png", "width": 512, "height": 512 },
+        "sameAs": ["https://www.instagram.com/avnish__1203/", "https://www.youtube.com/@FinupFact"],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer support",
+          "email": "avnishravat20@gmail.com",
+          "areaServed": "IN",
+          "availableLanguage": ["Hindi", "English"]
+        }
+      },
+      {
+        "@type": "Person",
+        "@id": "https://factzone.online/#person-awaneesh",
+        "name": "Awaneesh",
+        "url": "https://factzone.online/author.html",
+        "worksFor": { "@id": "https://factzone.online/#organization" },
+        "sameAs": ["https://www.instagram.com/avnish__1203/"]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://factzone.online/#website",
+        "name": "FactZone",
+        "url": "https://factzone.online/",
+        "inLanguage": "hi",
+        "publisher": { "@id": "https://factzone.online/#organization" },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://factzone.online/index.html?search={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "ImageObject",
+        "@id": "https://factzone.online/detail.html#primaryimage",
+        "url": "https://factzone.online/logo.png",
+        "caption": "FactZone Educational Article"
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://factzone.online/detail.html#webpage",
+        "url": "https://factzone.online/detail.html",
+        "name": "FactZone Educational Article",
+        "inLanguage": "hi",
+        "isPartOf": { "@id": "https://factzone.online/#website" },
+        "primaryImageOfPage": { "@id": "https://factzone.online/detail.html#primaryimage" },
+        "breadcrumb": { "@id": "https://factzone.online/detail.html#breadcrumb" },
+        "mainEntity": { "@id": "https://factzone.online/detail.html#article" }
+      },
+      {
+        "@type": "Article",
+        "@id": "https://factzone.online/detail.html#article",
+        "mainEntityOfPage": { "@id": "https://factzone.online/detail.html#webpage" },
+        "headline": "FactZone Educational Article",
+        "image": { "@id": "https://factzone.online/detail.html#primaryimage" },
+        "inLanguage": "hi",
+        "about": { "@type": "Thing", "name": "Amazing Facts" },
+        "copyrightHolder": { "@id": "https://factzone.online/#organization" },
+        "author": { "@id": "https://factzone.online/#person-awaneesh" },
+        "publisher": { "@id": "https://factzone.online/#organization" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://factzone.online/detail.html#breadcrumb",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://factzone.online/" },
+          { "@type": "ListItem", "position": 2, "name": "Amazing Facts", "item": "https://factzone.online/" },
+          { "@type": "ListItem", "position": 3, "name": "FactZone Article", "item": "https://factzone.online/detail.html" }
+        ]
+      }
+    ]
+  }
+  </script>
 
   <link rel="icon" href="https://factzone.online/logo.png" sizes="48x48" type="image/png">
   <link rel="apple-touch-icon" href="https://factzone.online/logo.png">
@@ -41,6 +183,16 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
+  <!-- Hero images ImgBB par host hoti hain (admin panel se upload) — preconnect
+       se DNS/TLS handshake pehle se ho jaata hai, jab tak actual image URL
+       Firestore se aake preload <link> add hoga (JS me niche). -->
+  <link rel="preconnect" href="https://i.ibb.co" crossorigin>
+
+  <!-- Web App Manifest — PWA installability ke liye. manifest.json file
+       website root par honi chahiye (alag se share kar raha hoon). -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="FactZone">
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6974190466298538" crossorigin="anonymous"></script>
@@ -54,8 +206,8 @@
       --surface:  #ffffff;
       --ink:      #1a1a18;
       --muted:    #5a5a55;
-      --accent:   #c0392b;
-      --border:   #e2e0d8;
+      --accent:    #c0392b;
+      --border:    #e2e0d8;
       --r:        1rem;
     }
     body {
@@ -81,13 +233,37 @@
     #post img.hero { width: 100%; max-width: 300px; aspect-ratio: 16/9; border-radius: .6rem; object-fit: cover; display: block; box-shadow: 0 4px 18px rgba(0,0,0,.18); }
     #post h1 { font-family: 'Merriweather', serif; font-size: clamp(1.3rem, 4vw, 1.9rem); line-height: 1.25; font-weight: 700; margin-bottom: .5rem; }
     .meta-line { font-size: .82rem; color: var(--muted); margin-bottom: .85rem; display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; }
-    
-    /* white-space को normal किया ताकि रिच टेक्स्ट एडिटर का HTML सही दिखे */
-    #post .content { font-size: 1.02rem; line-height: 1.7; color: #2d2d2b; white-space: normal; }
-    
-    /* कोड ब्लॉक के लिए स्टाइलिंग */
+
+    #post .content { font-size: 1.02rem; line-height: 1.3; color: #2d2d2b; white-space: normal; }
+    #post .content p { margin: 0 0 .25rem; }
+    #post .content h1, #post .content h2, #post .content h3, #post .content h4 { margin: .5rem 0 .2rem; line-height: 1.2; }
+    #post .content ul, #post .content ol { margin: .15rem 0 .25rem 1.25rem; }
+    #post .content li { margin-bottom: .1rem; }
+    #post .content br { line-height: 1; }
+    #post .content hr { margin: .4rem 0; border: none; border-top: 1px solid var(--border); }
+    #post .content img { margin: .4rem 0; }
+    #post .content p:empty,
+    #post .content p:has(> br:only-child) { margin: 0; min-height: 0; }
+
+    /* ── Links inside article content (only the linked text turns colored/underlined) ── */
+    #post .content a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+      font-weight: 600;
+      word-break: break-word;
+    }
+    #post .content a:hover,
+    #post .content a:active {
+      color: #96291d;
+    }
+    #post .content a:visited {
+      color: #8e44ad;
+    }
+
     .ql-code-block-container { background: #282c34; color: #abb2bf; padding: 1rem; border-radius: 0.5rem; font-family: monospace; margin: 1rem 0; overflow-x: auto; }
-    
+
     .author-box { margin-top: 1.25rem; padding-top: .85rem; border-top: 1px solid var(--border); font-size: .9rem; color: var(--muted); }
     .author-box a { color: var(--accent); text-decoration: none; font-weight: 600; }
 
@@ -111,6 +287,11 @@
 
     .err { text-align: center; padding: 3rem 1rem; color: var(--muted); }
     .err h2 { font-family: 'Merriweather', serif; color: var(--ink); margin-bottom: .5rem; }
+
+    /* Ad container minimum height reserve karo - CLS aur "no space to render" issue avoid karne ke liye */
+    .ad-slot { min-height: 60px; margin: 1rem 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .banner-300x250-slot { width: 300px; height: 250px; max-width: 100%; }
+    .banner-320x50-slot { width: 320px; height: 50px; max-width: 100%; }
 
     #relatedSection { margin-top: 1.25rem; background: var(--surface); border-radius: var(--r); padding: 1.25rem 1.5rem; box-shadow: 0 2px 16px rgba(0,0,0,.07); }
     #relatedSection h2 { font-family: 'Merriweather', serif; font-size: 1.15rem; font-weight: 700; margin-bottom: .85rem; padding-bottom: .5rem; border-bottom: 2px solid var(--ink); }
@@ -153,9 +334,14 @@
       </div>
     </div>
     <noscript>
-      <p>Please enable JavaScript to read this article on FactZone. यह लेख पढ़ने के लिए JavaScript enable करें।</p>
+      <p>Please enable JavaScript to read this article on FactZone. यह लेख पढ़ने के लिए JavaScript enable करें।</p>
     </noscript>
   </article>
+
+  <!-- BOTTOM AD (Related section ke pehle) -->
+  <div class="ad-slot" style="margin: 1rem 0;">
+    <div class="banner-300x250-slot"></div>
+  </div>
 
   <section id="relatedSection" aria-label="Related Facts">
     <h2>Related Facts</h2>
@@ -169,12 +355,21 @@
 
   var PROJECT_ID = "factzone-a9ace";
   var API_KEY    = "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc";
-  var FS_BASE = "https://firestore.googleapis.com/v1/projects/" + PROJECT_ID + "/databases/(default)/documents/";
+  var FS_BASE    = "https://firestore.googleapis.com/v1/projects/" + PROJECT_ID + "/databases/(default)/documents";
 
-  var params = new URLSearchParams(location.search);
-  var id     = params.get("id") || "";
+  // ============================================================
+  // HYBRID URL SUPPORT: purane posts "?id=..." se khulte hain
+  // (direct document fetch), naye posts "?slug=..." se (query by
+  // slug field, NewsFriend jaisa). Dono ek saath supported hain,
+  // taaki 34 already-indexed ?id= URLs kabhi na tootein.
+  // ============================================================
+  var params    = new URLSearchParams(location.search);
+  var idParam   = params.get("id") || "";
+  var slugParam = params.get("slug") || "";
 
   function $(q) { return document.getElementById(q); }
+
+  function sleep(ms) { return new Promise(function (resolve) { setTimeout(resolve, ms); }); }
 
   function escapeHtml(str) {
     return String(str == null ? "" : str)
@@ -204,8 +399,39 @@
     return obj;
   }
 
-  function lsGet(k) { try { return localStorage.getItem(k); } catch(e){ return null; } }
-  function lsSet(k, v) { try { localStorage.setItem(k, v); } catch(e){} }
+  // ============================================================
+  // sessionStorage CACHE + TTL (5 min) + purane entries clean karna
+  // Pehle localStorage use hota tha, jo KABHI expire nahi hota tha —
+  // agar koi post edit hoti, purane visitors ko hamesha stale
+  // (purana) content dikhta rehta, jab tak wo manually browser
+  // storage clear na karein. Ab sessionStorage + TTL se ye theek ho
+  // gaya, aur cleanOldCacheEntries purane keys hata deta hai taaki
+  // storage bloat na ho.
+  // ============================================================
+  var CACHE_PREFIX      = "fz-post-";
+  var CACHE_TTL_MS       = 5 * 60 * 1000;
+  var RELATED_CACHE_KEY  = "fz-related-v1";
+  var RELATED_TTL_MS     = 5 * 60 * 1000;
+
+  function ssGet(k) { try { return sessionStorage.getItem(k); } catch(e){ return null; } }
+  function ssSet(k, v) { try { sessionStorage.setItem(k, v); } catch(e){} }
+
+  function cleanOldCacheEntries(currentActiveKey) {
+    try {
+      var keysToClean = [];
+      for (var i = 0; i < sessionStorage.length; i++) {
+        var k = sessionStorage.key(i);
+        if (k && k.indexOf(CACHE_PREFIX) === 0 && k !== currentActiveKey) {
+          keysToClean.push(k);
+        }
+      }
+      keysToClean.forEach(function(k){ sessionStorage.removeItem(k); });
+    } catch (e) { console.error("Cache clean warning:", e); }
+  }
+
+  function currentCacheKey() {
+    return CACHE_PREFIX + (slugParam ? ("slug-" + slugParam) : ("id-" + idParam));
+  }
 
   function toSafeDate(val) {
     if (val === undefined || val === null || val === "") return null;
@@ -236,9 +462,56 @@
     } catch (e) { return ""; }
   }
 
-  function updateSEO(title, desc, image, publishedISO, updatedISO, keywords) {
-    var url = location.href;
+  // ── Category id -> display label, homepage filter link (breadcrumb
+  //    aur articleSection ab dynamic hain, "Amazing Facts" hardcoded
+  //    nahi hai) ──
+  var CATEGORY_LABELS = {
+    science: "Science / विज्ञान",
+    tech:    "Tech / तकनीक",
+    history: "History / इतिहास",
+    mystery: "Mystery / रहस्य",
+    viral:   "Viral / रोचक तथ्य"
+  };
+
+  // ============================================================
+  // SEO + SCHEMA update — single @graph, dynamic Article + Breadcrumb,
+  // conditional FAQ/Video entities only when the post actually has
+  // that data.
+  //
+  // v2 CHANGES (schema audit fixes):
+  // 1. WebPage entity add hua (pehle bilkul nahi tha) — WebPage.inLanguage,
+  //    WebPage.mainEntity -> Article, aur Article.mainEntityOfPage ->
+  //    WebPage, dono taraf se link.
+  // 2. ImageObject ab ek alag, referenced entity hai — width/height
+  //    HATA diye kyunki asli image ka size 1200x630 nahi hota, aur
+  //    galat dimensions claim karna Google guidelines ke against hai.
+  //    Sirf url + caption diya hai.
+  // 3. Organization.contactPoint add hua.
+  // 4. Person.sameAs add hua — aur Organization.sameAs ke saath EXACT
+  //    same Instagram URL use karta hai (pehle "avnish__123" bnam
+  //    "avnish__1203" ka mismatch tha).
+  // 5. WebSite.potentialAction (SearchAction) add hua — assume karta
+  //    hai ki index.html "?search=" query param support karta hai
+  //    (NewsFriend ke pattern jaisa). Agar FactZone ka index.html
+  //    search support nahi karta, to ye block hata dena.
+  // 6. Article.wordCount, isAccessibleForFree, about, copyrightHolder
+  //    add hue.
+  // 7. Author/Publisher ab duplicate inline objects ki jagah sirf
+  //    @id se Person/Organization ko reference karte hain — ek hi
+  //    global definition, poore graph me consistent (pehle Article
+  //    ke andar ek ALAG chhota Person/Organization object tha, jo
+  //    upar wale global Person/Organization se mismatch kar sakta tha).
+  // 8. Breadcrumb ka 2nd level aur articleSection ab post.category se
+  //    dynamically aate hain, "Amazing Facts" hardcoded nahi hai.
+  // ============================================================
+  function updateSEO(post, title, desc, image, publishedISO, updatedISO, keywords, wordCount) {
+    var url = location.origin + location.pathname + location.search;
     document.title = title + " | FactZone";
+
+    var categoryLabel = CATEGORY_LABELS[post.category] || "Amazing Facts";
+    var categoryUrl = post.category
+      ? ("https://factzone.online/index.html?cat=" + encodeURIComponent(post.category))
+      : "https://factzone.online/";
 
     function setMeta(sel, attr, val) {
       var el = document.querySelector(sel);
@@ -255,53 +528,137 @@
     setMeta('meta[name="twitter:image"]',       "content", image);
     setMeta('#meta-published', "content", publishedISO);
     setMeta('#meta-modified',  "content", updatedISO);
+    setMeta('#meta-section',   "content", categoryLabel);
 
     var can = document.getElementById("meta-canonical");
     if (can) can.href = url;
 
-    var schema = {
-      "@context":   "https://schema.org",
-      "@type":      "Article",
-      "mainEntityOfPage": { "@type": "WebPage", "@id": url },
-      "headline":   title,
-      "description": desc,
-      "url":         url,
-      "image": {
-        "@type": "ImageObject",
-        "url":    image,
-        "width":  1200,
-        "height": 630
-      },
-      "datePublished": publishedISO,
-      "dateModified":  updatedISO,
-      "inLanguage":    "hi",
-      "articleSection": "Amazing Facts",
-      "keywords":      keywords,
-      "author": {
-        "@type": "Person",
-        "name":  "Awaneesh",
-        "url":   "https://factzone.online/author.html"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name":  "FactZone Official",
-        "logo":  { "@type": "ImageObject", "url": "https://factzone.online/logo.png", "width": 512, "height": 512 }
-      }
+    var imageEntity = {
+      "@type": "ImageObject",
+      "@id": url + "#primaryimage",
+      "url": image,
+      "caption": title
     };
-    var el = document.getElementById("articleSchema");
-    if (el) el.textContent = JSON.stringify(schema);
 
-    var breadcrumb = {
-      "@context": "https://schema.org",
-      "@type":    "BreadcrumbList",
+    var webPageEntity = {
+      "@type": "WebPage",
+      "@id": url + "#webpage",
+      "url": url,
+      "name": title,
+      "description": desc,
+      "inLanguage": "hi",
+      "isPartOf": { "@id": "https://factzone.online/#website" },
+      "primaryImageOfPage": { "@id": url + "#primaryimage" },
+      "datePublished": publishedISO,
+      "dateModified": updatedISO,
+      "breadcrumb": { "@id": url + "#breadcrumb" },
+      "mainEntity": { "@id": url + "#article" }
+    };
+
+    var articleEntity = {
+      "@type": "Article",
+      "@id": url + "#article",
+      "mainEntityOfPage": { "@id": url + "#webpage" },
+      "headline": title,
+      "description": desc,
+      "url": url,
+      "image": { "@id": url + "#primaryimage" },
+      "datePublished": publishedISO,
+      "dateModified": updatedISO,
+      "inLanguage": "hi",
+      "articleSection": categoryLabel,
+      "keywords": keywords,
+      "wordCount": wordCount,
+      "about": { "@type": "Thing", "name": categoryLabel },
+      "copyrightYear": new Date(publishedISO).getFullYear(),
+      "copyrightHolder": { "@id": "https://factzone.online/#organization" },
+      "author": { "@id": "https://factzone.online/#person-awaneesh" },
+      "publisher": { "@id": "https://factzone.online/#organization" }
+    };
+
+    var breadcrumbEntity = {
+      "@type": "BreadcrumbList",
+      "@id": url + "#breadcrumb",
       "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Home",          "item": "https://factzone.online/" },
-        { "@type": "ListItem", "position": 2, "name": "Amazing Facts", "item": "https://factzone.online/" },
-        { "@type": "ListItem", "position": 3, "name": title,           "item": url }
+        { "@type": "ListItem", "position": 1, "name": "Home",       "item": "https://factzone.online/" },
+        { "@type": "ListItem", "position": 2, "name": categoryLabel, "item": categoryUrl },
+        { "@type": "ListItem", "position": 3, "name": title,        "item": url }
       ]
     };
-    var bc = document.getElementById("breadcrumbSchema");
-    if (bc) bc.textContent = JSON.stringify(breadcrumb);
+
+    var graph = [
+      {
+        "@type": "Organization",
+        "@id": "https://factzone.online/#organization",
+        "name": "FactZone",
+        "url": "https://factzone.online/",
+        "logo": { "@type": "ImageObject", "url": "https://factzone.online/logo.png", "width": 512, "height": 512 },
+        "sameAs": ["https://www.instagram.com/avnish__1203/", "https://www.youtube.com/@FinupFact"],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer support",
+          "email": "avnishravat20@gmail.com",
+          "areaServed": "IN",
+          "availableLanguage": ["Hindi", "English"]
+        }
+      },
+      {
+        "@type": "Person",
+        "@id": "https://factzone.online/#person-awaneesh",
+        "name": "Awaneesh",
+        "url": "https://factzone.online/author.html",
+        "worksFor": { "@id": "https://factzone.online/#organization" },
+        "sameAs": ["https://www.instagram.com/avnish__1203/"]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://factzone.online/#website",
+        "name": "FactZone",
+        "url": "https://factzone.online/",
+        "inLanguage": "hi",
+        "publisher": { "@id": "https://factzone.online/#organization" },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://factzone.online/index.html?search={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      },
+      imageEntity,
+      webPageEntity,
+      articleEntity,
+      breadcrumbEntity
+    ];
+
+    // ── FAQPage: sirf tab jab post.faq array ho ──
+    if (Array.isArray(post.faq) && post.faq.length) {
+      var faqItems = post.faq.filter(function(f){ return f && f.question && f.answer; });
+      if (faqItems.length) {
+        graph.push({
+          "@type": "FAQPage",
+          "mainEntity": faqItems.map(function(f){
+            return { "@type": "Question", "name": f.question, "acceptedAnswer": { "@type": "Answer", "text": f.answer } };
+          })
+        });
+      }
+    }
+
+    // ── VideoObject: sirf tab jab post.videoUrl ho ──
+    if (post.videoUrl) {
+      graph.push({
+        "@type": "VideoObject",
+        "name": title,
+        "description": desc,
+        "thumbnailUrl": image,
+        "contentUrl": post.videoUrl,
+        "uploadDate": publishedISO
+      });
+    }
+
+    var graphEl = document.getElementById("ldJsonGraph");
+    if (graphEl) graphEl.textContent = JSON.stringify({ "@context": "https://schema.org", "@graph": graph });
   }
 
   window.copyArticleLink = function(btn) {
@@ -315,34 +672,180 @@
     });
   };
 
+  /* ---------------------------------------------------------------
+     AD LOADER (unchanged network logic, still container-scoped +
+     duplicate-load guarded)
+  --------------------------------------------------------------- */
+  var NATIVE_BANNER_ZONE = "7ff4b1b157bf01a56609549fe359888b";
+  var NATIVE_BANNER_SRC  = "https://pl30385025.effectivecpmnetwork.com/" + NATIVE_BANNER_ZONE + "/invoke.js";
+
+  function injectSingleAd(container, scriptSrc) {
+    try {
+      if (!container) return;
+      if (container.dataset.adLoaded === "true") return;
+      var adScript = document.createElement('script');
+      adScript.type = 'text/javascript';
+      adScript.async = true;
+      adScript.setAttribute('data-cfasync', 'false');
+      adScript.src = scriptSrc;
+      container.appendChild(adScript);
+      container.dataset.adLoaded = "true";
+    } catch (e) { console.error("Ad script embedding error:", e); }
+  }
+
+  function injectAdNetworkScripts() {
+    document.querySelectorAll('.native-banner-slot').forEach(function(slot) {
+      injectSingleAd(slot, NATIVE_BANNER_SRC);
+    });
+    document.querySelectorAll('.banner-300x250-slot').forEach(function(slot) {
+      injectBanner300x250(slot);
+    });
+    document.querySelectorAll('.banner-320x50-slot').forEach(function(slot) {
+      injectBanner320x50(slot);
+    });
+  }
+
+  function injectBanner300x250(container) {
+    try {
+      if (!container) return;
+      if (container.dataset.adLoaded === "true") return;
+      var iframe = document.createElement('iframe');
+      iframe.style.width = '300px'; iframe.style.height = '250px'; iframe.style.border = '0';
+      iframe.style.overflow = 'hidden'; iframe.style.maxWidth = '100%'; iframe.scrolling = 'no';
+      iframe.title = 'Advertisement';
+      var doc = '<!DOCTYPE html><html><head><style>*{margin:0;padding:0;}</style></head><body>' +
+        '<script>atOptions = {"key":"d7218ad0d4e9095bb4a145457bc7bea2","format":"iframe","height":250,"width":300,"params":{}};</' + 'script>' +
+        '<script src="https://www.highperformanceformat.com/d7218ad0d4e9095bb4a145457bc7bea2/invoke.js"></' + 'script>' +
+        '</body></html>';
+      iframe.srcdoc = doc;
+      container.appendChild(iframe);
+      container.dataset.adLoaded = "true";
+    } catch (e) { console.error("Banner 300x250 ad error:", e); }
+  }
+
+  function injectBanner320x50(container) {
+    try {
+      if (!container) return;
+      if (container.dataset.adLoaded === "true") return;
+      var iframe = document.createElement('iframe');
+      iframe.style.width = '320px'; iframe.style.height = '50px'; iframe.style.border = '0';
+      iframe.style.overflow = 'hidden'; iframe.style.maxWidth = '100%'; iframe.scrolling = 'no';
+      iframe.title = 'Advertisement';
+      var doc = '<!DOCTYPE html><html><head><style>*{margin:0;padding:0;}</style></head><body>' +
+        '<script>atOptions = {"key":"3012ad1961449518ada204e09cdbceef","format":"iframe","height":50,"width":320,"params":{}};</' + 'script>' +
+        '<script src="https://www.highperformanceformat.com/3012ad1961449518ada204e09cdbceef/invoke.js"></' + 'script>' +
+        '</body></html>';
+      iframe.srcdoc = doc;
+      container.appendChild(iframe);
+      container.dataset.adLoaded = "true";
+    } catch (e) { console.error("Banner 320x50 ad error:", e); }
+  }
+
+  // ============================================================
+  // DOM-based inline ad injection (NewsFriend ka nfInjectInlineAds
+  // jaisa) — purana tarika raw HTML string ko literal "</p>" text
+  // se split karta tha, jo tootta agar content lists/headings/nested
+  // tags use kare bina exact </p> boundary ke. Ab asli DOM nodes
+  // parse karke top-level blocks ke beech evenly ads daalte hain —
+  // content structure kaisi bhi ho, hamesha safely kaam karega aur
+  // Layout Shift (CLS) kam rahega kyunki ad wahi margin-rhythm use
+  // karta hai jo paragraphs already use kar rahe hain.
+  // ============================================================
+  function injectInlineAdsDom(rawHtml, count, adHtmlString) {
+    if (!rawHtml) return rawHtml;
+    var tmp = document.createElement('div');
+    tmp.innerHTML = rawHtml;
+    var children = Array.prototype.slice.call(tmp.childNodes).filter(function(n) {
+      return n.nodeType === 1 || (n.nodeType === 3 && n.textContent.trim() !== '');
+    });
+    if (children.length < 2) return rawHtml;
+
+    var totalGaps = children.length - 1;
+    var slots = Math.min(count, totalGaps);
+    if (slots < 1) return rawHtml;
+
+    var insertAfter = [];
+    var used = {};
+    for (var i = 1; i <= slots; i++) {
+      var pos = Math.round((i * totalGaps) / (slots + 1)) - 1;
+      pos = Math.max(0, Math.min(totalGaps - 1, pos));
+      while (used[pos] && pos < totalGaps - 1) pos++;
+      used[pos] = true;
+      insertAfter.push(pos);
+    }
+
+    var out = '';
+    children.forEach(function(node, idx) {
+      out += (node.nodeType === 1) ? node.outerHTML : node.textContent;
+      if (insertAfter.indexOf(idx) !== -1) out += adHtmlString;
+    });
+    return out;
+  }
+
+  // ============================================================
+  // HERO IMAGE PRELOAD — jaise hi Firestore se post data (aur uski
+  // image URL) mil jaaye, browser ko turant batao ki ye image sabse
+  // zaroori resource hai (as="image" + fetchpriority="high"), <img>
+  // tag DOM me daalne se bhi PEHLE. Isse network request thodi jaldi
+  // shuru hoti hai — poora "preload nahi ho raha" issue client-side
+  // JS-render architecture me 100% fix nahi ho sakta (asli fix SSR/
+  // prerendering hota), lekin ye best achievable improvement hai.
+  // ============================================================
+  var heroPreloaded = false;
+  function preloadHeroImage(url) {
+    if (heroPreloaded || !url) return;
+    heroPreloaded = true;
+    try {
+      var link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = url;
+      link.setAttribute('fetchpriority', 'high');
+      document.head.appendChild(link);
+    } catch (e) {}
+  }
+
   function renderPost(post) {
     var titleRaw   = post.title   || "FactZone Educational Article";
     var contentRaw = post.content || "Amazing facts and verified educational details.";
     var image      = post.image   || "https://factzone.online/logo.png";
-    
-    // SEO के लिए क्लीन टेक्स्ट डिस्क्रिप्शन बनाएं
+    preloadHeroImage(image);
+
     var descRaw    = contentRaw.replace(/<[^>]*>/g, '').replace(/\n/g," ");
     var desc       = descRaw.substring(0, 160);
-    
+
     var createdDate  = toSafeDate(post.createdAt);
     var publishedISO = createdDate ? createdDate.toISOString() : new Date().toISOString();
     var updatedDate  = toSafeDate(post.updatedAt);
     var updatedISO   = updatedDate ? updatedDate.toISOString() : publishedISO;
     var keywords   = Array.isArray(post.tags) && post.tags.length ? post.tags.join(", ") : "amazing facts, science facts, hindi facts";
 
-    updateSEO(titleRaw, desc, image, publishedISO, updatedISO, keywords);
+    // wordCount schema field ke liye — updateSEO se pehle compute karna
+    // zaroori hai taaki Article.wordCount sahi value ke saath bane.
+    var cleanTextForReadTime = contentRaw.replace(/<[^>]*>/g, '');
+    var wordCount = cleanTextForReadTime.trim().split(/\s+/).filter(Boolean).length;
+
+    updateSEO(post, titleRaw, desc, image, publishedISO, updatedISO, keywords, wordCount);
+
+    // Related posts ko is post ki category ke hisaab se re-sort karo
+    // (agar related items pehle se fetch ho chuki hain to turant, warna
+    // jab fetchRelated() complete hoga tab apne aap ho jayega), aur
+    // saath hi ek ASLI category-filtered Firestore query bhi chalao
+    // jo latest-posts fallback ko behtar, sahi results se replace kar
+    // degi (agar Firestore index ijaazat de, warna chup-chaap fallback
+    // list hi rehne degi).
+    currentPostCategory = post.category || null;
+    maybeResortRelated();
+    fetchRelatedByCategory(currentPostCategory);
 
     var title   = escapeHtml(titleRaw);
-    
-    // रिच टेक्स्ट HTML को रेंडर करने से पहले DOMPurify से sanitize करें (XSS से बचाव)
+
     var content = (typeof DOMPurify !== "undefined")
-      ? DOMPurify.sanitize(contentRaw)
-      : escapeHtml(contentRaw); 
-    
-    // पढ़ने का समय निकालने से पहले HTML टैग्स हटाएं
-    var cleanTextForReadTime = contentRaw.replace(/<[^>]*>/g, '');
+      ? DOMPurify.sanitize(contentRaw, { ADD_ATTR: ['target', 'rel'] })
+      : escapeHtml(contentRaw);
+
     var minsRead = readingTime(cleanTextForReadTime);
-    
+
     var author  = escapeHtml(post.author || "Awaneesh");
 
     var metaBits = ['📅 ' + formatDate(publishedISO), '📖 ' + minsRead, '👤 ' + author];
@@ -354,12 +857,20 @@
     var shareUrl = encodeURIComponent(location.href);
     var shareText = encodeURIComponent(titleRaw + " - Read more on FactZone:\n");
 
-    // "post-content" कंटेनर को रेंडर करें
+    var midAdHtml = '<div class="ad-slot" style="margin: 1rem 0;"><div class="banner-320x50-slot"></div></div>';
+    var contentWithAd = injectInlineAdsDom(content, 6, midAdHtml);
+
     $("post-content").innerHTML =
-      '<div class="hero-wrap"><img class="hero" src="' + escapeHtml(image) + '" alt="' + title + '" loading="eager" width="300" height="169"></div>' +
+      '<div class="hero-wrap"><img class="hero" src="' + escapeHtml(image) + '" alt="' + title + '" itemprop="image" loading="eager" fetchpriority="high" width="300" height="169"></div>' +
       '<h1 itemprop="headline">' + title + '</h1>' +
       '<p class="meta-line">' + metaLine + '</p>' +
-      '<div class="content" itemprop="articleBody">' + content + '</div>' +
+      '<meta itemprop="datePublished" content="' + escapeHtml(publishedISO) + '">' +
+      '<meta itemprop="dateModified" content="' + escapeHtml(updatedISO) + '">' +
+      '<div itemprop="publisher" itemscope itemtype="https://schema.org/Organization" style="display:none">' +
+        '<span itemprop="name">FactZone</span>' +
+        '<div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject"><meta itemprop="url" content="https://factzone.online/logo.png"></div>' +
+      '</div>' +
+      '<div class="content" itemprop="articleBody">' + contentWithAd + '</div>' +
       '<div class="share-container">' +
         '<div class="share-title">Share this Fact:</div>' +
         '<div class="share-buttons">' +
@@ -369,7 +880,143 @@
           '<button onclick="window.copyArticleLink(this)" class="share-btn btn-cp">Copy Link</button>' +
         '</div>' +
       '</div>' +
-      '<div class="author-box">Written by <a href="author.html" itemprop="author">Awaneesh</a></div>';
+      '<div class="author-box" itemprop="author" itemscope itemtype="https://schema.org/Person">Written by <a href="author.html" itemprop="url"><span itemprop="name">Awaneesh</span></a></div>';
+
+    // Content ke andar jo bhi links hain, unhe naye tab me kholo taaki
+    // article page band na ho jab user kisi bahar ke link pe click kare.
+    document.querySelectorAll('#post .content a').forEach(function(a) {
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener noreferrer');
+    });
+
+    injectAdNetworkScripts();
+  }
+
+  // ============================================================
+  // RELATED POSTS — category-aware sorting (bina naya Firestore
+  // composite index banaye). Pehle related posts sirf latest-N docs
+  // the, current post ki category ka koi role nahi tha. Ab jab bhi
+  // dono cheezein maloom ho jaati hain (current post ki category +
+  // related items ki list), items ko re-sort karte hain taaki SAME
+  // CATEGORY wale posts upar dikhein — bina query/index change kiye,
+  // isliye kabhi break nahi hoga chahe Firestore me category+date
+  // composite index ho ya na ho.
+  // ============================================================
+  var currentPostCategory = null;
+  var relatedItemsRaw = null;
+
+  function maybeResortRelated() {
+    if (!relatedItemsRaw) return;
+    var items = relatedItemsRaw;
+    if (currentPostCategory) {
+      items = items.slice().sort(function(a, b) {
+        var aMatch = (a.category === currentPostCategory) ? 0 : 1;
+        var bMatch = (b.category === currentPostCategory) ? 0 : 1;
+        return aMatch - bMatch;
+      });
+    }
+    renderRelated(items);
+  }
+
+  // ============================================================
+  // ASLI category-based Firestore query — jaise hi current post ki
+  // category maloom hoti hai (renderPost me), ye function ek REAL
+  // "where category == X" query bhejta hai (orderBy createdAt ke
+  // saath, agar Firestore me composite index maujood ho). Agar index
+  // nahi hai to query fail hogi — us case me hum chup-chaap "where"
+  // hi (bina orderBy) try karte hain (isko composite index NAHI
+  // chahiye), aur agar wo bhi fail ho to already-loaded latest-posts
+  // list (jo maybeResortRelated already dikha chuka hai) wahi rehne
+  // dete hain — kabhi bhi page break nahi hota.
+  // ============================================================
+  var CATEGORY_CACHE_PREFIX = "fz-related-cat-";
+
+  function fetchRelatedByCategory(category) {
+    if (!category) return;
+
+    var cacheKey = CATEGORY_CACHE_PREFIX + category;
+    var cachedRaw = ssGet(cacheKey);
+    if (cachedRaw) {
+      try {
+        var parsed = JSON.parse(cachedRaw);
+        if (Date.now() - parsed.ts < RELATED_TTL_MS) {
+          relatedItemsRaw = parsed.data;
+          maybeResortRelated();
+          return;
+        }
+      } catch (e) {}
+    }
+
+    function finalizeItems(docs) {
+      var items = [];
+      docs.forEach(function(d) {
+        if (!d.document) return;
+        var pid = (d.document.name || "").split("/").pop();
+        if (items.length >= 6) return;
+        var post = parseDoc(d.document.fields);
+        post._id = pid;
+        if ((slugParam && post.slug === slugParam) || (idParam && pid === idParam)) return;
+        items.push(post);
+      });
+      return items;
+    }
+
+    function runQuery(body) {
+      return fetch(FS_BASE + ":runQuery?key=" + API_KEY, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      }).then(function(r){ return r.json(); });
+    }
+
+    // Attempt 1: where category==X + orderBy createdAt desc (needs
+    // a Firestore composite index on category+createdAt).
+    var queryWithOrder = {
+      structuredQuery: {
+        from: [{ collectionId: "posts" }],
+        where: { fieldFilter: { field: { fieldPath: "category" }, op: "EQUAL", value: { stringValue: category } } },
+        orderBy: [{ field: { fieldPath: "createdAt" }, direction: "DESCENDING" }],
+        limit: 8
+      }
+    };
+
+    runQuery(queryWithOrder).then(function(data) {
+      var docs = Array.isArray(data) ? data : [];
+      var hasIndexError = docs.length === 1 && docs[0] && docs[0].error;
+      if (hasIndexError) throw new Error("index-missing");
+      var items = finalizeItems(docs);
+      if (!items.length) throw new Error("empty");
+      ssSet(cacheKey, JSON.stringify({ ts: Date.now(), data: items }));
+      relatedItemsRaw = items;
+      maybeResortRelated();
+    }).catch(function() {
+      // Attempt 2: where category==X only, no orderBy — Firestore
+      // doesn't need a composite index for a single equality filter,
+      // so this almost always works even on a fresh project.
+      var queryNoOrder = {
+        structuredQuery: {
+          from: [{ collectionId: "posts" }],
+          where: { fieldFilter: { field: { fieldPath: "category" }, op: "EQUAL", value: { stringValue: category } } },
+          limit: 12
+        }
+      };
+      runQuery(queryNoOrder).then(function(data) {
+        var docs = Array.isArray(data) ? data : [];
+        var items = finalizeItems(docs);
+        if (!items.length) return; // keep whatever is already rendered
+        // client-side sort by createdAt desc since query had no orderBy
+        items.sort(function(a, b) {
+          var ta = toSafeDate(a.createdAt); var tb = toSafeDate(b.createdAt);
+          return (tb ? tb.getTime() : 0) - (ta ? ta.getTime() : 0);
+        });
+        items = items.slice(0, 6);
+        ssSet(cacheKey, JSON.stringify({ ts: Date.now(), data: items }));
+        relatedItemsRaw = items;
+        maybeResortRelated();
+      }).catch(function(e2) {
+        console.warn("Category-based related fetch fully failed, keeping fallback list:", e2 && e2.message);
+      });
+    });
   }
 
   function renderRelated(items) {
@@ -380,48 +1027,126 @@
     $("relatedGrid").innerHTML = items.map(function(item){
       var img   = escapeHtml(item.image || "https://factzone.online/logo.png");
       var ttl   = escapeHtml(item.title || "");
-      var pid   = encodeURIComponent(item._id || "");
-      return '<a href="detail.html?id=' + pid + '" class="rc" aria-label="Read: ' + ttl + '">' +
+      // Hybrid link: naye posts jinke paas slug hai unhe ?slug= se link karo,
+      // purane posts (slug nahi hai) ko ?id= se — dono future-proof aur safe.
+      var linkQuery = item.slug ? ("slug=" + encodeURIComponent(item.slug)) : ("id=" + encodeURIComponent(item._id || ""));
+      return '<a href="detail.html?' + linkQuery + '" class="rc" aria-label="Read: ' + ttl + '">' +
              '<img src="' + img + '" loading="lazy" width="68" height="68" alt="' + ttl + '">' +
              '<h3>' + ttl + '</h3></a>';
     }).join("");
   }
 
+  // ============================================================
+  // HYBRID FETCH: id ho to direct document path se, slug ho to
+  // runQuery se where("slug","==",...) — dono retry-with-backoff
+  // ke saath, taaki slow/flaky internet par bhi post load ho jaaye.
+  // ============================================================
+  function fetchPostByIdOnce(idVal) {
+    var url = FS_BASE + "/posts/" + idVal + "?key=" + API_KEY;
+    return fetch(url).then(function(r){ return r.json(); }).then(function(data){
+      if (!data.fields) return null;
+      var post = parseDoc(data.fields);
+      post._id = idVal;
+      return post;
+    });
+  }
+
+  function fetchPostBySlugOnce(slugVal) {
+    var url = FS_BASE + ":runQuery?key=" + API_KEY;
+    var body = {
+      structuredQuery: {
+        from: [{ collectionId: "posts" }],
+        where: { fieldFilter: { field: { fieldPath: "slug" }, op: "EQUAL", value: { stringValue: slugVal } } },
+        limit: 1
+      }
+    };
+    return fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        var found = (Array.isArray(data) ? data : []).find(function(r){ return r.document; });
+        if (!found) return null;
+        var post = parseDoc(found.document.fields);
+        post._id = found.document.name.split("/").pop();
+        return post;
+      });
+  }
+
+  function fetchPostOnce() {
+    if (slugParam) return fetchPostBySlugOnce(slugParam);
+    if (idParam)   return fetchPostByIdOnce(idParam);
+    return Promise.resolve(null);
+  }
+
+  function fetchPostWithRetry(maxAttempts) {
+    maxAttempts = maxAttempts || 4;
+    var attempt = 1;
+    function tryOnce() {
+      return fetchPostOnce().catch(function(e) {
+        console.warn("fetchPost attempt " + attempt + " failed:", e.message);
+        return null;
+      }).then(function(post) {
+        if (post) return post;
+        if (attempt >= maxAttempts) return null;
+        attempt++;
+        return sleep(400 + Math.pow(attempt, 2) * 300).then(tryOnce);
+      });
+    }
+    return tryOnce();
+  }
+
   function fetchPost() {
-    if (!id) {
+    if (!idParam && !slugParam) {
       $("post-content").innerHTML = '<div class="err"><h2>No article ID</h2><p>Go back and pick an article.</p></div>';
       return;
     }
 
-    var cached = lsGet("fz_post_" + id);
-    if (cached) {
-      try { renderPost(JSON.parse(cached)); } catch(e){}
+    var cacheKey = currentCacheKey();
+    var cachedRaw = ssGet(cacheKey);
+    var cachedPost = null;
+    if (cachedRaw) {
+      try {
+        var parsed = JSON.parse(cachedRaw);
+        if (Date.now() - parsed.ts < CACHE_TTL_MS) {
+          cachedPost = parsed.data;
+          renderPost(cachedPost);
+        }
+      } catch (e) {}
     }
 
-    var url = FS_BASE + "posts/" + id + "?key=" + API_KEY;
-    fetch(url)
-      .then(function(r){ return r.json(); })
-      .then(function(data){
-        if (!data.fields) {
-          if (!cached) $("post-content").innerHTML = '<div class="err"><h2>Post Not Found</h2><p>This article may have been removed.</p></div>';
-          return;
-        }
-        var post = parseDoc(data.fields);
-        post._id = id;
-        lsSet("fz_post_" + id, JSON.stringify(post));
-        renderPost(post);
-      })
-      .catch(function(err){
-        console.error("Post fetch error:", err);
-        if (!cached) $("post-content").innerHTML = '<div class="err"><h2>Failed to load</h2><p>Check your connection and refresh.</p></div>';
-      });
+    cleanOldCacheEntries(cacheKey);
+
+    fetchPostWithRetry().then(function(post) {
+      if (!post) {
+        if (!cachedPost) $("post-content").innerHTML = '<div class="err"><h2>Post Not Found</h2><p>This article may have been removed.</p></div>';
+        return;
+      }
+      preloadHeroImage(post.image);
+      ssSet(cacheKey, JSON.stringify({ ts: Date.now(), data: post }));
+      renderPost(post);
+    }).catch(function(err) {
+      console.error("Post fetch error:", err);
+      if (!cachedPost) $("post-content").innerHTML = '<div class="err"><h2>Failed to load</h2><p>Check your connection and refresh.</p></div>';
+    });
   }
 
   function fetchRelated() {
-    var cached = lsGet("fz_related_v3");
-    if (cached) { try { renderRelated(JSON.parse(cached)); } catch(e){} }
+    var cachedRaw = ssGet(RELATED_CACHE_KEY);
+    var cachedItems = null;
+    if (cachedRaw) {
+      try {
+        var parsed = JSON.parse(cachedRaw);
+        if (Date.now() - parsed.ts < RELATED_TTL_MS) {
+          cachedItems = parsed.data;
+          relatedItemsRaw = cachedItems;
+          maybeResortRelated();
+        }
+      } catch (e) {}
+    }
 
-    var url = FS_BASE + "posts?key=" + API_KEY + "&pageSize=8";
+    // pageSize 12 rakha hai (pehle 8 tha) taaki category-match wale
+    // posts milne ke chances behtar hon, bina kisi naye Firestore
+    // query/index ke.
+    var url = FS_BASE + "/posts?key=" + API_KEY + "&pageSize=12";
     fetch(url)
       .then(function(r){ return r.json(); })
       .then(function(data){
@@ -429,15 +1154,20 @@
         var items = [];
         docs.forEach(function(d){
           var pid = (d.name || "").split("/").pop();
-          if (pid === id || items.length >= 6) return;
+          if (items.length >= 6) return;
           var post = parseDoc(d.fields);
           post._id = pid;
+          if ((slugParam && post.slug === slugParam) || (idParam && pid === idParam)) return;
           items.push(post);
         });
-        lsSet("fz_related_v3", JSON.stringify(items));
-        renderRelated(items);
+        ssSet(RELATED_CACHE_KEY, JSON.stringify({ ts: Date.now(), data: items }));
+        relatedItemsRaw = items;
+        maybeResortRelated();
       })
-      .catch(function(e){ console.error("Related fetch error:", e); });
+      .catch(function(e){
+        console.error("Related fetch error:", e);
+        if (!cachedItems) { /* leave section as-is, non-critical */ }
+      });
   }
 
   fetchPost();
