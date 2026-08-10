@@ -215,20 +215,20 @@
       font-family: 'DM Sans', sans-serif;
       color: var(--ink);
     }
-    .wrap { max-width: 860px; margin: 0 auto; padding: 1rem 1rem 2rem; }
+    .wrap { max-width: 860px; margin: 0 auto; padding: .6rem 1rem 2rem; }
 
     .site-header {
       display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 1.25rem; padding-bottom: .85rem;
+      margin-bottom: 0; padding-bottom: .5rem;
       border-bottom: 2px solid var(--ink);
     }
-    .logo-link { display: flex; align-items: center; gap: .75rem; text-decoration: none; color: inherit; }
-    .logo-link img { width: 40px; height: 40px; border-radius: 50%; background: #fff; padding: 3px; box-shadow: 0 2px 8px rgba(0,0,0,.12); }
-    .logo-link span { font-family: 'Merriweather', serif; font-size: 1.4rem; font-weight: 700; letter-spacing: -.02em; }
+    .logo-link { display: flex; align-items: center; gap: .5rem; text-decoration: none; color: inherit; }
+    .logo-link img { width: 30px; height: 30px; border-radius: 50%; background: #fff; padding: 2px; box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+    .logo-link span { font-family: 'Merriweather', serif; font-size: 1.1rem; font-weight: 700; letter-spacing: -.02em; }
     .back-btn { background: var(--ink); color: #fff; text-decoration: none; font-weight: 700; font-size: .8rem; padding: .45rem .95rem; border-radius: .5rem; transition: background .18s; }
     .back-btn:hover { background: #333; }
 
-    #post { background: var(--surface); border-radius: var(--r); padding: 1.25rem 1.5rem; box-shadow: 0 2px 16px rgba(0,0,0,.07); }
+    #post { background: var(--surface); border-radius: var(--r); padding: 1.25rem 1.5rem; box-shadow: 0 2px 16px rgba(0,0,0,.07); margin-top: 0; }
     .hero-wrap { display: flex; justify-content: center; margin-bottom: .85rem; }
     #post img.hero { width: 100%; max-width: 300px; aspect-ratio: 16/9; border-radius: .6rem; object-fit: cover; display: block; box-shadow: 0 4px 18px rgba(0,0,0,.18); }
     #post h1 { font-family: 'Merriweather', serif; font-size: clamp(1.3rem, 4vw, 1.9rem); line-height: 1.25; font-weight: 700; margin-bottom: .5rem; }
@@ -952,7 +952,6 @@
       docs.forEach(function(d) {
         if (!d.document) return;
         var pid = (d.document.name || "").split("/").pop();
-        if (items.length >= 6) return;
         var post = parseDoc(d.document.fields);
         post._id = pid;
         if ((slugParam && post.slug === slugParam) || (idParam && pid === idParam)) return;
@@ -975,8 +974,7 @@
       structuredQuery: {
         from: [{ collectionId: "posts" }],
         where: { fieldFilter: { field: { fieldPath: "category" }, op: "EQUAL", value: { stringValue: category } } },
-        orderBy: [{ field: { fieldPath: "createdAt" }, direction: "DESCENDING" }],
-        limit: 8
+        orderBy: [{ field: { fieldPath: "createdAt" }, direction: "DESCENDING" }]
       }
     };
 
@@ -996,8 +994,7 @@
       var queryNoOrder = {
         structuredQuery: {
           from: [{ collectionId: "posts" }],
-          where: { fieldFilter: { field: { fieldPath: "category" }, op: "EQUAL", value: { stringValue: category } } },
-          limit: 12
+          where: { fieldFilter: { field: { fieldPath: "category" }, op: "EQUAL", value: { stringValue: category } } }
         }
       };
       runQuery(queryNoOrder).then(function(data) {
@@ -1009,7 +1006,6 @@
           var ta = toSafeDate(a.createdAt); var tb = toSafeDate(b.createdAt);
           return (tb ? tb.getTime() : 0) - (ta ? ta.getTime() : 0);
         });
-        items = items.slice(0, 6);
         ssSet(cacheKey, JSON.stringify({ ts: Date.now(), data: items }));
         relatedItemsRaw = items;
         maybeResortRelated();
@@ -1129,6 +1125,29 @@
     });
   }
 
+  // ============================================================
+  // Firestore ka list-documents endpoint ek "page" me max ~itne hi
+  // docs deta hai jitna pageSize maanga jaaye, aur agar aur docs
+  // bache hon to response me nextPageToken aata hai. Pehle sirf
+  // pehla page (pageSize=12) fetch hota tha aur usme se bhi sirf 6
+  // rakhe jaate the — is wajah se "sabhi related posts" kabhi nahi
+  // dikhte the. Ye helper nextPageToken ko follow karke SAARE docs
+  // le aata hai, chahe collection me kitne bhi posts hon.
+  // ============================================================
+  function fetchAllPostDocs(pageToken, accumulated) {
+    accumulated = accumulated || [];
+    var url = FS_BASE + "/posts?key=" + API_KEY + "&pageSize=300" +
+      (pageToken ? ("&pageToken=" + encodeURIComponent(pageToken)) : "");
+    return fetch(url).then(function(r){ return r.json(); }).then(function(data){
+      var docs = data.documents || [];
+      accumulated = accumulated.concat(docs);
+      if (data.nextPageToken) {
+        return fetchAllPostDocs(data.nextPageToken, accumulated);
+      }
+      return accumulated;
+    });
+  }
+
   function fetchRelated() {
     var cachedRaw = ssGet(RELATED_CACHE_KEY);
     var cachedItems = null;
@@ -1143,22 +1162,22 @@
       } catch (e) {}
     }
 
-    // pageSize 12 rakha hai (pehle 8 tha) taaki category-match wale
-    // posts milne ke chances behtar hon, bina kisi naye Firestore
-    // query/index ke.
-    var url = FS_BASE + "/posts?key=" + API_KEY + "&pageSize=12";
-    fetch(url)
-      .then(function(r){ return r.json(); })
-      .then(function(data){
-        var docs = data.documents || [];
+    // Saare posts fetch karo (pagination ke through), sirf current post
+    // (id/slug se match) ko chhod kar baaki sab related list me aayenge —
+    // koi fixed 6/12 wali limit nahi.
+    fetchAllPostDocs()
+      .then(function(docs){
         var items = [];
         docs.forEach(function(d){
           var pid = (d.name || "").split("/").pop();
-          if (items.length >= 6) return;
           var post = parseDoc(d.fields);
           post._id = pid;
           if ((slugParam && post.slug === slugParam) || (idParam && pid === idParam)) return;
           items.push(post);
+        });
+        items.sort(function(a, b) {
+          var ta = toSafeDate(a.createdAt); var tb = toSafeDate(b.createdAt);
+          return (tb ? tb.getTime() : 0) - (ta ? ta.getTime() : 0);
         });
         ssSet(RELATED_CACHE_KEY, JSON.stringify({ ts: Date.now(), data: items }));
         relatedItemsRaw = items;
