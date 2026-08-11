@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <!-- 🏠 Main Homepage -->
+  <!-- Main Homepage -->
   <url>
     <loc>https://factzone.online/</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
-  <!-- 📄 Static Pages -->
+  <!-- Tools Hub (50+ Free Online Tools) -->
+  <url>
+    <loc>https://factzone.online/tools.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Static Pages -->
   <url><loc>https://factzone.online/author.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://factzone.online/about.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://factzone.online/contact.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
@@ -16,94 +23,248 @@
   <url><loc>https://factzone.online/terms.html</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
   <url><loc>https://factzone.online/disclaimer.html</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
 
-  <!-- 🚀 FIRESTORE IDs BASED LINKS  -->
-  <!-- 1. Internet se paise kaise kamaye -->
-  <url>
-    <loc>https://factzone.online/detail.html?id=HiNFmr1Qo6z4j9GGQtZh</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
+  <!-- ARTICLES (Firestore posts) - Total: 34 -->
 
-  <!-- 2. Digital Mayajal -->
-  <url>
-    <loc>https://factzone.online/detail.html?id=JcmkoTTqpkjd6uk4171b</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- 3. Rahasyo se bhari duniya -->
-  <url>
-    <loc>https://factzone.online/detail.html?id=PTwphi7ZEn4XjMUgboj1</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- 4. Wow Signal -->
-  <url>
-    <loc>https://factzone.online/detail.html?id=ibJFxusW7CwjtueAh63y</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- 5. The Walking Tree -->
-  <url>
-    <loc>https://factzone.online/detail.html?id=oyRQJOPYtgAeksy91Wr0</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- 6. Sabse Rahasyamayi Kitab -->
-  <url>
-    <loc>https://factzone.online/detail.html?id=qYKbjLpFVHrS7BpXxV6A</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- 7. Mobile Hacking Settings -->
-  <url>
-    <loc>https://factzone.online/detail.html?id=064O2yQDQJaciaZH0jNt</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- 8. Antariksh mein rone par aansu -->
-  <url>
-    <loc>https://factzone.online/detail.html?id=sDxEguYzK6cn12ABkNi5</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- 9. 5 Technology Facts -->
-  <url>
-    <loc>https://factzone.online/detail.html?id=sE09JG7EjfaV8XychMKW</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- 10. Skill-Based Income -->
+  <!-- 1. Walking Tree: एक ऐसा Tree जो सच में चलकर जगह बदलता है! 🚶‍♂️🌳 -->
   <url>
     <loc>https://factzone.online/detail.html?id=yRb0lSDDx5LpYuyBUDYz</loc>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-  
-  <!--11. [2026 में इन 5 टेक स्किल्स को सीखकर बदलें अपनी ज़िंदगी] -->
+
+  <!-- 2. World की सबसे Mysterious Book, जिसे आज तक कोई नहीं पढ़ पाया! -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=oyRQJOPYtgAeksy91WrO</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 3. 3 Mobile Settings जो तुरंत बंद कर देनी चाहिए! ⚠️📱 -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=064O2yQDQJaciaZH0jNt</loc>
+    <lastmod>2026-05-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 4. Space में रोने पर आंसू क्यों नहीं गिरते? 🌌 10 Weird Space Facts! -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=sDxEguYZK6cn12ABkNi5</loc>
+    <lastmod>2026-05-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 5. 5 Tech Facts जो आपको Smart बना देंगे! 📱💡 -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=ibJFxusW7CwjtuEaH63y</loc>
+    <lastmod>2026-05-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 6. Skill-Based Income: बिना Investment Online पैसे कमाने का सही और प्रैक्टिकल तरीका -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=sEO9jG7EjfaV8XychMKW</loc>
+    <lastmod>2026-04-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 7. 5 Most Mysterious Places on Earth! जहाँ विज्ञान भी फेल है 🤯🔮 -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=1Ha3PD0AMFKvsxuJk32L</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 8. 2026 की Top 5 High-Paying Tech Skills! 💻✨ -->
   <url>
     <loc>https://factzone.online/detail.html?id=1eAf8ZKCz3eyprEyc6kN</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
-    <!--12. [0 से 100K सब्सक्राइबर्स का सफर: यूट्यूब चैनल ग्रो करने के 5 कड़े सीक्रेट्स] -->
+  <!-- 9. 3 AM Sleep Mystery: रात 3 बजे अचानक आँख खुलने का सच! 😴💡 -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=4qkeSs8NlYVaNbWefZEo</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 10. Emerging Cyber Threats: जानिए साइबर अटैक का नया जाल! 💻⚠️ -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=55o2cIWQJYR0Mu55tFYo</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 11. ChatGPT क्या है और यह काम कैसे करता है? 🤖⚡ -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=5HHFszkq6ZbHvvmAjVR1</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 12. Reels Addiction: कहीं आपका Phone आपकी Life तो बर्बाद नहीं कर रहा? 📱⚠️ -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=CUPpEhAkJ5sg9KUsRGb0</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 13. Einstein का 'Spooky Science': क्या कण आपस में बातें करते हैं? 🧠⚛️ -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=CvvQCLT1gg84dh9GCWFa</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 14. 10 Mind-Blowing Facts जो आपको सोचने पर मजबूर कर देंगे! 🤯🌍 -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=HInFmr1Qo6z4j9GGQtZh</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 15. FIFA World Cup 2026 Post-Match Rows: लियोनेल मेसी और स्पेनिश खिलाड़ियों के बीच मैदान पर क्या हुआ था? -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=HkyVR9DleyhcNp95kkNL</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 16. 6G Speed Test: 5G से कितनी तेज़ होगी 6G Technology? 📲💥 -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=IhxVm2xkdl26nFPiMNRH</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 17. पृथ्वी का अंत: वैज्ञानिकों के अनुसार हमारी धरती का अंत कैसे हो सकता है? -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=J7ca3689Wm36xCbw54pk</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 18. 'Wow Signal': अंतरिक्ष से आया वो इकलौता मैसेज जिसे आज तक कोई समझ नहीं पाया! 📡 अंतरिक्ष -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=JcmkoTTqpkjd6uk4171b</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 19. 0 फॉलोअर्स से ₹50,000 महीना: इंस्टाग्राम एफिलिएट मार्केटिंग का वो सीक्रेट जो कोई नहीं बताता! -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=NpID1utbz7FkCuJzbSnz</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 20. Autonomous AI Agents: अब खुद फैसले लेने वाला AI आ चुका है! 🧠🤖 -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=NytvLXwbJoVyCuwmIqEe</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 21. Internet से पैसे कमाने के 5 Secret तरीके जो कोई नहीं बताता! 💻💸 -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=PTwpHi7ZEn4XjMUgboj1</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 22. America’s Hidden Places You Won't Believe Exist -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=TjrGR7YPlEnZEAp9BXAC</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 23. Copper Water: तांबे के बर्तन में पानी पीना सही या गलत? 🥛🔍 -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=X5oFYrKGdv6wn9DT7XNy</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 24. Secrets of Antarctica: बर्फ पिघलते ही बाहर आई ये चौंकाने वाली चीजें! 🏔️🔍 -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=XDmlvpfrBymVgfciMnTD</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 25. WhatsApp New Features 2026: बदल जाएगा ऐप चलाने का तरीका! 📲🚀 -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=aoBa4nYep0utmuuaoHRG</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 26. Why 8 Hours Sleep is Important: नींद का सच जो आपकी Life बदल देगा! 😴💡 -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=cua71RSePf9vwV3AcTbG</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 27. Multitasking AI War: ChatGPT vs Claude vs Gemini – कौन सा बेस्ट है? 🧠💥 -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=gK7dscXqdRQUY1LMM5kZ</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 28. Neuralink Brain Chip: जानिए इंसान कैसे बनेगा Superhuman? 🧠🤖 -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=grouIyCIHRWmSGOauECb</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 29. Cold Drink Side Effects: जानिए आपकी Body में क्या होता है? 🥤🤯 -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=j7sQHdyyyJEFibYWdU3A</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 30. 10 Tech Facts जो आपका दिमाग हिला देंगे! 📱🤯 -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=qYKbjLpFVHrS7BpXxV6A</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 31. चाय पीने के नुकसान -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=snMOIh91kZgBEea52S6h</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 32. Biscuits में Holes क्यों होते हैं? सिर्फ Design नहीं, यह है असली वजह! 🍪⚡ -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=x17XhtJ7eHGQnEhIUca8</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 33. YouTube Channel Grow कैसे करें? 0 से 100K Subscribers का Secret Formula! 📈🔥 -->
   <url>
     <loc>https://factzone.online/detail.html?id=yNQggdmPoDkWQhs6D35t</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
-    <!--13. [पृथ्वी का अंत: वैज्ञानिकों के अनुसार हमारी धरती का अंत कैसे हो सकता है?] -->
+  <!-- 34. सपने क्यों आते हैं? जानिए इसके पीछे का असली वैज्ञानिक कारण | द साइंस ऑफ ड्रीम्स -->
   <url>
-    <loc>https://factzone.online/detail.html?id=J7ca3689Wm36xCbw54pk</loc>
+    <loc>https://factzone.online/detail.html?id=yag7WvQOvIxoPulYnyB8</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
