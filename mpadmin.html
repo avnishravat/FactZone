@@ -4,19 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Master Admin Panel - FactZone</title>
+    <!-- Admin panel should never be indexed by search engines -->
+    <meta name="robots" content="noindex, nofollow">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }
         body { background-color: #f1f5f9; padding: 2rem; color: #0f172a; }
         .admin-container { max-width: 950px; margin: 0 auto; }
         h1 { margin-bottom: 1.5rem; text-align: center; }
-        
+
         .card { background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 2rem; }
         .form-group { margin-bottom: 1rem; }
         label { display: block; font-weight: 600; margin-bottom: 0.3rem; font-size: 0.9rem; }
         input, select, textarea { width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; }
-        
+        .hint { font-size: 0.75rem; color: #64748b; margin-top: 0.25rem; }
+        .error-text { font-size: 0.78rem; color: #ef4444; margin-top: 0.25rem; display: none; }
+
         .btn { background: #0284c7; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.8rem; }
         .btn:hover { background: #0369a1; }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
         .btn-danger { background: #ef4444; }
         .btn-success { background: #22c55e; }
         .btn-edit { background: #eab308; color: #000; margin-right: 0.3rem; }
@@ -24,11 +29,12 @@
         table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
         th, td { border: 1px solid #e2e8f0; padding: 0.75rem; text-align: left; font-size: 0.85rem; }
         th { background: #f8fafc; }
-        
+
         .qr-preview { width: 80px; height: 80px; border: 1px solid #cbd5e1; border-radius: 6px; margin-top: 0.5rem; object-fit: contain; }
         .status-badge { padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600; font-size: 0.75rem; }
         .status-pending { background: #fef08a; color: #854d0e; }
         .status-approved { background: #bbf7d0; color: #166534; }
+        .storage-meter { font-size: 0.75rem; color: #64748b; margin-top: 0.5rem; }
     </style>
 </head>
 <body>
@@ -67,10 +73,11 @@
             <div class="form-group" style="flex: 1;">
                 <label>Upload Scanner/QR Code Image</label>
                 <input type="file" id="qrFileInput" accept="image/*">
+                <p class="hint">Max 500 KB — this is stored in the browser, so keep it small.</p>
                 <img id="qrPreviewImg" src="" class="qr-preview" style="display:none;" alt="QR Preview">
             </div>
         </div>
-        <button type="button" class="btn" style="background:#22c55e;" onclick="saveUpiSettings()">Save Payment Settings</button>
+        <button type="button" class="btn" id="saveUpiBtn" style="background:#22c55e;" onclick="saveUpiSettings()">Save Payment Settings</button>
     </div>
 
     <!-- Product Form Card -->
@@ -78,7 +85,7 @@
         <h2 id="formTitle">Add / Edit Digital Product</h2>
         <form id="productForm" style="margin-top: 1rem;">
             <input type="hidden" id="productId">
-            
+
             <div class="form-group">
                 <label>Product Title</label>
                 <input type="text" id="title" placeholder="e.g. Master SEO Guide PDF" required>
@@ -91,7 +98,7 @@
                 </div>
                 <div class="form-group" style="flex: 1;">
                     <label>Price (₹)</label>
-                    <input type="number" id="price" placeholder="e.g. 99" required>
+                    <input type="number" id="price" placeholder="e.g. 99" min="1" step="1" required>
                 </div>
             </div>
 
@@ -103,7 +110,10 @@
             <div class="form-group">
                 <label>Upload/Replace PDF Document</label>
                 <input type="file" id="pdfFile" accept="application/pdf">
+                <p class="hint" id="currentFileHint"></p>
+                <p class="hint">Max 4 MB — large PDFs quickly fill up browser storage and cause save errors.</p>
             </div>
+            <p class="error-text" id="formError"></p>
 
             <button type="submit" class="btn" id="saveBtn">Save Product</button>
             <button type="button" class="btn" style="background:#64748b;" onclick="resetForm()">Reset</button>
@@ -125,14 +135,70 @@
             </thead>
             <tbody id="adminTableBody"></tbody>
         </table>
+        <p class="storage-meter" id="storageMeter"></p>
     </div>
 </div>
 
 <script>
-    let products = JSON.parse(localStorage.getItem('fz_products')) || [];
+    // Max sizes kept small on purpose: everything here is stored as base64
+    // inside localStorage, which typically caps out around 5–10 MB total
+    // per site. Oversized files were the main cause of silent save failures.
+    const MAX_PDF_BYTES = 4 * 1024 * 1024;   // 4 MB
+    const MAX_QR_BYTES = 500 * 1024;         // 500 KB
+
+    let products = safeGet('fz_products', []);
+    let editingFileUrl = null; // holds the existing PDF data when editing, if no new file is chosen
+
+    function escapeHtml(str) {
+        return String(str ?? '').replace(/[&<>"']/g, (c) => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        })[c]);
+    }
+
+    function safeGet(key, fallback) {
+        try {
+            const raw = localStorage.getItem(key);
+            return raw ? JSON.parse(raw) : fallback;
+        } catch (e) {
+            console.error('Could not read "' + key + '" from storage:', e);
+            return fallback;
+        }
+    }
+
+    function safeSet(key, value) {
+        try {
+            localStorage.setItem(key, JSON.stringify(value));
+            renderStorageMeter();
+            return true;
+        } catch (e) {
+            console.error('Could not save "' + key + '":', e);
+            if (e && e.name === 'QuotaExceededError') {
+                alert('Browser storage is full. This is a hard limit of storing files in localStorage — delete an old product (especially ones with large PDFs) or use a smaller file, then try again.');
+            } else {
+                alert('Something went wrong while saving. Please try again.');
+            }
+            return false;
+        }
+    }
+
+    function renderStorageMeter() {
+        try {
+            let bytes = 0;
+            for (const key in localStorage) {
+                if (Object.prototype.hasOwnProperty.call(localStorage, key)) {
+                    bytes += (localStorage[key] || '').length;
+                }
+            }
+            const kb = (bytes / 1024).toFixed(0);
+            document.getElementById('storageMeter').textContent =
+                `Approx. browser storage used: ${kb} KB (typical limit is 5,000–10,000 KB).`;
+        } catch (e) {
+            // Non-critical — skip silently if it can't be measured.
+        }
+    }
 
     function renderPendingOrders() {
-        const pending = JSON.parse(localStorage.getItem('fz_pending_orders')) || [];
+        const pending = safeGet('fz_pending_orders', []);
         const tbody = document.getElementById('pendingOrdersBody');
 
         if (pending.length === 0) {
@@ -142,12 +208,12 @@
 
         tbody.innerHTML = pending.map(o => `
             <tr>
-                <td>${o.date}</td>
-                <td><strong>${o.name}</strong><br><small>${o.contact}</small></td>
-                <td>${o.product}</td>
-                <td>₹${o.price}</td>
-                <td><strong style="color:#0284c7;">${o.utr}</strong></td>
-                <td><span class="status-badge ${o.status === 'Approved' ? 'status-approved' : 'status-pending'}">${o.status}</span></td>
+                <td>${escapeHtml(o.date)}</td>
+                <td><strong>${escapeHtml(o.name)}</strong><br><small>${escapeHtml(o.contact)}</small></td>
+                <td>${escapeHtml(o.product)}</td>
+                <td>₹${escapeHtml(o.price)}</td>
+                <td><strong style="color:#0284c7;">${escapeHtml(o.utr)}</strong></td>
+                <td><span class="status-badge ${o.status === 'Approved' ? 'status-approved' : 'status-pending'}">${escapeHtml(o.status)}</span></td>
                 <td>
                     ${o.status !== 'Approved' ? `<button class="btn btn-success" onclick="approveOrder(${o.id})">Approve</button>` : '✓ Approved'}
                     <button class="btn btn-danger" onclick="deleteOrder(${o.id})">✕</button>
@@ -157,68 +223,98 @@
     }
 
     function approveOrder(id) {
-        let pending = JSON.parse(localStorage.getItem('fz_pending_orders')) || [];
+        let pending = safeGet('fz_pending_orders', []);
         const index = pending.findIndex(o => o.id == id);
         if (index !== -1) {
             pending[index].status = 'Approved';
-            localStorage.setItem('fz_pending_orders', JSON.stringify(pending));
-            alert('Request Approved! User can now download PDF directly from Store page.');
-            renderPendingOrders();
+            if (safeSet('fz_pending_orders', pending)) {
+                alert('Request Approved! User can now download PDF directly from Store page.');
+                renderPendingOrders();
+            }
         }
     }
 
     function deleteOrder(id) {
-        if(confirm("Delete this request?")) {
-            let pending = JSON.parse(localStorage.getItem('fz_pending_orders')) || [];
+        if (confirm("Delete this request?")) {
+            let pending = safeGet('fz_pending_orders', []);
             pending = pending.filter(o => o.id != id);
-            localStorage.setItem('fz_pending_orders', JSON.stringify(pending));
-            renderPendingOrders();
+            if (safeSet('fz_pending_orders', pending)) {
+                renderPendingOrders();
+            }
         }
     }
 
     function loadUpiSettings() {
-        const settings = JSON.parse(localStorage.getItem('fz_upi_settings')) || { upiId: '', qrImage: '' };
+        const settings = safeGet('fz_upi_settings', { upiId: '', qrImage: '' });
         document.getElementById('adminUpiId').value = settings.upiId || '';
-        if(settings.qrImage) {
+        if (settings.qrImage) {
             const preview = document.getElementById('qrPreviewImg');
             preview.src = settings.qrImage;
             preview.style.display = 'block';
         }
     }
 
-    function saveUpiSettings() {
+    function readFileAsDataUrl(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.onerror = () => reject(new Error('Could not read file.'));
+            reader.readAsDataURL(file);
+        });
+    }
+
+    async function saveUpiSettings() {
         const upiId = document.getElementById('adminUpiId').value.trim();
         const qrInput = document.getElementById('qrFileInput');
-        let settings = JSON.parse(localStorage.getItem('fz_upi_settings')) || {};
+        const btn = document.getElementById('saveUpiBtn');
+        let settings = safeGet('fz_upi_settings', {});
 
-        const updateSettings = (qrBase64) => {
-            settings.upiId = upiId;
-            if(qrBase64) settings.qrImage = qrBase64;
-            localStorage.setItem('fz_upi_settings', JSON.stringify(settings));
-            alert('Payment Settings Saved Successfully!');
-        };
+        if (!upiId) {
+            alert('Please enter a UPI ID before saving.');
+            return;
+        }
 
-        if (qrInput.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('qrPreviewImg').src = e.target.result;
+        const file = qrInput.files[0];
+        if (file && file.size > MAX_QR_BYTES) {
+            alert(`That QR image is too large (${(file.size / 1024).toFixed(0)} KB). Please use an image under 500 KB.`);
+            return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = 'Saving...';
+
+        try {
+            let qrBase64 = null;
+            if (file) {
+                qrBase64 = await readFileAsDataUrl(file);
+                document.getElementById('qrPreviewImg').src = qrBase64;
                 document.getElementById('qrPreviewImg').style.display = 'block';
-                updateSettings(e.target.result);
-            };
-            reader.readAsDataURL(qrInput.files[0]);
-        } else {
-            updateSettings(null);
+            }
+            settings.upiId = upiId;
+            if (qrBase64) settings.qrImage = qrBase64;
+            if (safeSet('fz_upi_settings', settings)) {
+                alert('Payment Settings Saved Successfully!');
+            }
+        } catch (err) {
+            alert('Could not read the QR image file. Please try a different file.');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Save Payment Settings';
         }
     }
 
     function renderAdminTable() {
         const tbody = document.getElementById('adminTableBody');
+        if (!products.length) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No products yet — add your first one above.</td></tr>';
+            return;
+        }
         tbody.innerHTML = products.map(p => `
             <tr>
-                <td><strong>${p.title}</strong></td>
-                <td>${p.tag}</td>
-                <td>₹${p.price}</td>
-                <td>${p.file !== '#' ? '📄 PDF Attached' : 'No File'}</td>
+                <td><strong>${escapeHtml(p.title)}</strong></td>
+                <td>${escapeHtml(p.tag)}</td>
+                <td>₹${escapeHtml(p.price)}</td>
+                <td>${p.file && p.file !== '#' ? '📄 PDF Attached' : 'No File'}</td>
                 <td>
                     <button class="btn btn-edit" onclick="editProduct(${p.id})">Edit</button>
                     <button class="btn btn-danger" onclick="deleteProduct(${p.id})">Delete</button>
@@ -227,50 +323,98 @@
         `).join('');
     }
 
-    document.getElementById('productForm').addEventListener('submit', function(e) {
+    function showFormError(msg) {
+        const el = document.getElementById('formError');
+        el.textContent = msg;
+        el.style.display = 'block';
+    }
+
+    function hideFormError() {
+        document.getElementById('formError').style.display = 'none';
+    }
+
+    document.getElementById('productForm').addEventListener('submit', async function (e) {
         e.preventDefault();
+        hideFormError();
+
         const id = document.getElementById('productId').value;
-        const title = document.getElementById('title').value;
-        const tag = document.getElementById('tag').value;
+        const title = document.getElementById('title').value.trim();
+        const tag = document.getElementById('tag').value.trim();
         const price = document.getElementById('price').value;
-        const desc = document.getElementById('desc').value;
+        const desc = document.getElementById('desc').value.trim();
         const fileInput = document.getElementById('pdfFile');
 
-        const processProduct = (fileUrl) => {
+        if (!title || !tag) return showFormError('Please fill in the title and category.');
+        if (!price || Number(price) <= 0) return showFormError('Please enter a valid price greater than 0.');
+
+        const file = fileInput.files[0];
+        if (file && file.size > MAX_PDF_BYTES) {
+            return showFormError(`That PDF is too large (${(file.size / 1024 / 1024).toFixed(1)} MB). Please use a file under 4 MB.`);
+        }
+
+        const saveBtn = document.getElementById('saveBtn');
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Saving...';
+
+        try {
+            let fileUrl = null;
+            if (file) {
+                fileUrl = await readFileAsDataUrl(file);
+            }
+
+            let nextProducts;
             if (id) {
                 const index = products.findIndex(p => p.id == id);
-                products[index] = { ...products[index], title, tag, price, desc, file: fileUrl || products[index].file };
+                if (index === -1) return showFormError('Could not find this product to update.');
+                nextProducts = [...products];
+                nextProducts[index] = { ...nextProducts[index], title, tag, price, desc, file: fileUrl || nextProducts[index].file };
             } else {
-                products.push({ id: Date.now(), title, tag, price, desc, file: fileUrl || '#' });
+                nextProducts = [...products, { id: Date.now(), title, tag, price, desc, file: fileUrl || '#' }];
             }
-            localStorage.setItem('fz_products', JSON.stringify(products));
-            renderAdminTable();
-            resetForm();
-        };
 
-        if (fileInput.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) { processProduct(e.target.result); };
-            reader.readAsDataURL(fileInput.files[0]);
-        } else {
-            processProduct(null);
+            if (safeSet('fz_products', nextProducts)) {
+                products = nextProducts;
+                renderAdminTable();
+                resetForm();
+            }
+        } catch (err) {
+            showFormError('Could not read the PDF file. Please try a different file.');
+        } finally {
+            saveBtn.disabled = false;
+            saveBtn.textContent = 'Save Product';
         }
     });
 
     function editProduct(id) {
         const p = products.find(prod => prod.id == id);
+        if (!p) return;
         document.getElementById('productId').value = p.id;
         document.getElementById('title').value = p.title;
         document.getElementById('tag').value = p.tag;
         document.getElementById('price').value = p.price;
         document.getElementById('desc').value = p.desc;
         document.getElementById('formTitle').innerText = "Edit Product: " + p.title;
+        document.getElementById('currentFileHint').textContent =
+            p.file && p.file !== '#' ? 'A PDF is already attached — leave the file field empty to keep it.' : 'No PDF attached yet.';
+        hideFormError();
+        window.scrollTo({ top: document.getElementById('productForm').offsetTop - 20, behavior: 'smooth' });
     }
 
     function deleteProduct(id) {
-        if (confirm("Delete product?")) {
-            products = products.filter(p => p.id != id);
-            localStorage.setItem('fz_products', JSON.stringify(products));
+        if (confirm("Delete product? Any pending/approved orders for it will also be removed.")) {
+            const nextProducts = products.filter(p => p.id != id);
+            if (!safeSet('fz_products', nextProducts)) return;
+            products = nextProducts;
+
+            // Clean up orphaned orders so the pending-orders table never
+            // references a product that no longer exists.
+            const pending = safeGet('fz_pending_orders', []);
+            const nextPending = pending.filter(o => o.productId != id);
+            if (nextPending.length !== pending.length) {
+                safeSet('fz_pending_orders', nextPending);
+                renderPendingOrders();
+            }
+
             renderAdminTable();
         }
     }
@@ -279,13 +423,25 @@
         document.getElementById('productForm').reset();
         document.getElementById('productId').value = '';
         document.getElementById('formTitle').innerText = "Add / Edit Digital Product";
+        document.getElementById('currentFileHint').textContent = '';
+        hideFormError();
     }
 
     window.onload = () => {
         loadUpiSettings();
         renderAdminTable();
         renderPendingOrders();
+        renderStorageMeter();
     };
+
+    // Keep this tab's view in sync if the store page changes data too.
+    window.addEventListener('storage', function (e) {
+        if (e.key === 'fz_pending_orders') renderPendingOrders();
+        if (e.key === 'fz_products') {
+            products = safeGet('fz_products', []);
+            renderAdminTable();
+        }
+    });
 </script>
 </body>
 </html>
