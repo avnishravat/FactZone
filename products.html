@@ -3,7 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Store - FactZone</title>
+    <title>Digital Store - FactZone | eBooks, Canva Templates & Source Codes</title>
+
+    <!-- SEO -->
+    <meta name="description" content="Buy premium eBooks, Canva templates and source code files from FactZone Digital Store. Instant download, secure UPI payment.">
+    <meta name="keywords" content="digital products, ebooks, canva templates, source code, UPI payment store India">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="FactZone">
+    <link rel="canonical" href="https://www.factzone.example/products.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="FactZone Digital Store">
+    <meta property="og:description" content="Premium eBooks, Canva Templates, and Source Codes for Instant Download.">
+    <meta property="og:url" content="https://www.factzone.example/products.html">
+    <meta property="og:site_name" content="FactZone">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="FactZone Digital Store">
+    <meta name="twitter:description" content="Premium eBooks, Canva Templates, and Source Codes for Instant Download.">
+
+    <!-- Performance: warm up connection to the QR image API -->
+    <link rel="preconnect" href="https://api.qrserver.com">
+    <link rel="dns-prefetch" href="https://api.qrserver.com">
+
+    <!-- Breadcrumb structured data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.factzone.example/index.html" },
+            { "@type": "ListItem", "position": 2, "name": "Store", "item": "https://www.factzone.example/products.html" }
+        ]
+    }
+    </script>
+
     <style>
         :root {
             --bg-body: #ffffff;
@@ -47,6 +83,10 @@
             padding: 0.3rem 0.5rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer;
         }
 
+        .breadcrumb { max-width: 1200px; margin: 0.6rem auto 0; padding: 0 1rem; font-size: 0.8rem; color: var(--text-muted); }
+        .breadcrumb a { color: var(--primary); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+
         .hero { text-align: center; padding: 1rem 1rem 0.4rem; max-width: 800px; margin: 0 auto; }
         .hero h1 { font-size: 1.4rem; margin-bottom: 0.2rem; font-weight: 700; }
         .hero p { color: var(--text-muted); font-size: 0.85rem; }
@@ -64,8 +104,8 @@
         .tag { background-color: rgba(2, 132, 199, 0.1); color: var(--primary); font-size: 0.75rem; padding: 0.15rem 0.5rem; border-radius: 4px; font-weight: 600; }
         .product-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.4rem; }
         .product-desc { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.8rem; }
-        
-        .card-bottom { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); padding-top: 0.8rem; gap: 0.5rem; }
+
+        .card-bottom { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); padding-top: 0.8rem; gap: 0.5rem; flex-wrap: wrap; }
         .price { font-size: 1.25rem; font-weight: 700; color: var(--price); }
 
         .status-badge { font-size: 0.72rem; font-weight: 600; padding: 0.25rem 0.45rem; border-radius: 6px; text-align: center; white-space: nowrap; }
@@ -75,8 +115,7 @@
 
         .download-btn { background-color: var(--primary); color: #ffffff; border: none; padding: 0.45rem 0.9rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: 0.2s; }
         .download-btn:hover { background-color: var(--primary-hover); }
-        
-        /* Red Button for Approved Download */
+
         .btn-approved-red { background-color: #ef4444 !important; color: #ffffff !important; animation: pulse 1.5s infinite; }
         .btn-approved-red:hover { background-color: #dc2626 !important; }
         .download-btn-disabled { background-color: #94a3b8 !important; cursor: not-allowed; }
@@ -87,7 +126,9 @@
             100% { transform: scale(1); }
         }
 
-        /* Modal Popup */
+        .empty-state { grid-column: 1 / -1; text-align: center; padding: 3rem 1rem; color: var(--text-muted); }
+        .empty-state .icon-box { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
+
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 2000;
@@ -99,10 +140,12 @@
         }
 
         .modal-close { position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-main); }
-        .qr-img { width: 180px; height: 180px; margin: 0.8rem auto; border-radius: 8px; border: 1px solid var(--border); object-fit: contain; }
-        .upi-id { background: var(--bg-card); padding: 0.4rem; border-radius: 6px; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.8rem; }
+        .qr-img { width: 180px; height: 180px; margin: 0.8rem auto; border-radius: 8px; border: 1px solid var(--border); object-fit: contain; background: #fff; }
+        .upi-id { background: var(--bg-card); padding: 0.4rem; border-radius: 6px; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.8rem; word-break: break-all; }
         .form-input { width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 0.6rem; font-size: 0.85rem; }
+        .field-error { color: #ef4444; font-size: 0.75rem; text-align: left; margin: -0.4rem 0 0.6rem; display: none; }
         .verify-btn { background: var(--price); color: white; border: none; width: 100%; padding: 0.6rem; border-radius: 6px; font-weight: 600; cursor: pointer; }
+        .verify-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
         footer { text-align: center; padding: 1.5rem 1rem; border-top: 1px solid var(--border); margin-top: 2rem; color: var(--text-muted); font-size: 0.8rem; }
     </style>
@@ -112,42 +155,48 @@
     <header>
         <a href="index.html" class="logo">FactZone</a>
         <div class="nav-right">
-            <div class="nav-links">
+            <nav class="nav-links" aria-label="Primary">
                 <a href="index.html" id="navTools">Tools</a>
-                <a href="products.html" style="color:var(--primary);" id="navStore">Store</a>
-            </div>
-            <select class="lang-select" id="langSelector" onchange="changeLanguage(this.value)">
+                <a href="products.html" style="color:var(--primary);" id="navStore" aria-current="page">Store</a>
+            </nav>
+            <select class="lang-select" id="langSelector" onchange="changeLanguage(this.value)" aria-label="Language">
                 <option value="en">🌐 English</option>
                 <option value="hi">🌐 Hindi</option>
             </select>
-            <button class="theme-toggle" onclick="toggleTheme()">🌓 Mode</button>
+            <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">🌓 Mode</button>
         </div>
     </header>
 
-    <div class="hero">
-        <h1 id="heroTitle">Digital Products Store</h1>
-        <p id="heroDesc">Premium eBooks, Canva Templates, and Source Codes for Instant Download</p>
-    </div>
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Home</a> &rsaquo; <span id="breadcrumbCurrent">Store</span>
+    </nav>
 
-    <div class="container">
-        <div class="product-grid" id="productGrid"></div>
-    </div>
+    <main>
+        <div class="hero">
+            <h1 id="heroTitle">Digital Products Store</h1>
+            <p id="heroDesc">Premium eBooks, Canva Templates, and Source Codes for Instant Download</p>
+        </div>
 
-    <!-- UPI Payment Modal Popup -->
-    <div class="modal-overlay" id="payModal">
+        <div class="container">
+            <div class="product-grid" id="productGrid"></div>
+        </div>
+    </main>
+
+    <div class="modal-overlay" id="payModal" role="dialog" aria-modal="true" aria-labelledby="modalHeading">
         <div class="modal">
-            <button class="modal-close" onclick="closeModal()">✕</button>
-            <h3>Scan & Pay via UPI</h3>
+            <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+            <h3 id="modalHeading">Scan & Pay via UPI</h3>
             <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">Amount: <strong id="modalPrice" style="color: var(--price);">₹0</strong></p>
 
-            <img id="qrCodeImg" src="" alt="UPI QR Code" class="qr-img">
+            <img id="qrCodeImg" src="" alt="UPI QR Code" class="qr-img" loading="lazy">
             <div class="upi-id" id="upiIdText">UPI ID: Loading...</div>
 
             <input type="text" id="custName" class="form-input" placeholder="Your Name" required>
-            <input type="text" id="custContact" class="form-input" placeholder="WhatsApp / Mobile Number" required>
-            <input type="text" id="utrNumber" class="form-input" placeholder="12-digit UTR/Ref Number" maxlength="12" required>
-            
-            <button class="verify-btn" onclick="submitVerification()">Submit Payment Request</button>
+            <input type="text" id="custContact" class="form-input" placeholder="WhatsApp / Mobile Number" required maxlength="10" inputmode="numeric">
+            <input type="text" id="utrNumber" class="form-input" placeholder="12-digit UTR/Ref Number" maxlength="12" required inputmode="numeric">
+            <p class="field-error" id="modalError"></p>
+
+            <button class="verify-btn" id="submitPaymentBtn" onclick="submitVerification()">Submit Payment Request</button>
         </div>
     </div>
 
@@ -157,12 +206,43 @@
 
     <script>
         const translations = {
-            en: { tools: "Tools", store: "Store", heroTitle: "Digital Products Store", heroDesc: "Premium eBooks, Canva Templates, and Source Codes for Instant Download", btnText: "Download" },
-            hi: { tools: "टूल्स", store: "स्टोर", heroTitle: "डिजिटल प्रोडक्ट्स स्टोर", heroDesc: "प्रीमियम ई-बुक्स, कैनवा टेम्पलेट्स और सोर्स कोड्स तुरंत डाउनलोड करें", btnText: "डाउनलोड" }
+            en: { tools: "Tools", store: "Store", heroTitle: "Digital Products Store", heroDesc: "Premium eBooks, Canva Templates, and Source Codes for Instant Download", btnText: "Download", empty: "No products available right now. Please check back soon." },
+            hi: { tools: "टूल्स", store: "स्टोर", heroTitle: "डिजिटल प्रोडक्ट्स स्टोर", heroDesc: "प्रीमियम ई-बुक्स, कैनवा टेम्पलेट्स और सोर्स कोड्स तुरंत डाउनलोड करें", btnText: "डाउनलोड", empty: "अभी कोई प्रोडक्ट उपलब्ध नहीं है। कृपया बाद में देखें।" }
         };
 
         let currentLang = localStorage.getItem('fz_lang') || 'en';
         let activeProduct = null;
+
+        function escapeHtml(str) {
+            return String(str ?? '').replace(/[&<>"']/g, (c) => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            })[c]);
+        }
+
+        function safeGet(key, fallback) {
+            try {
+                const raw = localStorage.getItem(key);
+                return raw ? JSON.parse(raw) : fallback;
+            } catch (e) {
+                console.error('Could not read "' + key + '" from storage:', e);
+                return fallback;
+            }
+        }
+
+        function safeSet(key, value) {
+            try {
+                localStorage.setItem(key, JSON.stringify(value));
+                return true;
+            } catch (e) {
+                console.error('Could not save "' + key + '":', e);
+                if (e && e.name === 'QuotaExceededError') {
+                    alert('Storage is full, so this could not be saved. Large PDF/QR files take up a lot of space in the browser — try a smaller file, or remove an old product from the admin panel first.');
+                } else {
+                    alert('Something went wrong while saving. Please try again.');
+                }
+                return false;
+            }
+        }
 
         function changeLanguage(lang) {
             currentLang = lang;
@@ -170,23 +250,34 @@
             document.getElementById('langSelector').value = lang;
             document.getElementById('navTools').innerText = translations[lang].tools;
             document.getElementById('navStore').innerText = translations[lang].store;
+            document.getElementById('breadcrumbCurrent').innerText = translations[lang].store;
             document.getElementById('heroTitle').innerText = translations[lang].heroTitle;
             document.getElementById('heroDesc').innerText = translations[lang].heroDesc;
+            document.title = translations[lang].heroTitle + ' - FactZone';
             renderProducts();
         }
 
         function renderProducts() {
             const grid = document.getElementById('productGrid');
-            const products = JSON.parse(localStorage.getItem('fz_products')) || [
-                { id: 1, title: '100+ YouTube Thumbnail Templates', tag: 'Canva', price: '99', desc: 'Ready-to-use HD thumbnail templates for content creators.', file: '#' },
-                { id: 2, title: 'Website SEO Master Guide', tag: 'E-Book', price: '149', desc: 'Step-by-step guide to get organic search traffic in 30 days.', file: '#' }
-            ];
+            // Real products only — no placeholder/demo items baked in.
+            // The admin panel (mpadmin.html) is the only source of truth.
+            const products = safeGet('fz_products', []);
 
-            const pendingList = JSON.parse(localStorage.getItem('fz_pending_orders')) || [];
+            if (!products.length) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <span class="icon-box">🛒</span>
+                        <p>${escapeHtml(translations[currentLang].empty)}</p>
+                    </div>`;
+                injectProductSchema([]);
+                return;
+            }
+
+            const pendingList = safeGet('fz_pending_orders', []);
 
             grid.innerHTML = products.map(p => {
                 const userOrder = pendingList.find(o => o.productId == p.id);
-                
+
                 let badgeHTML = `<span class="status-badge badge-info">Approve in 24 hrs</span>`;
                 let buttonAction = `onclick="handleProductClick(${p.id})"`;
                 let buttonClass = `download-btn`;
@@ -194,12 +285,10 @@
 
                 if (userOrder) {
                     if (userOrder.status === 'Approved') {
-                        // 🟢 APPROVED: Badge becomes Approved & Button becomes RED with Direct Download
                         badgeHTML = `<span class="status-badge badge-approved">✅ Approved</span>`;
                         buttonClass = `download-btn btn-approved-red`;
                         buttonText = `Download PDF ⬇`;
                     } else {
-                        // ⏳ PENDING: Pending Badge & Disabled Button
                         badgeHTML = `<span class="status-badge badge-pending">⏳ Pending</span>`;
                         buttonClass = `download-btn download-btn-disabled`;
                         buttonText = `Verifying...`;
@@ -212,29 +301,68 @@
                         <div>
                             <div class="card-header">
                                 <span class="icon-box">📦</span>
-                                <span class="tag">${p.tag}</span>
+                                <span class="tag">${escapeHtml(p.tag)}</span>
                             </div>
-                            <h3 class="product-title">${p.title}</h3>
-                            <p class="product-desc">${p.desc}</p>
+                            <h3 class="product-title">${escapeHtml(p.title)}</h3>
+                            <p class="product-desc">${escapeHtml(p.desc)}</p>
                         </div>
                         <div class="card-bottom">
-                            <span class="price">₹${p.price}</span>
+                            <span class="price">₹${escapeHtml(p.price)}</span>
                             ${badgeHTML}
                             <button class="${buttonClass}" ${buttonAction}>${buttonText}</button>
                         </div>
                     </div>
                 `;
             }).join('');
+
+            injectProductSchema(products);
+        }
+
+        // Keeps an ItemList + Product JSON-LD block in sync with whatever
+        // products are actually shown (SEO).
+        function injectProductSchema(products) {
+            let scriptTag = document.getElementById('productSchema');
+            if (!scriptTag) {
+                scriptTag = document.createElement('script');
+                scriptTag.type = 'application/ld+json';
+                scriptTag.id = 'productSchema';
+                document.head.appendChild(scriptTag);
+            }
+            const schema = {
+                "@context": "https://schema.org",
+                "@type": "ItemList",
+                "itemListElement": products.map((p, i) => ({
+                    "@type": "ListItem",
+                    "position": i + 1,
+                    "item": {
+                        "@type": "Product",
+                        "name": p.title,
+                        "description": p.desc || undefined,
+                        "category": p.tag || undefined,
+                        "offers": {
+                            "@type": "Offer",
+                            "priceCurrency": "INR",
+                            "price": p.price,
+                            "availability": "https://schema.org/InStock"
+                        }
+                    }
+                }))
+            };
+            scriptTag.textContent = JSON.stringify(schema);
         }
 
         function handleProductClick(id) {
-            const products = JSON.parse(localStorage.getItem('fz_products')) || [];
-            const pendingList = JSON.parse(localStorage.getItem('fz_pending_orders')) || [];
-            
+            const products = safeGet('fz_products', []);
+            const pendingList = safeGet('fz_pending_orders', []);
+
             const prod = products.find(p => p.id == id);
+            if (!prod) {
+                alert('This product is no longer available.');
+                renderProducts();
+                return;
+            }
             const userOrder = pendingList.find(o => o.productId == id);
 
-            // अगर एडमिन ने Approve कर दिया है, तो बिना फ़ॉर्म सीधे PDF डाउनलोड करो
             if (userOrder && userOrder.status === 'Approved') {
                 downloadFileDirectly(prod.file, prod.title);
             } else {
@@ -243,17 +371,30 @@
         }
 
         function openPaymentModal(id) {
-            const products = JSON.parse(localStorage.getItem('fz_products')) || [];
+            const products = safeGet('fz_products', []);
             activeProduct = products.find(p => p.id == id);
-            const upiSettings = JSON.parse(localStorage.getItem('fz_upi_settings')) || { upiId: '', qrImage: '' };
+            const upiSettings = safeGet('fz_upi_settings', { upiId: '', qrImage: '' });
 
-            if(!activeProduct) return;
+            if (!activeProduct) return;
 
+            document.getElementById('modalError').style.display = 'none';
             document.getElementById('modalPrice').innerText = '₹' + activeProduct.price;
-            document.getElementById('upiIdText').innerText = upiSettings.upiId ? 'UPI ID: ' + upiSettings.upiId : 'UPI ID: Not Provided';
-            
-            const autoQr = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=${upiSettings.upiId}%26am=${activeProduct.price}`;
-            document.getElementById('qrCodeImg').src = upiSettings.qrImage ? upiSettings.qrImage : autoQr;
+            document.getElementById('upiIdText').innerText = upiSettings.upiId
+                ? 'UPI ID: ' + upiSettings.upiId
+                : 'UPI ID: Not set up yet — contact the seller before paying.';
+
+            if (upiSettings.qrImage) {
+                document.getElementById('qrCodeImg').src = upiSettings.qrImage;
+            } else if (upiSettings.upiId) {
+                // Build a correctly-encoded UPI deep link, then encode the
+                // WHOLE link for the QR API — the previous version only
+                // escaped one "&", which produced a broken QR code.
+                const upiLink = `upi://pay?pa=${upiSettings.upiId}&pn=${encodeURIComponent('FactZone')}&am=${activeProduct.price}&cu=INR`;
+                document.getElementById('qrCodeImg').src =
+                    `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(upiLink)}`;
+            } else {
+                document.getElementById('qrCodeImg').src = '';
+            }
 
             document.getElementById('payModal').style.display = 'flex';
         }
@@ -263,6 +404,13 @@
             document.getElementById('utrNumber').value = '';
             document.getElementById('custName').value = '';
             document.getElementById('custContact').value = '';
+            document.getElementById('modalError').style.display = 'none';
+        }
+
+        function showModalError(msg) {
+            const el = document.getElementById('modalError');
+            el.textContent = msg;
+            el.style.display = 'block';
         }
 
         function submitVerification() {
@@ -270,12 +418,15 @@
             const contact = document.getElementById('custContact').value.trim();
             const utr = document.getElementById('utrNumber').value.trim();
 
-            if (!name || !contact || utr.length < 10) {
-                alert('Please enter Name, Mobile/WhatsApp number, and valid 12-digit UTR!');
-                return;
-            }
+            if (!name) return showModalError('Please enter your name.');
+            if (!/^\d{10}$/.test(contact)) return showModalError('Please enter a valid 10-digit mobile number.');
+            if (!/^\d{12}$/.test(utr)) return showModalError('Please enter a valid 12-digit UTR/reference number.');
 
-            let pending = JSON.parse(localStorage.getItem('fz_pending_orders')) || [];
+            const submitBtn = document.getElementById('submitPaymentBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+
+            let pending = safeGet('fz_pending_orders', []);
             pending = pending.filter(o => o.productId != activeProduct.id);
 
             pending.push({
@@ -290,7 +441,12 @@
                 date: new Date().toLocaleString()
             });
 
-            localStorage.setItem('fz_pending_orders', JSON.stringify(pending));
+            const saved = safeSet('fz_pending_orders', pending);
+
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Submit Payment Request';
+
+            if (!saved) return;
 
             alert('✅ Payment details submitted!\n\nStatus is set to "Pending". As soon as Admin approves it from panel, this button will turn RED for instant download.');
             closeModal();
@@ -306,23 +462,30 @@
                 a.click();
                 document.body.removeChild(a);
             } else {
-                alert('Downloading PDF for: ' + title);
+                alert('No file has been uploaded for this product yet. Please contact the seller.');
             }
         }
 
         function toggleTheme() {
             const html = document.documentElement;
-            html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+            const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('fz_theme', next);
         }
 
-        // 🔄 Real-time Sync: जब भी mpadmin.html से Approve बटन पर क्लिक हो, यहाँ स्क्रीन तुरंत अपडेट हो जाए
-        window.addEventListener('storage', function(e) {
-            if (e.key === 'fz_pending_orders') {
+        // Real-time sync: when mpadmin.html changes data in another tab,
+        // reflect it here immediately.
+        window.addEventListener('storage', function (e) {
+            if (e.key === 'fz_pending_orders' || e.key === 'fz_products') {
                 renderProducts();
             }
         });
 
-        window.onload = () => { changeLanguage(currentLang); };
+        window.onload = () => {
+            const savedTheme = localStorage.getItem('fz_theme');
+            if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+            changeLanguage(currentLang);
+        };
     </script>
 </body>
 </html>
