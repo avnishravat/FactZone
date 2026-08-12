@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Admin Panel - FactZone</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }
+        body { background-color: #f1f5f9; padding: 2rem; color: #0f172a; }
+        .admin-container { max-width: 950px; margin: 0 auto; }
+        h1 { margin-bottom: 1.5rem; text-align: center; }
+        
+        .card { background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 2rem; }
+        .form-group { margin-bottom: 1rem; }
+        label { display: block; font-weight: 600; margin-bottom: 0.3rem; font-size: 0.9rem; }
+        input, select, textarea { width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; }
+        
+        .btn { background: #0284c7; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.8rem; }
+        .btn:hover { background: #0369a1; }
+        .btn-danger { background: #ef4444; }
+        .btn-success { background: #22c55e; }
+        .btn-edit { background: #eab308; color: #000; margin-right: 0.3rem; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { border: 1px solid #e2e8f0; padding: 0.75rem; text-align: left; font-size: 0.85rem; }
+        th { background: #f8fafc; }
+        
+        .qr-preview { width: 80px; height: 80px; border: 1px solid #cbd5e1; border-radius: 6px; margin-top: 0.5rem; object-fit: contain; }
+        .status-badge { padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600; font-size: 0.75rem; }
+        .status-pending { background: #fef08a; color: #854d0e; }
+        .status-approved { background: #bbf7d0; color: #166534; }
+    </style>
+</head>
+<body>
+
+<div class="admin-container">
+    <h1>MpAdmin Store Control Dashboard</h1>
+
+    <!-- Pending & Approved Requests Table -->
+    <div class="card" style="border-left: 4px solid #eab308;">
+        <h2>🔍 Payment Approvals & Verification Requests</h2>
+        <p style="font-size:0.8rem; color:#64748b; margin-top:0.2rem;">Verify UTR in payment app. Upon clicking "Approve", user store button changes to Download PDF.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>User & Mobile</th>
+                    <th>Product</th>
+                    <th>Amount</th>
+                    <th>Submitted UTR</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="pendingOrdersBody"></tbody>
+        </table>
+    </div>
+
+    <!-- QR & UPI Settings Card -->
+    <div class="card" style="border-left: 4px solid #22c55e;">
+        <h2>💳 Direct UPI & QR Code Settings</h2>
+        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+            <div class="form-group" style="flex: 1;">
+                <label>Your UPI ID</label>
+                <input type="text" id="adminUpiId" placeholder="e.g. 9876543210@paytm">
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label>Upload Scanner/QR Code Image</label>
+                <input type="file" id="qrFileInput" accept="image/*">
+                <img id="qrPreviewImg" src="" class="qr-preview" style="display:none;" alt="QR Preview">
+            </div>
+        </div>
+        <button type="button" class="btn" style="background:#22c55e;" onclick="saveUpiSettings()">Save Payment Settings</button>
+    </div>
+
+    <!-- Product Form Card -->
+    <div class="card">
+        <h2 id="formTitle">Add / Edit Digital Product</h2>
+        <form id="productForm" style="margin-top: 1rem;">
+            <input type="hidden" id="productId">
+            
+            <div class="form-group">
+                <label>Product Title</label>
+                <input type="text" id="title" placeholder="e.g. Master SEO Guide PDF" required>
+            </div>
+
+            <div style="display: flex; gap: 1rem;">
+                <div class="form-group" style="flex: 1;">
+                    <label>Category / Tag</label>
+                    <input type="text" id="tag" placeholder="e.g. E-Book, Template" required>
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>Price (₹)</label>
+                    <input type="number" id="price" placeholder="e.g. 99" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="desc" rows="2" placeholder="Short detail about product..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Upload/Replace PDF Document</label>
+                <input type="file" id="pdfFile" accept="application/pdf">
+            </div>
+
+            <button type="submit" class="btn" id="saveBtn">Save Product</button>
+            <button type="button" class="btn" style="background:#64748b;" onclick="resetForm()">Reset</button>
+        </form>
+    </div>
+
+    <!-- Products List Card -->
+    <div class="card">
+        <h2>Existing Products</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>PDF File</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="adminTableBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    let products = JSON.parse(localStorage.getItem('fz_products')) || [];
+
+    function renderPendingOrders() {
+        const pending = JSON.parse(localStorage.getItem('fz_pending_orders')) || [];
+        const tbody = document.getElementById('pendingOrdersBody');
+
+        if (pending.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No payment requests found.</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = pending.map(o => `
+            <tr>
+                <td>${o.date}</td>
+                <td><strong>${o.name}</strong><br><small>${o.contact}</small></td>
+                <td>${o.product}</td>
+                <td>₹${o.price}</td>
+                <td><strong style="color:#0284c7;">${o.utr}</strong></td>
+                <td><span class="status-badge ${o.status === 'Approved' ? 'status-approved' : 'status-pending'}">${o.status}</span></td>
+                <td>
+                    ${o.status !== 'Approved' ? `<button class="btn btn-success" onclick="approveOrder(${o.id})">Approve</button>` : '✓ Approved'}
+                    <button class="btn btn-danger" onclick="deleteOrder(${o.id})">✕</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    function approveOrder(id) {
+        let pending = JSON.parse(localStorage.getItem('fz_pending_orders')) || [];
+        const index = pending.findIndex(o => o.id == id);
+        if (index !== -1) {
+            pending[index].status = 'Approved';
+            localStorage.setItem('fz_pending_orders', JSON.stringify(pending));
+            alert('Request Approved! User can now download PDF directly from Store page.');
+            renderPendingOrders();
+        }
+    }
+
+    function deleteOrder(id) {
+        if(confirm("Delete this request?")) {
+            let pending = JSON.parse(localStorage.getItem('fz_pending_orders')) || [];
+            pending = pending.filter(o => o.id != id);
+            localStorage.setItem('fz_pending_orders', JSON.stringify(pending));
+            renderPendingOrders();
+        }
+    }
+
+    function loadUpiSettings() {
+        const settings = JSON.parse(localStorage.getItem('fz_upi_settings')) || { upiId: '', qrImage: '' };
+        document.getElementById('adminUpiId').value = settings.upiId || '';
+        if(settings.qrImage) {
+            const preview = document.getElementById('qrPreviewImg');
+            preview.src = settings.qrImage;
+            preview.style.display = 'block';
+        }
+    }
+
+    function saveUpiSettings() {
+        const upiId = document.getElementById('adminUpiId').value.trim();
+        const qrInput = document.getElementById('qrFileInput');
+        let settings = JSON.parse(localStorage.getItem('fz_upi_settings')) || {};
+
+        const updateSettings = (qrBase64) => {
+            settings.upiId = upiId;
+            if(qrBase64) settings.qrImage = qrBase64;
+            localStorage.setItem('fz_upi_settings', JSON.stringify(settings));
+            alert('Payment Settings Saved Successfully!');
+        };
+
+        if (qrInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('qrPreviewImg').src = e.target.result;
+                document.getElementById('qrPreviewImg').style.display = 'block';
+                updateSettings(e.target.result);
+            };
+            reader.readAsDataURL(qrInput.files[0]);
+        } else {
+            updateSettings(null);
+        }
+    }
+
+    function renderAdminTable() {
+        const tbody = document.getElementById('adminTableBody');
+        tbody.innerHTML = products.map(p => `
+            <tr>
+                <td><strong>${p.title}</strong></td>
+                <td>${p.tag}</td>
+                <td>₹${p.price}</td>
+                <td>${p.file !== '#' ? '📄 PDF Attached' : 'No File'}</td>
+                <td>
+                    <button class="btn btn-edit" onclick="editProduct(${p.id})">Edit</button>
+                    <button class="btn btn-danger" onclick="deleteProduct(${p.id})">Delete</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    document.getElementById('productForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const id = document.getElementById('productId').value;
+        const title = document.getElementById('title').value;
+        const tag = document.getElementById('tag').value;
+        const price = document.getElementById('price').value;
+        const desc = document.getElementById('desc').value;
+        const fileInput = document.getElementById('pdfFile');
+
+        const processProduct = (fileUrl) => {
+            if (id) {
+                const index = products.findIndex(p => p.id == id);
+                products[index] = { ...products[index], title, tag, price, desc, file: fileUrl || products[index].file };
+            } else {
+                products.push({ id: Date.now(), title, tag, price, desc, file: fileUrl || '#' });
+            }
+            localStorage.setItem('fz_products', JSON.stringify(products));
+            renderAdminTable();
+            resetForm();
+        };
+
+        if (fileInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) { processProduct(e.target.result); };
+            reader.readAsDataURL(fileInput.files[0]);
+        } else {
+            processProduct(null);
+        }
+    });
+
+    function editProduct(id) {
+        const p = products.find(prod => prod.id == id);
+        document.getElementById('productId').value = p.id;
+        document.getElementById('title').value = p.title;
+        document.getElementById('tag').value = p.tag;
+        document.getElementById('price').value = p.price;
+        document.getElementById('desc').value = p.desc;
+        document.getElementById('formTitle').innerText = "Edit Product: " + p.title;
+    }
+
+    function deleteProduct(id) {
+        if (confirm("Delete product?")) {
+            products = products.filter(p => p.id != id);
+            localStorage.setItem('fz_products', JSON.stringify(products));
+            renderAdminTable();
+        }
+    }
+
+    function resetForm() {
+        document.getElementById('productForm').reset();
+        document.getElementById('productId').value = '';
+        document.getElementById('formTitle').innerText = "Add / Edit Digital Product";
+    }
+
+    window.onload = () => {
+        loadUpiSettings();
+        renderAdminTable();
+        renderPendingOrders();
+    };
+</script>
+</body>
+</html>
