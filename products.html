@@ -181,6 +181,9 @@
             <img id="qrCodeImg" src="" alt="UPI QR Code" class="qr-img" loading="lazy">
             <div class="upi-id" id="upiIdText">UPI ID: Loading...</div>
 
+            <button type="button" class="download-btn" id="upiPayBtn" style="display:none; width:100%; margin-bottom:0.8rem;" onclick="openUpiApp()">📲 Pay with UPI App</button>
+            <p class="hint-line" id="upiPayHint" style="display:none; font-size:0.72rem; color:var(--text-muted); margin:-0.5rem 0 0.8rem;">Tap to open your UPI app (GPay/PhonePe/Paytm) with the amount already filled in — just enter your PIN.</p>
+
             <div class="coupon-row">
                 <input type="text" id="couponInput" class="form-input" placeholder="Coupon code (optional)">
                 <button type="button" class="download-btn" onclick="applyCoupon()">Apply</button>
@@ -465,6 +468,8 @@
             document.getElementById('payModal').style.display = 'flex';
         }
 
+        let currentUpiLink = ''; // rebuilt below whenever price/coupon changes
+
         function updateModalPrice() {
             const base = Number(activeProduct.price);
             let final = base;
@@ -477,14 +482,37 @@
             }
             document.getElementById('modalPrice').innerHTML = priceHTML;
 
-            if (upiSettings.qrUrl) {
-                document.getElementById('qrCodeImg').src = upiSettings.qrUrl;
-            } else if (upiSettings.upiId) {
-                const upiLink = `upi://pay?pa=${upiSettings.upiId}&pn=${encodeURIComponent('FactZone')}&am=${final}&cu=INR`;
-                document.getElementById('qrCodeImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(upiLink)}`;
+            const upiBtn = document.getElementById('upiPayBtn');
+            const upiHint = document.getElementById('upiPayHint');
+
+            if (upiSettings.upiId) {
+                // UPI deep link: opens the customer's UPI app directly with the
+                // payee, amount and a note pre-filled — they just enter their
+                // PIN to finish. Rebuilt here so it always reflects the coupon-
+                // discounted amount, not the original price.
+                currentUpiLink = `upi://pay?pa=${upiSettings.upiId}&pn=${encodeURIComponent('FactZone')}&am=${final}&cu=INR&tn=${encodeURIComponent(activeProduct.title)}`;
+                upiBtn.style.display = 'block';
+                upiHint.style.display = 'block';
+
+                document.getElementById('qrCodeImg').src = upiSettings.qrUrl
+                    ? upiSettings.qrUrl
+                    : `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(currentUpiLink)}`;
             } else {
+                currentUpiLink = '';
+                upiBtn.style.display = 'none';
+                upiHint.style.display = 'none';
                 document.getElementById('qrCodeImg').src = '';
             }
+        }
+
+        function openUpiApp() {
+            if (!currentUpiLink) return;
+            // Navigate the current tab to the upi:// link — the OS/browser
+            // intercepts this and hands off to whichever UPI app the
+            // customer has installed (GPay, PhonePe, Paytm, etc). Using a
+            // new tab here often just opens a blank tab on mobile, so we
+            // deliberately avoid target="_blank".
+            window.location.href = currentUpiLink;
         }
 
         async function applyCoupon() {
