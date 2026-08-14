@@ -4,13 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Master Admin Panel - FactZone</title>
-    <!-- Admin panel should never be indexed by search engines -->
     <meta name="robots" content="noindex, nofollow">
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }
         body { background-color: #f1f5f9; padding: 2rem; color: #0f172a; }
-        .admin-container { max-width: 950px; margin: 0 auto; }
+        .admin-container { max-width: 1000px; margin: 0 auto; }
         h1 { margin-bottom: 1.5rem; text-align: center; }
+        h2 { margin-bottom: 0.4rem; }
 
         .card { background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 2rem; }
         .form-group { margin-bottom: 1rem; }
@@ -25,6 +30,7 @@
         .btn-danger { background: #ef4444; }
         .btn-success { background: #22c55e; }
         .btn-edit { background: #eab308; color: #000; margin-right: 0.3rem; }
+        .btn-whatsapp { background: #22c55e; margin-left: 0.3rem; }
 
         table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
         th, td { border: 1px solid #e2e8f0; padding: 0.75rem; text-align: left; font-size: 0.85rem; }
@@ -34,63 +40,128 @@
         .status-badge { padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600; font-size: 0.75rem; }
         .status-pending { background: #fef08a; color: #854d0e; }
         .status-approved { background: #bbf7d0; color: #166534; }
-        .storage-meter { font-size: 0.75rem; color: #64748b; margin-top: 0.5rem; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.2rem; }
+        .stat-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; text-align: center; }
+        .stat-box .num { font-size: 1.4rem; font-weight: 700; color: #0284c7; }
+        .stat-box .label { font-size: 0.75rem; color: #64748b; }
+        canvas { width: 100%; max-width: 100%; height: 220px; }
+
+        #loginScreen { max-width: 380px; margin: 4rem auto; }
+        #loginScreen .card { text-align: left; }
+        #dashboard { display: none; }
+        .top-bar { display: flex; justify-content: flex-end; margin-bottom: 1rem; }
     </style>
 </head>
 <body>
 
-<div class="admin-container">
+<!-- ============== LOGIN GATE ============== -->
+<div id="loginScreen">
+    <div class="card">
+        <h2>🔐 Admin Login</h2>
+        <p class="hint" style="margin-bottom:1rem;">This account must first be created once in the Firebase Console → Authentication → Users (see setup notes).</p>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="loginEmail" placeholder="admin@factzone.online">
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="loginPassword" placeholder="Password">
+        </div>
+        <p class="error-text" id="loginError"></p>
+        <button class="btn" id="loginBtn" onclick="doLogin()" style="width:100%;">Login</button>
+    </div>
+</div>
+
+<!-- ============== DASHBOARD (hidden until logged in) ============== -->
+<div class="admin-container" id="dashboard">
+    <div class="top-bar">
+        <button class="btn" style="background:#64748b;" onclick="doLogout()">Logout</button>
+    </div>
     <h1>MpAdmin Store Control Dashboard</h1>
 
-    <!-- Pending & Approved Requests Table -->
+    <!-- Sales Analytics -->
+    <div class="card" style="border-left: 4px solid #0284c7;">
+        <h2>📊 Sales Analytics</h2>
+        <div class="stats-grid">
+            <div class="stat-box"><div class="num" id="statRevenue">₹0</div><div class="label">Total Revenue (Approved)</div></div>
+            <div class="stat-box"><div class="num" id="statOrders">0</div><div class="label">Approved Orders</div></div>
+            <div class="stat-box"><div class="num" id="statPending">0</div><div class="label">Pending Requests</div></div>
+            <div class="stat-box"><div class="num" id="statTop">-</div><div class="label">Top Product</div></div>
+        </div>
+        <canvas id="salesChart" width="800" height="220"></canvas>
+    </div>
+
+    <!-- Pending & Approved Requests -->
     <div class="card" style="border-left: 4px solid #eab308;">
         <h2>🔍 Payment Approvals & Verification Requests</h2>
-        <p style="font-size:0.8rem; color:#64748b; margin-top:0.2rem;">Verify UTR in payment app. Upon clicking "Approve", user store button changes to Download PDF.</p>
+        <p class="hint" style="margin-top:0.2rem;">Verify UTR in your payment app, then click Approve. The customer's store button turns into a direct download.</p>
         <table>
             <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>User & Mobile</th>
-                    <th>Product</th>
-                    <th>Amount</th>
-                    <th>Submitted UTR</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
+                <tr><th>Date</th><th>User & Mobile</th><th>Product</th><th>Amount</th><th>UTR</th><th>Status</th><th>Action</th></tr>
             </thead>
             <tbody id="pendingOrdersBody"></tbody>
         </table>
     </div>
 
-    <!-- QR & UPI Settings Card -->
+    <!-- UPI, WhatsApp & Expiry Settings -->
     <div class="card" style="border-left: 4px solid #22c55e;">
-        <h2>💳 Direct UPI & QR Code Settings</h2>
-        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
-            <div class="form-group" style="flex: 1;">
-                <label>Your UPI ID</label>
-                <input type="text" id="adminUpiId" placeholder="e.g. 9876543210@paytm">
-            </div>
-            <div class="form-group" style="flex: 1;">
-                <label>Upload Scanner/QR Code Image</label>
-                <input type="file" id="qrFileInput" accept="image/*">
-                <p class="hint">Max 500 KB — this is stored in the browser, so keep it small.</p>
-                <img id="qrPreviewImg" src="" class="qr-preview" style="display:none;" alt="QR Preview">
-            </div>
+        <h2>💳 Payment, WhatsApp & Link Settings</h2>
+        <div class="form-group">
+            <label>Your UPI ID</label>
+            <input type="text" id="adminUpiId" placeholder="e.g. 9876543210@paytm">
         </div>
-        <button type="button" class="btn" id="saveUpiBtn" style="background:#22c55e;" onclick="saveUpiSettings()">Save Payment Settings</button>
+        <div class="form-group">
+            <label>QR Code Image Link (optional)</label>
+            <input type="text" id="adminQrUrl" placeholder="Paste a public image link (Google Drive / Cloudinary / Imgur)">
+            <p class="hint">Leave empty and a QR will be auto-generated from your UPI ID instead. Tip: for Google Drive, use "Anyone with the link can view" sharing.</p>
+            <img id="qrPreviewImg" src="" class="qr-preview" style="display:none;" alt="QR Preview">
+        </div>
+        <div class="form-group">
+            <label>Your WhatsApp Number (with country code, digits only)</label>
+            <input type="text" id="adminWhatsapp" placeholder="e.g. 919876543210">
+            <p class="hint">Used to build free "click-to-send" WhatsApp alerts — no paid API needed.</p>
+        </div>
+        <div class="form-group">
+            <label>Download Link Expiry (hours)</label>
+            <input type="number" id="expiryHours" min="1" placeholder="48">
+        </div>
+        <button type="button" class="btn" id="saveUpiBtn" style="background:#22c55e;" onclick="saveSettings()">Save Settings</button>
     </div>
 
-    <!-- Product Form Card -->
+    <!-- Coupons -->
+    <div class="card" style="border-left: 4px solid #a855f7;">
+        <h2>🏷️ Coupons</h2>
+        <div style="display:flex; gap:0.6rem; flex-wrap:wrap; align-items:flex-end; margin-top:0.8rem;">
+            <div class="form-group" style="flex:1; min-width:120px; margin-bottom:0;">
+                <label>Code</label>
+                <input type="text" id="couponCode" placeholder="FIRST10">
+            </div>
+            <div class="form-group" style="flex:1; min-width:120px; margin-bottom:0;">
+                <label>Type</label>
+                <select id="couponType"><option value="percent">% Percent</option><option value="flat">₹ Flat</option></select>
+            </div>
+            <div class="form-group" style="flex:1; min-width:100px; margin-bottom:0;">
+                <label>Value</label>
+                <input type="number" id="couponValue" placeholder="10" min="1">
+            </div>
+            <button type="button" class="btn" onclick="addCoupon()">Add Coupon</button>
+        </div>
+        <table>
+            <thead><tr><th>Code</th><th>Discount</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="couponsBody"></tbody>
+        </table>
+    </div>
+
+    <!-- Product Form -->
     <div class="card">
         <h2 id="formTitle">Add / Edit Digital Product</h2>
         <form id="productForm" style="margin-top: 1rem;">
             <input type="hidden" id="productId">
-
             <div class="form-group">
                 <label>Product Title</label>
                 <input type="text" id="title" placeholder="e.g. Master SEO Guide PDF" required>
             </div>
-
             <div style="display: flex; gap: 1rem;">
                 <div class="form-group" style="flex: 1;">
                     <label>Category / Tag</label>
@@ -101,226 +172,330 @@
                     <input type="number" id="price" placeholder="e.g. 99" min="1" step="1" required>
                 </div>
             </div>
-
             <div class="form-group">
                 <label>Description</label>
                 <textarea id="desc" rows="2" placeholder="Short detail about product..."></textarea>
             </div>
-
             <div class="form-group">
-                <label>Upload/Replace PDF Document</label>
-                <input type="file" id="pdfFile" accept="application/pdf">
-                <p class="hint" id="currentFileHint"></p>
-                <p class="hint">Max 4 MB — large PDFs quickly fill up browser storage and cause save errors.</p>
+                <label>PDF File Link</label>
+                <input type="text" id="fileUrl" placeholder="Paste a public download link (Google Drive / Cloudinary)">
+                <p class="hint">Use a direct/"Anyone with the link" share link so it opens straight to the file.</p>
+            </div>
+            <div class="form-group">
+                <label>Preview / Screenshot Image Link (optional)</label>
+                <input type="text" id="previewUrl" placeholder="Paste a public image link">
             </div>
             <p class="error-text" id="formError"></p>
-
             <button type="submit" class="btn" id="saveBtn">Save Product</button>
             <button type="button" class="btn" style="background:#64748b;" onclick="resetForm()">Reset</button>
         </form>
     </div>
 
-    <!-- Products List Card -->
+    <!-- Products List -->
     <div class="card">
         <h2>Existing Products</h2>
         <table>
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Category</th>
-                    <th>Price</th>
-                    <th>PDF File</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
+            <thead><tr><th>Title</th><th>Category</th><th>Price</th><th>File</th><th>Rating</th><th>Actions</th></tr></thead>
             <tbody id="adminTableBody"></tbody>
         </table>
-        <p class="storage-meter" id="storageMeter"></p>
     </div>
 </div>
 
 <script>
-    // Max sizes kept small on purpose: everything here is stored as base64
-    // inside localStorage, which typically caps out around 5–10 MB total
-    // per site. Oversized files were the main cause of silent save failures.
-    const MAX_PDF_BYTES = 4 * 1024 * 1024;   // 4 MB
-    const MAX_QR_BYTES = 500 * 1024;         // 500 KB
+    // ---------------------------------------------------------------
+    // FIREBASE INIT
+    // ---------------------------------------------------------------
+    const firebaseConfig = {
+        apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
+        authDomain: "factzone-a9ace.firebaseapp.com",
+        databaseURL: "https://factzone-a9ace-default-rtdb.firebaseio.com",
+        projectId: "factzone-a9ace",
+        storageBucket: "factzone-a9ace.firebasestorage.app",
+        messagingSenderId: "425838320650",
+        appId: "1:425838320650:web:beab18baddf818cb73d3f3",
+        measurementId: "G-311JQXBXR9"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
-    let products = safeGet('fz_products', []);
-    let editingFileUrl = null; // holds the existing PDF data when editing, if no new file is chosen
+    let products = [];
+    let orders = [];
+    let coupons = [];
+    let reviewsByProduct = {};
 
     function escapeHtml(str) {
-        return String(str ?? '').replace(/[&<>"']/g, (c) => ({
-            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-        })[c]);
+        return String(str ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
     }
 
-    function safeGet(key, fallback) {
-        try {
-            const raw = localStorage.getItem(key);
-            return raw ? JSON.parse(raw) : fallback;
-        } catch (e) {
-            console.error('Could not read "' + key + '" from storage:', e);
-            return fallback;
-        }
-    }
+    // ---------------------------------------------------------------
+    // AUTH GATE — only a signed-in admin (created once in Firebase
+    // Console) ever sees the dashboard. Firestore security rules also
+    // check this same login server-side, so hiding the UI is backed by
+    // real enforcement, not just JavaScript.
+    // ---------------------------------------------------------------
+    function doLogin() {
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value;
+        const errEl = document.getElementById('loginError');
+        const btn = document.getElementById('loginBtn');
+        errEl.style.display = 'none';
 
-    function safeSet(key, value) {
-        try {
-            localStorage.setItem(key, JSON.stringify(value));
-            renderStorageMeter();
-            return true;
-        } catch (e) {
-            console.error('Could not save "' + key + '":', e);
-            if (e && e.name === 'QuotaExceededError') {
-                alert('Browser storage is full. This is a hard limit of storing files in localStorage — delete an old product (especially ones with large PDFs) or use a smaller file, then try again.');
-            } else {
-                alert('Something went wrong while saving. Please try again.');
-            }
-            return false;
-        }
-    }
-
-    function renderStorageMeter() {
-        try {
-            let bytes = 0;
-            for (const key in localStorage) {
-                if (Object.prototype.hasOwnProperty.call(localStorage, key)) {
-                    bytes += (localStorage[key] || '').length;
-                }
-            }
-            const kb = (bytes / 1024).toFixed(0);
-            document.getElementById('storageMeter').textContent =
-                `Approx. browser storage used: ${kb} KB (typical limit is 5,000–10,000 KB).`;
-        } catch (e) {
-            // Non-critical — skip silently if it can't be measured.
-        }
-    }
-
-    function renderPendingOrders() {
-        const pending = safeGet('fz_pending_orders', []);
-        const tbody = document.getElementById('pendingOrdersBody');
-
-        if (pending.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No payment requests found.</td></tr>';
-            return;
-        }
-
-        tbody.innerHTML = pending.map(o => `
-            <tr>
-                <td>${escapeHtml(o.date)}</td>
-                <td><strong>${escapeHtml(o.name)}</strong><br><small>${escapeHtml(o.contact)}</small></td>
-                <td>${escapeHtml(o.product)}</td>
-                <td>₹${escapeHtml(o.price)}</td>
-                <td><strong style="color:#0284c7;">${escapeHtml(o.utr)}</strong></td>
-                <td><span class="status-badge ${o.status === 'Approved' ? 'status-approved' : 'status-pending'}">${escapeHtml(o.status)}</span></td>
-                <td>
-                    ${o.status !== 'Approved' ? `<button class="btn btn-success" onclick="approveOrder(${o.id})">Approve</button>` : '✓ Approved'}
-                    <button class="btn btn-danger" onclick="deleteOrder(${o.id})">✕</button>
-                </td>
-            </tr>
-        `).join('');
-    }
-
-    function approveOrder(id) {
-        let pending = safeGet('fz_pending_orders', []);
-        const index = pending.findIndex(o => o.id == id);
-        if (index !== -1) {
-            pending[index].status = 'Approved';
-            if (safeSet('fz_pending_orders', pending)) {
-                alert('Request Approved! User can now download PDF directly from Store page.');
-                renderPendingOrders();
-            }
-        }
-    }
-
-    function deleteOrder(id) {
-        if (confirm("Delete this request?")) {
-            let pending = safeGet('fz_pending_orders', []);
-            pending = pending.filter(o => o.id != id);
-            if (safeSet('fz_pending_orders', pending)) {
-                renderPendingOrders();
-            }
-        }
-    }
-
-    function loadUpiSettings() {
-        const settings = safeGet('fz_upi_settings', { upiId: '', qrImage: '' });
-        document.getElementById('adminUpiId').value = settings.upiId || '';
-        if (settings.qrImage) {
-            const preview = document.getElementById('qrPreviewImg');
-            preview.src = settings.qrImage;
-            preview.style.display = 'block';
-        }
-    }
-
-    function readFileAsDataUrl(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = (e) => resolve(e.target.result);
-            reader.onerror = () => reject(new Error('Could not read file.'));
-            reader.readAsDataURL(file);
-        });
-    }
-
-    async function saveUpiSettings() {
-        const upiId = document.getElementById('adminUpiId').value.trim();
-        const qrInput = document.getElementById('qrFileInput');
-        const btn = document.getElementById('saveUpiBtn');
-        let settings = safeGet('fz_upi_settings', {});
-
-        if (!upiId) {
-            alert('Please enter a UPI ID before saving.');
-            return;
-        }
-
-        const file = qrInput.files[0];
-        if (file && file.size > MAX_QR_BYTES) {
-            alert(`That QR image is too large (${(file.size / 1024).toFixed(0)} KB). Please use an image under 500 KB.`);
+        if (!email || !password) {
+            errEl.textContent = 'Please enter email and password.';
+            errEl.style.display = 'block';
             return;
         }
 
         btn.disabled = true;
-        btn.textContent = 'Saving...';
+        btn.textContent = 'Logging in...';
+        auth.signInWithEmailAndPassword(email, password)
+            .catch(err => {
+                errEl.textContent = 'Login failed: ' + (err.code === 'auth/invalid-credential' ? 'wrong email or password.' : err.message);
+                errEl.style.display = 'block';
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.textContent = 'Login';
+            });
+    }
 
+    function doLogout() {
+        auth.signOut();
+    }
+
+    let listenersStarted = false;
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            if (!listenersStarted) { startListeners(); listenersStarted = true; }
+        } else {
+            document.getElementById('loginScreen').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+        }
+    });
+
+    // ---------------------------------------------------------------
+    // LIVE LISTENERS (start only after login, matching security rules)
+    // ---------------------------------------------------------------
+    function startListeners() {
+        db.collection('products').orderBy('createdAt', 'desc').onSnapshot(snap => {
+            products = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            renderAdminTable();
+            renderAnalytics();
+        }, err => console.error('Products listener error:', err));
+
+        db.collection('orders').orderBy('createdAt', 'desc').onSnapshot(snap => {
+            orders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            renderPendingOrders();
+            renderAnalytics();
+        }, err => console.error('Orders listener error:', err));
+
+        db.collection('coupons').onSnapshot(snap => {
+            coupons = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            renderCoupons();
+        }, err => console.error('Coupons listener error:', err));
+
+        db.collection('reviews').onSnapshot(snap => {
+            reviewsByProduct = {};
+            snap.docs.forEach(d => {
+                const r = d.data();
+                if (!reviewsByProduct[r.productId]) reviewsByProduct[r.productId] = [];
+                reviewsByProduct[r.productId].push(r);
+            });
+            renderAdminTable();
+        }, err => console.error('Reviews listener error:', err));
+
+        db.collection('settings').doc('store').get().then(doc => {
+            if (doc.exists) {
+                const s = doc.data();
+                document.getElementById('adminUpiId').value = s.upiId || '';
+                document.getElementById('adminQrUrl').value = s.qrUrl || '';
+                document.getElementById('adminWhatsapp').value = s.adminWhatsapp || '';
+                document.getElementById('expiryHours').value = s.expiryHours || 48;
+                if (s.qrUrl) {
+                    document.getElementById('qrPreviewImg').src = s.qrUrl;
+                    document.getElementById('qrPreviewImg').style.display = 'block';
+                }
+            }
+        }).catch(err => console.error('Settings load error:', err));
+    }
+
+    // ---------------------------------------------------------------
+    // ORDERS
+    // ---------------------------------------------------------------
+    function renderPendingOrders() {
+        const tbody = document.getElementById('pendingOrdersBody');
+        if (!orders.length) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No payment requests found.</td></tr>';
+            return;
+        }
+        tbody.innerHTML = orders.map(o => {
+            const date = o.createdAt ? o.createdAt.toDate().toLocaleString() : '-';
+            const amount = o.finalPrice ?? o.price;
+            return `
+            <tr>
+                <td>${escapeHtml(date)}</td>
+                <td><strong>${escapeHtml(o.name)}</strong><br><small>${escapeHtml(o.contact)}</small></td>
+                <td>${escapeHtml(o.productTitle)}</td>
+                <td>₹${escapeHtml(amount)}${o.couponCode ? ` <small>(${escapeHtml(o.couponCode)})</small>` : ''}</td>
+                <td><strong style="color:#0284c7;">${escapeHtml(o.utr)}</strong></td>
+                <td><span class="status-badge ${o.status === 'Approved' ? 'status-approved' : 'status-pending'}">${escapeHtml(o.status)}</span></td>
+                <td>
+                    ${o.status !== 'Approved' ? `<button class="btn btn-success" onclick="approveOrder('${o.id}')">Approve</button>` : '✓ Approved'}
+                    <button class="btn btn-danger" onclick="deleteOrder('${o.id}')">✕</button>
+                    ${o.contact ? `<button class="btn btn-whatsapp" onclick="notifyCustomer('${o.id}')">WhatsApp</button>` : ''}
+                </td>
+            </tr>`;
+        }).join('');
+    }
+
+    async function approveOrder(id) {
         try {
-            let qrBase64 = null;
-            if (file) {
-                qrBase64 = await readFileAsDataUrl(file);
-                document.getElementById('qrPreviewImg').src = qrBase64;
-                document.getElementById('qrPreviewImg').style.display = 'block';
-            }
-            settings.upiId = upiId;
-            if (qrBase64) settings.qrImage = qrBase64;
-            if (safeSet('fz_upi_settings', settings)) {
-                alert('Payment Settings Saved Successfully!');
-            }
-        } catch (err) {
-            alert('Could not read the QR image file. Please try a different file.');
-        } finally {
-            btn.disabled = false;
-            btn.textContent = 'Save Payment Settings';
+            await db.collection('orders').doc(id).update({
+                status: 'Approved',
+                approvedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            alert('Request Approved! Use the WhatsApp button to notify the customer instantly.');
+        } catch (e) {
+            console.error('Approve failed:', e);
+            alert('Could not approve this order. Please check your connection and try again.');
         }
     }
 
+    async function deleteOrder(id) {
+        if (!confirm('Delete this request?')) return;
+        try {
+            await db.collection('orders').doc(id).delete();
+        } catch (e) {
+            console.error('Delete order failed:', e);
+            alert('Could not delete this order. Please try again.');
+        }
+    }
+
+    // Free "click-to-send" WhatsApp — opens WhatsApp with the download
+    // link pre-filled so the admin just taps Send. No paid API used.
+    function notifyCustomer(orderId) {
+        const order = orders.find(o => o.id === orderId);
+        const product = products.find(p => p.id === order?.productId);
+        if (!order) return;
+        const link = product?.fileUrl || '(link not set yet — add it in the product form)';
+        const text = encodeURIComponent(
+            `Hi ${order.name}, your FactZone order "${order.productTitle}" is approved! ✅\nDownload here: ${link}`
+        );
+        window.open(`https://wa.me/${order.contact.length === 10 ? '91' + order.contact : order.contact}?text=${text}`, '_blank');
+    }
+
+    // ---------------------------------------------------------------
+    // SETTINGS
+    // ---------------------------------------------------------------
+    async function saveSettings() {
+        const upiId = document.getElementById('adminUpiId').value.trim();
+        const qrUrl = document.getElementById('adminQrUrl').value.trim();
+        const adminWhatsapp = document.getElementById('adminWhatsapp').value.trim();
+        const expiryHours = Number(document.getElementById('expiryHours').value) || 48;
+
+        if (!upiId) { alert('Please enter a UPI ID before saving.'); return; }
+
+        const btn = document.getElementById('saveUpiBtn');
+        btn.disabled = true;
+        btn.textContent = 'Saving...';
+        try {
+            await db.collection('settings').doc('store').set({ upiId, qrUrl, adminWhatsapp, expiryHours }, { merge: true });
+            if (qrUrl) {
+                document.getElementById('qrPreviewImg').src = qrUrl;
+                document.getElementById('qrPreviewImg').style.display = 'block';
+            }
+            alert('Settings saved successfully!');
+        } catch (e) {
+            console.error('Save settings failed:', e);
+            alert('Could not save settings. Please try again.');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Save Settings';
+        }
+    }
+
+    // ---------------------------------------------------------------
+    // COUPONS
+    // ---------------------------------------------------------------
+    function renderCoupons() {
+        const tbody = document.getElementById('couponsBody');
+        if (!coupons.length) {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No coupons yet.</td></tr>';
+            return;
+        }
+        tbody.innerHTML = coupons.map(c => `
+            <tr>
+                <td><strong>${escapeHtml(c.code)}</strong></td>
+                <td>${c.type === 'percent' ? escapeHtml(c.value) + '% off' : '₹' + escapeHtml(c.value) + ' off'}</td>
+                <td><span class="status-badge ${c.active ? 'status-approved' : 'status-pending'}">${c.active ? 'Active' : 'Disabled'}</span></td>
+                <td>
+                    <button class="btn ${c.active ? 'btn-edit' : 'btn-success'}" onclick="toggleCoupon('${c.id}', ${!c.active})">${c.active ? 'Disable' : 'Enable'}</button>
+                    <button class="btn btn-danger" onclick="deleteCoupon('${c.id}')">Delete</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    async function addCoupon() {
+        const code = document.getElementById('couponCode').value.trim().toUpperCase();
+        const type = document.getElementById('couponType').value;
+        const value = Number(document.getElementById('couponValue').value);
+
+        if (!code) return alert('Please enter a coupon code.');
+        if (!value || value <= 0) return alert('Please enter a valid discount value.');
+        if (type === 'percent' && value > 100) return alert('Percent discount cannot exceed 100.');
+
+        try {
+            await db.collection('coupons').add({ code, type, value, active: true });
+            document.getElementById('couponCode').value = '';
+            document.getElementById('couponValue').value = '';
+        } catch (e) {
+            console.error('Add coupon failed:', e);
+            alert('Could not add coupon. Please try again.');
+        }
+    }
+
+    async function toggleCoupon(id, active) {
+        try { await db.collection('coupons').doc(id).update({ active }); }
+        catch (e) { console.error('Toggle coupon failed:', e); alert('Could not update coupon.'); }
+    }
+
+    async function deleteCoupon(id) {
+        if (!confirm('Delete this coupon?')) return;
+        try { await db.collection('coupons').doc(id).delete(); }
+        catch (e) { console.error('Delete coupon failed:', e); alert('Could not delete coupon.'); }
+    }
+
+    // ---------------------------------------------------------------
+    // PRODUCTS
+    // ---------------------------------------------------------------
     function renderAdminTable() {
         const tbody = document.getElementById('adminTableBody');
         if (!products.length) {
-            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No products yet — add your first one above.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No products yet — add your first one above.</td></tr>';
             return;
         }
-        tbody.innerHTML = products.map(p => `
+        tbody.innerHTML = products.map(p => {
+            const reviews = reviewsByProduct[p.id] || [];
+            const ratingText = reviews.length
+                ? (reviews.reduce((a, r) => a + Number(r.rating || 0), 0) / reviews.length).toFixed(1) + ` (${reviews.length})`
+                : '-';
+            return `
             <tr>
                 <td><strong>${escapeHtml(p.title)}</strong></td>
                 <td>${escapeHtml(p.tag)}</td>
                 <td>₹${escapeHtml(p.price)}</td>
-                <td>${p.file && p.file !== '#' ? '📄 PDF Attached' : 'No File'}</td>
+                <td>${p.fileUrl ? '📄 Link set' : 'No link'}</td>
+                <td>${ratingText}</td>
                 <td>
-                    <button class="btn btn-edit" onclick="editProduct(${p.id})">Edit</button>
-                    <button class="btn btn-danger" onclick="deleteProduct(${p.id})">Delete</button>
+                    <button class="btn btn-edit" onclick="editProduct('${p.id}')">Edit</button>
+                    <button class="btn btn-danger" onclick="deleteProduct('${p.id}')">Delete</button>
                 </td>
-            </tr>
-        `).join('');
+            </tr>`;
+        }).join('');
     }
 
     function showFormError(msg) {
@@ -328,10 +503,7 @@
         el.textContent = msg;
         el.style.display = 'block';
     }
-
-    function hideFormError() {
-        document.getElementById('formError').style.display = 'none';
-    }
+    function hideFormError() { document.getElementById('formError').style.display = 'none'; }
 
     document.getElementById('productForm').addEventListener('submit', async function (e) {
         e.preventDefault();
@@ -340,45 +512,28 @@
         const id = document.getElementById('productId').value;
         const title = document.getElementById('title').value.trim();
         const tag = document.getElementById('tag').value.trim();
-        const price = document.getElementById('price').value;
+        const price = Number(document.getElementById('price').value);
         const desc = document.getElementById('desc').value.trim();
-        const fileInput = document.getElementById('pdfFile');
+        const fileUrl = document.getElementById('fileUrl').value.trim();
+        const previewUrl = document.getElementById('previewUrl').value.trim();
 
         if (!title || !tag) return showFormError('Please fill in the title and category.');
-        if (!price || Number(price) <= 0) return showFormError('Please enter a valid price greater than 0.');
-
-        const file = fileInput.files[0];
-        if (file && file.size > MAX_PDF_BYTES) {
-            return showFormError(`That PDF is too large (${(file.size / 1024 / 1024).toFixed(1)} MB). Please use a file under 4 MB.`);
-        }
+        if (!price || price <= 0) return showFormError('Please enter a valid price greater than 0.');
 
         const saveBtn = document.getElementById('saveBtn');
         saveBtn.disabled = true;
         saveBtn.textContent = 'Saving...';
 
         try {
-            let fileUrl = null;
-            if (file) {
-                fileUrl = await readFileAsDataUrl(file);
-            }
-
-            let nextProducts;
             if (id) {
-                const index = products.findIndex(p => p.id == id);
-                if (index === -1) return showFormError('Could not find this product to update.');
-                nextProducts = [...products];
-                nextProducts[index] = { ...nextProducts[index], title, tag, price, desc, file: fileUrl || nextProducts[index].file };
+                await db.collection('products').doc(id).update({ title, tag, price, desc, fileUrl, previewUrl });
             } else {
-                nextProducts = [...products, { id: Date.now(), title, tag, price, desc, file: fileUrl || '#' }];
+                await db.collection('products').add({ title, tag, price, desc, fileUrl, previewUrl, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
             }
-
-            if (safeSet('fz_products', nextProducts)) {
-                products = nextProducts;
-                renderAdminTable();
-                resetForm();
-            }
-        } catch (err) {
-            showFormError('Could not read the PDF file. Please try a different file.');
+            resetForm();
+        } catch (e) {
+            console.error('Save product failed:', e);
+            showFormError('Could not save this product. Please check your connection and try again.');
         } finally {
             saveBtn.disabled = false;
             saveBtn.textContent = 'Save Product';
@@ -386,36 +541,35 @@
     });
 
     function editProduct(id) {
-        const p = products.find(prod => prod.id == id);
+        const p = products.find(prod => prod.id === id);
         if (!p) return;
         document.getElementById('productId').value = p.id;
         document.getElementById('title').value = p.title;
         document.getElementById('tag').value = p.tag;
         document.getElementById('price').value = p.price;
-        document.getElementById('desc').value = p.desc;
+        document.getElementById('desc').value = p.desc || '';
+        document.getElementById('fileUrl').value = p.fileUrl || '';
+        document.getElementById('previewUrl').value = p.previewUrl || '';
         document.getElementById('formTitle').innerText = "Edit Product: " + p.title;
-        document.getElementById('currentFileHint').textContent =
-            p.file && p.file !== '#' ? 'A PDF is already attached — leave the file field empty to keep it.' : 'No PDF attached yet.';
         hideFormError();
         window.scrollTo({ top: document.getElementById('productForm').offsetTop - 20, behavior: 'smooth' });
     }
 
-    function deleteProduct(id) {
-        if (confirm("Delete product? Any pending/approved orders for it will also be removed.")) {
-            const nextProducts = products.filter(p => p.id != id);
-            if (!safeSet('fz_products', nextProducts)) return;
-            products = nextProducts;
+    async function deleteProduct(id) {
+        if (!confirm('Delete product? Its orders and reviews will also be removed.')) return;
+        try {
+            await db.collection('products').doc(id).delete();
 
-            // Clean up orphaned orders so the pending-orders table never
-            // references a product that no longer exists.
-            const pending = safeGet('fz_pending_orders', []);
-            const nextPending = pending.filter(o => o.productId != id);
-            if (nextPending.length !== pending.length) {
-                safeSet('fz_pending_orders', nextPending);
-                renderPendingOrders();
-            }
-
-            renderAdminTable();
+            // Clean up orphaned orders and reviews for this product.
+            const ordersSnap = await db.collection('orders').where('productId', '==', id).get();
+            const reviewsSnap = await db.collection('reviews').where('productId', '==', id).get();
+            const batch = db.batch();
+            ordersSnap.forEach(d => batch.delete(d.ref));
+            reviewsSnap.forEach(d => batch.delete(d.ref));
+            await batch.commit();
+        } catch (e) {
+            console.error('Delete product failed:', e);
+            alert('Could not delete this product. Please try again.');
         }
     }
 
@@ -423,25 +577,72 @@
         document.getElementById('productForm').reset();
         document.getElementById('productId').value = '';
         document.getElementById('formTitle').innerText = "Add / Edit Digital Product";
-        document.getElementById('currentFileHint').textContent = '';
         hideFormError();
     }
 
-    window.onload = () => {
-        loadUpiSettings();
-        renderAdminTable();
-        renderPendingOrders();
-        renderStorageMeter();
-    };
+    // ---------------------------------------------------------------
+    // ANALYTICS
+    // ---------------------------------------------------------------
+    function renderAnalytics() {
+        const approved = orders.filter(o => o.status === 'Approved');
+        const pending = orders.filter(o => o.status !== 'Approved');
+        const revenue = approved.reduce((sum, o) => sum + Number(o.finalPrice ?? o.price ?? 0), 0);
 
-    // Keep this tab's view in sync if the store page changes data too.
-    window.addEventListener('storage', function (e) {
-        if (e.key === 'fz_pending_orders') renderPendingOrders();
-        if (e.key === 'fz_products') {
-            products = safeGet('fz_products', []);
-            renderAdminTable();
+        document.getElementById('statRevenue').textContent = '₹' + revenue.toLocaleString('en-IN');
+        document.getElementById('statOrders').textContent = approved.length;
+        document.getElementById('statPending').textContent = pending.length;
+
+        const salesByProduct = {};
+        approved.forEach(o => { salesByProduct[o.productTitle] = (salesByProduct[o.productTitle] || 0) + 1; });
+        const top = Object.entries(salesByProduct).sort((a, b) => b[1] - a[1])[0];
+        document.getElementById('statTop').textContent = top ? top[0] : '-';
+
+        // Revenue for the last 6 months, drawn on a plain <canvas> —
+        // no external charting library, so nothing extra to load or pay for.
+        const months = [];
+        const now = new Date();
+        for (let i = 5; i >= 0; i--) {
+            const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+            months.push({ key: d.getFullYear() + '-' + d.getMonth(), label: d.toLocaleString('en-IN', { month: 'short' }), total: 0 });
         }
-    });
+        approved.forEach(o => {
+            if (!o.approvedAt) return;
+            const d = o.approvedAt.toDate();
+            const key = d.getFullYear() + '-' + d.getMonth();
+            const bucket = months.find(m => m.key === key);
+            if (bucket) bucket.total += Number(o.finalPrice ?? o.price ?? 0);
+        });
+        drawBarChart(document.getElementById('salesChart'), months);
+    }
+
+    function drawBarChart(canvas, months) {
+        const ctx = canvas.getContext('2d');
+        const w = canvas.width, h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+
+        const max = Math.max(1, ...months.map(m => m.total));
+        const barWidth = w / months.length * 0.5;
+        const gap = w / months.length;
+
+        ctx.fillStyle = '#64748b';
+        ctx.font = '12px system-ui';
+
+        months.forEach((m, i) => {
+            const barHeight = (m.total / max) * (h - 50);
+            const x = i * gap + (gap - barWidth) / 2;
+            const y = h - barHeight - 25;
+
+            ctx.fillStyle = '#0284c7';
+            ctx.fillRect(x, y, barWidth, barHeight);
+
+            ctx.fillStyle = '#0f172a';
+            ctx.textAlign = 'center';
+            ctx.fillText('₹' + m.total, x + barWidth / 2, y - 6);
+
+            ctx.fillStyle = '#64748b';
+            ctx.fillText(m.label, x + barWidth / 2, h - 8);
+        });
+    }
 </script>
 </body>
 </html>
