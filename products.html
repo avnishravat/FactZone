@@ -28,6 +28,8 @@
     <link rel="dns-prefetch" href="https://api.qrserver.com">
     <link rel="dns-prefetch" href="https://firestore.googleapis.com">
 
+    <meta name="theme-color" content="#0284c7">
+
     <!-- Breadcrumb structured data -->
     <script type="application/ld+json">
     {
@@ -37,6 +39,23 @@
             { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://factzone.online/index.html" },
             { "@type": "ListItem", "position": 2, "name": "Store", "item": "https://factzone.online/products.html" }
         ]
+    }
+    </script>
+
+    <!-- WebSite + sitelinks search box structured data — lets Google show
+         a search box directly in search results, and the products page
+         itself now understands ?q= so that search is functional. -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "url": "https://factzone.online/",
+        "name": "FactZone",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://factzone.online/products.html?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
     }
     </script>
 
@@ -65,19 +84,23 @@
         .breadcrumb { max-width: 1200px; margin: 0.6rem auto 0; padding: 0 1rem; font-size: 0.8rem; color: var(--text-muted); }
         .breadcrumb a { color: var(--primary); text-decoration: none; }
 
-        .hero { text-align: center; padding: 1rem 1rem 0.4rem; max-width: 800px; margin: 0 auto; }
-        .hero h1 { font-size: 1.4rem; margin-bottom: 0.2rem; font-weight: 700; }
-        .hero p { color: var(--text-muted); font-size: 0.85rem; }
+        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 0.8rem 1rem 1.5rem; }
+        /* Hero stays for SEO (page needs one clear h1) but sits compact,
+           right under the toolbar instead of taking a tall block above it. */
+        .hero { text-align: center; padding: 0.5rem 0 0.2rem; }
+        .hero h1 { font-size: 1.05rem; margin-bottom: 0.1rem; font-weight: 700; }
+        .hero p { color: var(--text-muted); font-size: 0.75rem; }
 
-        .toolbar { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0.6rem 1rem 1.5rem; }
+
+        .toolbar { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0; }
         .toolbar input, .toolbar select { padding: 0.5rem 0.65rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-body); color: var(--text-main); font-size: 0.8rem; }
         .toolbar input { flex: 1; min-width: 140px; }
 
         /* Meesho/Flipkart-style grid: exactly 2 columns on phones,
            4 columns from tablet/desktop width up. */
-        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
+        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.6rem; margin-top: 0.5rem; }
         @media (min-width: 700px) {
             .product-grid { grid-template-columns: repeat(4, 1fr); gap: 1rem; }
         }
@@ -127,13 +150,13 @@
            margins and a shorter image box to cut wasted vertical space. */
         @media (max-width: 699px) {
             header { padding: 0.5rem 0.75rem; }
-            .breadcrumb { margin: 0.35rem auto 0; padding: 0 0.75rem; }
-            .hero { padding: 0.5rem 0.75rem 0.25rem; }
-            .hero h1 { font-size: 1.15rem; margin-bottom: 0.1rem; }
-            .hero p { font-size: 0.72rem; }
-            .container { padding: 0.5rem 0.6rem 1rem; }
-            .toolbar { margin-bottom: 0.5rem; gap: 0.4rem; }
-            .product-grid { gap: 0.4rem; }
+            .breadcrumb { margin: 0.3rem auto 0; padding: 0 0.75rem; }
+            .hero { padding: 0.35rem 0.75rem 0.15rem; }
+            .hero h1 { font-size: 0.95rem; margin-bottom: 0.05rem; }
+            .hero p { font-size: 0.68rem; }
+            .container { padding: 0.4rem 0.6rem 1rem; }
+            .toolbar { gap: 0.4rem; }
+            .product-grid { gap: 0.4rem; margin-top: 0.3rem; }
             .card-image-wrap { aspect-ratio: 3 / 2; }
             .card-body { padding: 0.35rem 0.45rem 0; }
             .product-title { font-size: 0.74rem; margin-bottom: 0.15rem; }
@@ -199,18 +222,21 @@
     </nav>
 
     <main>
-        <div class="hero">
-            <h1 id="heroTitle">Digital Products Store</h1>
-            <p id="heroDesc">Premium eBooks, Canva Templates, and Source Codes for Instant Download</p>
-        </div>
-
         <div class="container">
-            <div class="toolbar">
+            <div class="toolbar" role="search">
+                <label for="searchInput" class="sr-only">Search products</label>
                 <input type="text" id="searchInput" placeholder="🔍 Search products..." oninput="renderProducts()">
+                <label for="categoryFilter" class="sr-only">Filter by category</label>
                 <select id="categoryFilter" onchange="renderProducts()">
                     <option value="">All Categories</option>
                 </select>
             </div>
+
+            <div class="hero">
+                <h1 id="heroTitle">Digital Products Store</h1>
+                <p id="heroDesc">Premium eBooks, Canva Templates, and Source Codes for Instant Download</p>
+            </div>
+
             <div class="product-grid" id="productGrid">
                 <div class="loading-state"><span class="icon-box">⏳</span><p>Loading products...</p></div>
             </div>
@@ -736,6 +762,12 @@
         window.onload = () => {
             const savedTheme = localStorage.getItem('fz_theme');
             if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+
+            // Supports ?q=... so the SearchAction structured data (sitelinks
+            // search box) and any shared/search-engine links actually work.
+            const qParam = new URLSearchParams(window.location.search).get('q');
+            if (qParam) document.getElementById('searchInput').value = qParam;
+
             changeLanguage(currentLang);
         };
     </script>
