@@ -584,16 +584,65 @@
                 scriptTag.id = 'productSchema';
                 document.head.appendChild(scriptTag);
             }
+            // Offers valid for a year out — Google flags offers with no
+            // priceValidUntil as an "improve appearance" warning.
+            const priceValidUntil = new Date(Date.now() + 365 * 24 * 3600 * 1000).toISOString().slice(0, 10);
+
             const schema = {
                 "@context": "https://schema.org",
                 "@type": "ItemList",
-                "itemListElement": products.map((p, i) => ({
-                    "@type": "ListItem", "position": i + 1,
-                    "item": {
-                        "@type": "Product", "name": p.title, "description": p.desc || undefined, "category": p.tag || undefined,
-                        "offers": { "@type": "Offer", "priceCurrency": "INR", "price": p.price, "availability": "https://schema.org/InStock" }
+                "itemListElement": products.map((p, i) => {
+                    const rating = avgRating(p.id);
+                    const item = {
+                        "@type": "Product",
+                        "name": p.title,
+                        "description": p.desc || undefined,
+                        "category": p.tag || undefined,
+                        "image": p.previewUrl || undefined,
+                        "offers": {
+                            "@type": "Offer",
+                            "priceCurrency": "INR",
+                            "price": p.price,
+                            "availability": "https://schema.org/InStock",
+                            "priceValidUntil": priceValidUntil,
+                            // These are digital, instant-download products —
+                            // "shipping" is just the download becoming
+                            // available (up to 24 hrs while payment is
+                            // verified), no physical transit.
+                            "shippingDetails": {
+                                "@type": "OfferShippingDetails",
+                                "shippingRate": { "@type": "MonetaryAmount", "value": "0", "currency": "INR" },
+                                "deliveryTime": {
+                                    "@type": "ShippingDeliveryTime",
+                                    "handlingTime": { "@type": "QuantitativeValue", "minValue": 0, "maxValue": 1, "unitCode": "DAY" },
+                                    "transitTime": { "@type": "QuantitativeValue", "minValue": 0, "maxValue": 0, "unitCode": "DAY" }
+                                },
+                                "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "IN" }
+                            },
+                            // Digital files delivered instantly on approval
+                            // can't be "returned" — stating this truthfully
+                            // (rather than omitting it) is what satisfies
+                            // the Merchant listing return-policy check.
+                            "hasMerchantReturnPolicy": {
+                                "@type": "MerchantReturnPolicy",
+                                "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted",
+                                "applicableCountry": "IN"
+                            }
+                        }
+                    };
+                    // Only attach a rating when real reviews exist for this
+                    // product — it must match what's visibly shown on the
+                    // page (the ★ rating-line). A fabricated/no-review
+                    // aggregateRating is a structured-data policy violation.
+                    if (rating) {
+                        item.aggregateRating = {
+                            "@type": "AggregateRating",
+                            "ratingValue": rating.avg,
+                            "reviewCount": rating.count
+                        };
                     }
-                }))
+                    return { "@type": "ListItem", "position": i + 1, "item": item };
+                })
             };
             scriptTag.textContent = JSON.stringify(schema);
         }
