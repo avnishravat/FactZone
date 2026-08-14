@@ -36,7 +36,7 @@
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
         "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://factzone.online/" },
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://factzone.online/index.html" },
             { "@type": "ListItem", "position": 2, "name": "Store", "item": "https://factzone.online/products.html" }
         ]
     }
@@ -59,9 +59,12 @@
     }
     </script>
 
-    <!-- Firebase (compat build — plain <script> tags, no bundler needed) -->
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <!-- Firestore is accessed via the plain REST API (fetch calls below) —
+         no Firebase JS SDK. The SDK's realtime listener opens a persistent
+         WebChannel/long-polling connection that Googlebot's renderer can't
+         complete in time, which was causing Search Console to see an empty
+         "no products" page. Plain REST calls are simple one-shot requests
+         that resolve fast for both users and crawlers. -->
 
     <style>
         :root {
@@ -294,20 +297,71 @@
 
     <script>
         // ---------------------------------------------------------------
-        // FIREBASE INIT
+        // FIRESTORE REST API — no SDK, just fetch() calls.
         // ---------------------------------------------------------------
-        const firebaseConfig = {
-            apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
-            authDomain: "factzone-a9ace.firebaseapp.com",
-            databaseURL: "https://factzone-a9ace-default-rtdb.firebaseio.com",
-            projectId: "factzone-a9ace",
-            storageBucket: "factzone-a9ace.firebasestorage.app",
-            messagingSenderId: "425838320650",
-            appId: "1:425838320650:web:beab18baddf818cb73d3f3",
-            measurementId: "G-311JQXBXR9"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        const FS_PROJECT_ID = "factzone-a9ace";
+        const FS_BASE = `https://firestore.googleapis.com/v1/projects/${FS_PROJECT_ID}/databases/(default)/documents`;
+
+        function fsValueToJs(v) {
+            if (v == null) return null;
+            if ('stringValue' in v) return v.stringValue;
+            if ('integerValue' in v) return Number(v.integerValue);
+            if ('doubleValue' in v) return v.doubleValue;
+            if ('booleanValue' in v) return v.booleanValue;
+            if ('timestampValue' in v) return { __isTimestamp: true, iso: v.timestampValue, toMillis: () => new Date(v.timestampValue).getTime() };
+            if ('mapValue' in v) return fsFieldsToJs(v.mapValue.fields || {});
+            if ('arrayValue' in v) return (v.arrayValue.values || []).map(fsValueToJs);
+            return null;
+        }
+        function fsFieldsToJs(fields) {
+            const out = {};
+            for (const k in fields) out[k] = fsValueToJs(fields[k]);
+            return out;
+        }
+        function jsToFsValue(v) {
+            if (v === null || v === undefined) return { nullValue: null };
+            if (v instanceof Date) return { timestampValue: v.toISOString() };
+            if (typeof v === 'number') return Number.isInteger(v) ? { integerValue: String(v) } : { doubleValue: v };
+            if (typeof v === 'boolean') return { booleanValue: v };
+            return { stringValue: String(v) };
+        }
+        function fsDocId(name) { return name ? name.split('/').pop() : null; }
+
+        async function fsRunQuery(collectionId, { where, orderBy, limit } = {}) {
+            const structuredQuery = { from: [{ collectionId }] };
+            if (where) structuredQuery.where = where;
+            if (orderBy) structuredQuery.orderBy = orderBy;
+            if (limit) structuredQuery.limit = limit;
+            const res = await fetch(`${FS_BASE}:runQuery`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ structuredQuery })
+            });
+            if (!res.ok) throw new Error('Firestore query failed: ' + res.status);
+            const rows = await res.json();
+            return rows.filter(r => r.document).map(r => ({ id: fsDocId(r.document.name), ...fsFieldsToJs(r.document.fields || {}) }));
+        }
+
+        async function fsGetDoc(collectionId, docId) {
+            const res = await fetch(`${FS_BASE}/${collectionId}/${docId}`);
+            if (res.status === 404) return null;
+            if (!res.ok) throw new Error('Firestore get failed: ' + res.status);
+            const doc = await res.json();
+            return { id: fsDocId(doc.name), ...fsFieldsToJs(doc.fields || {}) };
+        }
+
+        async function fsCreateDoc(collectionId, dataObj) {
+            const fields = {};
+            for (const k in dataObj) fields[k] = jsToFsValue(dataObj[k]);
+            const res = await fetch(`${FS_BASE}/${collectionId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fields })
+            });
+            if (!res.ok) throw new Error('Firestore write failed: ' + res.status);
+            const doc = await res.json();
+            return fsDocId(doc.name);
+        }
 
         // Approved downloads stop working after this many hours (security).
         // Admin can override this from the admin panel's UPI settings card.
@@ -348,34 +402,61 @@
         }
 
         // ---------------------------------------------------------------
-        // LIVE DATA — Firestore keeps this page in sync automatically,
-        // across every visitor's tab, without any manual refresh.
+        // DATA LOADING — plain REST fetches instead of realtime listeners.
+        // A single request resolves fast for both visitors and crawlers.
+        // A light poll keeps things reasonably fresh across open tabs.
         // ---------------------------------------------------------------
-        db.collection('products').orderBy('createdAt', 'desc').onSnapshot(snap => {
-            allProducts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-            populateCategoryFilter();
-            refreshMyOrderStatuses().then(renderProducts);
-        }, err => {
-            console.error('Products listener error:', err);
-            document.getElementById('productGrid').innerHTML =
-                `<div class="empty-state"><span class="icon-box">⚠️</span><p>Could not load products. Please refresh the page.</p></div>`;
-        });
-
-        db.collection('reviews').onSnapshot(snap => {
-            reviewsByProduct = {};
-            snap.docs.forEach(d => {
-                const r = d.data();
-                if (!reviewsByProduct[r.productId]) reviewsByProduct[r.productId] = [];
-                reviewsByProduct[r.productId].push(r);
-            });
-            renderProducts();
-        }, err => console.error('Reviews listener error:', err));
-
-        db.collection('settings').doc('store').onSnapshot(snap => {
-            if (snap.exists) {
-                upiSettings = { upiId: '', qrUrl: '', adminWhatsapp: '', expiryHours: DEFAULT_EXPIRY_HOURS, ...snap.data() };
+        async function loadProducts() {
+            try {
+                const rows = await fsRunQuery('products', {
+                    orderBy: [{ field: { fieldPath: 'createdAt' }, direction: 'DESCENDING' }]
+                });
+                allProducts = rows;
+                populateCategoryFilter();
+                await refreshMyOrderStatuses();
+                renderProducts();
+            } catch (e) {
+                console.error('Products fetch error:', e);
+                if (!allProducts.length) {
+                    document.getElementById('productGrid').innerHTML =
+                        `<div class="empty-state"><span class="icon-box">⚠️</span><p>Could not load products. Please refresh the page.</p></div>`;
+                }
             }
-        }, err => console.error('Settings listener error:', err));
+        }
+
+        async function loadReviews() {
+            try {
+                const rows = await fsRunQuery('reviews');
+                const grouped = {};
+                rows.forEach(r => {
+                    if (!grouped[r.productId]) grouped[r.productId] = [];
+                    grouped[r.productId].push(r);
+                });
+                reviewsByProduct = grouped;
+                renderProducts();
+            } catch (e) {
+                console.error('Reviews fetch error:', e);
+            }
+        }
+
+        async function loadSettings() {
+            try {
+                const doc = await fsGetDoc('settings', 'store');
+                if (doc) {
+                    upiSettings = { upiId: '', qrUrl: '', adminWhatsapp: '', expiryHours: DEFAULT_EXPIRY_HOURS, ...doc };
+                }
+            } catch (e) {
+                console.error('Settings fetch error:', e);
+            }
+        }
+
+        loadProducts();
+        loadReviews();
+        loadSettings();
+
+        // Refresh every 25s so approvals/new products/reviews still show up
+        // without a manual reload — without ever opening a long-lived stream.
+        setInterval(() => { loadProducts(); loadReviews(); loadSettings(); }, 25000);
 
         function populateCategoryFilter() {
             const select = document.getElementById('categoryFilter');
@@ -393,8 +474,8 @@
             myOrderStatus = {};
             for (const entry of myOrders) {
                 try {
-                    const doc = await db.collection('orders').doc(entry.orderId).get();
-                    if (doc.exists) myOrderStatus[entry.productId] = { id: doc.id, ...doc.data() };
+                    const doc = await fsGetDoc('orders', entry.orderId);
+                    if (doc) myOrderStatus[entry.productId] = doc;
                 } catch (e) {
                     console.error('Could not refresh order status:', e);
                 }
@@ -600,13 +681,16 @@
             if (!code) { appliedCoupon = null; updateModalPrice(); msgEl.textContent = ''; return; }
 
             try {
-                const snap = await db.collection('coupons').where('code', '==', code).limit(1).get();
-                if (snap.empty || !snap.docs[0].data().active) {
+                const rows = await fsRunQuery('coupons', {
+                    where: { fieldFilter: { field: { fieldPath: 'code' }, op: 'EQUAL', value: { stringValue: code } } },
+                    limit: 1
+                });
+                const c = rows[0];
+                if (!c || !c.active) {
                     appliedCoupon = null;
                     msgEl.className = 'coupon-msg err';
                     msgEl.textContent = 'Invalid or expired coupon code.';
                 } else {
-                    const c = snap.docs[0].data();
                     appliedCoupon = { code, type: c.type, value: Number(c.value) };
                     msgEl.className = 'coupon-msg ok';
                     msgEl.textContent = c.type === 'percent' ? `Applied: ${c.value}% off` : `Applied: ₹${c.value} off`;
@@ -653,7 +737,7 @@
             submitBtn.textContent = 'Submitting...';
 
             try {
-                const docRef = await db.collection('orders').add({
+                const orderId = await fsCreateDoc('orders', {
                     productId: activeProduct.id,
                     productTitle: activeProduct.title,
                     name, contact, utr,
@@ -661,10 +745,10 @@
                     couponCode: appliedCoupon ? appliedCoupon.code : null,
                     finalPrice,
                     status: 'Pending',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    createdAt: new Date()
                 });
 
-                myOrders.push({ orderId: docRef.id, productId: activeProduct.id });
+                myOrders.push({ orderId, productId: activeProduct.id });
                 localStorage.setItem('fz_my_orders', JSON.stringify(myOrders));
                 await refreshMyOrderStatuses();
                 renderProducts();
@@ -736,12 +820,13 @@
             btn.textContent = 'Submitting...';
 
             try {
-                await db.collection('reviews').add({
+                await fsCreateDoc('reviews', {
                     productId: activeReviewProductId,
                     name, text, rating: selectedStars,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    createdAt: new Date()
                 });
                 closeReviewModal();
+                loadReviews();
             } catch (e) {
                 console.error('Review submit failed:', e);
                 errEl.textContent = 'Could not submit review — please try again.';
