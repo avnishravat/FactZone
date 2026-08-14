@@ -24,7 +24,9 @@
 
     <link rel="preconnect" href="https://api.qrserver.com">
     <link rel="preconnect" href="https://www.gstatic.com">
+    <link rel="preconnect" href="https://firestore.googleapis.com">
     <link rel="dns-prefetch" href="https://api.qrserver.com">
+    <link rel="dns-prefetch" href="https://firestore.googleapis.com">
 
     <!-- Breadcrumb structured data -->
     <script type="application/ld+json">
@@ -119,6 +121,30 @@
             .download-btn { font-size: 0.85rem; padding: 0.5rem 0.7rem; }
             .status-badge { font-size: 0.72rem; padding: 0.25rem 0.45rem; }
         }
+
+        /* Compact mobile spacing so 4 products (2x2) fit in one screen
+           without scrolling. Nothing removed — just tighter paddings,
+           margins and a shorter image box to cut wasted vertical space. */
+        @media (max-width: 699px) {
+            header { padding: 0.5rem 0.75rem; }
+            .breadcrumb { margin: 0.35rem auto 0; padding: 0 0.75rem; }
+            .hero { padding: 0.5rem 0.75rem 0.25rem; }
+            .hero h1 { font-size: 1.15rem; margin-bottom: 0.1rem; }
+            .hero p { font-size: 0.72rem; }
+            .container { padding: 0.5rem 0.6rem 1rem; }
+            .toolbar { margin-bottom: 0.5rem; gap: 0.4rem; }
+            .product-grid { gap: 0.4rem; }
+            .card-image-wrap { aspect-ratio: 3 / 2; }
+            .card-body { padding: 0.35rem 0.45rem 0; }
+            .product-title { font-size: 0.74rem; margin-bottom: 0.15rem; }
+            .rating-line { font-size: 0.62rem; margin-bottom: 0.15rem; }
+            .review-link { font-size: 0.6rem; }
+            .card-bottom { padding: 0.3rem 0.45rem 0.45rem; gap: 0.25rem; }
+            .price { font-size: 0.85rem; }
+            .status-badge { font-size: 0.56rem; padding: 0.14rem 0.32rem; }
+            .download-btn { font-size: 0.68rem; padding: 0.3rem 0.4rem; }
+        }
+
         .btn-approved-red { background-color: #ef4444 !important; color: #ffffff !important; animation: pulse 1.5s infinite; }
         .btn-approved-red:hover { background-color: #dc2626 !important; }
         .download-btn-disabled { background-color: #94a3b8 !important; cursor: not-allowed; }
@@ -377,7 +403,7 @@
                 return;
             }
 
-            grid.innerHTML = filtered.map(p => {
+            grid.innerHTML = filtered.map((p, i) => {
                 const order = myOrderStatus[p.id];
                 const rating = avgRating(p.id);
 
@@ -409,8 +435,12 @@
                     ? `<div class="rating-line">${'★'.repeat(Math.round(rating.avg))}${'☆'.repeat(5 - Math.round(rating.avg))} ${rating.avg} <span class="count">(${rating.count})</span></div>`
                     : `<div class="rating-line count">No reviews yet</div>`;
 
+                // First 4 cards are the ones visible without scrolling, so
+                // load them eagerly for a faster first paint; everything
+                // below stays lazy as before.
+                const imgLoadAttr = i < 4 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"';
                 const previewHTML = p.previewUrl
-                    ? `<img src="${escapeHtml(p.previewUrl)}" alt="${escapeHtml(p.title)} preview" class="preview-thumb" loading="lazy" onclick="window.open('${escapeHtml(p.previewUrl)}','_blank')">`
+                    ? `<img src="${escapeHtml(p.previewUrl)}" alt="${escapeHtml(p.title)} preview" class="preview-thumb" ${imgLoadAttr} onclick="window.open('${escapeHtml(p.previewUrl)}','_blank')">`
                     : `<span class="icon-box">📦</span>`;
 
                 return `
