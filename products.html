@@ -420,8 +420,11 @@
                 });
                 allProducts = rows;
                 populateCategoryFilter();
-                await refreshMyOrderStatuses();
+                // Render right away — don't make the visitor wait on the
+                // "did I already pay for this?" lookups below. Those run
+                // in the background and just re-render once they resolve.
                 renderProducts();
+                refreshMyOrderStatuses().then(renderProducts);
             } catch (e) {
                 console.error('Products fetch error:', e);
                 // A "Failed to fetch" here is usually a brief network blip
@@ -484,16 +487,29 @@
 
         // Because non-admins can only "get" an order by its known ID (not
         // list the whole collection — see firestore.rules), we look up each
-        // order we personally created, one by one, to know its status.
+        // order we personally created. Done in parallel (not one-by-one)
+        // so a long order history never delays the page.
         async function refreshMyOrderStatuses() {
             myOrderStatus = {};
-            for (const entry of myOrders) {
+            const stillValid = [];
+            await Promise.all(myOrders.map(async entry => {
                 try {
                     const doc = await fsGetDoc('orders', entry.orderId);
-                    if (doc) myOrderStatus[entry.productId] = doc;
+                    if (doc) {
+                        myOrderStatus[entry.productId] = doc;
+                        stillValid.push(entry);
+                    }
+                    // doc === null means a confirmed 404 (order was deleted
+                    // by admin) — drop it below so it's never looked up
+                    // again. A thrown error (network blip) keeps it as-is.
                 } catch (e) {
                     console.error('Could not refresh order status:', e);
+                    stillValid.push(entry);
                 }
+            }));
+            if (stillValid.length !== myOrders.length) {
+                myOrders = stillValid;
+                localStorage.setItem('fz_my_orders', JSON.stringify(myOrders));
             }
         }
 
