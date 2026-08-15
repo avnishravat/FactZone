@@ -84,8 +84,8 @@
     <div class="card" style="border-left: 4px solid #0284c7;">
         <h2>📊 Sales Analytics</h2>
         <div class="stats-grid">
-            <div class="stat-box"><div class="num" id="statRevenue">₹0</div><div class="label">Total Revenue (Approved)</div></div>
-            <div class="stat-box"><div class="num" id="statOrders">0</div><div class="label">Approved Orders</div></div>
+            <div class="stat-box"><div class="num" id="statRevenue">₹0</div><div class="label">Total Revenue (permanent)</div></div>
+            <div class="stat-box"><div class="num" id="statOrders">0</div><div class="label">Total Sales</div></div>
             <div class="stat-box"><div class="num" id="statPending">0</div><div class="label">Pending Requests</div></div>
             <div class="stat-box"><div class="num" id="statTop">-</div><div class="label">Top Product</div></div>
         </div>
@@ -101,6 +101,20 @@
                 <tr><th>Date</th><th>User & Mobile</th><th>Product</th><th>Amount</th><th>UTR</th><th>Status</th><th>Action</th></tr>
             </thead>
             <tbody id="pendingOrdersBody"></tbody>
+        </table>
+    </div>
+
+    <!-- Buyers / Sales History — a PERMANENT record, separate from
+         orders. Deleting an order or product never removes these rows,
+         so revenue history always stays accurate. -->
+    <div class="card" style="border-left: 4px solid #16a34a;">
+        <h2>🧾 Buyers / Sales History</h2>
+        <p class="hint" style="margin-top:0.2rem;">This list is permanent — it stays here (and keeps counting in Total Revenue) even if you later delete the request from Payment Approvals or delete the product itself.</p>
+        <table>
+            <thead>
+                <tr><th>Date</th><th>Buyer & Contact</th><th>Product</th><th>Amount</th></tr>
+            </thead>
+            <tbody id="salesHistoryBody"></tbody>
         </table>
     </div>
 
@@ -221,6 +235,7 @@
 
     let products = [];
     let orders = [];
+    let sales = [];
     let coupons = [];
     let reviewsByProduct = {};
 
@@ -292,6 +307,17 @@
             renderAnalytics();
         }, err => console.error('Orders listener error:', err));
 
+        // 'sales' is a separate, permanent collection — a record is written
+        // here once when an order is approved, and it is NEVER deleted when
+        // the order or product is later deleted. Revenue is calculated from
+        // this collection, not from 'orders', so it can't be made wrong by
+        // cleanup/deletion later.
+        db.collection('sales').orderBy('approvedAt', 'desc').onSnapshot(snap => {
+            sales = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            renderSalesHistory();
+            renderAnalytics();
+        }, err => console.error('Sales listener error:', err));
+
         db.collection('coupons').onSnapshot(snap => {
             coupons = snap.docs.map(d => ({ id: d.id, ...d.data() }));
             renderCoupons();
@@ -353,10 +379,31 @@
 
     async function approveOrder(id) {
         try {
+            const order = orders.find(o => o.id === id);
+            const now = firebase.firestore.FieldValue.serverTimestamp();
+
             await db.collection('orders').doc(id).update({
                 status: 'Approved',
-                approvedAt: firebase.firestore.FieldValue.serverTimestamp()
+                approvedAt: now
             });
+
+            // Write the permanent sales record. Using the order's own id as
+            // the sales doc id makes this safe to run more than once (e.g.
+            // a double click) — it just overwrites the same record instead
+            // of creating a duplicate.
+            if (order) {
+                await db.collection('sales').doc(id).set({
+                    orderId: id,
+                    buyerName: order.name || '',
+                    buyerContact: order.contact || '',
+                    productId: order.productId || null,
+                    productTitle: order.productTitle || 'Unknown product',
+                    amount: Number(order.finalPrice ?? order.price ?? 0),
+                    couponCode: order.couponCode || null,
+                    approvedAt: now
+                }, { merge: true });
+            }
+
             alert('Request Approved! Use the WhatsApp button to notify the customer instantly.');
         } catch (e) {
             console.error('Approve failed:', e);
@@ -385,6 +432,27 @@
             `Hi ${order.name}, your FactZone order "${order.productTitle}" is approved! ✅\nDownload here: ${link}`
         );
         window.open(`https://wa.me/${order.contact.length === 10 ? '91' + order.contact : order.contact}?text=${text}`, '_blank');
+    }
+
+    // Permanent buyers list — sourced from the 'sales' collection, so it
+    // keeps showing every past buyer even after the matching order (or the
+    // product itself) has been deleted.
+    function renderSalesHistory() {
+        const tbody = document.getElementById('salesHistoryBody');
+        if (!sales.length) {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No sales yet.</td></tr>';
+            return;
+        }
+        tbody.innerHTML = sales.map(s => {
+            const date = s.approvedAt && s.approvedAt.toDate ? s.approvedAt.toDate().toLocaleString() : '-';
+            return `
+            <tr>
+                <td>${escapeHtml(date)}</td>
+                <td><strong>${escapeHtml(s.buyerName)}</strong><br><small>${escapeHtml(s.buyerContact)}</small></td>
+                <td>${escapeHtml(s.productTitle)}</td>
+                <td>₹${escapeHtml(s.amount)}${s.couponCode ? ` <small>(${escapeHtml(s.couponCode)})</small>` : ''}</td>
+            </tr>`;
+        }).join('');
     }
 
     // ---------------------------------------------------------------
@@ -584,16 +652,18 @@
     // ANALYTICS
     // ---------------------------------------------------------------
     function renderAnalytics() {
-        const approved = orders.filter(o => o.status === 'Approved');
         const pending = orders.filter(o => o.status !== 'Approved');
-        const revenue = approved.reduce((sum, o) => sum + Number(o.finalPrice ?? o.price ?? 0), 0);
+        // Revenue and counts now come from the permanent 'sales' collection
+        // — not from 'orders' — so deleting a request/product afterwards
+        // never changes past revenue.
+        const revenue = sales.reduce((sum, s) => sum + Number(s.amount ?? 0), 0);
 
         document.getElementById('statRevenue').textContent = '₹' + revenue.toLocaleString('en-IN');
-        document.getElementById('statOrders').textContent = approved.length;
+        document.getElementById('statOrders').textContent = sales.length;
         document.getElementById('statPending').textContent = pending.length;
 
         const salesByProduct = {};
-        approved.forEach(o => { salesByProduct[o.productTitle] = (salesByProduct[o.productTitle] || 0) + 1; });
+        sales.forEach(s => { salesByProduct[s.productTitle] = (salesByProduct[s.productTitle] || 0) + 1; });
         const top = Object.entries(salesByProduct).sort((a, b) => b[1] - a[1])[0];
         document.getElementById('statTop').textContent = top ? top[0] : '-';
 
@@ -605,12 +675,12 @@
             const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
             months.push({ key: d.getFullYear() + '-' + d.getMonth(), label: d.toLocaleString('en-IN', { month: 'short' }), total: 0 });
         }
-        approved.forEach(o => {
-            if (!o.approvedAt) return;
-            const d = o.approvedAt.toDate();
+        sales.forEach(s => {
+            if (!s.approvedAt || !s.approvedAt.toDate) return;
+            const d = s.approvedAt.toDate();
             const key = d.getFullYear() + '-' + d.getMonth();
             const bucket = months.find(m => m.key === key);
-            if (bucket) bucket.total += Number(o.finalPrice ?? o.price ?? 0);
+            if (bucket) bucket.total += Number(s.amount ?? 0);
         });
         drawBarChart(document.getElementById('salesChart'), months);
     }
