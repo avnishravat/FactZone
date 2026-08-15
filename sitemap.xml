@@ -14,7 +14,14 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-
+  
+  <!-- Digital Product Store -->
+  <url>
+    <loc>https://factzone.online/products</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
   <!-- Static Pages -->
   <url><loc>https://factzone.online/author.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://factzone.online/about.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
@@ -265,6 +272,12 @@
   <!-- 34. सपने क्यों आते हैं? जानिए इसके पीछे का असली वैज्ञानिक कारण | द साइंस ऑफ ड्रीम्स -->
   <url>
     <loc>https://factzone.online/detail.html?id=yag7WvQOvIxoPulYnyB8</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+ <!-- 35.Work From Home: महिलाओं और छात्रों के लिए बेस्ट जॉब आइडियाज 2026 | बिना इन्वेस्टमेंट कमाई -->
+  <url>
+    <loc>https://factzone.online/detail.html?id=JHQkbxOnWBzSIzWjaoXX</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
