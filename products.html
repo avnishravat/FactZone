@@ -320,11 +320,16 @@
         }
         function fsDocId(name) { return name ? name.split('/').pop() : null; }
 
-        async function fsRunQuery(collectionId, { where, orderBy, limit } = {}) {
+        async function fsRunQuery(collectionId, { where, orderBy, limit, select } = {}) {
             const structuredQuery = { from: [{ collectionId }] };
             if (where) structuredQuery.where = where;
             if (orderBy) structuredQuery.orderBy = orderBy;
             if (limit) structuredQuery.limit = limit;
+            // "select" trims the response to only the fields the caller
+            // actually reads — same rows/ids back, just a lighter payload
+            // to transfer and JSON-parse (nothing about what's rendered
+            // changes since callers only ever request fields they use).
+            if (select) structuredQuery.select = { fields: select.map(f => ({ fieldPath: f })) };
             const res = await fetch(`${FS_BASE}:runQuery`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -335,8 +340,12 @@
             return rows.filter(r => r.document).map(r => ({ id: fsDocId(r.document.name), ...fsFieldsToJs(r.document.fields || {}) }));
         }
 
-        async function fsGetDoc(collectionId, docId) {
-            const res = await fetch(`${FS_BASE}/${collectionId}/${docId}`);
+        async function fsGetDoc(collectionId, docId, fieldMask) {
+            // Same field-mask idea as fsRunQuery above — only used by
+            // loadSettings() to fetch the handful of fields it needs
+            // instead of the whole settings document.
+            const maskQS = fieldMask ? '?' + fieldMask.map(f => `mask.fieldPaths=${encodeURIComponent(f)}`).join('&') : '';
+            const res = await fetch(`${FS_BASE}/${collectionId}/${docId}${maskQS}`);
             if (res.status === 404) return null;
             if (!res.ok) throw new Error('Firestore get failed: ' + res.status);
             const doc = await res.json();
@@ -416,7 +425,8 @@
         async function loadProducts(isRetry) {
             try {
                 const rows = await fsRunQuery('products', {
-                    orderBy: [{ field: { fieldPath: 'createdAt' }, direction: 'DESCENDING' }]
+                    orderBy: [{ field: { fieldPath: 'createdAt' }, direction: 'DESCENDING' }],
+                    select: ['title', 'desc', 'tag', 'price', 'previewUrl', 'fileUrl', 'createdAt']
                 });
                 allProducts = rows;
                 populateCategoryFilter();
@@ -443,7 +453,7 @@
 
         async function loadReviews() {
             try {
-                const rows = await fsRunQuery('reviews');
+                const rows = await fsRunQuery('reviews', { select: ['productId', 'rating'] });
                 const grouped = {};
                 rows.forEach(r => {
                     if (!grouped[r.productId]) grouped[r.productId] = [];
@@ -458,7 +468,7 @@
 
         async function loadSettings() {
             try {
-                const doc = await fsGetDoc('settings', 'store');
+                const doc = await fsGetDoc('settings', 'store', ['upiId', 'qrUrl', 'adminWhatsapp', 'expiryHours']);
                 if (doc) {
                     upiSettings = { upiId: '', qrUrl: '', adminWhatsapp: '', expiryHours: DEFAULT_EXPIRY_HOURS, ...doc };
                     renderSupportLine();
@@ -618,6 +628,9 @@
             // Offers valid for a year out — Google flags offers with no
             // priceValidUntil as an "improve appearance" warning.
             const priceValidUntil = new Date(Date.now() + 365 * 24 * 3600 * 1000).toISOString().slice(0, 10);
+            // Offer is valid starting from today — Google also flags offers
+            // with no validFrom as an "improve appearance" warning.
+            const validFrom = new Date().toISOString().slice(0, 10);
 
             const schema = {
                 "@context": "https://schema.org",
@@ -638,6 +651,7 @@
                             "price": p.price,
                             "availability": "https://schema.org/InStock",
                             "priceValidUntil": priceValidUntil,
+                            "validFrom": validFrom,
                             // These are digital, instant-download products —
                             // "shipping" is just the download becoming
                             // available (up to 24 hrs while payment is
