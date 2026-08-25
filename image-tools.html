@@ -3,18 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image & Design Tools | FactZone</title>
-    <meta name="description" content="Free online image utility tool to compress and resize images directly in your browser.">
+    <title>Image & Design Tools | Compress & Resize Online - FactZone</title>
+    <meta name="description" content="Free Image & Design Tools on FactZone. Compress, resize, edit, and optimize image assets easily in your browser.">
+    <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://factzone.online/image-tools.html">
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232563eb'/><text x='50%' y='68%' font-family='sans-serif' font-weight='bold' font-size='60' fill='white' text-anchor='middle'>F</text></svg>">
+
+    <!-- Open Graph Metadata -->
+    <meta property="og:title" content="Image & Design Tools | FactZone">
+    <meta property="og:description" content="Compress, resize, edit, and optimize image assets directly in your browser.">
+    <meta property="og:url" content="https://factzone.online/image-tools.html">
+    <meta property="og:type" content="website">
+
+    <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://factzone.online/"},
-        {"@type": "ListItem", "position": 2, "name": "Tools", "item": "https://factzone.online/tools.html"},
-        {"@type": "ListItem", "position": 3, "name": "Image Tools", "item": "https://factzone.online/image-tools.html"}
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "name": "Image & Design Tools",
+          "url": "https://factzone.online/image-tools.html",
+          "applicationCategory": "MultimediaApplication",
+          "operatingSystem": "All"
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://factzone.online/"},
+            {"@type": "ListItem", "position": 2, "name": "Tools", "item": "https://factzone.online/tools.html"},
+            {"@type": "ListItem", "position": 3, "name": "Image Tools", "item": "https://factzone.online/image-tools.html"}
+          ]
+        }
       ]
     }
     </script>
@@ -25,9 +47,12 @@
         .main-container { width: 100%; max-width: 700px; margin: 0 auto; padding: 20px 16px; flex: 1; }
         .breadcrumbs { font-size: 13px; color: #64748b; margin-bottom: 16px; }
         .breadcrumbs a { color: #2563eb; text-decoration: none; }
-        .card { background: #ffffff; border-radius: 8px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
-        input[type="file"] { margin: 15px 0; width: 100%; }
-        .btn { background-color: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 14px; }
+        .breadcrumbs span { margin: 0 6px; color: #94a3b8; }
+        .card { background: #ffffff; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
+        .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+        .card-header h1 { font-size: 20px; font-weight: 700; color: #0f172a; }
+        input[type="file"] { margin: 12px 0; width: 100%; font-size: 13px; }
+        .btn { background-color: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 13px; }
         .btn:hover { background-color: #1d4ed8; }
         #preview { max-width: 100%; height: auto; margin-top: 15px; border-radius: 6px; display: none; }
         .site-footer { background-color: #ffffff; border-top: 1px solid #e2e8f0; padding: 20px 16px; margin-top: 40px; font-size: 13px; color: #64748b; }
@@ -39,23 +64,30 @@
 
 <div class="main-container">
     <nav class="breadcrumbs">
-        <a href="https://factzone.online/">Home</a> / <a href="tools.html">Tools</a> / <strong>Image Tools</strong>
+        <a href="https://factzone.online/">Home</a><span>/</span><a href="tools.html">Tools</a><span>/</span><strong>Image Tools</strong>
     </nav>
 
-    <div class="card">
-        <h2>📷 Image Resizer & Compressor</h2>
-        <p style="font-size: 13px; color: #64748b; margin-top: 4px;">Upload an image to resize or compress client-side.</p>
+    <main class="card">
+        <div class="card-header">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+            <h1>Image & Design Tools</h1>
+        </div>
+        <p style="font-size: 13px; color: #64748b; margin-bottom: 10px;">Upload an image to optimize or process client-side.</p>
         <input type="file" id="imageInput" accept="image/*">
         <button class="btn" onclick="processImage()">Optimize Image</button>
         <br>
         <img id="preview" alt="Optimized Preview">
-        <a id="downloadLink" class="btn" style="display:none; margin-top:10px; inline-block; text-decoration:none;">Download Image</a>
-    </div>
+        <a id="downloadLink" class="btn" style="display:none; margin-top:10px; text-decoration:none; display:inline-block;">Download Image</a>
+    </main>
 </div>
 
 <footer class="site-footer">
     <div class="footer-inner">
-        <div>© 2026 <strong>factzone.online</strong></div>
+        <div>© 2026 <strong>factzone.online</strong>. All rights reserved.</div>
         <div class="footer-links">
             <a href="https://factzone.online/">Home</a>
             <a href="tools.html">Tools</a>
