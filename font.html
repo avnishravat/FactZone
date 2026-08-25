@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Font Generator | FactZone</title>
+    <meta name="description" content="Generate stylish Unicode fonts for Instagram bio, captions, and comments on FactZone.">
+    <link rel="canonical" href="https://factzone.online/font.html">
+
+    <!-- Open Graph Metadata -->
+    <meta property="og:title" content="Instagram Font Generator | FactZone">
+    <meta property="og:description" content="Convert normal ASCII text into fancy Unicode fonts for Instagram and social media.">
+    <meta property="og:url" content="https://factzone.online/font.html">
+    <meta property="og:type" content="website">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://factzone.online/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Tools",
+          "item": "https://factzone.online/tools.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Instagram Fonts",
+          "item": "https://factzone.online/font.html"
+        }
+      ]
+    }
+    </script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px 16px;
+            flex: 1;
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 16px;
+        }
+
+        .breadcrumbs a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .breadcrumbs a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumbs span {
+            margin: 0 6px;
+            color: #94a3b8;
+        }
+
+        /* Card Section */
+        .card {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 16px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 16px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .card-header h1 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 15px;
+            resize: vertical;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: #2563eb;
+        }
+
+        .btn {
+            margin-top: 10px;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        .results-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8fafc;
+            padding: 10px 12px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            word-break: break-all;
+        }
+
+        .result-text {
+            font-size: 16px;
+            color: #0f172a;
+        }
+
+        .copy-btn {
+            background: #e2e8f0;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            color: #334155;
+            margin-left: 10px;
+            white-space: nowrap;
+        }
+
+        .copy-btn:hover {
+            background: #cbd5e1;
+        }
+
+        .info-box {
+            font-size: 13px;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        .info-box h2 {
+            font-size: 15px;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+
+        /* Footer */
+        .site-footer {
+            background-color: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            padding: 20px 16px;
+            margin-top: 40px;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .footer-inner {
+            max-width: 700px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .footer-links a {
+            color: #475569;
+            text-decoration: none;
+            margin-left: 12px;
+        }
+
+        .footer-links a:hover {
+            color: #2563eb;
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="https://factzone.online/">Home</a>
+        <span>/</span>
+        <a href="tools.html">Tools</a>
+        <span>/</span>
+        <strong>Instagram Fonts</strong>
+    </nav>
+
+    <!-- Generator Tool Card -->
+    <main class="card">
+        <div class="card-header">
+            <span>✨</span>
+            <h1>Instagram Font Generator</h1>
+        </div>
+        <textarea id="inputText" placeholder="Type or paste your text here..."></textarea>
+        <button class="btn" onclick="generateFancyText()">Generate Fonts</button>
+        <div id="resultsContainer" class="results-list"></div>
+    </main>
+
+    <!-- Short Info Box -->
+    <article class="card info-box">
+        <h2>What is an Instagram Font Generator?</h2>
+        <p>This online tool converts standard ASCII characters into fancy Unicode symbols suitable for Instagram bios, posts, and video captions.</p>
+    </article>
+</div>
+
+<!-- Site Footer -->
+<footer class="site-footer">
+    <div class="footer-inner">
+        <div>
+            © 2026 <strong>factzone.online</strong>. All rights reserved.
+        </div>
+        <div class="footer-links">
+            <a href="https://factzone.online/">Home</a>
+            <a href="tools.html">Tools</a>
+            <a href="privacy-policy.html">Privacy Policy</a>
+        </div>
+    </div>
+</footer>
+
+<script>
+    const fontStyles = [
+        {
+            name: "Bold",
+            transform: text => text.replace(/[a-zA-Z]/g, c => {
+                const code = c.charCodeAt(0);
+                return String.fromCodePoint(code >= 97 ? 0x1D41A + code - 97 : 0x1D400 + code - 65);
+            })
+        },
+        {
+            name: "Italic",
+            transform: text => text.replace(/[a-zA-Z]/g, c => {
+                const code = c.charCodeAt(0);
+                return String.fromCodePoint(code >= 97 ? 0x1D44E + code - 97 : 0x1D434 + code - 65);
+            })
+        },
+        {
+            name: "Monospace",
+            transform: text => text.replace(/[a-zA-Z]/g, c => {
+                const code = c.charCodeAt(0);
+                return String.fromCodePoint(code >= 97 ? 0x1D68A + code - 97 : 0x1D670 + code - 65);
+            })
+        },
+        {
+            name: "Double Struck",
+            transform: text => text.replace(/[a-zA-Z]/g, c => {
+                const code = c.charCodeAt(0);
+                return String.fromCodePoint(code >= 97 ? 0x1D552 + code - 97 : 0x1D538 + code - 65);
+            })
+        }
+    ];
+
+    function generateFancyText() {
+        const input = document.getElementById('inputText').value;
+        const container = document.getElementById('resultsContainer');
+        container.innerHTML = '';
+
+        if (!input.trim()) return;
+
+        fontStyles.forEach(style => {
+            const transformed = style.transform(input);
+            
+            const item = document.createElement('div');
+            item.className = 'result-item';
+            
+            const textSpan = document.createElement('span');
+            textSpan.className = 'result-text';
+            textSpan.textContent = transformed;
+
+            const copyBtn = document.createElement('button');
+            copyBtn.className = 'copy-btn';
+            copyBtn.textContent = 'Copy';
+            copyBtn.onclick = () => {
+                navigator.clipboard.writeText(transformed);
+                copyBtn.textContent = 'Copied!';
+                setTimeout(() => copyBtn.textContent = 'Copy', 1500);
+            };
+
+            item.appendChild(textSpan);
+            item.appendChild(copyBtn);
+            container.appendChild(item);
+        });
+    }
+
+    document.getElementById('inputText').addEventListener('input', generateFancyText);
+</script>
+
+</body>
+</html>
