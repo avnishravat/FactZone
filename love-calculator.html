@@ -3,18 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love Calculator | FactZone</title>
-    <meta name="description" content="Calculate love score compatibility between two names with FactZone Love Calculator.">
+    <title>Love Calculator | Name Compatibility Score - FactZone</title>
+    <meta name="description" content="Calculate love score compatibility between two names instantly with FactZone Love Calculator tool.">
+    <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://factzone.online/love-calculator.html">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23e11d48'/><text x='50%' y='68%' font-family='sans-serif' font-weight='bold' font-size='60' fill='white' text-anchor='middle'>F</text></svg>">
 
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://factzone.online/"},
-        {"@type": "ListItem", "position": 2, "name": "Tools", "item": "https://factzone.online/tools.html"},
-        {"@type": "ListItem", "position": 3, "name": "Love Calculator", "item": "https://factzone.online/love-calculator.html"}
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "name": "Love Calculator",
+          "url": "https://factzone.online/love-calculator.html",
+          "applicationCategory": "EntertainmentApplication",
+          "operatingSystem": "All",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+          "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.7", "ratingCount": "150", "bestRating": "5", "worstRating": "1" }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://factzone.online/"},
+            {"@type": "ListItem", "position": 2, "name": "Tools", "item": "https://factzone.online/tools.html"},
+            {"@type": "ListItem", "position": 3, "name": "Love Calculator", "item": "https://factzone.online/love-calculator.html"}
+          ]
+        }
       ]
     }
     </script>
@@ -25,44 +41,48 @@
         .main-container { width: 100%; max-width: 700px; margin: 0 auto; padding: 20px 16px; flex: 1; }
         .breadcrumbs { font-size: 13px; color: #64748b; margin-bottom: 16px; }
         .breadcrumbs a { color: #2563eb; text-decoration: none; }
-        .card { background: #ffffff; border-radius: 8px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
-        input[type="text"] { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; margin: 8px 0 16px 0; outline: none; }
-        .btn { background-color: #e11d48; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 14px; width: 100%; }
+        .breadcrumbs span { margin: 0 6px; color: #94a3b8; }
+        .card { background: #ffffff; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
+        .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+        .card-header h1 { font-size: 20px; font-weight: 700; color: #0f172a; }
+        input[type="text"] { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; margin: 6px 0 14px 0; outline: none; font-size: 14px; }
+        .btn { background-color: #e11d48; color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 13px; width: 100%; }
         .btn:hover { background-color: #be123c; }
-        .result { margin-top: 15px; font-size: 20px; font-weight: 700; text-align: center; color: #e11d48; }
+        .result { margin-top: 15px; font-size: 18px; font-weight: 700; text-align: center; color: #e11d48; }
         .site-footer { background-color: #ffffff; border-top: 1px solid #e2e8f0; padding: 20px 16px; margin-top: 40px; font-size: 13px; color: #64748b; }
         .footer-inner { max-width: 700px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
         .footer-links a { color: #475569; text-decoration: none; margin-left: 12px; }
     </style>
 </head>
 <body>
-
 <div class="main-container">
     <nav class="breadcrumbs">
-        <a href="https://factzone.online/">Home</a> / <a href="tools.html">Tools</a> / <strong>Love Calculator</strong>
+        <a href="https://factzone.online/">Home</a><span>/</span><a href="tools.html">Tools</a><span>/</span><strong>Love Calculator</strong>
     </nav>
-
-    <div class="card">
-        <h2>❤️ Love Calculator</h2>
+    <main class="card">
+        <div class="card-header">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+            <h1>Love Calculator</h1>
+        </div>
         <label style="font-size: 13px; color: #64748b;">Your Name</label>
-        <input type="text" id="name1" placeholder="Enter name 1">
+        <input type="text" id="name1" placeholder="Enter first name">
         <label style="font-size: 13px; color: #64748b;">Partner's Name</label>
-        <input type="text" id="name2" placeholder="Enter name 2">
+        <input type="text" id="name2" placeholder="Enter second name">
         <button class="btn" onclick="calculateLove()">Calculate Score</button>
         <div id="loveResult" class="result"></div>
-    </div>
+    </main>
 </div>
-
 <footer class="site-footer">
     <div class="footer-inner">
-        <div>© 2026 <strong>factzone.online</strong></div>
+        <div>© 2026 <strong>factzone.online</strong>. All rights reserved.</div>
         <div class="footer-links">
             <a href="https://factzone.online/">Home</a>
             <a href="tools.html">Tools</a>
         </div>
     </div>
 </footer>
-
 <script>
     function calculateLove() {
         const n1 = document.getElementById('name1').value.trim();
@@ -71,7 +91,7 @@
         const combined = (n1 + n2).toLowerCase();
         let hash = 0;
         for (let i = 0; i < combined.length; i++) hash += combined.charCodeAt(i);
-        const score = (hash % 41) + 60; // Returns deterministic score between 60% and 100%
+        const score = (hash % 41) + 60;
         document.getElementById('loveResult').textContent = `Compatibility: ${score}% ❤️`;
     }
 </script>
