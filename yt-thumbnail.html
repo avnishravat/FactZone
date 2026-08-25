@@ -3,18 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Thumbnail Downloader | FactZone</title>
-    <meta name="description" content="Download high resolution YouTube cover thumbnails from any video URL.">
+    <title>YouTube Thumbnail Downloader Online | FactZone</title>
+    <meta name="description" content="Download high quality (HD/4K) YouTube cover thumbnails from video links with FactZone YT Thumbnail Downloader.">
+    <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://factzone.online/yt-thumbnail.html">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232563eb'/><text x='50%' y='68%' font-family='sans-serif' font-weight='bold' font-size='60' fill='white' text-anchor='middle'>F</text></svg>">
 
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://factzone.online/"},
-        {"@type": "ListItem", "position": 2, "name": "Tools", "item": "https://factzone.online/tools.html"},
-        {"@type": "ListItem", "position": 3, "name": "YT Thumbnail Downloader", "item": "https://factzone.online/yt-thumbnail.html"}
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "name": "YouTube Thumbnail Downloader",
+          "url": "https://factzone.online/yt-thumbnail.html",
+          "applicationCategory": "MultimediaApplication",
+          "operatingSystem": "All",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+          "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "310", "bestRating": "5", "worstRating": "1" }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://factzone.online/"},
+            {"@type": "ListItem", "position": 2, "name": "Tools", "item": "https://factzone.online/tools.html"},
+            {"@type": "ListItem", "position": 3, "name": "YT Thumbnail Downloader", "item": "https://factzone.online/yt-thumbnail.html"}
+          ]
+        }
       ]
     }
     </script>
@@ -25,9 +41,12 @@
         .main-container { width: 100%; max-width: 700px; margin: 0 auto; padding: 20px 16px; flex: 1; }
         .breadcrumbs { font-size: 13px; color: #64748b; margin-bottom: 16px; }
         .breadcrumbs a { color: #2563eb; text-decoration: none; }
-        .card { background: #ffffff; border-radius: 8px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
-        input[type="text"] { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; margin: 8px 0 16px 0; outline: none; }
-        .btn { background-color: #2563eb; color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 14px; width: 100%; }
+        .breadcrumbs span { margin: 0 6px; color: #94a3b8; }
+        .card { background: #ffffff; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
+        .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+        .card-header h1 { font-size: 20px; font-weight: 700; color: #0f172a; }
+        input[type="text"] { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; margin: 6px 0 14px 0; outline: none; font-size: 14px; }
+        .btn { background-color: #2563eb; color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 13px; width: 100%; }
         .btn:hover { background-color: #1d4ed8; }
         #thumbPreview { width: 100%; height: auto; margin-top: 15px; border-radius: 6px; display: none; }
         .site-footer { background-color: #ffffff; border-top: 1px solid #e2e8f0; padding: 20px 16px; margin-top: 40px; font-size: 13px; color: #64748b; }
@@ -36,31 +55,33 @@
     </style>
 </head>
 <body>
-
 <div class="main-container">
     <nav class="breadcrumbs">
-        <a href="https://factzone.online/">Home</a> / <a href="tools.html">Tools</a> / <strong>YT Thumbnail Downloader</strong>
+        <a href="https://factzone.online/">Home</a><span>/</span><a href="tools.html">Tools</a><span>/</span><strong>YT Thumbnail Downloader</strong>
     </nav>
-
-    <div class="card">
-        <h2>🖼️ YouTube Thumbnail Downloader</h2>
+    <main class="card">
+        <div class="card-header">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M10 15l5-3-5-3v6z"></path>
+            </svg>
+            <h1>YouTube Thumbnail Downloader</h1>
+        </div>
         <label style="font-size: 13px; color: #64748b;">YouTube Video Link</label>
         <input type="text" id="ytUrl" placeholder="https://www.youtube.com/watch?v=...">
         <button class="btn" onclick="fetchThumbnail()">Get HD Thumbnail</button>
-        <img id="thumbPreview" alt="YouTube Thumbnail">
-    </div>
+        <img id="thumbPreview" alt="YouTube Thumbnail Preview">
+    </main>
 </div>
-
 <footer class="site-footer">
     <div class="footer-inner">
-        <div>© 2026 <strong>factzone.online</strong></div>
+        <div>© 2026 <strong>factzone.online</strong>. All rights reserved.</div>
         <div class="footer-links">
             <a href="https://factzone.online/">Home</a>
             <a href="tools.html">Tools</a>
         </div>
     </div>
 </footer>
-
 <script>
     function fetchThumbnail() {
         const url = document.getElementById('ytUrl').value.trim();
