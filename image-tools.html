@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image & Design Tools | FactZone</title>
+    <meta name="description" content="Free online image utility tool to compress and resize images directly in your browser.">
+    <link rel="canonical" href="https://factzone.online/image-tools.html">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://factzone.online/"},
+        {"@type": "ListItem", "position": 2, "name": "Tools", "item": "https://factzone.online/tools.html"},
+        {"@type": "ListItem", "position": 3, "name": "Image Tools", "item": "https://factzone.online/image-tools.html"}
+      ]
+    }
+    </script>
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
+        .main-container { width: 100%; max-width: 700px; margin: 0 auto; padding: 20px 16px; flex: 1; }
+        .breadcrumbs { font-size: 13px; color: #64748b; margin-bottom: 16px; }
+        .breadcrumbs a { color: #2563eb; text-decoration: none; }
+        .card { background: #ffffff; border-radius: 8px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
+        input[type="file"] { margin: 15px 0; width: 100%; }
+        .btn { background-color: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 14px; }
+        .btn:hover { background-color: #1d4ed8; }
+        #preview { max-width: 100%; height: auto; margin-top: 15px; border-radius: 6px; display: none; }
+        .site-footer { background-color: #ffffff; border-top: 1px solid #e2e8f0; padding: 20px 16px; margin-top: 40px; font-size: 13px; color: #64748b; }
+        .footer-inner { max-width: 700px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+        .footer-links a { color: #475569; text-decoration: none; margin-left: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <nav class="breadcrumbs">
+        <a href="https://factzone.online/">Home</a> / <a href="tools.html">Tools</a> / <strong>Image Tools</strong>
+    </nav>
+
+    <div class="card">
+        <h2>📷 Image Resizer & Compressor</h2>
+        <p style="font-size: 13px; color: #64748b; margin-top: 4px;">Upload an image to resize or compress client-side.</p>
+        <input type="file" id="imageInput" accept="image/*">
+        <button class="btn" onclick="processImage()">Optimize Image</button>
+        <br>
+        <img id="preview" alt="Optimized Preview">
+        <a id="downloadLink" class="btn" style="display:none; margin-top:10px; inline-block; text-decoration:none;">Download Image</a>
+    </div>
+</div>
+
+<footer class="site-footer">
+    <div class="footer-inner">
+        <div>© 2026 <strong>factzone.online</strong></div>
+        <div class="footer-links">
+            <a href="https://factzone.online/">Home</a>
+            <a href="tools.html">Tools</a>
+        </div>
+    </div>
+</footer>
+
+<script>
+    function processImage() {
+        const file = document.getElementById('imageInput').files[0];
+        if (!file) return alert('Please select an image file');
+        const img = document.getElementById('preview');
+        const link = document.getElementById('downloadLink');
+        const reader = new FileReader();
+        reader.onload = e => {
+            img.src = e.target.result;
+            img.style.display = 'block';
+            link.href = e.target.result;
+            link.download = 'optimized-' + file.name;
+            link.style.display = 'inline-block';
+        };
+        reader.readAsDataURL(file);
+    }
+</script>
+</body>
+</html>
