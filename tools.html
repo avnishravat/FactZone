@@ -200,44 +200,47 @@
 :root{--p:#2563eb;--bg:#f8fafc;--card:#fff;--tx:#0f172a;--mut:#64748b;--bd:#e2e8f0}
 [data-theme=dark]{--bg:#0f172a;--card:#1e293b;--tx:#e2e8f0;--mut:#94a3b8;--bd:#334155}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.6}
-.container{max-width:1180px;margin:auto;padding:14px}
-.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.crumb{font-size:.9rem;color:var(--mut)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.5}
+.container{max-width:1180px;margin:auto;padding:12px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.crumb{font-size:.88rem;color:var(--mut)}
 .crumb a{color:var(--p);text-decoration:none}
-.theme{padding:8px 12px;border:1px solid var(--bd);border-radius:9px;background:var(--card);color:var(--tx)}
-header{background:linear-gradient(135deg,#2563eb,#0f172a);color:#fff;border-radius:16px;padding:18px 20px;margin-bottom:18px}
-header h1{font-size:clamp(1.55rem,3vw,2.2rem);margin:0 0 4px;line-height:1.2}
-header p{margin:0;opacity:.92;font-size:.95rem;line-height:1.45}
-.category{margin:18px 0}
-.category h2{font-size:1.35rem}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
-.card{border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:14px;padding:15px;text-align:left;min-height:125px;cursor:pointer}
+.theme{padding:6px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx);font-size:.85rem;cursor:pointer}
+header{background:transparent;padding:6px 0 10px 0;margin-bottom:6px;text-align:left}
+header h1{font-size:clamp(1.5rem,3vw,2.1rem);margin:0 0 4px;line-height:1.2;color:var(--p);font-weight:800}
+header p{margin:0;color:var(--mut);font-size:.95rem;line-height:1.4}
+.category{margin:12px 0}
+.category h2{font-size:1.2rem;margin:0 0 8px 0;display:flex;align-items:center;gap:6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.card{border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;padding:12px;text-align:left;display:flex;flex-direction:column;justify-content:center;min-height:92px;cursor:pointer;transition:transform 0.15s, border-color 0.15s}
 .card:hover{border-color:var(--p);transform:translateY(-2px)}
-.card span{font-size:1.7rem}
-.card strong,.card small{display:block}
-.card small{color:var(--mut)}
-.tool-view{display:none;background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:22px;margin-bottom:25px}
+.card span{font-size:1.4rem;line-height:1;margin-bottom:4px}
+.card strong{font-size:.95rem;display:block;margin-bottom:2px}
+.card small{color:var(--mut);font-size:.8rem;line-height:1.2}
+.tool-view{display:none;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px;margin-bottom:16px}
 .tool-view.active{display:block}
-.back{border:0;background:none;color:var(--p);cursor:pointer;padding:0}
-.back-bottom{display:block;margin-top:18px;padding:10px 14px;border:1px solid var(--bd);border-radius:9px;background:var(--bg);font-weight:700}
-.lead{color:var(--mut)}
-.toolbox{border:1px solid var(--bd);border-radius:14px;padding:17px;margin:18px 0}
-input,select,textarea{width:100%;padding:11px;border:1px solid var(--bd);border-radius:9px;background:var(--bg);color:var(--tx);margin:5px 0}
-textarea{min-height:145px}
-.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
-.toolbox button{background:var(--p);color:#fff;border:0;border-radius:9px;padding:11px 14px;margin:5px 0;font-weight:700;cursor:pointer}
-.result,.notice{padding:11px;border-radius:9px;background:rgba(37,99,235,.08);margin-top:8px;word-break:break-word}
-.guide{border-top:1px dashed var(--bd);padding-top:16px;color:var(--mut)}
-.guide h3{color:var(--tx)}
-canvas{max-width:100%;margin-top:10px;border:1px solid var(--bd)}
-.seo{border-top:1px solid var(--bd);margin-top:28px;padding-top:22px}
-.seo h2{font-size:1.4rem}
-.faq details{background:var(--card);border:1px solid var(--bd);padding:11px 13px;border-radius:9px;margin:8px 0}
+.back{border:0;background:none;color:var(--p);cursor:pointer;padding:0;font-weight:600;font-size:.9rem}
+.back-bottom{display:inline-block;margin-top:12px;padding:8px 12px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);font-weight:600;font-size:.85rem}
+.lead{color:var(--mut);margin:4px 0 12px;font-size:.92rem}
+.toolbox{border:1px solid var(--bd);border-radius:10px;padding:14px;margin:12px 0;background:var(--bg)}
+input,select,textarea{width:100%;padding:9px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx);margin:4px 0;font-size:.9rem}
+textarea{min-height:110px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+.toolbox button{background:var(--p);color:#fff;border:0;border-radius:8px;padding:9px 14px;margin:8px 0 4px;font-weight:600;font-size:.9rem;cursor:pointer}
+.result,.notice{padding:10px;border-radius:8px;background:rgba(37,99,235,.08);margin-top:8px;word-break:break-word;font-size:.9rem}
+.guide{border-top:1px dashed var(--bd);margin-top:14px;padding-top:12px;color:var(--mut);font-size:.88rem}
+.guide h3{color:var(--tx);margin:0 0 6px 0;font-size:1rem}
+.guide ol,.guide ul{margin:4px 0 10px 20px;padding:0}
+.guide li{margin-bottom:3px}
+canvas{max-width:100%;margin-top:8px;border:1px solid var(--bd);border-radius:6px}
+.seo{border-top:1px solid var(--bd);margin-top:20px;padding-top:16px}
+.seo h2{font-size:1.2rem;margin:0 0 6px 0}
+.seo p{margin:0 0 12px 0;font-size:.9rem}
+.faq details{background:var(--card);border:1px solid var(--bd);padding:9px 12px;border-radius:8px;margin:6px 0;font-size:.9rem}
 .faq summary{cursor:pointer}
-footer{text-align:center;color:var(--mut);padding:25px 0;font-size:.85rem}
-.language-row{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin:0 0 18px;padding:10px 0}
-.language-row select{width:auto;min-width:145px;margin:0}
+footer{text-align:center;color:var(--mut);padding:16px 0 6px;font-size:.85rem}
+.language-row{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin:0 0 12px;padding:0}
+.language-row select{width:auto;min-width:130px;margin:0;padding:6px 8px;font-size:.85rem}
 @media(max-width:600px){.grid{grid-template-columns:1fr 1fr}}
 @media(max-width:390px){.grid{grid-template-columns:1fr}}
 </style>
@@ -297,49 +300,487 @@ footer{text-align:center;color:var(--mut);padding:25px 0;font-size:.85rem}
 </main>
 
 <div id="views">
-  <article class="tool-view" id="image-compressor"><button class="back" onclick="showMenu()">← सभी Tools</button><h2>📷 Image Compressor</h2><p class="lead">इमेज का KB/MB साइज कम करें</p><div class="toolbox"><input accept="image/*" id="file" type="file"/><label>Quality <input id="quality" max="100" min="20" type="range" value="75"/></label><button onclick="compress()">Compress &amp; Download</button><div class="result" id="result"></div><button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button></div><div class="guide"><h3>📖 कैसे इस्तेमाल करें?</h3><p>यह browser-based image/design utility है।</p><ol><li>Tool खोलें और required input भरें।</li><li>Image/file चुनें → आवश्यक options भरें → process करें → output download करें।</li><li>Result को जरूरत के अनुसार copy/download करें।</li></ol><h3>✅ फायदे और उपयोग</h3><p>Web, social media, thumbnails और design workflow तेज होता है।</p></div></article>
-  
-  <article class="tool-view" id="image-resizer"><button class="back" onclick="showMenu()">← सभी Tools</button><h2>📐 Image Resizer</h2><p class="lead">फोटो के Pixels बदलें</p><div class="toolbox"><input accept="image/*" id="file" type="file"/><div class="two"><input id="w" placeholder="Width px" type="number"/><input id="h" placeholder="Height px" type="number"/></div><button onclick="resize()">Resize &amp; Download</button><div class="result" id="result"></div><button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button></div><div class="guide"><h3>📖 कैसे इस्तेमाल करें?</h3><p>यह browser-based image/design utility है।</p><ol><li>Tool खोलें और required input भरें।</li><li>Image/file चुनें → आवश्यक options भरें → process करें → output download करें।</li><li>Result को जरूरत के अनुसार copy/download करें।</li></ol><h3>✅ फायदे और उपयोग</h3><p>Web, social media, thumbnails और design workflow तेज होता है।</p></div></article>
+  <article class="tool-view" id="image-compressor">
+    <button class="back" onclick="showMenu()">← सभी Tools</button>
+    <h2>📷 Image Compressor</h2>
+    <p class="lead">इमेज की क्वालिटी बनाए रखते हुए उसका file size (KB/MB) कम करें।</p>
+    <div class="toolbox">
+      <input accept="image/*" id="file" type="file"/>
+      <label style="font-size:0.85rem; display:block; margin-top:6px;">Compression Quality: 
+        <input id="quality" max="100" min="20" type="range" value="75"/>
+      </label>
+      <button onclick="compress()">Compress &amp; Download</button>
+      <div class="result" id="result"></div>
+    </div>
+    <div class="guide">
+      <h3>📖 कैसे इस्तेमाल करें?</h3>
+      <ol>
+        <li>"Choose File" पर क्लिक करके अपनी फोटो अपलोड करें।</li>
+        <li>Slider से Compression Quality एडजस्ट करें (Default: 75%)।</li>
+        <li>"Compress & Download" बटन दबाकर रिजल्ट सेव करें।</li>
+      </ol>
+      <h3>✅ फायदे और उपयोग</h3>
+      <p>वेबसाइट स्पीड बढ़ाने, Forms भरने और सोशल मीडिया पर जल्दी फोटो भेजने के लिए साइज कम करने में उपयोगी।</p>
+    </div>
+    <button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button>
+  </article>
 
-  <article class="tool-view" id="png-to-jpg"><button class="back" onclick="showMenu()">← सभी Tools</button><h2>🖼️ PNG to JPG Converter</h2><p class="lead">PNG को JPG में बदलें</p><div class="toolbox"><input accept="image/*" id="file" type="file"/><button onclick="imgConvert('png-to-jpg')">Convert &amp; Download</button><div class="result" id="result"></div><button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button></div><div class="guide"><h3>📖 कैसे इस्तेमाल करें?</h3><p>यह tool एक format/unit को दूसरे format/unit में बदलता है।</p><ol><li>Tool खोलें और required input भरें।</li><li>Input डालें → From/To या Encode/Decode चुनें → Convert करें।</li><li>Result को जरूरत के अनुसार copy/download करें।</li></ol><h3>✅ फायदे और उपयोग</h3><p>Manual conversion की जरूरत कम होती है और quick results मिलते हैं।</p></div></article>
+  <article class="tool-view" id="image-resizer">
+    <button class="back" onclick="showMenu()">← सभी Tools</button>
+    <h2>📐 Image Resizer</h2>
+    <p class="lead">अपनी इमेज के Pixels (Height & Width) को आवश्यकतानुसार बदलें।</p>
+    <div class="toolbox">
+      <input accept="image/*" id="file" type="file"/>
+      <div class="two">
+        <input id="w" placeholder="Width (px)" type="number"/>
+        <input id="h" placeholder="Height (px)" type="number"/>
+      </div>
+      <button onclick="resize()">Resize &amp; Download</button>
+      <div class="result" id="result"></div>
+    </div>
+    <div class="guide">
+      <h3>📖 कैसे इस्तेमाल करें?</h3>
+      <ol>
+        <li>इमेज सेलेक्ट करें और मनचाही Width और Height (Pixels में) दर्ज करें।</li>
+        <li>"Resize & Download" पर क्लिक करें।</li>
+      </ol>
+      <h3>✅ फायदे और उपयोग</h3>
+      <p>YouTube Thumbnails, Banners aur Online Forms के निर्धारित साइज़ में फोटो बदलने के लिए बेस्ट।</p>
+    </div>
+    <button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button>
+  </article>
 
-  <article class="tool-view" id="jpg-to-png"><button class="back" onclick="showMenu()">← सभी Tools</button><h2>🖼️ JPG to PNG Converter</h2><p class="lead">JPG को PNG में बदलें</p><div class="toolbox"><input accept="image/*" id="file" type="file"/><button onclick="imgConvert('jpg-to-png')">Convert &amp; Download</button><div class="result" id="result"></div><button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button></div><div class="guide"><h3>📖 कैसे इस्तेमाल करें?</h3><p>यह tool एक format/unit को दूसरे format/unit में बदलता है।</p><ol><li>Tool खोलें और required input भरें।</li><li>Input डालें → From/To या Encode/Decode चुनें → Convert करें।</li><li>Result को जरूरत के अनुसार copy/download करें।</li></ol><h3>✅ फायदे और उपयोग</h3><p>Manual conversion की जरूरत कम होती है और quick results मिलते हैं।</p></div></article>
+  <article class="tool-view" id="png-to-jpg">
+    <button class="back" onclick="showMenu()">← सभी Tools</button>
+    <h2>🖼️ PNG to JPG Converter</h2>
+    <p class="lead">PNG इमेज को तुरंत High Quality JPG फॉर्मेट में कन्वर्ट करें।</p>
+    <div class="toolbox">
+      <input accept="image/*" id="file" type="file"/>
+      <button onclick="imgConvert('png-to-jpg')">Convert &amp; Download</button>
+      <div class="result" id="result"></div>
+    </div>
+    <div class="guide">
+      <h3>📖 कैसे इस्तेमाल करें?</h3>
+      <ol>
+        <li>PNG फोटो अपलोड करें।</li>
+        <li>"Convert & Download" दबाएं और आपकी फाइलों का JPG फॉर्मेट पाएं।</li>
+      </ol>
+      <h3>✅ फायदे और उपयोग</h3>
+      <p>फाइल साइज कम करने और standard photo upload requirement को पूरा करने के लिए।</p>
+    </div>
+    <button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button>
+  </article>
 
-  <article class="tool-view" id="image-crop"><button class="back" onclick="showMenu()">← सभी Tools</button><h2>✂️ Image Crop Tool</h2><p class="lead">फोटो का अनचाहा हिस्सा काटें</p><div class="toolbox"><input accept="image/*" id="file" type="file"/><div class="two"><input id="x" placeholder="X" type="number"/><input id="y" placeholder="Y" type="number"/><input id="w" placeholder="Width" type="number"/><input id="h" placeholder="Height" type="number"/></div><button onclick="crop()">Crop &amp; Download</button><div class="result" id="result"></div><button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button></div><div class="guide"><h3>📖 कैसे इस्तेमाल करें?</h3><p>यह browser-based image/design utility है।</p><ol><li>Tool खोलें और required input भरें।</li><li>Image/file चुनें → आवश्यक options भरें → process करें → output download करें।</li><li>Result को जरूरत के अनुसार copy/download करें।</li></ol><h3>✅ फायदे और उपयोग</h3><p>Web, social media, thumbnails और design workflow तेज होता है।</p></div></article>
+  <article class="tool-view" id="jpg-to-png">
+    <button class="back" onclick="showMenu()">← सभी Tools</button>
+    <h2>🖼️ JPG to PNG Converter</h2>
+    <p class="lead">JPG इमेज को Transparent compatible PNG फॉर्मेट में बदलें।</p>
+    <div class="toolbox">
+      <input accept="image/*" id="file" type="file"/>
+      <button onclick="imgConvert('jpg-to-png')">Convert &amp; Download</button>
+      <div class="result" id="result"></div>
+    </div>
+    <div class="guide">
+      <h3>📖 कैसे इस्तेमाल करें?</h3>
+      <ol>
+        <li>JPG फाइल सेलेक्ट करें।</li>
+        <li>"Convert & Download" पर क्लिक करें।</li>
+      </ol>
+      <h3>✅ फायदे और उपयोग</h3>
+      <p>Graphic design, transparent logos, aur web assets ke liye suitable format.</p>
+    </div>
+    <button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button>
+  </article>
 
-  <article class="tool-view" id="color-picker"><button class="back" onclick="showMenu()">← सभी Tools</button><h2>🎨 Color Picker from Image</h2><p class="lead">इमेज से HEX/RGB कलर निकालें</p><div class="toolbox"><input accept="image/*" id="file" onchange="initColorPicker(this)" type="file"/><canvas id="canvas"></canvas><div class="result" id="result"></div><button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button></div><div class="guide"><h3>📖 कैसे इस्तेमाल करें?</h3><p>यह browser-based image/design utility है।</p><ol><li>Tool खोलें और required input भरें।</li><li>Image/file चुनें → आवश्यक options भरें → process करें → output download करें।</li><li>Result को जरूरत के अनुसार copy/download करें।</li></ol><h3>✅ फायदे और उपयोग</h3><p>Web, social media, thumbnails और design workflow तेज होता है।</p></div></article>
+  <article class="tool-view" id="image-crop">
+    <button class="back" onclick="showMenu()">← सभी Tools</button>
+    <h2>✂️ Image Crop Tool</h2>
+    <p class="lead">फोटो का कोई भी अनचाहा हिस्सा आसानी से क्रॉप (कट) करें।</p>
+    <div class="toolbox">
+      <input accept="image/*" id="file" type="file"/>
+      <div class="two">
+        <input id="x" placeholder="X Coord" type="number"/>
+        <input id="y" placeholder="Y Coord" type="number"/>
+        <input id="w" placeholder="Crop Width" type="number"/>
+        <input id="h" placeholder="Crop Height" type="number"/>
+      </div>
+      <button onclick="crop()">Crop &amp; Download</button>
+      <div class="result" id="result"></div>
+    </div>
+    <div class="guide">
+      <h3>📖 कैसे इस्तेमाल करें?</h3>
+      <ol>
+        <li>फोटो अपलोड करें और Crop Coordinates दर्ज करें।</li>
+        <li>"Crop & Download" पर क्लिक करके क्रॉप्ड इमेज सेव करें।</li>
+      </ol>
+      <h3>✅ फायदे और उपयोग</h3>
+      <p>Photo se extra background trim karne aur exact focus create karne ke liye.</p>
+    </div>
+    <button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button>
+  </article>
 
-  <article class="tool-view" id="svg-to-png"><button class="back" onclick="showMenu()">← सभी Tools</button><h2>🔷 SVG to PNG Converter</h2><p class="lead">SVG को PNG में बदलें</p><div class="toolbox"><textarea id="input" placeholder="SVG code paste करें"></textarea><input id="size" type="number" value="512"/><button onclick="svgPng()">Export PNG</button><div class="result" id="result"></div><button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button></div><div class="guide"><h3>📖 कैसे इस्तेमाल करें?</h3><p>यह tool एक format/unit को दूसरे format/unit में बदलता है।</p><ol><li>Tool खोलें और required input भरें।</li><li>Input डालें → From/To या Encode/Decode चुनें → Convert करें।</li><li>Result को जरूरत के अनुसार copy/download करें।</li></ol><h3>✅ फायदे और उपयोग</h3><p>Manual conversion की जरूरत कम होती है और quick results मिलते हैं।</p></div></article>
+  <article class="tool-view" id="color-picker">
+    <button class="back" onclick="showMenu()">← सभी Tools</button>
+    <h2>🎨 Color Picker from Image</h2>
+    <p class="lead">इमेज पर कहीं भी क्लिक करके exact HEX/RGB कलर कोड निकालें।</p>
+    <div class="toolbox">
+      <input accept="image/*" id="file" onchange="initColorPicker(this)" type="file"/>
+      <canvas id="canvas"></canvas>
+      <div class="result" id="result">इमेज अपलोड करने के बाद उसपर कलर पिक करने के लिए क्लिक करें।</div>
+    </div>
+    <div class="guide">
+      <h3>📖 कैसे इस्तेमाल करें?</h3>
+      <ol>
+        <li>इमेज चुनें और स्क्रीन पर लोड होने दें।</li>
+        <li>इमेज के किसी भी हिस्से पर Tap/Click करें। Niche Hex aur RGB codes aa jayenge.</li>
+      </ol>
+      <h3>✅ फायदे और उपयोग</h3>
+      <p>Web Designers, Thumbnail Creators aur Branding ke liye matching color palette nikalna aasan.</p>
+    </div>
+    <button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button>
+  </article>
 
-  <article class="tool-view" id="favicon-generator"><button class="back" onclick="showMenu()">← सभी Tools</button><h2>🌐 Favicon Generator</h2><p class="lead">वेबसाइट के लिए favicon बनाएं</p><div class="toolbox"><input accept="image/*" id="file" type="file"/><button onclick="favicon()">Generate Favicon</button><div class="result" id="result"></div><button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button></div><div class="guide"><h3>📖 कैसे इस्तेमाल करें?</h3><p>यह browser-based image/design utility है।</p><ol><li>Tool खोलें और required input भरें।</li><li>Image/file चुनें → आवश्यक options भरें → process करें → output download करें।</li><li>Result को जरूरत के अनुसार copy/download करें।</li></ol><h3>✅ फायदे और उपयोग</h3><p>Web, social media, thumbnails और design workflow तेज होता है।</p></div></article>
+  <article class="tool-view" id="svg-to-png">
+    <button class="back" onclick="showMenu()">← सभी Tools</button>
+    <h2>🔷 SVG to PNG Converter</h2>
+    <p class="lead">Vector SVG code को High Resolution PNG इमेज में बदलें।</p>
+    <div class="toolbox">
+      <textarea id="input" placeholder="यहाँ SVG Code Paste करें... (<svg>...</svg>)"></textarea>
+      <input id="size" placeholder="Output Canvas Size (px)" type="number" value="512"/>
+      <button onclick="svgPng()">Export PNG</button>
+      <div class="result" id="result"></div>
+    </div>
+    <div class="guide">
+      <h3>📖 कैसे इस्तेमाल करें?</h3>
+      <ol>
+        <li>अपना SVG कोड टेक्स्ट एरिया में पेस्ट करें।</li>
+        <li>"Export PNG" पर क्लिक करें।</li>
+      </ol>
+      <h3>✅ फायदे और उपयोग</h3>
+      <p>Vector graphics को raster image format में बदलकर apps aur websites पर use करने के लिए।</p>
+    </div>
+    <button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button>
+  </article>
 
-  <article class="tool-view" id="meme-generator"><button class="back" onclick="showMenu()">← सभी Tools</button><h2>😂 Meme Generator</h2><p class="lead">सोशल मीडिया के लिए मीम बनाएं</p><div class="toolbox"><input accept="image/*" id="file" type="file"/><input id="top" placeholder="Top text"/><input id="bottom" placeholder="Bottom text"/><button onclick="meme()">Generate Meme</button><canvas id="canvas"></canvas><div class="result" id="result"></div><button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button></div><div class="guide"><h3>📖 कैसे इस्तेमाल करें?</h3><p>यह browser-based image/design utility है।</p><ol><li>Tool खोलें और required input भरें।</li><li>Image/file चुनें → आवश्यक options भरें → process करें → output download करें।</li><li>Result को जरूरत के अनुसार copy/download करें।</li></ol><h3>✅ फायदे और उपयोग</h3><p>Web, social media, thumbnails और design workflow तेज होता है।</p></div></article>
+  <article class="tool-view" id="favicon-generator">
+    <button class="back" onclick="showMenu()">← सभी Tools</button>
+    <h2>🌐 Favicon Generator</h2>
+    <p class="lead">अपनी फोटो या लोगो से 64x64 Web Favicon तैयार करें।</p>
+    <div class="toolbox">
+      <input accept="image/*" id="file" type="file"/>
+      <button onclick="favicon()">Generate Favicon</button>
+      <div class="result" id="result"></div>
+    </div>
+    <div class="guide">
+      <h3>📖 कैसे इस्तेमाल करें?</h3>
+      <ol>
+        <li>अपना Logo या Photo सेलेक्ट करें।</li>
+        <li>"Generate Favicon" पर क्लिक करके PNG Icon सेव करें।</li>
+      </ol>
+      <h3>✅ फायदे और उपयोग</h3>
+      <p>Website ke browser tab icon me use karne ke liye perfect scaled image.</p>
+    </div>
+    <button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button>
+  </article>
 
-  <article class="tool-view" id="bmi-calculator"><button class="back" onclick="showMenu()">← सभी Tools</button><h2>⚖️ BMI Calculator</h2><p class="lead">लंबाई और वजन से BMI जानें</p><div class="toolbox"><input id="weight" placeholder="Weight kg" type="number"/><input id="height" placeholder="Height cm" type="number"/><button onclick="bmi()">Calculate BMI</button><div class="result" id="result"></div><button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button></div><div class="guide"><h3>📖 कैसे इस्तेमाल करें?</h3><p>यह calculator आपके दिए गए inputs से एक estimate/result देता है।</p><ol><li>Tool खोलें और required input भरें।</li><li>Required values भरें → Calculate/Convert दबाएं → result पढ़ें।</li><li>Result को जरूरत के अनुसार copy/download करें।</li></ol><h3>✅ फायदे और उपयोग</h3><p>Quick planning और calculations में समय बचाता है। Health tools estimates हैं, diagnosis नहीं।</p></div></article>
+  <article class="tool-view" id="meme-generator">
+    <button class="back" onclick="showMenu()">← सभी Tools</button>
+    <h2>😂 Meme Generator</h2>
+    <p class="lead">अपनी पसंदीदा फोटो पर Top और Bottom Text लिखकर मीम बनाएं।</p>
+    <div class="toolbox">
+      <input accept="image/*" id="file" type="file"/>
+      <input id="top" placeholder="Top Text (ऊपर का टेक्स्ट)"/>
+      <input id="bottom" placeholder="Bottom Text (नीचे का टेक्स्ट)"/>
+      <button onclick="meme()">Generate Meme</button>
+      <canvas id="canvas"></canvas>
+      <div class="result" id="result"></div>
+    </div>
+    <div class="guide">
+      <h3>📖 कैसे इस्तेमाल करें?</h3>
+      <ol>
+        <li>Photo सेलेक्ट करें, Top aur Bottom text टाइप करें।</li>
+        <li>"Generate Meme" बटन दबाकर Meme तैयार करें।</li>
+      </ol>
+      <h3>✅ फायदे और उपयोग</h3>
+      <p>Social media engagement, Fun post creation aur quick viral content generation.</p>
+    </div>
+    <button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button>
+  </article>
 
-  <article class="tool-view" id="bmr-calculator"><button class="back" onclick="showMenu()">← सभी Tools</button><h2>🔥 BMR Calculator</h2><p class="lead">BMR का अनुमान लगाएं</p><div class="toolbox"><div class="two"><input id="age" placeholder="Age" type="number"/><select id="sex"><option value="m">Male</option><option value="f">Female</option></select><input id="weight" placeholder="Weight kg" type="number"/><input id="height" placeholder="Height cm" type="number"/></div><button onclick="bmr()">Calculate BMR</button><div class="result" id="result"></div><button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button></div><div class="guide"><h3>📖 कैसे इस्तेमाल करें?</h3><p>यह calculator आपके दिए गए inputs से एक estimate/result देता है।</p><ol><li>Tool खोलें और required input भरें।</li><li>Required values भरें → Calculate/Convert दबाएं → result पढ़ें।</li><li>Result को जरूरत के अनुसार copy/download करें।</li></ol><h3>✅ फायदे और उपयोग</h3><p>Quick planning और calculations में समय बचाता है। Health tools estimates हैं, diagnosis नहीं।</p></div></article>
+  <article class="tool-view" id="bmi-calculator">
+    <button class="back" onclick="showMenu()">← सभी Tools</button>
+    <h2>⚖️ BMI Calculator</h2>
+    <p class="lead">बॉडी मास इंडेक्स (BMI) से अपनी सेहत और फिटनेस का स्तर जांचें।</p>
+    <div class="toolbox">
+      <input id="weight" placeholder="Weight (kg)" type="number"/>
+      <input id="height" placeholder="Height (cm)" type="number"/>
+      <button onclick="bmi()">Calculate BMI</button>
+      <div class="result" id="result"></div>
+    </div>
+    <div class="guide">
+      <h3>📖 कैसे इस्तेमाल करें?</h3>
+      <ol>
+        <li>अपना वजन (Kg) और लंबाई (cm) दर्ज करें।</li>
+        <li>"Calculate BMI" पर क्लिक करें।</li>
+      </ol>
+      <h3>✅ फायदे और उपयोग</h3>
+      <p>Underweight, Normal या Overweight श्रेणी जानने के लिए उपयोगी गाइड।</p>
+    </div>
+    <button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button>
+  </article>
 
-  <article class="tool-view" id="calories-burned"><button class="back" onclick="showMenu()">← सभी Tools</button><h2>🏃 Calories Burned Calculator</h2><p class="lead">वॉकिंग/रनिंग की अनुमानित कैलोरी</p><div class="toolbox"><div class="two"><input id="weight" placeholder="Weight kg" type="number"/><input id="minutes" placeholder="Minutes" type="number"/></div><select id="met"><option value="3.5">Walking</option><option value="8">Running</option><option value="6">Cycling</option></select><button onclick="calories()">Estimate Calories</button><div class="result" id="result"></div><button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button></div><div class="guide"><h3>📖 कैसे इस्तेमाल करें?</h3><p>यह calculator आपके दिए गए inputs से एक estimate/result देता है।</p><ol><li>Tool खोलें और required input भरें।</li><li>Required values भरें → Calculate/Convert दबाएं → result पढ़ें।</li><li>Result को जरूरत के अनुसार copy/download करें।</li></ol><h3>✅ फायदे और उपयोग</h3><p>Quick planning और calculations में समय बचाता है। Health tools estimates हैं, diagnosis नहीं।</p></div></article>
+  <article class="tool-view" id="bmr-calculator">
+    <button class="back" onclick="showMenu()">← सभी Tools</button>
+    <h2>🔥 BMR Calculator</h2>
+    <p class="lead">Basal Metabolic Rate से जानें आपकी बॉडी बिना किसी एक्टिविटी के कितनी कैलोरी बर्न करती है।</p>
+    <div class="toolbox">
+      <div class="two">
+        <input id="age" placeholder="Age" type="number"/>
+        <select id="sex"><option value="m">Male</option><option value="f">Female</option></select>
+        <input id="weight" placeholder="Weight (kg)" type="number"/>
+        <input id="height" placeholder="Height (cm)" type="number"/>
+      </div>
+      <button onclick="bmr()">Calculate BMR</button>
+      <div class="result" id="result"></div>
+    </div>
+    <div class="guide">
+      <h3>📖 कैसे इस्तेमाल करें?</h3>
+      <ol>
+        <li>Age, Gender, Weight, aur Height भरें।</li>
+        <li>"Calculate BMR" पर क्लिक करें।</li>
+      </ol>
+      <h3>✅ फायदे और उपयोग</h3>
+      <p>Diet Planning, Weight Loss / Weight Gain Macros set karne me madad karta hai.</p>
+    </div>
+    <button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button>
+  </article>
 
-  <article class="tool-view" id="water-intake"><button class="back" onclick="showMenu()">← सभी Tools</button><h2>💧 Water Intake Calculator</h2><p class="lead">रोज़ के पानी का अनुमान</p><div class="toolbox"><input id="weight" placeholder="Weight kg" type="number"/><button onclick="water()">Calculate</button><div class="result" id="result"></div><button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button></div><div class="guide"><h3>📖 कैसे इस्तेमाल करें?</h3><p>यह calculator आपके दिए गए inputs से एक estimate/result देता है।</p><ol><li>Tool खोलें और required input भरें।</li><li>Required values भरें → Calculate/Convert दबाएं → result पढ़ें।</li><li>Result को जरूरत के अनुसार copy/download करें।</li></ol><h3>✅ फायदे और उपयोग</h3><p>Quick planning और calculations में समय बचाता है। Health tools estimates हैं, diagnosis नहीं।</p></div></article>
+  <article class="tool-view" id="calories-burned">
+    <button class="back" onclick="showMenu()">← सभी Tools</button>
+    <h2>🏃 Calories Burned Calculator</h2>
+    <p class="lead">विभिन्न एक्टिविटीज़ से बर्न हुई कैलोरी का अनुमान लगाएं।</p>
+    <div class="toolbox">
+      <div class="two">
+        <input id="weight" placeholder="Weight (kg)" type="number"/>
+        <input id="minutes" placeholder="Minutes" type="number"/>
+      </div>
+      <select id="met">
+        <option value="3.5">Walking (साधारण पैदल चलना)</option>
+        <option value="8">Running (दौड़ना)</option>
+        <option value="6">Cycling (साइकिल चलाना)</option>
+      </select>
+      <button onclick="calories()">Estimate Calories</button>
+      <div class="result" id="result"></div>
+    </div>
+    <div class="guide">
+      <h3>📖 कैसे इस्तेमाल करें?</h3>
+      <ol>
+        <li>अपना वजन, टाइम (मिनटों में) और एक्टिविटी चुनें।</li>
+        <li>"Estimate Calories" दबाएं।</li>
+      </ol>
+      <h3>✅ फायदे और उपयोग</h3>
+      <p>Workout efficiency tracking aur daily energy expenditure janne ke liye.</p>
+    </div>
+    <button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button>
+  </article>
 
-  <article class="tool-view" id="pregnancy-due-date"><button class="back" onclick="showMenu()">← सभी Tools</button><h2>🤰 Pregnancy Due Date Calculator</h2><p class="lead">संभावित ड्यू डेट का अनुमान</p><div class="toolbox"><input id="date" type="date"/><button onclick="due()">Calculate Due Date</button><div class="result" id="result"></div><button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button></div><div class="guide"><h3>📖 कैसे इस्तेमाल करें?</h3><p>यह calculator आपके दिए गए inputs से एक estimate/result देता है।</p><ol><li>Tool खोलें और required input भरें।</li><li>Required values भरें → Calculate/Convert दबाएं → result पढ़ें।</li><li>Result को जरूरत के अनुसार copy/download करें।</li></ol><h3>✅ फायदे और उपयोग</h3><p>Quick planning और calculations में समय बचाता है। Health tools estimates हैं, diagnosis नहीं।</p></div></article>
+  <article class="tool-view" id="water-intake">
+    <button class="back" onclick="showMenu()">← सभी Tools</button>
+    <h2>💧 Water Intake Calculator</h2>
+    <p class="lead">वजन के अनुसार दैनिक पानी की आवश्यक मात्रा का अनुमान लगाएं।</p>
+    <div class="toolbox">
+      <input id="weight" placeholder="Weight (kg)" type="number"/>
+      <button onclick="water()">Calculate</button>
+      <div class="result" id="result"></div>
+    </div>
+    <div class="guide">
+      <h3>📖 कैसे इस्तेमाल करें?</h3>
+      <ol>
+        <li>अपना वजन दर्ज करें और "Calculate" पर क्लिक करें।</li>
+      </ol>
+      <h3>✅ फायदे और उपयोग</h3>
+      <p>Body Hydration maintained rakhne aur daily water targets set karne me helpful.</p>
+    </div>
+    <button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button>
+  </article>
 
-  <article class="tool-view" id="love-calculator"><button class="back" onclick="showMenu()">← सभी Tools</button><h2>❤️ Love Calculator</h2><p class="lead">दो नामों का fun match score</p><div class="toolbox"><input id="a" placeholder="Name 1"/><input id="b" placeholder="Name 2"/><button onclick="love()">Check Match</button><div class="result" id="result"></div><button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button></div><div class="guide"><h3>📖 कैसे इस्तेमाल करें?</h3><p>यह calculator आपके दिए गए inputs से एक estimate/result देता है।</p><ol><li>Tool खोलें और required input भरें।</li><li>Required values भरें → Calculate/Convert दबाएं → result पढ़ें।</li><li>Result को जरूरत के अनुसार copy/download करें।</li></ol><h3>✅ फायदे और उपयोग</h3><p>Quick planning और calculations में समय बचाता है। Health tools estimates हैं, diagnosis नहीं।</p></div></article>
+  <article class="tool-view" id="pregnancy-due-date">
+    <button class="back" onclick="showMenu()">← सभी Tools</button>
+    <h2>🤰 Pregnancy Due Date Calculator</h2>
+    <p class="lead">LMP (Last Menstrual Period) के अनुसार संभावित डिलीवरी डेट जानें।</p>
+    <div class="toolbox">
+      <input id="date" type="date"/>
+      <button onclick="due()">Calculate Due Date</button>
+      <div class="result" id="result"></div>
+    </div>
+    <div class="guide">
+      <h3>📖 कैसे इस्तेमाल करें?</h3>
+      <ol>
+        <li>Last Period ki Date सेलेक्ट करें और "Calculate Due Date" दबाएं।</li>
+      </ol>
+      <h3>✅ फायदे और उपयोग</h3>
+      <p>General Estimation guide. Important health decision ke liye doctor se sampark karein.</p>
+    </div>
+    <button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button>
+  </article>
 
-  <article class="tool-view" id="pdf-to-word"><button class="back" onclick="showMenu()">← सभी Tools</button><h2>📄 PDF to Word Converter</h2><p class="lead">PDF से Word workflow guide</p><div class="toolbox"><div class="notice">यह page PDF files को server पर upload नहीं करता। Privacy-sensitive documents के लिए trusted local PDF/Word software का उपयोग करें।</div><div class="result" id="result"></div><button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button></div><div class="guide"><h3>📖 कैसे इस्तेमाल करें?</h3><p>यह tool एक format/unit को दूसरे format/unit में बदलता है।</p><ol><li>Tool खोलें और required input भरें।</li><li>Input डालें → From/To या Encode/Decode चुनें → Convert करें।</li><li>Result को जरूरत के अनुसार copy/download करें।</li></ol><h3>✅ फायदे और उपयोग</h3><p>Manual conversion की जरूरत कम होती है और quick results मिलते हैं।</p></div></article>
+  <article class="tool-view" id="love-calculator">
+    <button class="back" onclick="showMenu()">← सभी Tools</button>
+    <h2>❤️ Love Calculator</h2>
+    <p class="lead">दो नामों का मजेदार Match Score और Compatibility कैलकुलेट करें।</p>
+    <div class="toolbox">
+      <input id="a" placeholder="Your Name"/>
+      <input id="b" placeholder="Partner Name"/>
+      <button onclick="love()">Check Match</button>
+      <div class="result" id="result"></div>
+    </div>
+    <div class="guide">
+      <h3>📖 कैसे इस्तेमाल करें?</h3>
+      <ol>
+        <li>दोनों नाम लिखें और "Check Match" पर क्लिक करें।</li>
+      </ol>
+      <h3>✅ फायदे और उपयोग</h3>
+      <p>Fun entertainment aur social share ke liye majedar tool.</p>
+    </div>
+    <button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button>
+  </article>
 
-  <article class="tool-view" id="word-to-pdf"><button class="back" onclick="showMenu()">← सभी Tools</button><h2>📝 Word to PDF Converter</h2><p class="lead">Word से PDF workflow guide</p><div class="toolbox"><div class="notice">यह page PDF files को server पर upload नहीं करता। Privacy-sensitive documents के लिए trusted local PDF/Word software का उपयोग करें।</div><div class="result" id="result"></div><button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button></div><div class="guide"><h3>📖 कैसे इस्तेमाल करें?</h3><p>यह tool एक format/unit को दूसरे format/unit में बदलता है।</p><ol><li>Tool खोलें और required input भरें।</li><li>Input डालें → From/To या Encode/Decode चुनें → Convert करें।</li><li>Result को जरूरत के अनुसार copy/download करें।</li></ol><h3>✅ फायदे और उपयोग</h3><p>Manual conversion की जरूरत कम होती है और quick results मिलते हैं।</p></div></article>
+  <article class="tool-view" id="pdf-to-word">
+    <button class="back" onclick="showMenu()">← सभी Tools</button>
+    <h2>📄 PDF to Word Converter</h2>
+    <p class="lead">PDF फाइलों को एडिटेबल Word डॉक्यूमेंट में बदलने की जानकारी।</p>
+    <div class="toolbox">
+      <div class="notice">यह टूल 100% Secure है। Privacy-sensitive फाइलों के लिए Desktop Apps या Local Editor यूज़ करने की सलाह दी जाती है।</div>
+      <div class="result" id="result"></div>
+    </div>
+    <div class="guide">
+      <h3>📖 कैसे इस्तेमाल करें?</h3>
+      <ol>
+        <li>Document Conversion Workflow Guides फॉलो करें।</li>
+      </ol>
+      <h3>✅ फायदे और उपयोग</h3>
+      <p>Easy document management without uploading sensitive files.</p>
+    </div>
+    <button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button>
+  </article>
 
-  <article class="tool-view" id="pdf-merge"><button class="back" onclick="showMenu()">← सभी Tools</button><h2>📚 PDF Merge Tool</h2><p class="lead">PDF files merge workflow guide</p><div class="toolbox"><div class="notice">यह page PDF files को server पर upload नहीं करता। Privacy-sensitive documents के लिए trusted local PDF/Word software का उपयोग करें।</div><div class="result" id="result"></div><button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button></div><div class="guide"><h3>📖 कैसे इस्तेमाल करें?</h3><p>यह tool आपको document conversion workflow में मदद करता है।</p><ol><li>Tool खोलें और required input भरें।</li><li>अपने trusted PDF/Word software में file चुनें → required operation करें → output save करें।</li><li>Result को जरूरत के अनुसार copy/download करें।</li></ol><h3>✅ फायदे और उपयोग</h3><p>Documents को organize और share करना आसान होता है। इस page पर files server पर upload नहीं होतीं।</p></div></article>
+  <article class="tool-view" id="word-to-pdf">
+    <button class="back" onclick="showMenu()">← सभी Tools</button>
+    <h2>📝 Word to PDF Converter</h2>
+    <p class="lead">Word फाइल को Read-Only PDF डॉक्यूमेंट फॉर्मेट में सेव करें।</p>
+    <div class="toolbox">
+      <div class="notice">सुरक्षा दृष्टि से यह टूल किसी बाहरी सर्वर पर फाइल अपलोड नहीं करता।</div>
+      <div class="result" id="result"></div>
+    </div>
+    <div class="guide">
+      <h3>📖 कैसे इस्तेमाल करें?</h3>
+      <ol>
+        <li>अपनी Word फाइल तैयार रखें और Standard Export to PDF मेथड अपनाएं।</li>
+      </ol>
+      <h3>✅ फायदे और उपयोग</h3>
+      <p>Formatting preserve rakhne aur share-ready files banane ke liye.</p>
+    </div>
+    <button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button>
+  </article>
 
-  <article class="tool-view" id="pdf-split"><button class="back" onclick="showMenu()">← सभी Tools</button><h2>✂️ PDF Splitter</h2><p class="lead">PDF pages split workflow guide</p><div class="toolbox"><div class="notice">यह page PDF files को server पर upload नहीं करता। Privacy-sensitive documents के लिए trusted local PDF/Word software का उपयोग करें।</div><div class="result" id="result"></div><button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button></div><div class="guide"><h3>📖 कैसे इस्तेमाल करें?</h3><p>यह tool आपको document conversion workflow में मदद करता है।</p><ol><li>Tool खोलें और required input भरें।</li><li>अपने trusted PDF/Word software में file चुनें → required operation करें → output save करें।</li><li>Result को जरूरत के अनुसार copy/download करें।</li></ol><h3>✅ फायदे और उपयोग</h3><p>Documents को organize और share करना आसान होता है। इस page पर files server पर upload नहीं होतीं।</p></div></article>
+  <article class="tool-view" id="pdf-merge">
+    <button class="back" onclick="showMenu()">← सभी Tools</button>
+    <h2>📚 PDF Merge Tool</h2>
+    <p class="lead">कई PDF फाइलों को जोड़कर एक फाइल बनाने का गाइड।</p>
+    <div class="toolbox">
+      <div class="notice">यह पेज क्लाइंट-साइड वर्कफ्लो पर काम करता है।</div>
+      <div class="result" id="result"></div>
+    </div>
+    <div class="guide">
+      <h3>📖 कैसे इस्तेमाल करें?</h3>
+      <ol>
+        <li>Multiple PDF documents ko combine karne ka aasan tarika.</li>
+      </ol>
+      <h3>✅ फायदे और उपयोग</h3>
+      <p>Documents organizaton and single file attachments sending.</p>
+    </div>
+    <button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button>
+  </article>
 
-  <article class="tool-view" id="youtube-thumbnail"><button class="back" onclick="showMenu()">← सभी Tools</button><h2>▶️ YouTube Thumbnail Downloader</h2><p class="lead">YouTube thumbnail खोलें</p><div class="toolbox"><input id="yt" placeholder="YouTube URL या Video ID"/><button onclick="thumb()">Open Thumbnail</button><div class="result" id="result"></div><button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button></div><div class="guide"><h3>📖 कैसे इस्तेमाल करें?</h3><p>यह utility रोज़मर्रा के web, coding या content workflow के लिए बनाई गई है।</p><ol><li>Tool खोलें और required input भरें।</li><li>Input डालें → tool button दबाएं → generated result को copy/download करें।</li><li>Result को जरूरत के अनुसार copy/download करें।</li></ol><h3>✅ फायदे और उपयोग</h3><p>Repetitive manual work कम होता है और quick output मिलता है।</p></div></article>
+  <article class="tool-view" id="pdf-split">
+    <button class="back" onclick="showMenu()">← सभी Tools</button>
+    <h2>✂️ PDF Splitter</h2>
+    <p class="lead">बड़ी PDF फाइल से अलग-अलग पेजेस अलग करें।</p>
+    <div class="toolbox">
+      <div class="notice">आपकी फाइलों की गोपनीयता सुरक्षित रहती है।</div>
+      <div class="result" id="result"></div>
+    </div>
+    <div class="guide">
+      <h3>📖 कैसे इस्तेमाल करें?</h3>
+      <ol>
+        <li>पेज नंबर्स चुनें और विशिष्ट पेजेस को एक्सट्रैक्ट करें।</li>
+      </ol>
+      <h3>✅ फायदे और उपयोग</h3>
+      <p>Unnecessary pages hatakar choti files banane me madadgar.</p>
+    </div>
+    <button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button>
+  </article>
 
-  <article class="tool-view" id="instagram-font"><button class="back" onclick="showMenu()">← सभी Tools</button><h2>𝓐 Instagram Font Generator</h2><p class="lead">Fancy Instagram text बनाएं</p><div class="toolbox"><textarea id="input" placeholder="Instagram text"></textarea><button onclick="fonts()">Generate Fancy Text</button><div class="result" id="result"></div><button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button></div><div class="guide"><h3>📖 कैसे इस्तेमाल करें?</h3><p>यह utility रोज़मर्रा के web, coding या content workflow के लिए बनाई गई है।</p><ol><li>Tool खोलें और required input भरें।</li><li>Input डालें → tool button दबाएं → generated result को copy/download करें।</li><li>Result को जरूरत के अनुसार copy/download करें।</li></ol><h3>✅ फायदे और उपयोग</h3><p>Repetitive manual work कम होता है और quick output मिलता है।</p></div></article>
+  <article class="tool-view" id="youtube-thumbnail">
+    <button class="back" onclick="showMenu()">← सभी Tools</button>
+    <h2>▶️ YouTube Thumbnail Downloader</h2>
+    <p class="lead">किसी भी यूट्यूब वीडियो का Full HD Thumbnail इमेज देखें और डाउनलोड करें।</p>
+    <div class="toolbox">
+      <input id="yt" placeholder="YouTube Video URL या Video ID डालें"/>
+      <button onclick="thumb()">Open Thumbnail</button>
+      <div class="result" id="result"></div>
+    </div>
+    <div class="guide">
+      <h3>📖 कैसे इस्तेमाल करें?</h3>
+      <ol>
+        <li>YouTube Video Link पेस्ट करें।</li>
+        <li>"Open Thumbnail" पर क्लिक करके HD Image नए टैब में खोलें।</li>
+      </ol>
+      <h3>✅ फायदे और उपयोग</h3>
+      <p>Design Inspiration, Thumbnails analysis aur HD Image retrieval.</p>
+    </div>
+    <button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button>
+  </article>
 
-  <article class="tool-view" id="twitter-counter"><button class="back" onclick="showMenu()">← सभी Tools</button><h2>🐦 Twitter Character Counter</h2><p class="lead">Text character count करें</p><div class="toolbox"><textarea id="input" oninput="counter()" placeholder="Post text"></textarea><div class="result" id="result"></div><button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button></div><div class="guide"><h3>📖 कैसे इस्तेमाल करें?</h3><p>यह utility रोज़मर्रा के web, coding या content workflow के लिए बनाई गई है।</p><ol><li>Tool खोलें और required input भरें।</li><li>Input डालें → tool button दबाएं → generated result को copy/download करें।</li><li>Result को जरूरत के अनुसार copy/download करें।</li></ol><h3>✅ फायदे और उपयोग</h3><p>Repetitive manual work कम होता है और quick output मिलता है।</p></div></article>
+  <article class="tool-view" id="instagram-font">
+    <button class="back" onclick="showMenu()">← सभी Tools</button>
+    <h2>𝓐 Instagram Font Generator</h2>
+    <p class="lead">अपने सिंपल टेक्स्ट को स्टाइलिश और फैंसी फॉन्ट में बदलें।</p>
+    <div class="toolbox">
+      <textarea id="input" placeholder="यहाँ टेक्स्ट टाइप करें..."></textarea>
+      <button onclick="fonts()">Generate Fancy Text</button>
+      <div class="result" id="result"></div>
+    </div>
+    <div class="guide">
+      <h3>📖 कैसे इस्तेमाल करें?</h3>
+      <ol>
+        <li>नॉर्मल टेक्स्ट लिखें और "Generate Fancy Text" दबाएं।</li>
+        <li>रिजल्ट को कॉपी करके Instagram Bio/Caption में पेस्ट करें।</li>
+      </ol>
+      <h3>✅ फायदे और उपयोग</h3>
+      <p>Profile bio ko attractive banane aur Social captions stand-out karne me helpful.</p>
+    </div>
+    <button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button>
+  </article>
+
+  <article class="tool-view" id="twitter-counter">
+    <button class="back" onclick="showMenu()">← सभी Tools</button>
+    <h2>🐦 Twitter Character Counter</h2>
+    <p class="lead">अपने पोस्ट का Character Limit, Words, और Length रियल-टाइम काउंट करें।</p>
+    <div class="toolbox">
+      <textarea id="input" oninput="counter()" placeholder="यहाँ अपनी पोस्ट लिखें..."></textarea>
+      <div class="result" id="result">Chars: 0 | Words: 0</div>
+    </div>
+    <div class="guide">
+      <h3>📖 कैसे इस्तेमाल करें?</h3>
+      <ol>
+        <li>टेक्स्ट बॉक्स में लिखना शुरू करें, लाइव काउंट नीचे दिखाई देगा।</li>
+      </ol>
+      <h3>✅ फायदे और उपयोग</h3>
+      <p>X (Twitter) 280-character limit aur SEO Meta Descriptions check karne me aasan.</p>
+    </div>
+    <button class="back back-bottom" onclick="showMenu()">← Back to All Tools</button>
+  </article>
 </div>
 
 <section class="seo">
@@ -363,15 +804,12 @@ footer{text-align:center;color:var(--mut);padding:25px 0;font-size:.85rem}
     <h2>Frequently Asked Questions</h2>
     <details><summary><strong>FactZone ke ye tools free hain?</strong></summary><p>Haan, FactZone के ye online tools free use ke liye available hain. Basic tools ko use karne ke liye signup ki zaroorat nahi hai.</p></details>
     <details><summary><strong>Kya image files server par upload hoti hain?</strong></summary><p>Jahan browser-side processing available hai, image processing aapke browser mein hi hoti hai. Isse unnecessary server upload avoid hota hai.</p></details>
-    <details><summary><strong>Kya ye tools mobile par work karte hain?</strong></summary><p>Haan, page responsive hai aur modern mobile, tablet aur desktop browsers ke liye designed hai।</p></details>
+    <details><summary><strong>Kya ye tools mobile par work karte hain?</strong></summary><p>Haan, page responsive hai aur modern mobile, tablet aur desktop browsers ke liye designed hai.</p></details>
     <details><summary><strong>Kya BMI, BMR aur Pregnancy calculators medical advice hain?</strong></summary><p>Nahi. Ye calculators estimates provide karte hain. Important health decisions ke liye qualified healthcare professional se advice lena better hai.</p></details>
-    <details><summary><strong>Kya PDF tools files upload karte hain?</strong></summary><p>Nahi. Is page par PDF conversion, merge aur split ke लिए server-upload implementation nahi hai.</p></details>
+    <details><summary><strong>Kya PDF tools files upload karte hain?</strong></summary><p>Nahi. Is page par PDF conversion, merge aur split ke liye server-upload implementation nahi hai.</p></details>
   </div>
 </section>
-<div class="max-w-7xl mx-auto px-5 my-8 flex justify-center">
-    <div id="container-7ff4b1b157bf01a56609549fe359888b"></div>
-    <script async="async" data-cfasync="false" src="https://pl30385025.effectivecpmnetwork.com/7ff4b1b157bf01a56609549fe359888b/invoke.js"></script>
-     
+
 <footer>© <span id="year"></span> FactZone — Free Online Tools Hub | Created by <strong>Awaneesh</strong></footer>
 </div>
 
@@ -623,12 +1061,12 @@ function thumb(){
 
 function fonts(){
   let v=document.querySelector('#instagram-font #input'), map={a:'𝒶',b:'𝒷',c:'𝒸',d:'𝒹',e:'ℯ',f:'𝒻',g:'𝒊',h:'𝒽',i:'𝒾',j:'𝒿',k:'𝓀',l:'𝓁',m:'𝓂',n:'𝓃',o:'ℴ',p:'𝓅',q:'𝓆',r:'𝓇',s:'𝓈',t:'𝓉',u:'𝓊',v:'𝓋',w:'𝓌',x:'𝓍',y:'𝓎',z:'𝓏'};
-  out('instagram-font',v.value.replace(/[a-z]/g,x=>map[x]||x));
+  out('instagram-font',v.value.split('').map(x=>map[x.toLowerCase()]||x).join(''));
 }
 
 function counter(){
-  let len=document.querySelector('#twitter-counter #input').value.length;
-  out('twitter-counter',len+' / 280 chars ('+(280-len)+' left)');
+  let s=document.querySelector('#twitter-counter #input').value;
+  out('twitter-counter','Chars: '+s.length+' | Words: '+(s.trim()?s.trim().split(/\s+/).length:0));
 }
 </script>
 </body>
