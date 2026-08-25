@@ -3,39 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instagram Font Generator | FactZone</title>
-    <meta name="description" content="Generate stylish Unicode fonts for Instagram bio, captions, and comments on FactZone.">
+    <title>Instagram Font Generator | Fancy Text & Stylish Unicode Fonts - FactZone</title>
+    <meta name="description" content="Free Instagram Font Generator online. Convert normal text into 100+ stylish, cool, fancy Unicode fonts for Instagram bio, captions, comments, and story fonts on FactZone.">
+    <meta name="keywords" content="Instagram font generator, fancy text generator, cool text styles, stylish fonts for instagram bio, unicode text generator, factzone tools">
+    <meta name="robots" content="index, follow, max-image-preview:large">
     <link rel="canonical" href="https://factzone.online/font.html">
 
-    <!-- Open Graph Metadata -->
-    <meta property="og:title" content="Instagram Font Generator | FactZone">
-    <meta property="og:description" content="Convert normal ASCII text into fancy Unicode fonts for Instagram and social media.">
-    <meta property="og:url" content="https://factzone.online/font.html">
-    <meta property="og:type" content="website">
+    <!-- Favicon / Logo -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232563eb'/><text x='50%' y='68%' font-family='sans-serif' font-weight='bold' font-size='60' fill='white' text-anchor='middle'>F</text></svg>">
 
-    <!-- Structured Data (JSON-LD) -->
+    <!-- Open Graph Metadata -->
+    <meta property="og:locale" content="en_US">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Instagram Font Generator | Stylish & Fancy Unicode Text | FactZone">
+    <meta property="og:description" content="Generate cool, bold, italic, and stylish fancy fonts for Instagram bio and posts. Copy & paste Unicode fonts easily.">
+    <meta property="og:url" content="https://factzone.online/font.html">
+    <meta property="og:site_name" content="FactZone">
+    <meta property="og:image" content="https://factzone.online/assets/font-generator-og.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Instagram Font Generator - FactZone">
+    <meta name="twitter:description" content="Copy & paste cool fancy fonts for Instagram bio, captions, and comments.">
+
+    <!-- Structured Data (JSON-LD) for High SEO -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
+      "@graph": [
         {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://factzone.online/"
+          "@type": "WebApplication",
+          "@id": "https://factzone.online/font.html#webapp",
+          "url": "https://factzone.online/font.html",
+          "name": "Instagram Font Generator",
+          "applicationCategory": "UtilitiesApplication",
+          "operatingSystem": "All",
+          "browserRequirements": "Requires JavaScript",
+          "description": "Convert regular plain text into stylized fancy Unicode fonts for Instagram bios and posts.",
+          "provider": {
+            "@type": "Organization",
+            "name": "FactZone",
+            "url": "https://factzone.online/"
+          }
         },
         {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Tools",
-          "item": "https://factzone.online/tools.html"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": "Instagram Fonts",
-          "item": "https://factzone.online/font.html"
+          "@type": "BreadcrumbList",
+          "@id": "https://factzone.online/font.html#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://factzone.online/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Tools",
+              "item": "https://factzone.online/tools.html"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Instagram Fonts",
+              "item": "https://factzone.online/font.html"
+            }
+          ]
         }
       ]
     }
@@ -65,7 +98,7 @@
             flex: 1;
         }
 
-        /* Breadcrumbs */
+        /* Breadcrumb Navigation */
         .breadcrumbs {
             font-size: 13px;
             color: #64748b;
@@ -86,20 +119,25 @@
             color: #94a3b8;
         }
 
-        /* Card Section */
+        /* Compact Tool Card */
         .card {
             background: #ffffff;
             border-radius: 8px;
             padding: 16px;
             border: 1px solid #e2e8f0;
             margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
         }
 
         .card-header {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             margin-bottom: 12px;
+        }
+
+        .card-header svg {
+            flex-shrink: 0;
         }
 
         .card-header h1 {
@@ -110,13 +148,14 @@
 
         textarea {
             width: 100%;
-            height: 100px;
+            height: 90px;
             padding: 10px;
             border: 1px solid #cbd5e1;
             border-radius: 6px;
             font-size: 15px;
             resize: vertical;
             outline: none;
+            transition: border-color 0.2s;
         }
 
         textarea:focus {
@@ -126,7 +165,7 @@
         .btn {
             margin-top: 10px;
             background-color: #2563eb;
-            color: white;
+            color: #ffffff;
             border: none;
             padding: 8px 16px;
             border-radius: 6px;
@@ -152,7 +191,7 @@
             justify-content: space-between;
             align-items: center;
             background: #f8fafc;
-            padding: 10px 12px;
+            padding: 8px 12px;
             border-radius: 6px;
             border: 1px solid #e2e8f0;
             word-break: break-all;
@@ -179,19 +218,20 @@
             background: #cbd5e1;
         }
 
+        /* SEO Info Content */
         .info-box {
             font-size: 13px;
             color: #64748b;
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
         .info-box h2 {
             font-size: 15px;
             color: #0f172a;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
 
-        /* Footer */
+        /* Site Footer */
         .site-footer {
             background-color: #ffffff;
             border-top: 1px solid #e2e8f0;
@@ -225,7 +265,7 @@
 <body>
 
 <div class="main-container">
-    <!-- Breadcrumbs -->
+    <!-- Breadcrumb Navigation -->
     <nav class="breadcrumbs" aria-label="Breadcrumb">
         <a href="https://factzone.online/">Home</a>
         <span>/</span>
@@ -234,21 +274,27 @@
         <strong>Instagram Fonts</strong>
     </nav>
 
-    <!-- Generator Tool Card -->
+    <!-- Main Generator Tool Card -->
     <main class="card">
         <div class="card-header">
-            <span>✨</span>
+            <!-- Typography / Font SVG Logo -->
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="4 7 4 4 20 4 20 7"></polyline>
+                <line x1="9" y1="20" x2="15" y2="20"></line>
+                <line x1="12" y1="4" x2="12" y2="20"></line>
+            </svg>
             <h1>Instagram Font Generator</h1>
         </div>
-        <textarea id="inputText" placeholder="Type or paste your text here..."></textarea>
+        
+        <textarea id="inputText" aria-label="Input Text" placeholder="Type or paste your text here..."></textarea>
         <button class="btn" onclick="generateFancyText()">Generate Fonts</button>
         <div id="resultsContainer" class="results-list"></div>
     </main>
 
-    <!-- Short Info Box -->
+    <!-- SEO Content Box -->
     <article class="card info-box">
         <h2>What is an Instagram Font Generator?</h2>
-        <p>This online tool converts standard ASCII characters into fancy Unicode symbols suitable for Instagram bios, posts, and video captions.</p>
+        <p>This browser tool transforms standard ASCII characters into custom script Unicode symbols. You can copy and paste these stylish fonts directly into your Instagram bio, post captions, comments, and story highlights.</p>
     </article>
 </div>
 
