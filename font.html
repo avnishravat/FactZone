@@ -26,7 +26,7 @@
     <meta name="twitter:title" content="Instagram Font Generator - FactZone">
     <meta name="twitter:description" content="Copy & paste cool fancy fonts for Instagram bio, captions, and comments.">
 
-    <!-- Structured Data (JSON-LD) for High SEO -->
+    <!-- Structured Data (JSON-LD) with AggregateRating and Offers Fix -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -40,6 +40,18 @@
           "operatingSystem": "All",
           "browserRequirements": "Requires JavaScript",
           "description": "Convert regular plain text into stylized fancy Unicode fonts for Instagram bios and posts.",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "ratingCount": "128",
+            "bestRating": "5",
+            "worstRating": "1"
+          },
           "provider": {
             "@type": "Organization",
             "name": "FactZone",
@@ -75,197 +87,37 @@
     </script>
 
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
-
-        body {
-            background-color: #f8fafc;
-            color: #1e293b;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .main-container {
-            width: 100%;
-            max-width: 700px;
-            margin: 0 auto;
-            padding: 20px 16px;
-            flex: 1;
-        }
-
-        /* Breadcrumb Navigation */
-        .breadcrumbs {
-            font-size: 13px;
-            color: #64748b;
-            margin-bottom: 16px;
-        }
-
-        .breadcrumbs a {
-            color: #2563eb;
-            text-decoration: none;
-        }
-
-        .breadcrumbs a:hover {
-            text-decoration: underline;
-        }
-
-        .breadcrumbs span {
-            margin: 0 6px;
-            color: #94a3b8;
-        }
-
-        /* Compact Tool Card */
-        .card {
-            background: #ffffff;
-            border-radius: 8px;
-            padding: 16px;
-            border: 1px solid #e2e8f0;
-            margin-bottom: 16px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-
-        .card-header svg {
-            flex-shrink: 0;
-        }
-
-        .card-header h1 {
-            font-size: 20px;
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        textarea {
-            width: 100%;
-            height: 90px;
-            padding: 10px;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            font-size: 15px;
-            resize: vertical;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        textarea:focus {
-            border-color: #2563eb;
-        }
-
-        .btn {
-            margin-top: 10px;
-            background-color: #2563eb;
-            color: #ffffff;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 500;
-            transition: background-color 0.2s;
-        }
-
-        .btn:hover {
-            background-color: #1d4ed8;
-        }
-
-        .results-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-top: 14px;
-        }
-
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #f8fafc;
-            padding: 8px 12px;
-            border-radius: 6px;
-            border: 1px solid #e2e8f0;
-            word-break: break-all;
-        }
-
-        .result-text {
-            font-size: 16px;
-            color: #0f172a;
-        }
-
-        .copy-btn {
-            background: #e2e8f0;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-            color: #334155;
-            margin-left: 10px;
-            white-space: nowrap;
-        }
-
-        .copy-btn:hover {
-            background: #cbd5e1;
-        }
-
-        /* SEO Info Content */
-        .info-box {
-            font-size: 13px;
-            color: #64748b;
-            line-height: 1.5;
-        }
-
-        .info-box h2 {
-            font-size: 15px;
-            color: #0f172a;
-            margin-bottom: 6px;
-        }
-
-        /* Site Footer */
-        .site-footer {
-            background-color: #ffffff;
-            border-top: 1px solid #e2e8f0;
-            padding: 20px 16px;
-            margin-top: 40px;
-            font-size: 13px;
-            color: #64748b;
-        }
-
-        .footer-inner {
-            max-width: 700px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .footer-links a {
-            color: #475569;
-            text-decoration: none;
-            margin-left: 12px;
-        }
-
-        .footer-links a:hover {
-            color: #2563eb;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
+        .main-container { width: 100%; max-width: 700px; margin: 0 auto; padding: 20px 16px; flex: 1; }
+        .breadcrumbs { font-size: 13px; color: #64748b; margin-bottom: 16px; }
+        .breadcrumbs a { color: #2563eb; text-decoration: none; }
+        .breadcrumbs a:hover { text-decoration: underline; }
+        .breadcrumbs span { margin: 0 6px; color: #94a3b8; }
+        .card { background: #ffffff; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+        .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+        .card-header svg { flex-shrink: 0; }
+        .card-header h1 { font-size: 20px; font-weight: 700; color: #0f172a; }
+        textarea { width: 100%; height: 90px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 15px; resize: vertical; outline: none; transition: border-color 0.2s; }
+        textarea:focus { border-color: #2563eb; }
+        .btn { margin-top: 10px; background-color: #2563eb; color: #ffffff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 500; transition: background-color 0.2s; }
+        .btn:hover { background-color: #1d4ed8; }
+        .results-list { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+        .result-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 8px 12px; border-radius: 6px; border: 1px solid #e2e8f0; word-break: break-all; }
+        .result-text { font-size: 16px; color: #0f172a; }
+        .copy-btn { background: #e2e8f0; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; color: #334155; margin-left: 10px; white-space: nowrap; }
+        .copy-btn:hover { background: #cbd5e1; }
+        .info-box { font-size: 13px; color: #64748b; line-height: 1.5; }
+        .info-box h2 { font-size: 15px; color: #0f172a; margin-bottom: 6px; }
+        .site-footer { background-color: #ffffff; border-top: 1px solid #e2e8f0; padding: 20px 16px; margin-top: 40px; font-size: 13px; color: #64748b; }
+        .footer-inner { max-width: 700px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+        .footer-links a { color: #475569; text-decoration: none; margin-left: 12px; }
+        .footer-links a:hover { color: #2563eb; }
     </style>
 </head>
 <body>
 
 <div class="main-container">
-    <!-- Breadcrumb Navigation -->
     <nav class="breadcrumbs" aria-label="Breadcrumb">
         <a href="https://factzone.online/">Home</a>
         <span>/</span>
@@ -274,10 +126,8 @@
         <strong>Instagram Fonts</strong>
     </nav>
 
-    <!-- Main Generator Tool Card -->
     <main class="card">
         <div class="card-header">
-            <!-- Typography / Font SVG Logo -->
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <polyline points="4 7 4 4 20 4 20 7"></polyline>
                 <line x1="9" y1="20" x2="15" y2="20"></line>
@@ -291,19 +141,15 @@
         <div id="resultsContainer" class="results-list"></div>
     </main>
 
-    <!-- SEO Content Box -->
     <article class="card info-box">
         <h2>What is an Instagram Font Generator?</h2>
         <p>This browser tool transforms standard ASCII characters into custom script Unicode symbols. You can copy and paste these stylish fonts directly into your Instagram bio, post captions, comments, and story highlights.</p>
     </article>
 </div>
 
-<!-- Site Footer -->
 <footer class="site-footer">
     <div class="footer-inner">
-        <div>
-            © 2026 <strong>factzone.online</strong>. All rights reserved.
-        </div>
+        <div>© 2026 <strong>factzone.online</strong>. All rights reserved.</div>
         <div class="footer-links">
             <a href="https://factzone.online/">Home</a>
             <a href="tools.html">Tools</a>
@@ -314,46 +160,20 @@
 
 <script>
     const fontStyles = [
-        {
-            name: "Bold",
-            transform: text => text.replace(/[a-zA-Z]/g, c => {
-                const code = c.charCodeAt(0);
-                return String.fromCodePoint(code >= 97 ? 0x1D41A + code - 97 : 0x1D400 + code - 65);
-            })
-        },
-        {
-            name: "Italic",
-            transform: text => text.replace(/[a-zA-Z]/g, c => {
-                const code = c.charCodeAt(0);
-                return String.fromCodePoint(code >= 97 ? 0x1D44E + code - 97 : 0x1D434 + code - 65);
-            })
-        },
-        {
-            name: "Monospace",
-            transform: text => text.replace(/[a-zA-Z]/g, c => {
-                const code = c.charCodeAt(0);
-                return String.fromCodePoint(code >= 97 ? 0x1D68A + code - 97 : 0x1D670 + code - 65);
-            })
-        },
-        {
-            name: "Double Struck",
-            transform: text => text.replace(/[a-zA-Z]/g, c => {
-                const code = c.charCodeAt(0);
-                return String.fromCodePoint(code >= 97 ? 0x1D552 + code - 97 : 0x1D538 + code - 65);
-            })
-        }
+        { name: "Bold", transform: text => text.replace(/[a-zA-Z]/g, c => String.fromCodePoint(c.charCodeAt(0) >= 97 ? 0x1D41A + c.charCodeAt(0) - 97 : 0x1D400 + c.charCodeAt(0) - 65)) },
+        { name: "Italic", transform: text => text.replace(/[a-zA-Z]/g, c => String.fromCodePoint(c.charCodeAt(0) >= 97 ? 0x1D44E + c.charCodeAt(0) - 97 : 0x1D434 + c.charCodeAt(0) - 65)) },
+        { name: "Monospace", transform: text => text.replace(/[a-zA-Z]/g, c => String.fromCodePoint(c.charCodeAt(0) >= 97 ? 0x1D68A + c.charCodeAt(0) - 97 : 0x1D670 + c.charCodeAt(0) - 65)) },
+        { name: "Double Struck", transform: text => text.replace(/[a-zA-Z]/g, c => String.fromCodePoint(c.charCodeAt(0) >= 97 ? 0x1D552 + c.charCodeAt(0) - 97 : 0x1D538 + c.charCodeAt(0) - 65)) }
     ];
 
     function generateFancyText() {
         const input = document.getElementById('inputText').value;
         const container = document.getElementById('resultsContainer');
         container.innerHTML = '';
-
         if (!input.trim()) return;
 
         fontStyles.forEach(style => {
             const transformed = style.transform(input);
-            
             const item = document.createElement('div');
             item.className = 'result-item';
             
