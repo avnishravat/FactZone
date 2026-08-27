@@ -263,6 +263,11 @@ select.form-input{cursor:pointer; appearance:none; background-image:url("data:im
       <button id="nav-posts" class="nav-item" onclick="switchPage('posts',this)">
         <span class="nav-icon">📰</span><span>All Posts</span>
       </button>
+
+      <!-- Instagram Creator Admin Nav Option -->
+      <button id="nav-insta" class="nav-item" onclick="switchPage('insta',this)">
+        <span class="nav-icon">📸</span><span>Instagram Creator</span>
+      </button>
     </nav>
     <div class="sidebar-footer">
       <div class="sync-badge">
@@ -437,6 +442,27 @@ select.form-input{cursor:pointer; appearance:none; background-image:url("data:im
         <div id="posts-grid" class="posts-grid"></div>
       </div>
     </div>
+
+    <!-- ── INSTAGRAM CREATOR ADMIN PAGE CONTAINER ── -->
+    <div id="page-insta" class="page">
+      <div class="content" style="padding-top:24px">
+        <div class="upload-card">
+          <div class="section-header">
+            <div class="section-icon">📸</div>
+            <div class="section-title">Instagram Creator Admin</div>
+          </div>
+          <p style="color:var(--muted); margin-bottom:16px;">
+            Yahan aap instagram creator se sambandhit post/details add aur manage kar sakte hain.
+          </p>
+          <div class="empty-state">
+            <div class="empty-icon">📱</div>
+            <div class="empty-text">Instagram Creator Panel Active</div>
+            <div class="empty-sub">Aap is section me apna naya Insta Creator form add kar sakte hain.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -1011,7 +1037,12 @@ window.switchPage = function(page, btn) {
   if(targetPage) targetPage.classList.add('active');
   if(btn) btn.classList.add('active');
   
-  const titles = {dashboard:'Dashboard', upload:'New Post', posts:'All Posts'};
+  const titles = {
+    dashboard: 'Dashboard', 
+    upload: 'New Post', 
+    posts: 'All Posts',
+    insta: 'Instagram Creator'
+  };
   document.getElementById('pageTitle').textContent = titles[page] || 'Dashboard';
 };
 </script>
