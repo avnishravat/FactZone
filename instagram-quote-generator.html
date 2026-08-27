@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Generate shareable quotes for your chosen topic or mood.">
+<title>Instagram Quote Generator | Free Instagram Creator Tool</title>
+<link rel="icon" type="image/png" href="insta.png">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f6f7fb;color:#182033}
+header{background:#fff;border-bottom:1px solid #e8eaf0;padding:12px 4%;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:10}
+header img{width:34px;height:34px}header b{font-size:18px}header span{font-size:12px;color:#6b7280}
+main{max-width:900px;margin:auto;padding:28px 16px 50px}.hero{text-align:center;margin-bottom:22px}
+h1{font-size:clamp(26px,5vw,42px);margin:0 0 10px}.hero p{color:#64748b;line-height:1.6;max-width:680px;margin:auto}
+.card{background:#fff;border:1px solid #e6e8ef;border-radius:18px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,.04)}
+label{display:block;font-size:13px;font-weight:bold;margin:14px 0 7px}textarea,select{width:100%;border:1px solid #d9dde8;border-radius:10px;padding:13px;font:inherit;outline:none}textarea{min-height:150px;resize:vertical}textarea:focus,select:focus{border-color:#d63384}
+button{width:100%;margin-top:14px;border:0;border-radius:10px;padding:14px;background:#d63384;color:#fff;font-size:15px;font-weight:bold;cursor:pointer}button:disabled{opacity:.6}
+.output{margin-top:18px;padding:18px;border-radius:12px;background:#f9fafc;border:1px solid #e6e8ef;white-space:pre-wrap;line-height:1.7;min-height:80px}.hidden{display:none}
+.actions{display:flex;gap:8px}.actions button{width:auto;padding:9px 13px;margin-top:10px;font-size:12px;background:#111827}
+.small{font-size:12px;color:#6b7280;margin-top:10px;line-height:1.6}
+footer{text-align:center;color:#8a92a1;font-size:12px;padding:25px}
+@media(max-width:600px){header span{display:none}main{padding:20px 12px}.card{padding:15px}}
+</style>
+</head>
+<body>
+<header><img src="insta.png" alt="Instagram Tools"><b>Instagram Creator Tools</b><span>Free tools for creators</span></header>
+<main>
+<section class="hero"><h1>Instagram Quote Generator</h1><p>Generate shareable quotes for your chosen topic or mood.</p></section>
+<section class="card">
+<label for="input">Enter your topic, niche, idea, or requirement</label>
+<textarea id="input" placeholder="Example: Fitness tips for beginners"></textarea>
+<label for="category">Choose category</label>
+<select id="category"><option value="general">General</option><option value="engaging">Engaging</option><option value="short">Short</option><option value="creative">Creative</option><option value="business">Business</option><option value="motivational">Motivational</option></select>
+<button id="generate">Generate Quote</button>
+<div id="outputBox" class="output hidden"></div>
+<div class="actions hidden" id="actions"><button id="copy">Copy Output</button><button id="again">Generate Again</button></div>
+<div class="small">New saved outputs are automatically read from the Firebase database when available.</div>
+</section>
+</main>
+<footer>© 2026 Instagram Creator Tools</footer>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig={
+apiKey:"AIzaSyCUyMZee1e01RqmTmIp_0jLT7guUAc",
+authDomain:"factzone-a9ace.firebaseapp.com",
+databaseURL:"https://factzone-a9ace-default-rtdb.firebaseio.com",
+projectId:"factzone-a9ace",
+storageBucket:"factzone-a9ace.firebasestorage.app",
+messagingSenderId:"425838320650",
+appId:"1:425838320650:web:eb81baddf818cb73d3f3",
+measurementId:"G-311JQXBXRY"
+};
+const db=getFirestore(initializeApp(firebaseConfig));
+const TOOL="instagram-quote-generator";
+let templates=[];
+const $=id=>document.getElementById(id);
+function replaceVars(text,input){
+ return String(text).replace(/\{\{input\}\}|\{input\}|\{\{topic\}\}|\{topic\}|\{\{niche\}\}|\{niche\}|\{\{content\}\}|\{content\}|\{\{reel\}\}|\{reel\}/gi,input);
+}
+async function loadTemplates(){
+ try{
+  const snap=await getDocs(collection(db,"instagramCreatorToolOutputs"));
+  templates=snap.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.tool===TOOL&&x.text);
+ }catch(e){console.log("Firebase templates unavailable",e.message);}
+}
+function fallback(input){
+ const type="Quote";
+ return `${type} for: ${input}\n\n✨ Make it clear, useful, and engaging.\n📌 Save this idea and customize it for your audience.\n#instagram #creator #content`;
+}
+function generate(){
+ const input=$("input").value.trim();
+ if(!input){$("input").focus();return;}
+ const category=$("category").value;
+ let choices=templates.filter(x=>x.category===category);
+ if(!choices.length) choices=templates;
+ let result;
+ if(choices.length){
+   const item=choices[Math.floor(Math.random()*choices.length)];
+   result=replaceVars(item.text,input);
+ }else result=fallback(input);
+ $("outputBox").textContent=result;
+ $("outputBox").classList.remove("hidden");
+ $("actions").classList.remove("hidden");
+}
+$("generate").onclick=generate;
+$("again").onclick=generate;
+$("copy").onclick=async()=>{await navigator.clipboard.writeText($("outputBox").textContent);$("copy").textContent="Copied!";setTimeout(()=>$("copy").textContent="Copy Output",1200)};
+loadTemplates();
+</script>
+</body></html>
