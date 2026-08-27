@@ -174,6 +174,35 @@ select.form-input{cursor:pointer; appearance:none; background-image:url("data:im
 .page{display:none}
 .page.active{display:block}
 
+
+/* ── Instagram Creator Tools Admin ── */
+.ig-admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.ig-panel{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px}
+.ig-panel h3{font-size:16px;margin-bottom:12px}
+.ig-form-group{margin-bottom:13px}
+.ig-form-group label{display:block;font-size:12px;font-weight:700;margin-bottom:6px;color:var(--muted)}
+.ig-form-group select,.ig-form-group textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px;font:inherit}
+.ig-form-group textarea{min-height:220px;resize:vertical;line-height:1.6}
+.ig-help{font-size:11px;color:var(--muted);line-height:1.6;margin-top:7px}
+.ig-filter-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.ig-filter-row select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:9px;color:var(--text);padding:10px;font:inherit}
+.ig-list{display:grid;gap:10px;max-height:680px;overflow:auto;padding-right:3px}
+.ig-item{border:1px solid var(--border);background:var(--surface2);border-radius:12px;padding:13px}
+.ig-item-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.ig-badges{display:flex;flex-wrap:wrap;gap:5px}
+.ig-badge{font-size:10px;font-weight:700;padding:4px 7px;border-radius:20px;background:rgba(124,109,250,.14);color:var(--accent)}
+.ig-badge.category{background:rgba(34,197,94,.12);color:#22c55e}
+.ig-item-text{white-space:pre-wrap;font-size:12px;line-height:1.65;margin-top:10px;word-break:break-word}
+.ig-actions{display:flex;gap:6px}
+.ig-small-btn{border:0;border-radius:8px;padding:7px 9px;font-size:11px;font-weight:700;cursor:pointer;background:var(--surface);color:var(--text)}
+.ig-small-btn.delete{color:var(--red)}
+.ig-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.ig-stat{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center}
+.ig-stat b{display:block;font-size:18px}.ig-stat span{font-size:10px;color:var(--muted)}
+.ig-empty{padding:30px;text-align:center;color:var(--muted);font-size:13px}
+@media(max-width:900px){.ig-admin-grid{grid-template-columns:1fr}.ig-list{max-height:none}}
+@media(max-width:768px){.ig-filter-row{grid-template-columns:1fr}.ig-stats{grid-template-columns:1fr}.ig-actions{width:100%}.ig-small-btn{flex:1}}
+
 /* ── Quill Styles Modifications for Dark/Light ── */
 .editor-container {
   background: var(--surface2);
@@ -263,10 +292,8 @@ select.form-input{cursor:pointer; appearance:none; background-image:url("data:im
       <button id="nav-posts" class="nav-item" onclick="switchPage('posts',this)">
         <span class="nav-icon">📰</span><span>All Posts</span>
       </button>
-
-      <!-- Instagram Creator Admin Nav Option -->
-      <button id="nav-insta" class="nav-item" onclick="switchPage('insta',this)">
-        <span class="nav-icon">📸</span><span>Instagram Creator</span>
+      <button id="nav-instagram-tools" class="nav-item" onclick="switchPage('instagram-tools',this)">
+        <span class="nav-icon">📸</span><span>Instagram Tools</span>
       </button>
     </nav>
     <div class="sidebar-footer">
@@ -443,26 +470,72 @@ select.form-input{cursor:pointer; appearance:none; background-image:url("data:im
       </div>
     </div>
 
-    <!-- ── INSTAGRAM CREATOR ADMIN PAGE CONTAINER ── -->
-    <div id="page-insta" class="page">
+    <!-- Instagram Creator Tools: uses the SAME Firebase Admin authentication -->
+    <div id="page-instagram-tools" class="page">
       <div class="content" style="padding-top:24px">
-        <div class="upload-card">
-          <div class="section-header">
-            <div class="section-icon">📸</div>
-            <div class="section-title">Instagram Creator Admin</div>
+        <div class="section-header">
+          <div class="section-icon">📸</div>
+          <div>
+            <div class="section-title">Instagram Creator Tools</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:4px">Cloud outputs managed by the same Firebase Admin account</div>
           </div>
-          <p style="color:var(--muted); margin-bottom:16px;">
-            Yahan aap instagram creator se sambandhit post/details add aur manage kar sakte hain.
-          </p>
-          <div class="empty-state">
-            <div class="empty-icon">📱</div>
-            <div class="empty-text">Instagram Creator Panel Active</div>
-            <div class="empty-sub">Aap is section me apna naya Insta Creator form add kar sakte hain.</div>
+        </div>
+
+        <div class="ig-stats">
+          <div class="ig-stat"><b id="igTotal">0</b><span>Total Outputs</span></div>
+          <div class="ig-stat"><b id="igToolsUsed">0</b><span>Tools Used</span></div>
+          <div class="ig-stat"><b id="igCategoriesUsed">0</b><span>Categories Used</span></div>
+        </div>
+
+        <div class="ig-admin-grid">
+          <div class="ig-panel">
+            <h3 id="igFormTitle">Add New Output</h3>
+
+            <div class="ig-form-group">
+              <label for="igTool">Select Tool Page</label>
+              <select id="igTool"></select>
+            </div>
+
+            <div class="ig-form-group">
+              <label for="igCategory">Select Category</label>
+              <select id="igCategory"></select>
+            </div>
+
+            <div class="ig-form-group">
+              <label for="igOutputText">Output Text</label>
+              <textarea id="igOutputText" placeholder="Write the output/template here...
+
+You can use placeholders:
+{input}
+{topic}
+{niche}
+{content}
+{reel}"></textarea>
+              <div class="ig-help">This output is saved in Firebase Firestore collection: instagramCreatorToolOutputs</div>
+            </div>
+
+            <button class="btn btn-primary" id="igSaveBtn" onclick="saveInstagramOutput()">💾 Save to Firebase</button>
+            <button class="btn btn-primary" id="igUpdateBtn" onclick="updateInstagramOutput()" style="display:none">💾 Update Output</button>
+            <button class="btn btn-secondary" id="igCancelBtn" onclick="cancelInstagramEdit()" style="display:none;margin-top:10px">Cancel Editing</button>
+          </div>
+
+          <div class="ig-panel">
+            <h3>Saved Outputs</h3>
+
+            <div class="ig-filter-row">
+              <select id="igFilterTool"></select>
+              <select id="igFilterCategory">
+                <option value="all">All Categories</option>
+              </select>
+            </div>
+
+            <div class="ig-list" id="igOutputList">
+              <div class="ig-empty">Open this page to load saved outputs.</div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
   </div>
 </div>
 
@@ -544,7 +617,7 @@ select.form-input{cursor:pointer; appearance:none; background-image:url("data:im
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
@@ -713,6 +786,7 @@ onAuthStateChanged(auth, (user) => {
     document.getElementById('auth-view').style.display = 'block';
     setSyncStatus('connected', 'Database Online');
     loadPosts();
+    initInstagramToolsAdmin();
   } else {
     document.getElementById('auth-view').style.display = 'none';
     document.getElementById('login-view').style.display = 'flex';
@@ -1028,6 +1102,261 @@ window.saveEdit = async function() {
   btn.textContent = '💾 Save Changes'; btn.disabled = false;
 };
 
+// ── Instagram Creator Tools Admin ──
+// This page is inside the existing admin dashboard, so it uses the SAME
+// Firebase Authentication session already checked by onAuthStateChanged above.
+const IG_COLLECTION = "instagramCreatorToolOutputs";
+
+const IG_TOOLS = {
+  "instagram-caption-generator":"Instagram Caption Generator",
+  "instagram-username-generator":"Instagram Username Generator",
+  "instagram-content-idea-generator":"Instagram Content Idea Generator",
+  "instagram-quote-generator":"Instagram Quote Generator",
+  "instagram-comment-generator":"Instagram Comment Generator",
+  "instagram-hashtag-generator":"Instagram Hashtag Generator",
+  "instagram-bio-generator":"Instagram Bio Generator",
+  "instagram-story-idea-generator":"Instagram Story Idea Generator",
+  "instagram-reel-idea-generator":"Instagram Reel Idea Generator",
+  "instagram-reel-hook-generator":"Instagram Reel Hook Generator",
+  "instagram-reel-script-generator":"Instagram Reel Script Generator",
+  "instagram-carousel-idea-generator":"Instagram Carousel Idea Generator"
+};
+
+const IG_CATEGORIES = {
+  "instagram-caption-generator":["general","engaging","short","storytelling","promotional","funny","motivational"],
+  "instagram-username-generator":["general","personal","business","creator","gaming","fashion","fitness"],
+  "instagram-content-idea-generator":["general","educational","entertainment","promotional","trending","tutorial","storytelling"],
+  "instagram-quote-generator":["general","motivational","success","life","love","attitude","business"],
+  "instagram-comment-generator":["general","supportive","funny","short","engaging","appreciation","question"],
+  "instagram-hashtag-generator":["general","trending","niche","business","creator","reels","engagement"],
+  "instagram-bio-generator":["general","creator","business","personal","professional","short","creative"],
+  "instagram-story-idea-generator":["general","engagement","educational","interactive","personal","promotional","behind-scenes"],
+  "instagram-reel-idea-generator":["general","educational","entertainment","trending","tutorial","storytelling","promotional"],
+  "instagram-reel-hook-generator":["general","curiosity","question","problem","warning","list","bold"],
+  "instagram-reel-script-generator":["general","educational","storytelling","tutorial","list","promotional","short"],
+  "instagram-carousel-idea-generator":["general","educational","tips","list","tutorial","storytelling","promotional"]
+};
+
+let instagramOutputs = [];
+let currentInstagramEditId = null;
+let instagramLoadedOnce = false;
+
+function igEsc(v) {
+  return String(v == null ? "" : v)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#39;");
+}
+
+function initInstagramToolsAdmin() {
+  const toolEl = document.getElementById("igTool");
+  const filterToolEl = document.getElementById("igFilterTool");
+  if (!toolEl || toolEl.dataset.ready) return;
+
+  const options = Object.entries(IG_TOOLS)
+    .map(([id,name]) => `<option value="${id}">${name}</option>`)
+    .join("");
+
+  toolEl.innerHTML = options;
+  filterToolEl.innerHTML = `<option value="all">All Tools</option>` + options;
+  toolEl.dataset.ready = "1";
+
+  updateInstagramCategories();
+
+  toolEl.addEventListener("change", updateInstagramCategories);
+  filterToolEl.addEventListener("change", renderInstagramOutputs);
+  document.getElementById("igFilterCategory").addEventListener("change", renderInstagramOutputs);
+
+  document.getElementById("igOutputList").addEventListener("click", (e) => {
+    const editId = e.target.dataset.edit;
+    const deleteId = e.target.dataset.delete;
+    if (editId) startInstagramEdit(editId);
+    if (deleteId) deleteInstagramOutput(deleteId);
+  });
+}
+
+function updateInstagramCategories() {
+  const tool = document.getElementById("igTool").value;
+  const list = IG_CATEGORIES[tool] || ["general"];
+  document.getElementById("igCategory").innerHTML =
+    list.map(x => `<option value="${x}">${x.replace(/-/g," ")}</option>`).join("");
+}
+
+function updateInstagramFilterCategories() {
+  const select = document.getElementById("igFilterCategory");
+  const previous = select.value;
+  const cats = [...new Set(instagramOutputs.map(x => x.category).filter(Boolean))].sort();
+
+  select.innerHTML = `<option value="all">All Categories</option>` +
+    cats.map(x => `<option value="${igEsc(x)}">${igEsc(x.replace(/-/g," "))}</option>`).join("");
+
+  if (cats.includes(previous)) select.value = previous;
+}
+
+async function loadInstagramOutputs() {
+  initInstagramToolsAdmin();
+
+  const list = document.getElementById("igOutputList");
+  list.innerHTML = `<div class="ig-empty">Loading outputs from Firebase...</div>`;
+
+  try {
+    const snap = await getDocs(collection(db, IG_COLLECTION));
+    instagramOutputs = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+
+    instagramOutputs.sort((a,b) => {
+      const av = a.createdAt?.seconds || 0;
+      const bv = b.createdAt?.seconds || 0;
+      return bv - av;
+    });
+
+    updateInstagramFilterCategories();
+    renderInstagramOutputs();
+    instagramLoadedOnce = true;
+  } catch(e) {
+    console.error(e);
+    list.innerHTML = `<div class="ig-empty">❌ Could not load Instagram outputs: ${igEsc(e.message)}</div>`;
+  }
+}
+
+function renderInstagramOutputs() {
+  const toolFilter = document.getElementById("igFilterTool").value;
+  const categoryFilter = document.getElementById("igFilterCategory").value;
+
+  const filtered = instagramOutputs.filter(x =>
+    (toolFilter === "all" || x.tool === toolFilter) &&
+    (categoryFilter === "all" || x.category === categoryFilter)
+  );
+
+  document.getElementById("igOutputList").innerHTML = filtered.length
+    ? filtered.map(x => `
+      <div class="ig-item">
+        <div class="ig-item-top">
+          <div class="ig-badges">
+            <span class="ig-badge">${igEsc(IG_TOOLS[x.tool] || x.tool)}</span>
+            <span class="ig-badge category">${igEsc(x.category || "general")}</span>
+          </div>
+          <div class="ig-actions">
+            <button class="ig-small-btn" data-edit="${x.id}">Edit</button>
+            <button class="ig-small-btn delete" data-delete="${x.id}">Delete</button>
+          </div>
+        </div>
+        <div class="ig-item-text">${igEsc(x.text || "")}</div>
+      </div>
+    `).join("")
+    : `<div class="ig-empty">No outputs found.</div>`;
+
+  document.getElementById("igTotal").textContent = instagramOutputs.length;
+  document.getElementById("igToolsUsed").textContent = new Set(instagramOutputs.map(x => x.tool)).size;
+  document.getElementById("igCategoriesUsed").textContent = new Set(instagramOutputs.map(x => x.category)).size;
+}
+
+window.saveInstagramOutput = async function() {
+  const text = document.getElementById("igOutputText").value.trim();
+  if (!text) {
+    showToast("⚠️ Please enter the output text.", "error");
+    return;
+  }
+
+  const btn = document.getElementById("igSaveBtn");
+  btn.disabled = true;
+  btn.textContent = "⏳ Saving...";
+
+  try {
+    await addDoc(collection(db, IG_COLLECTION), {
+      tool: document.getElementById("igTool").value,
+      category: document.getElementById("igCategory").value,
+      text,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    });
+
+    document.getElementById("igOutputText").value = "";
+    showToast("✅ Instagram tool output saved successfully!", "success");
+    await loadInstagramOutputs();
+  } catch(e) {
+    console.error(e);
+    showToast("❌ " + e.message, "error");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "💾 Save to Firebase";
+  }
+};
+
+function startInstagramEdit(id) {
+  const item = instagramOutputs.find(x => x.id === id);
+  if (!item) return;
+
+  currentInstagramEditId = id;
+  document.getElementById("igTool").value = item.tool;
+  updateInstagramCategories();
+  document.getElementById("igCategory").value = item.category;
+  document.getElementById("igOutputText").value = item.text || "";
+
+  document.getElementById("igFormTitle").textContent = "Edit Output";
+  document.getElementById("igSaveBtn").style.display = "none";
+  document.getElementById("igUpdateBtn").style.display = "block";
+  document.getElementById("igCancelBtn").style.display = "block";
+  window.scrollTo({ top:0, behavior:"smooth" });
+}
+
+window.cancelInstagramEdit = function() {
+  currentInstagramEditId = null;
+  document.getElementById("igOutputText").value = "";
+  document.getElementById("igFormTitle").textContent = "Add New Output";
+  document.getElementById("igSaveBtn").style.display = "block";
+  document.getElementById("igUpdateBtn").style.display = "none";
+  document.getElementById("igCancelBtn").style.display = "none";
+};
+
+window.updateInstagramOutput = async function() {
+  if (!currentInstagramEditId) return;
+
+  const text = document.getElementById("igOutputText").value.trim();
+  if (!text) {
+    showToast("⚠️ Please enter the output text.", "error");
+    return;
+  }
+
+  const btn = document.getElementById("igUpdateBtn");
+  btn.disabled = true;
+  btn.textContent = "⏳ Updating...";
+
+  try {
+    await updateDoc(doc(db, IG_COLLECTION, currentInstagramEditId), {
+      tool: document.getElementById("igTool").value,
+      category: document.getElementById("igCategory").value,
+      text,
+      updatedAt: serverTimestamp()
+    });
+
+    showToast("✅ Instagram tool output updated!", "success");
+    window.cancelInstagramEdit();
+    await loadInstagramOutputs();
+  } catch(e) {
+    console.error(e);
+    showToast("❌ " + e.message, "error");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "💾 Update Output";
+  }
+};
+
+async function deleteInstagramOutput(id) {
+  if (!confirm("Delete this output permanently?")) return;
+
+  try {
+    await deleteDoc(doc(db, IG_COLLECTION, id));
+    showToast("🗑️ Output deleted successfully.", "success");
+    await loadInstagramOutputs();
+  } catch(e) {
+    console.error(e);
+    showToast("❌ " + e.message, "error");
+  }
+}
+
+
 // ── Page switch ──
 window.switchPage = function(page, btn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1037,13 +1366,12 @@ window.switchPage = function(page, btn) {
   if(targetPage) targetPage.classList.add('active');
   if(btn) btn.classList.add('active');
   
-  const titles = {
-    dashboard: 'Dashboard', 
-    upload: 'New Post', 
-    posts: 'All Posts',
-    insta: 'Instagram Creator'
-  };
+  const titles = {dashboard:'Dashboard', upload:'New Post', posts:'All Posts', 'instagram-tools':'Instagram Creator Tools'};
   document.getElementById('pageTitle').textContent = titles[page] || 'Dashboard';
+
+  if(page === 'instagram-tools' && !instagramLoadedOnce) {
+    loadInstagramOutputs();
+  }
 };
 </script>
 </body>
