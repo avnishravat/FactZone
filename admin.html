@@ -203,6 +203,18 @@ select.form-input{cursor:pointer; appearance:none; background-image:url("data:im
 @media(max-width:900px){.ig-admin-grid{grid-template-columns:1fr}.ig-list{max-height:none}}
 @media(max-width:768px){.ig-filter-row{grid-template-columns:1fr}.ig-stats{grid-template-columns:1fr}.ig-actions{width:100%}.ig-small-btn{flex:1}}
 
+
+/* ── Instagram Bulk Import ── */
+.ig-bulk-panel{margin:0 0 16px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px}
+.ig-bulk-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
+.ig-bulk-head h3{font-size:16px;margin:0 0 5px}.ig-bulk-head p{font-size:12px;color:var(--muted);margin:0;line-height:1.6}
+.ig-bulk-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.ig-file-label{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:10px;padding:10px 13px;font-size:12px;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text)}
+.ig-bulk-actions .btn{width:auto;margin:0}.ig-bulk-status{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.6;min-height:18px}
+.ig-bulk-status.success{color:#22c55e}.ig-bulk-status.error{color:var(--red)}
+.ig-bulk-note{margin-top:10px;font-size:11px;color:var(--muted);line-height:1.6}
+@media(max-width:768px){.ig-bulk-head{flex-direction:column}.ig-bulk-actions{width:100%}.ig-file-label,.ig-bulk-actions .btn{flex:1;text-align:center}}
+
 /* ── Quill Styles Modifications for Dark/Light ── */
 .editor-container {
   background: var(--surface2);
@@ -487,6 +499,22 @@ select.form-input{cursor:pointer; appearance:none; background-image:url("data:im
           <div class="ig-stat"><b id="igCategoriesUsed">0</b><span>Categories Used</span></div>
         </div>
 
+        <div class="ig-bulk-panel">
+          <div class="ig-bulk-head">
+            <div>
+              <h3>⚡ Bulk Import Outputs</h3>
+              <p>Upload the prepared Instagram outputs JSON or CSV file and save all valid outputs to Firebase in one operation.</p>
+            </div>
+          </div>
+          <div class="ig-bulk-actions">
+            <label class="ig-file-label" for="igBulkFile">📁 Choose JSON / CSV</label>
+            <input id="igBulkFile" type="file" accept=".json,.csv,application/json,text/csv" style="display:none">
+            <button class="btn btn-primary" id="igBulkImportBtn" type="button" onclick="bulkImportInstagramOutputs()">⚡ Import All to Firebase</button>
+          </div>
+          <div class="ig-bulk-status" id="igBulkStatus">No file selected.</div>
+          <div class="ig-bulk-note">Expected fields: <b>tool</b>, <b>category</b>, <b>text</b>. Duplicate checking is included, so the same tool + category + text is not added twice.</div>
+        </div>
+
         <div class="ig-admin-grid">
           <div class="ig-panel">
             <h3 id="igFormTitle">Add New Output</h3>
@@ -617,7 +645,7 @@ You can use placeholders:
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, serverTimestamp, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
@@ -1355,6 +1383,157 @@ async function deleteInstagramOutput(id) {
     showToast("❌ " + e.message, "error");
   }
 }
+
+
+
+// ── Instagram Bulk Import ──
+// Only writes to instagramCreatorToolOutputs; posts, products and auth are untouched.
+
+function setInstagramBulkStatus(message, type="") {
+  const el = document.getElementById("igBulkStatus");
+  if (!el) return;
+  el.textContent = message;
+  el.className = "ig-bulk-status" + (type ? " " + type : "");
+}
+
+function normalizeInstagramRecord(item) {
+  if (!item || typeof item !== "object") return null;
+  const tool = String(item.tool || "").trim();
+  const category = String(item.category || "").trim();
+  const text = String(item.text || item.output || "").trim();
+  if (!tool || !category || !text) return null;
+  if (!IG_TOOLS[tool]) return null;
+  if (!(IG_CATEGORIES[tool] || []).includes(category)) return null;
+  return { tool, category, text };
+}
+
+function parseInstagramCSV(text) {
+  const rows = [];
+  let row = [], cell = "", quoted = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i], next = text[i + 1];
+    if (ch === '"' && quoted && next === '"') { cell += '"'; i++; }
+    else if (ch === '"') quoted = !quoted;
+    else if (ch === "," && !quoted) { row.push(cell); cell = ""; }
+    else if ((ch === "\n" || ch === "\r") && !quoted) {
+      if (ch === "\r" && next === "\n") i++;
+      row.push(cell);
+      if (row.some(v => String(v).trim() !== "")) rows.push(row);
+      row = []; cell = "";
+    } else cell += ch;
+  }
+  if (cell.length || row.length) {
+    row.push(cell);
+    if (row.some(v => String(v).trim() !== "")) rows.push(row);
+  }
+  if (!rows.length) return [];
+  const headers = rows[0].map(h => String(h).replace(/^\uFEFF/, "").trim());
+  return rows.slice(1).map(values => {
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = values[i] ?? "");
+    return obj;
+  });
+}
+
+window.bulkImportInstagramOutputs = async function() {
+  const fileInput = document.getElementById("igBulkFile");
+  const file = fileInput?.files?.[0];
+  if (!file) {
+    setInstagramBulkStatus("⚠️ First choose the JSON or CSV output file.", "error");
+    return;
+  }
+
+  const btn = document.getElementById("igBulkImportBtn");
+  btn.disabled = true;
+  btn.textContent = "⏳ Reading file...";
+  setInstagramBulkStatus("Reading and validating the selected file...");
+
+  try {
+    const raw = await file.text();
+    let parsed;
+    if (file.name.toLowerCase().endsWith(".json") || file.type === "application/json") {
+      parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) throw new Error("JSON must contain an array of output records.");
+    } else {
+      parsed = parseInstagramCSV(raw);
+    }
+
+    const valid = [], seenInFile = new Set();
+    let skipped = 0;
+    for (const item of parsed) {
+      const x = normalizeInstagramRecord(item);
+      if (!x) { skipped++; continue; }
+      const key = x.tool + "\u0001" + x.category + "\u0001" + x.text;
+      if (seenInFile.has(key)) { skipped++; continue; }
+      seenInFile.add(key);
+      valid.push(x);
+    }
+    if (!valid.length) throw new Error("No valid outputs were found. Check tool IDs, categories and text fields.");
+
+    btn.textContent = "⏳ Checking duplicates...";
+    setInstagramBulkStatus(`Validated ${valid.length} outputs. Checking existing Firebase data...`);
+
+    const snap = await getDocs(collection(db, IG_COLLECTION));
+    const existing = new Set(snap.docs.map(d => {
+      const x = d.data();
+      return String(x.tool || "") + "\u0001" + String(x.category || "") + "\u0001" + String(x.text || "");
+    }));
+
+    const toAdd = valid.filter(x => !existing.has(x.tool + "\u0001" + x.category + "\u0001" + x.text));
+    const duplicates = valid.length - toAdd.length;
+    if (!toAdd.length) {
+      setInstagramBulkStatus(`ℹ️ Nothing new to import. ${duplicates} outputs already exist in Firebase.`, "success");
+      return;
+    }
+
+    btn.textContent = `⏳ Importing ${toAdd.length} outputs...`;
+    let imported = 0;
+    for (let start = 0; start < toAdd.length; start += 450) {
+      const chunk = toAdd.slice(start, start + 450);
+      const batch = writeBatch(db);
+      chunk.forEach(item => {
+        const newRef = doc(collection(db, IG_COLLECTION));
+        batch.set(newRef, {
+          tool: item.tool,
+          category: item.category,
+          text: item.text,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        });
+      });
+      await batch.commit();
+      imported += chunk.length;
+      setInstagramBulkStatus(`Imported ${imported} of ${toAdd.length} outputs...`);
+    }
+
+    fileInput.value = "";
+    await loadInstagramOutputs();
+    setInstagramBulkStatus(
+      `✅ Import complete! Added ${imported} outputs.` +
+      (duplicates ? ` ${duplicates} duplicate outputs were skipped.` : "") +
+      (skipped ? ` ${skipped} invalid/duplicate file records were skipped.` : ""),
+      "success"
+    );
+    showToast(`✅ ${imported} Instagram outputs imported successfully!`, "success");
+  } catch (e) {
+    console.error(e);
+    setInstagramBulkStatus("❌ Import failed: " + e.message, "error");
+    showToast("❌ " + e.message, "error");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "⚡ Import All to Firebase";
+  }
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const fileInput = document.getElementById("igBulkFile");
+  if (fileInput) {
+    fileInput.addEventListener("change", () => {
+      const file = fileInput.files?.[0];
+      setInstagramBulkStatus(file ? `Selected: ${file.name}` : "No file selected.");
+    });
+  }
+});
 
 
 // ── Page switch ──
