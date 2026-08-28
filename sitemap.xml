@@ -281,5 +281,10 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-
+ <!-- 36.World's Most Dangerous Roads: दुनिया की 5 ऐसी सड़कें जहाँ गाड़ी चलाना मौत को दावत देना है -->
+  <url>
+    <loc>https://factzone.online/worlds-most-dangerous-roads-highest-death-rate-hindi</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
 </urlset>
