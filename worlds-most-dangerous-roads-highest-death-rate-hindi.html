@@ -141,13 +141,6 @@
               "caption": "FactZone Logo"
             }
           },
-          "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "4.8",
-            "reviewCount": "124",
-            "bestRating": "5",
-            "worstRating": "1"
-          },
           "mainEntityOfPage": {
             "@id": "https://factzone.online/worlds-most-dangerous-roads-highest-death-rate-hindi#webpage"
           },
@@ -309,7 +302,7 @@
             font-family: 'Inter', sans-serif;
             font-size: 0.825rem;
             color: var(--text-muted);
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             display: flex;
             flex-wrap: wrap;
             gap: 12px;
@@ -330,48 +323,6 @@
         .meta-info span strong {
             color: #374151;
             font-weight: 600;
-        }
-
-        /* Article Rating Widget Styling */
-        .rating-widget {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-            padding: 8px 12px;
-            background: #f9fafb;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .rating-stars {
-            display: flex;
-            direction: row-reverse;
-            gap: 4px;
-        }
-
-        .rating-stars input {
-            display: none;
-        }
-
-        .rating-stars label {
-            font-size: 1.25rem;
-            color: #d1d5db;
-            cursor: pointer;
-            transition: color 0.2s ease;
-        }
-
-        .rating-stars label:hover,
-        .rating-stars label:hover ~ label,
-        .rating-stars input:checked ~ label {
-            color: #f59e0b;
-        }
-
-        .rating-text {
-            font-size: 0.85rem;
-            color: #4b5563;
-            font-weight: 500;
         }
 
         /* Featured Image - Compact YouTube Thumbnail Size */
@@ -635,18 +586,6 @@
                     <span><strong>Date:</strong> August 27, 2026</span>
                     <span><strong>Read Time:</strong> 10 min read</span>
                 </div>
-
-                <!-- Rating System Widget -->
-                <div class="rating-widget">
-                    <div class="rating-stars">
-                        <input type="radio" id="star5" name="rating" value="5" onclick="submitRating(5)"><label for="star5" title="5 stars">&#9733;</label>
-                        <input type="radio" id="star4" name="rating" value="4" onclick="submitRating(4)"><label for="star4" title="4 stars">&#9733;</label>
-                        <input type="radio" id="star3" name="rating" value="3" onclick="submitRating(3)"><label for="star3" title="3 stars">&#9733;</label>
-                        <input type="radio" id="star2" name="rating" value="2" onclick="submitRating(2)"><label for="star2" title="2 stars">&#9733;</label>
-                        <input type="radio" id="star1" name="rating" value="1" onclick="submitRating(1)"><label for="star1" title="1 star">&#9733;</label>
-                    </div>
-                    <span class="rating-text" id="rating-status"><strong>4.8</strong> / 5 (124 votes)</span>
-                </div>
             </div>
 
             <!-- Featured Image (Compact YouTube Thumbnail proportions) -->
@@ -782,27 +721,5 @@
         </div>
     </footer>
 
-    <!-- Persistent Star Rating Script (LocalStorage) -->
-    <script>
-        function submitRating(stars) {
-            localStorage.setItem('factzone_user_rating_dangerous_roads', stars);
-            updateRatingUI(stars);
-        }
-
-        function updateRatingUI(stars) {
-            var radio = document.getElementById('star' + stars);
-            if (radio) {
-                radio.checked = true;
-            }
-            document.getElementById('rating-status').innerHTML = "Thank you for rating <strong>" + stars + "</strong> stars!";
-        }
-
-        window.addEventListener('DOMContentLoaded', function() {
-            var savedRating = localStorage.getItem('factzone_user_rating_dangerous_roads');
-            if (savedRating) {
-                updateRatingUI(savedRating);
-            }
-        });
-    </script>
 </body>
 </html>
