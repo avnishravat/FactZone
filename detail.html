@@ -203,7 +203,7 @@
     }
     #post .content ul, #post .content ol { margin: 0.25rem 0 0.55rem 1.15rem; }
     #post .content li { margin-bottom: 0.2rem; }
-    #post .content br { display: none; } /* Prevents unwanted empty newline gaps */
+    #post .content br { display: none; }
     #post .content hr { margin: 0.6rem 0; border: none; border-top: 1px solid var(--border); }
     #post .content img { margin: 0.5rem 0; max-width: 100%; height: auto; border-radius: 0.4rem; }
     #post .content p:empty,
@@ -719,6 +719,7 @@
   function renderPost(post) {
     var titleRaw   = post.title   || "FactZone Educational Article";
     var contentRaw = post.content || "Amazing facts and verified educational details.";
+    var image      = post.image   || "https://factzone.online/logo.png";
     preloadHeroImage(image);
 
     var descRaw    = contentRaw.replace(/<[^>]*>/g, '').replace(/\n/g," ");
