@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- IMPROVEMENT 1: Static title fallback -->
   <title>FactZone - Verified Educational & Science Facts</title>
   <meta name="description" content="Read this verified fact and educational article on FactZone Official.">
   <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
@@ -141,7 +140,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
-  <link rel="preconnect" href="https://i.ibb.co" crossorigin>
 
   <link rel="manifest" href="/manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -187,7 +185,7 @@
     #post h1 { font-family: 'Merriweather', serif; font-size: clamp(1.25rem, 3.8vw, 1.75rem); line-height: 1.25; font-weight: 700; margin-bottom: 0.35rem; }
     .meta-line { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.6rem; display: flex; flex-wrap: wrap; gap: 0.3rem; align-items: center; }
 
-    /* Compact Content Typography - Spacing fix */
+    /* Compact Content Typography */
     #post .content { font-size: 1rem; line-height: 1.5; color: #1f2937; white-space: normal; }
     #post .content p { margin: 0 0 0.55rem; }
     #post .content h1, #post .content h3, #post .content h4 { margin: 0.75rem 0 0.25rem; line-height: 1.25; }
@@ -217,24 +215,33 @@
       font-weight: 600;
       word-break: break-word;
     }
-    #post .content a:hover,
-    #post .content a:active { color: #96291d; }
-    #post .content a:visited { color: #8e44ad; }
 
-    .ql-code-block-container { background: #282c34; color: #abb2bf; padding: 0.75rem; border-radius: 0.4rem; font-family: monospace; margin: 0.6rem 0; overflow-x: auto; }
+    /* Ad Slot Fail-Safe Styling */
+    .ad-slot {
+      margin: 0.5rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: transparent;
+      min-height: 0;
+    }
+    .ad-slot:empty, .ad-slot[data-ad-failed="true"] {
+      display: none !important;
+    }
+    .banner-300x250-slot { width: 300px; max-width: 100%; }
+    .banner-320x50-slot { width: 320px; max-width: 100%; }
+    .ad-slot iframe { border: 0 !important; outline: none !important; background: transparent !important; }
 
     .author-box { margin-top: 0.85rem; padding-top: 0.6rem; border-top: 1px solid var(--border); font-size: 0.85rem; color: var(--muted); }
     .author-box a { color: var(--accent); text-decoration: none; font-weight: 600; }
     .author-box p { margin-bottom: 0.3rem; line-height: 1.35; }
     .author-box .author-profile-link { display: inline-block; font-weight: 700; }
-    .author-box .author-profile-link:hover { text-decoration: underline; }
 
     .share-container { margin-top: 0.75rem; padding-top: 0.6rem; border-top: 1px dashed var(--border); }
     .share-title { font-size: 0.82rem; font-weight: 700; color: var(--ink); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.04em; }
     .share-buttons { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-    .share-btn { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.35rem 0.7rem; border-radius: 0.35rem; font-size: 0.8rem; font-weight: 700; text-decoration: none; color: #fff; transition: opacity 0.15s, transform 0.1s; cursor: pointer; border: none; }
-    .share-btn:hover { opacity: 0.9; }
-    .share-btn:active { transform: scale(0.97); }
+    .share-btn { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.35rem 0.7rem; border-radius: 0.35rem; font-size: 0.8rem; font-weight: 700; text-decoration: none; color: #fff; cursor: pointer; border: none; }
     .btn-wa { background-color: #25D366; }
     .btn-fb { background-color: #1877F2; }
     .btn-tw { background-color: #000000; }
@@ -242,40 +249,26 @@
 
     .sk { background: linear-gradient(90deg,#eee 25%,#f8f8f8 50%,#eee 75%); background-size: 400% 100%; animation: sh 1.4s infinite; border-radius: .4rem; }
     @keyframes sh { to { background-position: -400% 0; } }
-
-    .sk-img { 
-      width: 100%; 
-      max-width: 300px; 
-      aspect-ratio: 16 / 9; 
-      margin: 0 auto 1rem auto; 
-      border-radius: .5rem; 
-    }
-
-    .sk-h      { height: 1.75rem; width: 75%; margin-bottom: 0.6rem; }
-    .sk-p      { height: 0.85rem; width: 100%; margin-bottom: 0.4rem; }
-    .sk-p.s   { width: 55%; }
+    .sk-img { width: 100%; max-width: 300px; aspect-ratio: 16 / 9; margin: 0 auto 1rem auto; border-radius: .5rem; }
+    .sk-h { height: 1.75rem; width: 75%; margin-bottom: 0.6rem; }
+    .sk-p { height: 0.85rem; width: 100%; margin-bottom: 0.4rem; }
+    .sk-p.s { width: 55%; }
 
     .err { text-align: center; padding: 2rem 1rem; color: var(--muted); }
     .err h2 { font-family: 'Merriweather', serif; color: var(--ink); margin-bottom: .4rem; }
 
-    .ad-slot { min-height: 50px; margin: 0.6rem 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    .banner-300x250-slot { width: 300px; height: 250px; max-width: 100%; }
-    .banner-320x50-slot { width: 320px; height: 50px; max-width: 100%; }
-
     #relatedSection { margin-top: 0.85rem; background: var(--surface); border-radius: var(--r); padding: 0.85rem 1rem; box-shadow: 0 2px 12px rgba(0,0,0,.05); }
     #relatedSection h2 { font-family: 'Merriweather', serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 0.6rem; padding-bottom: 0.35rem; border-bottom: 2px solid var(--ink); }
     #relatedGrid { display: grid; gap: 0.5rem; }
-    .rc { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem; border: 1px solid var(--border); border-radius: 0.5rem; background: var(--bg); text-decoration: none; color: inherit; transition: box-shadow .18s, transform .18s; }
-    .rc:hover { box-shadow: 0 3px 12px rgba(0,0,0,.08); transform: translateY(-1px); }
+    .rc { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem; border: 1px solid var(--border); border-radius: 0.5rem; background: var(--bg); text-decoration: none; color: inherit; }
     .rc img { width: 55px; height: 55px; object-fit: cover; border-radius: 0.4rem; flex-shrink: 0; }
-    .rc h3  { font-size: 0.85rem; font-weight: 700; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.3; }
+    .rc h3 { font-size: 0.85rem; font-weight: 700; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.3; }
 
     @media(max-width:600px) { #post,#relatedSection { padding: 0.85rem 0.75rem; } }
 
     .site-footer { margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--border); text-align: center; }
     .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin-bottom: 0.4rem; }
     .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.8rem; font-weight: 600; }
-    .footer-links a:hover { color: var(--accent); text-decoration: underline; }
     .footer-copy { font-size: 0.75rem; color: var(--muted); }
   </style>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-311JQXBXR9"></script>
@@ -396,7 +389,7 @@
         }
       }
       keysToClean.forEach(function(k){ sessionStorage.removeItem(k); });
-    } catch (e) { console.error("Cache clean warning:", e); }
+    } catch (e) {}
   }
 
   function currentCacheKey() {
@@ -469,127 +462,22 @@
     var can = document.getElementById("meta-canonical");
     if (can) can.href = url;
 
-    var imageEntity = {
-      "@type": "ImageObject",
-      "@id": url + "#primaryimage",
-      "url": image,
-      "caption": title
-    };
-
-    var webPageEntity = {
-      "@type": "WebPage",
-      "@id": url + "#webpage",
-      "url": url,
-      "name": title,
-      "description": desc,
-      "inLanguage": "hi",
-      "isPartOf": { "@id": "https://factzone.online/#website" },
-      "primaryImageOfPage": { "@id": url + "#primaryimage" },
-      "datePublished": publishedISO,
-      "dateModified": updatedISO,
-      "breadcrumb": { "@id": url + "#breadcrumb" },
-      "mainEntity": { "@id": url + "#article" }
-    };
-
-    var articleEntity = {
-      "@type": "Article",
-      "@id": url + "#article",
-      "mainEntityOfPage": { "@id": url + "#webpage" },
-      "headline": title,
-      "description": desc,
-      "url": url,
-      "image": { "@id": url + "#primaryimage" },
-      "datePublished": publishedISO,
-      "dateModified": updatedISO,
-      "inLanguage": "hi",
-      "articleSection": categoryLabel,
-      "keywords": keywords,
-      "wordCount": wordCount,
-      "about": { "@type": "Thing", "name": categoryLabel },
-      "copyrightYear": new Date(publishedISO).getFullYear(),
-      "copyrightHolder": { "@id": "https://factzone.online/#organization" },
-      "author": { "@id": "https://factzone.online/#person-awaneesh" },
-      "publisher": { "@id": "https://factzone.online/#organization" }
-    };
-
-    var breadcrumbEntity = {
-      "@type": "BreadcrumbList",
-      "@id": url + "#breadcrumb",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Home",       "item": "https://factzone.online/" },
-        { "@type": "ListItem", "position": 2, "name": categoryLabel, "item": categoryUrl },
-        { "@type": "ListItem", "position": 3, "name": title,        "item": url }
-      ]
-    };
-
     var graph = [
       {
         "@type": "Organization",
         "@id": "https://factzone.online/#organization",
         "name": "FactZone",
         "url": "https://factzone.online/",
-        "logo": { "@type": "ImageObject", "url": "https://factzone.online/logo.png", "width": 512, "height": 512 },
-        "sameAs": ["https://www.instagram.com/avnish__1203/", "https://www.youtube.com/@FinupFact"],
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "contactType": "customer support",
-          "email": "avnishravat20@gmail.com",
-          "areaServed": "IN",
-          "availableLanguage": ["Hindi", "English"]
-        }
+        "logo": { "@type": "ImageObject", "url": "https://factzone.online/logo.png", "width": 512, "height": 512 }
       },
       {
-        "@type": "Person",
-        "@id": "https://factzone.online/#person-awaneesh",
-        "name": "Awaneesh",
-        "url": "https://factzone.online/author.html",
-        "worksFor": { "@id": "https://factzone.online/#organization" },
-        "sameAs": ["https://www.instagram.com/avnish__1203/"]
-      },
-      {
-        "@type": "WebSite",
-        "@id": "https://factzone.online/#website",
-        "name": "FactZone",
-        "url": "https://factzone.online/",
-        "inLanguage": "hi",
-        "publisher": { "@id": "https://factzone.online/#organization" },
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": {
-            "@type": "EntryPoint",
-            "urlTemplate": "https://factzone.online/index.html?search={search_term_string}"
-          },
-          "query-input": "required name=search_term_string"
-        }
-      },
-      imageEntity,
-      webPageEntity,
-      articleEntity,
-      breadcrumbEntity
-    ];
-
-    if (Array.isArray(post.faq) && post.faq.length) {
-      var faqItems = post.faq.filter(function(f){ return f && f.question && f.answer; });
-      if (faqItems.length) {
-        graph.push({
-          "@type": "FAQPage",
-          "mainEntity": faqItems.map(function(f){
-            return { "@type": "Question", "name": f.question, "acceptedAnswer": { "@type": "Answer", "text": f.answer } };
-          })
-        });
-      }
-    }
-
-    if (post.videoUrl) {
-      graph.push({
-        "@type": "VideoObject",
+        "@type": "WebPage",
+        "@id": url + "#webpage",
+        "url": url,
         "name": title,
-        "description": desc,
-        "thumbnailUrl": image,
-        "contentUrl": post.videoUrl,
-        "uploadDate": publishedISO
-      });
-    }
+        "description": desc
+      }
+    ];
 
     var graphEl = document.getElementById("ldJsonGraph");
     if (graphEl) graphEl.textContent = JSON.stringify({ "@context": "https://schema.org", "@graph": graph });
@@ -606,27 +494,8 @@
     });
   };
 
-  var NATIVE_BANNER_ZONE = "7ff4b1b157bf01a56609549fe359888b";
-  var NATIVE_BANNER_SRC  = "https://pl30385025.effectivecpmnetwork.com/" + NATIVE_BANNER_ZONE + "/invoke.js";
-
-  function injectSingleAd(container, scriptSrc) {
-    try {
-      if (!container) return;
-      if (container.dataset.adLoaded === "true") return;
-      var adScript = document.createElement('script');
-      adScript.type = 'text/javascript';
-      adScript.async = true;
-      adScript.setAttribute('data-cfasync', 'false');
-      adScript.src = scriptSrc;
-      container.appendChild(adScript);
-      container.dataset.adLoaded = "true";
-    } catch (e) { console.error("Ad script embedding error:", e); }
-  }
-
+  /* Fail-safe Ad Ingestion Functions */
   function injectAdNetworkScripts() {
-    document.querySelectorAll('.native-banner-slot').forEach(function(slot) {
-      injectSingleAd(slot, NATIVE_BANNER_SRC);
-    });
     document.querySelectorAll('.banner-300x250-slot').forEach(function(slot) {
       injectBanner300x250(slot);
     });
@@ -635,41 +504,59 @@
     });
   }
 
+  function hideSlotOnError(container) {
+    if (!container) return;
+    var parentSlot = container.closest('.ad-slot') || container;
+    parentSlot.style.display = 'none';
+    parentSlot.setAttribute('data-ad-failed', 'true');
+  }
+
   function injectBanner300x250(container) {
     try {
-      if (!container) return;
-      if (container.dataset.adLoaded === "true") return;
+      if (!container || container.dataset.adLoaded === "true") return;
       var iframe = document.createElement('iframe');
       iframe.style.width = '300px'; iframe.style.height = '250px'; iframe.style.border = '0';
       iframe.style.overflow = 'hidden'; iframe.style.maxWidth = '100%'; iframe.scrolling = 'no';
       iframe.title = 'Advertisement';
-      var doc = '<!DOCTYPE html><html><head><style>*{margin:0;padding:0;}</style></head><body>' +
+      iframe.onerror = function() { hideSlotOnError(container); };
+
+      var doc = '<!DOCTYPE html><html><head><style>*{margin:0;padding:0;}body{background:transparent;}</style></head><body>' +
         '<script>atOptions = {"key":"d7218ad0d4e9095bb4a145457bc7bea2","format":"iframe","height":250,"width":300,"params":{}};</' + 'script>' +
-        '<script src="https://www.highperformanceformat.com/d7218ad0d4e9095bb4a145457bc7bea2/invoke.js"></' + 'script>' +
+        '<script src="https://www.highperformanceformat.com/d7218ad0d4e9095bb4a145457bc7bea2/invoke.js" onerror="window.parent.postMessage(\'ad-failed\', \'*\')"></' + 'script>' +
         '</body></html>';
       iframe.srcdoc = doc;
       container.appendChild(iframe);
       container.dataset.adLoaded = "true";
-    } catch (e) { console.error("Banner 300x250 ad error:", e); }
+    } catch (e) { hideSlotOnError(container); }
   }
 
   function injectBanner320x50(container) {
     try {
-      if (!container) return;
-      if (container.dataset.adLoaded === "true") return;
+      if (!container || container.dataset.adLoaded === "true") return;
       var iframe = document.createElement('iframe');
       iframe.style.width = '320px'; iframe.style.height = '50px'; iframe.style.border = '0';
       iframe.style.overflow = 'hidden'; iframe.style.maxWidth = '100%'; iframe.scrolling = 'no';
       iframe.title = 'Advertisement';
-      var doc = '<!DOCTYPE html><html><head><style>*{margin:0;padding:0;}</style></head><body>' +
+      iframe.onerror = function() { hideSlotOnError(container); };
+
+      var doc = '<!DOCTYPE html><html><head><style>*{margin:0;padding:0;}body{background:transparent;}</style></head><body>' +
         '<script>atOptions = {"key":"3012ad1961449518ada204e09cdbceef","format":"iframe","height":50,"width":320,"params":{}};</' + 'script>' +
-        '<script src="https://www.highperformanceformat.com/3012ad1961449518ada204e09cdbceef/invoke.js"></' + 'script>' +
+        '<script src="https://www.highperformanceformat.com/3012ad1961449518ada204e09cdbceef/invoke.js" onerror="window.parent.postMessage(\'ad-failed\', \'*\')"></' + 'script>' +
         '</body></html>';
       iframe.srcdoc = doc;
       container.appendChild(iframe);
       container.dataset.adLoaded = "true";
-    } catch (e) { console.error("Banner 320x50 ad error:", e); }
+    } catch (e) { hideSlotOnError(container); }
   }
+
+  // Hide ad slot if postMessage signals failure from blocked ad scripts
+  window.addEventListener('message', function(e) {
+    if (e.data === 'ad-failed') {
+      document.querySelectorAll('.ad-slot').forEach(function(slot) {
+        slot.style.display = 'none';
+      });
+    }
+  });
 
   function injectInlineAdsDom(rawHtml, count, adHtmlString) {
     if (!rawHtml) return rawHtml;
@@ -678,7 +565,7 @@
     var children = Array.prototype.slice.call(tmp.childNodes).filter(function(n) {
       return n.nodeType === 1 || (n.nodeType === 3 && n.textContent.trim() !== '');
     });
-    if (children.length < 2) return rawHtml;
+    if (children.length < 3) return rawHtml;
 
     var totalGaps = children.length - 1;
     var slots = Math.min(count, totalGaps);
@@ -741,7 +628,6 @@
     fetchRelatedByCategory(currentPostCategory);
 
     var title   = escapeHtml(titleRaw);
-
     var content = (typeof DOMPurify !== "undefined")
       ? DOMPurify.sanitize(contentRaw, { ADD_ATTR: ['target', 'rel'] })
       : escapeHtml(contentRaw);
@@ -759,19 +645,13 @@
     var shareUrl = encodeURIComponent(location.href);
     var shareText = encodeURIComponent(titleRaw + " - Read more on FactZone:\n");
 
-    var midAdHtml = '<div class="ad-slot" style="margin: 0.6rem 0;"><div class="banner-320x50-slot"></div></div>';
-    var contentWithAd = injectInlineAdsDom(content, 6, midAdHtml);
+    var midAdHtml = '<div class="ad-slot"><div class="banner-320x50-slot"></div></div>';
+    var contentWithAd = injectInlineAdsDom(content, 2, midAdHtml);
 
     $("post-content").innerHTML =
       '<h1 itemprop="headline">' + title + '</h1>' +
       '<p class="meta-line">' + metaLine + '</p>' +
-      '<div class="hero-wrap"><img class="hero" src="' + escapeHtml(image) + '" alt="' + title + '" itemprop="image" loading="eager" fetchpriority="high" width="300" height="169"></div>' +
-      '<meta itemprop="datePublished" content="' + escapeHtml(publishedISO) + '">' +
-      '<meta itemprop="dateModified" content="' + escapeHtml(updatedISO) + '">' +
-      '<div itemprop="publisher" itemscope itemtype="https://schema.org/Organization" style="display:none">' +
-        '<span itemprop="name">FactZone</span>' +
-        '<div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject"><meta itemprop="url" content="https://factzone.online/logo.png"></div>' +
-      '</div>' +
+      '<div class="hero-wrap"><img class="hero" src="' + escapeHtml(image) + '" alt="' + title + '" itemprop="image" loading="eager" fetchpriority="high" width="300" height="169" onerror="this.style.display=\'none\'"></div>' +
       '<div class="content" itemprop="articleBody">' + contentWithAd + '</div>' +
       '<div class="share-container">' +
         '<div class="share-title">Share this Fact:</div>' +
@@ -783,13 +663,18 @@
         '</div>' +
       '</div>' +
       '<div class="author-box" itemprop="author" itemscope itemtype="https://schema.org/Person">' +
-        '<p>Written by <a href="author.html" itemprop="url"><span itemprop="name">Awaneesh</span></a>, a tech enthusiast and content strategist sharing insights on emerging technologies and digital trends.</p>' +
+        '<p>Written by <a href="author.html" itemprop="url"><span itemprop="name">Awaneesh</span></a>, a tech enthusiast sharing verified facts.</p>' +
         '<a href="author.html" class="author-profile-link">View Author Profile →</a>' +
       '</div>';
 
     document.querySelectorAll('#post .content a').forEach(function(a) {
       a.setAttribute('target', '_blank');
       a.setAttribute('rel', 'noopener noreferrer');
+    });
+
+    // Auto-hide broken images in content text
+    document.querySelectorAll('#post .content img').forEach(function(img) {
+      img.onerror = function() { this.style.display = 'none'; };
     });
 
     injectAdNetworkScripts();
@@ -815,7 +700,6 @@
 
   function fetchRelatedByCategory(category) {
     if (!category) return;
-
     var cacheKey = CATEGORY_CACHE_PREFIX + category;
     var cachedRaw = ssGet(cacheKey);
     if (cachedRaw) {
@@ -842,53 +726,23 @@
       return items;
     }
 
-    function runQuery(body) {
-      return fetch(FS_BASE + ":runQuery?key=" + API_KEY, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      }).then(function(r){ return r.json(); });
-    }
-
-    var queryWithOrder = {
-      structuredQuery: {
-        from: [{ collectionId: "posts" }],
-        where: { fieldFilter: { field: { fieldPath: "category" }, op: "EQUAL", value: { stringValue: category } } },
-        orderBy: [{ field: { fieldPath: "createdAt" }, direction: "DESCENDING" }]
-      }
-    };
-
-    runQuery(queryWithOrder).then(function(data) {
-      var docs = Array.isArray(data) ? data : [];
-      var hasIndexError = docs.length === 1 && docs[0] && docs[0].error;
-      if (hasIndexError) throw new Error("index-missing");
-      var items = finalizeItems(docs);
-      if (!items.length) throw new Error("empty");
-      ssSet(cacheKey, JSON.stringify({ ts: Date.now(), data: items }));
-      relatedItemsRaw = items;
-      maybeResortRelated();
-    }).catch(function() {
-      var queryNoOrder = {
+    fetch(FS_BASE + ":runQuery?key=" + API_KEY, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
         structuredQuery: {
           from: [{ collectionId: "posts" }],
           where: { fieldFilter: { field: { fieldPath: "category" }, op: "EQUAL", value: { stringValue: category } } }
         }
-      };
-      runQuery(queryNoOrder).then(function(data) {
-        var docs = Array.isArray(data) ? data : [];
-        var items = finalizeItems(docs);
-        if (!items.length) return;
-        items.sort(function(a, b) {
-          var ta = toSafeDate(a.createdAt); var tb = toSafeDate(b.createdAt);
-          return (tb ? tb.getTime() : 0) - (ta ? ta.getTime() : 0);
-        });
-        ssSet(cacheKey, JSON.stringify({ ts: Date.now(), data: items }));
-        relatedItemsRaw = items;
-        maybeResortRelated();
-      }).catch(function(e2) {
-        console.warn("Category-based related fetch fully failed, keeping fallback list:", e2 && e2.message);
-      });
-    });
+      })
+    }).then(function(r){ return r.json(); }).then(function(data){
+      var docs = Array.isArray(data) ? data : [];
+      var items = finalizeItems(docs);
+      if (!items.length) return;
+      ssSet(cacheKey, JSON.stringify({ ts: Date.now(), data: items }));
+      relatedItemsRaw = items;
+      maybeResortRelated();
+    }).catch(function(){});
   }
 
   function renderRelated(items) {
@@ -901,39 +755,40 @@
       var ttl   = escapeHtml(item.title || "");
       var linkQuery = item.slug ? ("slug=" + encodeURIComponent(item.slug)) : ("id=" + encodeURIComponent(item._id || ""));
       return '<a href="detail.html?' + linkQuery + '" class="rc" aria-label="Read: ' + ttl + '">' +
-             '<img src="' + img + '" loading="lazy" width="68" height="68" alt="' + ttl + '">' +
+             '<img src="' + img + '" loading="lazy" width="55" height="55" alt="' + ttl + '" onerror="this.style.display=\'none\'">' +
              '<h3>' + ttl + '</h3></a>';
     }).join("");
   }
 
   function fetchPostByIdOnce(idVal) {
-    var url = FS_BASE + "/posts/" + idVal + "?key=" + API_KEY;
-    return fetch(url).then(function(r){ return r.json(); }).then(function(data){
-      if (!data.fields) return null;
-      var post = parseDoc(data.fields);
-      post._id = idVal;
-      return post;
-    });
+    return fetch(FS_BASE + "/posts/" + idVal + "?key=" + API_KEY)
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        if (!data.fields) return null;
+        var post = parseDoc(data.fields);
+        post._id = idVal;
+        return post;
+      });
   }
 
   function fetchPostBySlugOnce(slugVal) {
-    var url = FS_BASE + ":runQuery?key=" + API_KEY;
-    var body = {
-      structuredQuery: {
-        from: [{ collectionId: "posts" }],
-        where: { fieldFilter: { field: { fieldPath: "slug" }, op: "EQUAL", value: { stringValue: slugVal } } },
-        limit: 1
-      }
-    };
-    return fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
-      .then(function(r){ return r.json(); })
-      .then(function(data){
-        var found = (Array.isArray(data) ? data : []).find(function(r){ return r.document; });
-        if (!found) return null;
-        var post = parseDoc(found.document.fields);
-        post._id = found.document.name.split("/").pop();
-        return post;
-      });
+    return fetch(FS_BASE + ":runQuery?key=" + API_KEY, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        structuredQuery: {
+          from: [{ collectionId: "posts" }],
+          where: { fieldFilter: { field: { fieldPath: "slug" }, op: "EQUAL", value: { stringValue: slugVal } } },
+          limit: 1
+        }
+      })
+    }).then(function(r){ return r.json(); }).then(function(data){
+      var found = (Array.isArray(data) ? data : []).find(function(r){ return r.document; });
+      if (!found) return null;
+      var post = parseDoc(found.document.fields);
+      post._id = found.document.name.split("/").pop();
+      return post;
+    });
   }
 
   function fetchPostOnce() {
@@ -943,17 +798,14 @@
   }
 
   function fetchPostWithRetry(maxAttempts) {
-    maxAttempts = maxAttempts || 4;
+    maxAttempts = maxAttempts || 3;
     var attempt = 1;
     function tryOnce() {
-      return fetchPostOnce().catch(function(e) {
-        console.warn("fetchPost attempt " + attempt + " failed:", e.message);
-        return null;
-      }).then(function(post) {
+      return fetchPostOnce().catch(function() { return null; }).then(function(post) {
         if (post) return post;
         if (attempt >= maxAttempts) return null;
         attempt++;
-        return sleep(400 + Math.pow(attempt, 2) * 300).then(tryOnce);
+        return sleep(300 * attempt).then(tryOnce);
       });
     }
     return tryOnce();
@@ -968,6 +820,7 @@
     var cacheKey = currentCacheKey();
     var cachedRaw = ssGet(cacheKey);
     var cachedPost = null;
+
     if (cachedRaw) {
       try {
         var parsed = JSON.parse(cachedRaw);
@@ -987,65 +840,10 @@
       }
       ssSet(cacheKey, JSON.stringify({ ts: Date.now(), data: post }));
       renderPost(post);
-    }).catch(function(err) {
-      console.error("Post fetch error:", err);
-      if (!cachedPost) $("post-content").innerHTML = '<div class="err"><h2>Failed to load</h2><p>Check your connection and refresh.</p></div>';
     });
-  }
-
-  function fetchAllPostDocs(pageToken, accumulated) {
-    accumulated = accumulated || [];
-    var url = FS_BASE + "/posts?key=" + API_KEY + "&pageSize=300" +
-      (pageToken ? ("&pageToken=" + encodeURIComponent(pageToken)) : "");
-    return fetch(url).then(function(r){ return r.json(); }).then(function(data){
-      var docs = data.documents || [];
-      accumulated = accumulated.concat(docs);
-      if (data.nextPageToken) {
-        return fetchAllPostDocs(data.nextPageToken, accumulated);
-      }
-      return accumulated;
-    });
-  }
-
-  function fetchRelated() {
-    var cachedRaw = ssGet(RELATED_CACHE_KEY);
-    var cachedItems = null;
-    if (cachedRaw) {
-      try {
-        var parsed = JSON.parse(cachedRaw);
-        if (Date.now() - parsed.ts < RELATED_TTL_MS) {
-          cachedItems = parsed.data;
-          relatedItemsRaw = cachedItems;
-          maybeResortRelated();
-        }
-      } catch (e) {}
-    }
-
-    fetchAllPostDocs()
-      .then(function(docs){
-        var items = [];
-        docs.forEach(function(d){
-          var pid = (d.name || "").split("/").pop();
-          var post = parseDoc(d.fields);
-          post._id = pid;
-          if ((slugParam && post.slug === slugParam) || (idParam && pid === idParam)) return;
-          items.push(post);
-        });
-        items.sort(function(a, b) {
-          var ta = toSafeDate(a.createdAt); var tb = toSafeDate(b.createdAt);
-          return (tb ? tb.getTime() : 0) - (ta ? ta.getTime() : 0);
-        });
-        ssSet(RELATED_CACHE_KEY, JSON.stringify({ ts: Date.now(), data: items }));
-        relatedItemsRaw = items;
-        maybeResortRelated();
-      })
-      .catch(function(e){
-        console.error("Related fetch error:", e);
-      });
   }
 
   fetchPost();
-  fetchRelated();
 
 })();
 </script>
