@@ -49,88 +49,11 @@
     })();
   </script>
 
+  <!-- Dynamic JSON-LD Schema (Will be updated automatically by JavaScript for each article) -->
   <script id="ldJsonGraph" type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Organization",
-        "@id": "https://factzone.online/#organization",
-        "name": "FactZone",
-        "url": "https://factzone.online/",
-        "logo": { "@type": "ImageObject", "url": "https://factzone.online/logo.png", "width": 512, "height": 512 },
-        "sameAs": ["https://www.instagram.com/avnish__1203/", "https://www.youtube.com/@FinupFact"],
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "contactType": "customer support",
-          "email": "avnishravat20@gmail.com",
-          "areaServed": "IN",
-          "availableLanguage": ["Hindi", "English"]
-        }
-      },
-      {
-        "@type": "Person",
-        "@id": "https://factzone.online/#person-awaneesh",
-        "name": "Awaneesh",
-        "url": "https://factzone.online/author.html",
-        "worksFor": { "@id": "https://factzone.online/#organization" },
-        "sameAs": ["https://www.instagram.com/avnish__1203/"]
-      },
-      {
-        "@type": "WebSite",
-        "@id": "https://factzone.online/#website",
-        "name": "FactZone",
-        "url": "https://factzone.online/",
-        "inLanguage": "hi",
-        "publisher": { "@id": "https://factzone.online/#organization" },
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": {
-            "@type": "EntryPoint",
-            "urlTemplate": "https://factzone.online/index.html?search={search_term_string}"
-          },
-          "query-input": "required name=search_term_string"
-        }
-      },
-      {
-        "@type": "ImageObject",
-        "@id": "https://factzone.online/detail.html#primaryimage",
-        "url": "https://factzone.online/logo.png",
-        "caption": "FactZone Educational Article"
-      },
-      {
-        "@type": "WebPage",
-        "@id": "https://factzone.online/detail.html#webpage",
-        "url": "https://factzone.online/detail.html",
-        "name": "FactZone Educational Article",
-        "inLanguage": "hi",
-        "isPartOf": { "@id": "https://factzone.online/#website" },
-        "primaryImageOfPage": { "@id": "https://factzone.online/detail.html#primaryimage" },
-        "breadcrumb": { "@id": "https://factzone.online/detail.html#breadcrumb" },
-        "mainEntity": { "@id": "https://factzone.online/detail.html#article" }
-      },
-      {
-        "@type": "Article",
-        "@id": "https://factzone.online/detail.html#article",
-        "mainEntityOfPage": { "@id": "https://factzone.online/detail.html#webpage" },
-        "headline": "FactZone Educational Article",
-        "image": { "@id": "https://factzone.online/detail.html#primaryimage" },
-        "inLanguage": "hi",
-        "about": { "@type": "Thing", "name": "Amazing Facts" },
-        "copyrightHolder": { "@id": "https://factzone.online/#organization" },
-        "author": { "@id": "https://factzone.online/#person-awaneesh" },
-        "publisher": { "@id": "https://factzone.online/#organization" }
-      },
-      {
-        "@type": "BreadcrumbList",
-        "@id": "https://factzone.online/detail.html#breadcrumb",
-        "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://factzone.online/" },
-          { "@type": "ListItem", "position": 2, "name": "Amazing Facts", "item": "https://factzone.online/" },
-          { "@type": "ListItem", "position": 3, "name": "FactZone Article", "item": "https://factzone.online/detail.html" }
-        ]
-      }
-    ]
+    "@graph": []
   }
   </script>
 
@@ -184,6 +107,27 @@
     #post img.hero { width: 100%; max-width: 320px; aspect-ratio: 16/9; border-radius: 0.5rem; object-fit: cover; display: block; box-shadow: 0 2px 10px rgba(0,0,0,.12); }
     #post h1 { font-family: 'Merriweather', serif; font-size: clamp(1.25rem, 3.8vw, 1.75rem); line-height: 1.25; font-weight: 700; margin-bottom: 0.35rem; }
     .meta-line { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.6rem; display: flex; flex-wrap: wrap; gap: 0.3rem; align-items: center; }
+
+    /* Visual Breadcrumbs styling for users */
+    .visual-breadcrumb {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+    .visual-breadcrumb a {
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .visual-breadcrumb a:hover {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+    .visual-breadcrumb span.sep { color: #9ca3af; }
 
     /* Compact Content Typography */
     #post .content { font-size: 1rem; line-height: 1.5; color: #1f2937; white-space: normal; }
@@ -433,13 +377,14 @@
     viral:   "Viral / रोचक तथ्य"
   };
 
+  /* DYNAMIC SCHEMA & SEO GENERATOR */
   function updateSEO(post, title, desc, image, publishedISO, updatedISO, keywords, wordCount) {
     var url = location.origin + location.pathname + location.search;
     document.title = title + " | FactZone";
 
-    var categoryLabel = CATEGORY_LABELS[post.category] || "Amazing Facts";
+    var categoryLabel = CATEGORY_LABELS[post.category] || post.category || "Amazing Facts";
     var categoryUrl = post.category
-      ? ("https://factzone.online/index.html?cat=" + encodeURIComponent(post.category))
+      ? (location.origin + "/index.html?cat=" + encodeURIComponent(post.category))
       : "https://factzone.online/";
 
     function setMeta(sel, attr, val) {
@@ -462,25 +407,96 @@
     var can = document.getElementById("meta-canonical");
     if (can) can.href = url;
 
+    // Dynamic JSON-LD Schema Generation for Rich Snippets & Mobile Usability
     var graph = [
       {
         "@type": "Organization",
         "@id": "https://factzone.online/#organization",
         "name": "FactZone",
         "url": "https://factzone.online/",
-        "logo": { "@type": "ImageObject", "url": "https://factzone.online/logo.png", "width": 512, "height": 512 }
+        "logo": { "@type": "ImageObject", "url": "https://factzone.online/logo.png", "width": 512, "height": 512 },
+        "sameAs": ["https://www.instagram.com/avnish__1203/", "https://www.youtube.com/@FinupFact"],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer support",
+          "email": "avnishravat20@gmail.com",
+          "areaServed": "IN",
+          "availableLanguage": ["Hindi", "English"]
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://factzone.online/#website",
+        "name": "FactZone",
+        "url": "https://factzone.online/",
+        "inLanguage": "hi",
+        "publisher": { "@id": "https://factzone.online/#organization" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": url + "#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://factzone.online/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": categoryLabel,
+            "item": categoryUrl
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": title,
+            "item": url
+          }
+        ]
       },
       {
         "@type": "WebPage",
         "@id": url + "#webpage",
         "url": url,
         "name": title,
-        "description": desc
+        "description": desc,
+        "inLanguage": "hi",
+        "isPartOf": { "@id": "https://factzone.online/#website" },
+        "primaryImageOfPage": {
+          "@type": "ImageObject",
+          "@id": url + "#primaryimage",
+          "url": image,
+          "caption": title
+        },
+        "breadcrumb": { "@id": url + "#breadcrumb" },
+        "mainEntity": { "@id": url + "#article" }
+      },
+      {
+        "@type": "Article",
+        "@id": url + "#article",
+        "mainEntityOfPage": { "@id": url + "#webpage" },
+        "headline": title,
+        "description": desc,
+        "image": [image],
+        "inLanguage": "hi",
+        "articleSection": categoryLabel,
+        "wordCount": wordCount,
+        "datePublished": publishedISO,
+        "dateModified": updatedISO,
+        "author": {
+          "@type": "Person",
+          "@id": "https://factzone.online/#person-awaneesh",
+          "name": "Awaneesh",
+          "url": "https://factzone.online/author.html"
+        },
+        "publisher": { "@id": "https://factzone.online/#organization" }
       }
     ];
 
     var graphEl = document.getElementById("ldJsonGraph");
-    if (graphEl) graphEl.textContent = JSON.stringify({ "@context": "https://schema.org", "@graph": graph });
+    if (graphEl) graphEl.textContent = JSON.stringify({ "@context": "https://schema.org", "@graph": graph }, null, 2);
   }
 
   window.copyArticleLink = function(btn) {
@@ -549,7 +565,6 @@
     } catch (e) { hideSlotOnError(container); }
   }
 
-  // Hide ad slot if postMessage signals failure from blocked ad scripts
   window.addEventListener('message', function(e) {
     if (e.data === 'ad-failed') {
       document.querySelectorAll('.ad-slot').forEach(function(slot) {
@@ -621,6 +636,7 @@
     var cleanTextForReadTime = contentRaw.replace(/<[^>]*>/g, '');
     var wordCount = cleanTextForReadTime.trim().split(/\s+/).filter(Boolean).length;
 
+    // Trigger Dynamic Schema & Meta Updates
     updateSEO(post, titleRaw, desc, image, publishedISO, updatedISO, keywords, wordCount);
 
     currentPostCategory = post.category || null;
@@ -634,6 +650,16 @@
 
     var minsRead = readingTime(cleanTextForReadTime);
     var author  = escapeHtml(post.author || "Awaneesh");
+
+    var catLabel = CATEGORY_LABELS[post.category] || post.category || "Facts";
+    var catUrl   = post.category ? ("index.html?cat=" + encodeURIComponent(post.category)) : "index.html";
+
+    var visualBreadcrumbsHtml = 
+      '<nav class="visual-breadcrumb" aria-label="Breadcrumb">' +
+        '<a href="index.html">Home</a><span class="sep">›</span>' +
+        '<a href="' + catUrl + '">' + escapeHtml(catLabel) + '</a><span class="sep">›</span>' +
+        '<span>Article</span>' +
+      '</nav>';
 
     var metaBits = ['<strong>Author:</strong> ' + author, '<strong>Date:</strong> ' + formatDate(publishedISO)];
     if (updatedISO !== publishedISO) {
@@ -649,6 +675,7 @@
     var contentWithAd = injectInlineAdsDom(content, 2, midAdHtml);
 
     $("post-content").innerHTML =
+      visualBreadcrumbsHtml +
       '<h1 itemprop="headline">' + title + '</h1>' +
       '<p class="meta-line">' + metaLine + '</p>' +
       '<div class="hero-wrap"><img class="hero" src="' + escapeHtml(image) + '" alt="' + title + '" itemprop="image" loading="eager" fetchpriority="high" width="300" height="169" onerror="this.style.display=\'none\'"></div>' +
@@ -672,7 +699,6 @@
       a.setAttribute('rel', 'noopener noreferrer');
     });
 
-    // Auto-hide broken images in content text
     document.querySelectorAll('#post .content img').forEach(function(img) {
       img.onerror = function() { this.style.display = 'none'; };
     });
