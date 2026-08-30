@@ -59,7 +59,7 @@
   "@type": "WebApplication",
   "name": "Instagram Content Idea Generator",
   "url": "https://factzone.online/instagram-content-idea-generator",
-  "description": "Free online Instagram Content Idea Generator tool to quickly brainstorm creative post concepts, Reel hooks, and carousel topics.",
+  "description": "Generate viral Instagram content ideas, post concepts, and Reel hooks instantly for free with our online Instagram Content Idea Generator.",
   "applicationCategory": "BusinessApplication",
   "operatingSystem": "All",
   "browserRequirements": "Requires JavaScript. Requires HTML5.",
@@ -89,7 +89,7 @@
       "name": "How to generate content ideas for Instagram?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Type your niche or topic into the input field, choose your content style category, and click Generate Idea to get tailored post and Reel concepts."
+        "text": "Type your niche or topic into the input field, choose your content style category, and click Generate Content Idea to get tailored post and Reel concepts."
       }
     },
     {
@@ -132,13 +132,13 @@ button:disabled{opacity:.6}
 .actions button:hover{background:#1f2937}
 .small{font-size:12px;color:#6b7280;margin-top:10px;line-height:1.6}
 
-/* Interactive Rating Box */
+/* Interactive Rating Box: Standard 1 to 5 Order (Left to Right) */
 .interactive-rating{margin-top:20px;padding-top:15px;border-top:1px dashed #e6e8ef;text-align:center}
 .interactive-rating p{margin:0 0 8px;font-size:13px;font-weight:bold;color:#4b5563}
-.stars{display:flex;justify-content:center;gap:5px;cursor:pointer}
-.star{font-size:22px;color:#d1d5db;transition:color 0.2s}
-.star.active, .star:hover, .star:hover ~ .star{color:#f59e0b}
-.rating-msg{font-size:12px;color:#059669;margin-top:6px;display:none}
+.stars{display:flex;justify-content:center;gap:6px;cursor:pointer}
+.star{font-size:26px;color:#d1d5db;transition:color 0.15s;user-select:none}
+.star.active, .star.hover{color:#f59e0b}
+.rating-msg{font-size:12px;color:#059669;margin-top:6px;display:none;font-weight:600}
 
 /* Guide Section */
 .guide-section{margin-top:35px;background:#fff;border:1px solid #e6e8ef;border-radius:18px;padding:25px;line-height:1.7;color:#334155}
@@ -165,7 +165,7 @@ footer{text-align:center;color:#8a92a1;font-size:12px;padding:25px}
 <main>
 <section class="hero">
   <h1>Instagram Content Idea Generator</h1>
-  <p>Generate fresh, engaging content ideas and Reel concepts for your niche instantly.</p>
+  <p>Generate viral Instagram content ideas, post concepts, and Reel hooks instantly for free with our online Instagram Content Idea Generator.</p>
   <div class="rating-badge">★ <span id="badgeRating">4.9</span> / 5 <span id="badgeCount">(1,420 creator votes)</span></div>
 </section>
 
@@ -194,21 +194,21 @@ footer{text-align:center;color:#8a92a1;font-size:12px;padding:25px}
 
   <div class="small">New saved outputs are automatically read from the Firebase database when available.</div>
 
-  <!-- Interactive Rating Widget -->
+  <!-- Interactive Rating Widget (Order 1 to 5: 1 Star on Left, 5 Stars on Right) -->
   <div class="interactive-rating">
-    <p>Rate this tool:</p>
+    <p>Rate this tool (1 to 5 Stars):</p>
     <div class="stars" id="starContainer">
-      <span class="star" data-value="1">★</span>
-      <span class="star" data-value="2">★</span>
-      <span class="star" data-value="3">★</span>
-      <span class="star" data-value="4">★</span>
-      <span class="star" data-value="5">★</span>
+      <span class="star" data-value="1" title="1 Star">★</span>
+      <span class="star" data-value="2" title="2 Stars">★</span>
+      <span class="star" data-value="3" title="3 Stars">★</span>
+      <span class="star" data-value="4" title="4 Stars">★</span>
+      <span class="star" data-value="5" title="5 Stars">★</span>
     </div>
     <div id="ratingMsg" class="rating-msg">Thank you for your rating!</div>
   </div>
 </section>
 
-<!-- Ad Placement 1: Tool aur Guide ke beech me (320x50) -->
+<!-- Ad Placement 1: Tool & Guide Between (320x50) -->
 <div class="ad-container">
 <script>
   atOptions = {
@@ -229,8 +229,7 @@ footer{text-align:center;color:#8a92a1;font-size:12px;padding:25px}
   
   <h3>1. Focus on Hook-Driven Concepts</h3>
   <p>The first 3 seconds of a Reel or the headline of a Carousel determine whether a user continues watching or scrolls past.</p>
-
-  <!-- Ad Placement 2: Guide ke beech me 1st time (320x50) -->
+  <!-- Ad Placement: Inside Guide (320x50) -->
   <div class="ad-container">
   <script>
     atOptions = {
@@ -246,11 +245,9 @@ footer{text-align:center;color:#8a92a1;font-size:12px;padding:25px}
 
   <h3>2. Balance Value, Entertainment, and Action</h3>
   <p>Structure your posts into distinct pillars: educational carousels for saves, entertaining shorts for shares, and call-to-action posts for comments and DM leads.</p>
-
   <h3>3. Leverage Trending Topics in Your Niche</h3>
   <p>Adapting viral trends or popular commentary to your specific domain gives your content instant relevance and algorithmic priority.</p>
-
-  <!-- Ad Placement 3: Guide ke beech me 2nd time (320x50) -->
+  <!-- Ad Placement: Inside Guide (320x50) -->
   <div class="ad-container">
   <script>
     atOptions = {
@@ -266,9 +263,10 @@ footer{text-align:center;color:#8a92a1;font-size:12px;padding:25px}
 
   <h3>4. Re-purpose High Performing Formats</h3>
   <p>Once a post concept proves successful, transform it into alternative formats—turning a text-heavy quote into a voiceover video clip or interactive Reel.</p>
+
 </article>
 
-<!-- Ad Placement 4: Footer ke upar (300x250) -->
+<!-- Ad Placement 4: Above Footer (300x250) -->
 <div class="ad-container">
 <script>
   atOptions = {
@@ -318,8 +316,7 @@ async function loadTemplates(){
 }
 
 function fallback(input){
- const type="Content Idea";
- return `${type} for: ${input}\n\n🎬 Concept: Create a step-by-step carousel detailing 3 mistakes to avoid in ${input}.\n📌 Hook: "Stop doing this if you want results in ${input}..."\n#instagram #contentideas #creator`;
+ return `🎬 Concept for: ${input}\n\n📌 Hook: "Stop doing this if you want results in ${input}..."\n💡 Carousel Slide 1: The 3 major mistakes beginners make.\n💡 Carousel Slide 2: The exact step-by-step fix.\n💡 Reel Idea: Show a 15-second before vs after transformation.\n#instagram #contentideas #creator`;
 }
 
 function generate(){
@@ -346,26 +343,45 @@ $("copy").onclick=async()=>{
   setTimeout(()=>$("copy").textContent="Copy Output",1200);
 };
 
-/* Interactive Star Rating Handling */
-const stars=document.querySelectorAll("#starContainer .star");
-stars.forEach((star, idx)=>{
-  star.addEventListener("click", ()=>{
-    stars.forEach((s, i)=>{
-      if(i <= idx) s.classList.add("active");
+/* Interactive Star Rating Handling (Correct 1 to 5 Order: Left Star = 1, Right Star = 5) */
+const stars = document.querySelectorAll("#starContainer .star");
+stars.forEach((star, idx) => {
+  // Mouse hover state (1 star lights 1st, 2 stars light 1st and 2nd...)
+  star.addEventListener("mouseenter", () => {
+    stars.forEach((s, i) => {
+      if (i <= idx) s.classList.add("hover");
+      else s.classList.remove("hover");
+    });
+  });
+
+  star.addEventListener("mouseleave", () => {
+    stars.forEach(s => s.classList.remove("hover"));
+  });
+
+  // Click handler (Rating 1..5)
+  star.addEventListener("click", () => {
+    const selectedRating = idx + 1; // 1, 2, 3, 4, 5
+    stars.forEach((s, i) => {
+      if (i <= idx) s.classList.add("active");
       else s.classList.remove("active");
     });
-    $("ratingMsg").style.display="block";
-    localStorage.setItem("userRated_idea_gen", idx+1);
+    const msg = $("ratingMsg");
+    msg.style.display = "block";
+    msg.textContent = `Thank you! You rated this tool ${selectedRating} / 5 stars.`;
+    localStorage.setItem("userRated_" + TOOL, selectedRating);
   });
 });
 
-const userRating = localStorage.getItem("userRated_idea_gen");
-if(userRating){
-  stars.forEach((s, i)=>{
-    if(i < userRating) s.classList.add("active");
+// Load saved user rating from LocalStorage
+const savedRating = localStorage.getItem("userRated_" + TOOL);
+if(savedRating){
+  const ratingIndex = parseInt(savedRating, 10) - 1;
+  stars.forEach((s, i) => {
+    if (i <= ratingIndex) s.classList.add("active");
   });
-  $("ratingMsg").style.display="block";
-  $("ratingMsg").textContent="You have already rated this tool!";
+  const msg = $("ratingMsg");
+  msg.style.display = "block";
+  msg.textContent = `You have already rated this tool ${savedRating} / 5 stars!`;
 }
 
 loadTemplates();
