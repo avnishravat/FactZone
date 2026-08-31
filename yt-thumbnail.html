@@ -3,13 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Thumbnail Downloader Online | FactZone</title>
-    <meta name="description" content="Download high quality (HD/4K) YouTube cover thumbnails from video links with FactZone YT Thumbnail Downloader.">
+    <title>YouTube Thumbnail Downloader Online (HD/4K) | FactZone</title>
+    <meta name="description" content="Download high-quality (Full HD 1080p, 4K, HD) YouTube video cover thumbnails for free. Works with YouTube videos and Shorts on FactZone.">
+    <meta name="keywords" content="youtube thumbnail downloader, download yt thumbnail, get youtube cover image, youtube shorts thumbnail downloader, hd thumbnail saver">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://factzone.online/yt-thumbnail.html">
 
+    <!-- Open Graph / Social Media SEO -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="YouTube Thumbnail Downloader Online | FactZone">
+    <meta property="og:description" content="Extract and download high-resolution YouTube video thumbnails instantly. 100% Free & No Registration required.">
+    <meta property="og:url" content="https://factzone.online/yt-thumbnail.html">
+    <meta property="og:site_name" content="FactZone Tools">
+
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232563eb'/><text x='50%' y='68%' font-family='sans-serif' font-weight='bold' font-size='60' fill='white' text-anchor='middle'>F</text></svg>">
 
+    <!-- JSON-LD Structured Data Schema (WebApplication + Breadcrumb + FAQPage) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -30,6 +39,35 @@
             {"@type": "ListItem", "position": 2, "name": "Tools", "item": "https://factzone.online/tools.html"},
             {"@type": "ListItem", "position": 3, "name": "YT Thumbnail Downloader", "item": "https://factzone.online/yt-thumbnail.html"}
           ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "How to download YouTube video thumbnails in HD?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Copy the YouTube video or Shorts link, paste it into the input box on FactZone YouTube Thumbnail Downloader, and click 'Get HD Thumbnail'. Select your preferred resolution to download."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Does this tool work for YouTube Shorts?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes! You can paste any YouTube Shorts URL to grab high-resolution cover images."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is downloading YouTube thumbnails free and legal?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, our downloader tool is completely free. Downloading thumbnails for personal use, fair use, or inspiration is common, though copyright belongs to original creators."
+              }
+            }
+          ]
         }
       ]
     }
@@ -38,19 +76,58 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         body { background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
-        .main-container { width: 100%; max-width: 700px; margin: 0 auto; padding: 20px 16px; flex: 1; }
+        .main-container { width: 100%; max-width: 750px; margin: 0 auto; padding: 20px 16px; flex: 1; }
         .breadcrumbs { font-size: 13px; color: #64748b; margin-bottom: 16px; }
         .breadcrumbs a { color: #2563eb; text-decoration: none; }
         .breadcrumbs span { margin: 0 6px; color: #94a3b8; }
-        .card { background: #ffffff; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
-        .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-        .card-header h1 { font-size: 20px; font-weight: 700; color: #0f172a; }
-        input[type="text"] { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; margin: 6px 0 14px 0; outline: none; font-size: 14px; }
-        .btn { background-color: #2563eb; color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 13px; width: 100%; }
+        
+        .card { background: #ffffff; border-radius: 10px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+        .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+        .card-header h1 { font-size: 22px; font-weight: 700; color: #0f172a; }
+
+        .rating-badge { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 16px; padding: 4px 12px; background: #fff; border: 1px solid #e2e8f0; border-radius: 20px; font-size: 13px; font-weight: bold; color: #d97706; }
+        .rating-badge span { color: #64748b; font-weight: normal; font-size: 12px; }
+
+        label { display: block; font-size: 13px; font-weight: 600; color: #475569; margin-bottom: 6px; }
+        input[type="text"] { width: 100%; padding: 11px 14px; border: 1px solid #cbd5e1; border-radius: 6px; margin-bottom: 14px; outline: none; font-size: 14px; transition: border-color 0.2s; }
+        input[type="text"]:focus { border-color: #2563eb; }
+        
+        .btn { background-color: #2563eb; color: white; border: none; padding: 11px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px; width: 100%; transition: background-color 0.15s; }
         .btn:hover { background-color: #1d4ed8; }
-        #thumbPreview { width: 100%; height: auto; margin-top: 15px; border-radius: 6px; display: none; }
+        
+        /* Result & Preview Section */
+        #resultContainer { display: none; margin-top: 20px; text-align: center; }
+        .preview-img { width: 100%; max-width: 100%; height: auto; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
+        .download-options { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+        .dl-btn { background: #f1f5f9; color: #1e293b; border: 1px solid #cbd5e1; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600; transition: all 0.15s; }
+        .dl-btn:hover { background: #2563eb; color: #ffffff; border-color: #2563eb; }
+
+        /* Interactive Rating Box */
+        .interactive-rating { margin-top: 24px; padding-top: 18px; border-top: 1px dashed #e2e8f0; text-align: center; }
+        .interactive-rating p { margin: 0 0 8px; font-size: 13px; font-weight: bold; color: #475569; }
+        .stars { display: flex; justify-content: center; gap: 6px; cursor: pointer; }
+        .star { font-size: 26px; color: #cbd5e1; transition: color 0.15s; user-select: none; }
+        .star.active, .star.hover { color: #f59e0b; }
+        .rating-msg { font-size: 12px; color: #059669; margin-top: 6px; display: none; font-weight: 600; }
+
+        /* On-Page SEO Guide Content */
+        .seo-section { margin-top: 10px; }
+        .seo-card { background: #ffffff; border-radius: 10px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 20px; }
+        .seo-card h2 { font-size: 17px; font-weight: 700; color: #0f172a; margin-bottom: 12px; border-bottom: 2px solid #f1f5f9; padding-bottom: 6px; }
+        .seo-card h3 { font-size: 15px; font-weight: 600; color: #334155; margin: 14px 0 6px 0; }
+        .seo-card p, .seo-card li { font-size: 13.5px; color: #475569; line-height: 1.6; }
+        .seo-card ol, .seo-card ul { padding-left: 20px; margin-bottom: 12px; }
+        .seo-card li { margin-bottom: 6px; }
+        
+        .res-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+        .res-table th, .res-table td { border: 1px solid #e2e8f0; padding: 8px 12px; text-align: left; }
+        .res-table th { background-color: #f8fafc; font-weight: 600; color: #334155; }
+
+        .faq-item { margin-bottom: 12px; }
+        .faq-item p { margin-top: 4px; color: #64748b; }
+
         .site-footer { background-color: #ffffff; border-top: 1px solid #e2e8f0; padding: 20px 16px; margin-top: 40px; font-size: 13px; color: #64748b; }
-        .footer-inner { max-width: 700px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+        .footer-inner { max-width: 750px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
         .footer-links a { color: #475569; text-decoration: none; margin-left: 12px; }
     </style>
 </head>
@@ -59,20 +136,115 @@
     <nav class="breadcrumbs">
         <a href="https://factzone.online/">Home</a><span>/</span><a href="tools.html">Tools</a><span>/</span><strong>YT Thumbnail Downloader</strong>
     </nav>
+
     <main class="card">
         <div class="card-header">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                 <path d="M10 15l5-3-5-3v6z"></path>
             </svg>
             <h1>YouTube Thumbnail Downloader</h1>
         </div>
-        <label style="font-size: 13px; color: #64748b;">YouTube Video Link</label>
-        <input type="text" id="ytUrl" placeholder="https://www.youtube.com/watch?v=...">
+
+        <div class="rating-badge">★ <span id="badgeRating">4.9</span> / 5 <span id="badgeCount">(310 votes)</span></div>
+
+        <label for="ytUrl">Paste YouTube Video or Shorts Link:</label>
+        <input type="text" id="ytUrl" placeholder="e.g. https://www.youtube.com/watch?v=dQw4w9WgXcQ or https://youtu.be/...">
         <button class="btn" onclick="fetchThumbnail()">Get HD Thumbnail</button>
-        <img id="thumbPreview" alt="YouTube Thumbnail Preview">
+
+        <!-- Preview and Download Section -->
+        <div id="resultContainer">
+            <img id="thumbPreview" class="preview-img" alt="YouTube Video Thumbnail Preview">
+            <div class="download-options">
+                <a id="dlMax" class="dl-btn" target="_blank" download>Download Full HD (1080p)</a>
+                <a id="dlHq" class="dl-btn" target="_blank" download>Download High (720p)</a>
+                <a id="dlMq" class="dl-btn" target="_blank" download>Download Medium (480p)</a>
+            </div>
+        </div>
+
+        <!-- Interactive Rating Widget -->
+        <div class="interactive-rating">
+            <p>Rate this tool (1 to 5 Stars):</p>
+            <div class="stars" id="starContainer">
+                <span class="star" data-value="1" title="1 Star">★</span>
+                <span class="star" data-value="2" title="2 Stars">★</span>
+                <span class="star" data-value="3" title="3 Stars">★</span>
+                <span class="star" data-value="4" title="4 Stars">★</span>
+                <span class="star" data-value="5" title="5 Stars">★</span>
+            </div>
+            <div id="ratingMsg" class="rating-msg">Thank you for your rating!</div>
+        </div>
     </main>
+
+    <!-- SEO Content & User Guides Section -->
+    <section class="seo-section">
+        <article class="seo-card">
+            <h2>How to Download YouTube Thumbnails in 4K / Full HD</h2>
+            <p>Extracting high-resolution thumbnails from YouTube videos or YouTube Shorts is quick and effortless using FactZone's online YouTube Thumbnail Downloader. Follow these step-by-step instructions:</p>
+            
+            <ol>
+                <li><strong>Copy the YouTube Link:</strong> Open YouTube on your browser or mobile app and copy the link of any video or YouTube Short.</li>
+                <li><strong>Paste the Link:</strong> Paste the copied URL into the input field above.</li>
+                <li><strong>Click 'Get HD Thumbnail':</strong> Press the button to instantly fetch all available resolution formats.</li>
+                <li><strong>Save/Download Image:</strong> Click your desired resolution button (Full HD 1080p, HD 720p, or Standard) or right-click the image to save it to your device.</li>
+            </ol>
+        </article>
+
+        <article class="seo-card">
+            <h2>Supported YouTube Thumbnail Quality & Resolutions</h2>
+            <p>YouTube generates multiple thumbnail sizes for every uploaded video. Our tool extracts all available resolutions automatically:</p>
+            
+            <table class="res-table">
+                <thead>
+                    <tr>
+                        <th>Quality Name</th>
+                        <th>Dimensions</th>
+                        <th>Best Used For</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Maximum Resolution (MaxRes)</strong></td>
+                        <td>1920 × 1080 px (1080p)</td>
+                        <td>High Quality Displays, Wallpapers, Content Reference</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Standard Definition (SD)</strong></td>
+                        <td>640 × 480 px</td>
+                        <td>Standard Displays, Blogs & Articles</td>
+                    </tr>
+                    <tr>
+                        <td><strong>High Quality (HQ)</strong></td>
+                        <td>480 × 360 px</td>
+                        <td>Website Previews & Social Media Posts</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Medium Quality (MQ)</strong></td>
+                        <td>320 × 180 px</td>
+                        <td>Mobile Previews & Fast Loading Thumbnails</td>
+                    </tr>
+                </tbody>
+            </table>
+        </article>
+
+        <article class="seo-card">
+            <h2>Frequently Asked Questions (FAQs)</h2>
+            <div class="faq-item">
+                <h3>Is it free to download YouTube thumbnails on FactZone?</h3>
+                <p>Yes, FactZone's YouTube Thumbnail Downloader is 100% free with unlimited downloads and no registration required.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Can I download thumbnails from YouTube Shorts?</h3>
+                <p>Yes! Simply copy the URL of any YouTube Short (e.g. <code>youtube.com/shorts/...</code>) and paste it into our tool.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Why is Maximum Resolution (1080p) not showing for some videos?</h3>
+                <p>If the original creator uploaded a low-resolution video or did not supply a high-resolution custom thumbnail, YouTube fallback defaults to HD (720p) or HQ (480p).</p>
+            </div>
+        </article>
+    </section>
 </div>
+
 <footer class="site-footer">
     <div class="footer-inner">
         <div>© 2026 <strong>factzone.online</strong>. All rights reserved.</div>
@@ -82,20 +254,146 @@
         </div>
     </div>
 </footer>
+
 <script>
+    function extractVideoId(url) {
+        if (!url) return null;
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|shorts\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[2].length === 11) ? match[2] : null;
+    }
+
     function fetchThumbnail() {
         const url = document.getElementById('ytUrl').value.trim();
-        let videoId = '';
-        if (url.includes('v=')) {
-            videoId = url.split('v=')[1].split('&')[0];
-        } else if (url.includes('youtu.be/')) {
-            videoId = url.split('youtu.be/')[1].split('?')[0];
+        const videoId = extractVideoId(url);
+
+        if (!videoId) {
+            alert('Please enter a valid YouTube video or Shorts URL.');
+            return;
         }
-        if (!videoId) return alert('Please enter a valid YouTube video URL');
+
+        const maxRes = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+        const hqRes = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+        const mqRes = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+
         const img = document.getElementById('thumbPreview');
-        img.src = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
-        img.style.display = 'block';
+        img.src = maxRes;
+        
+        // Handle fallback if maxresdefault doesn't exist
+        img.onerror = function() {
+            this.src = hqRes;
+        };
+
+        document.getElementById('dlMax').href = maxRes;
+        document.getElementById('dlHq').href = hqRes;
+        document.getElementById('dlMq').href = mqRes;
+
+        document.getElementById('resultContainer').style.display = 'block';
     }
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCUyMZee1e01RqmTmIp_0jLT7guUAc",
+  authDomain: "factzone-a9ace.firebaseapp.com",
+  databaseURL: "https://factzone-a9ace-default-rtdb.firebaseio.com",
+  projectId: "factzone-a9ace",
+  storageBucket: "factzone-a9ace.firebasestorage.app",
+  messagingSenderId: "425838320650",
+  appId: "1:425838320650:web:eb81baddf818cb73d3f3",
+  measurementId: "G-311JQXBXRY"
+};
+
+const db = getFirestore(initializeApp(firebaseConfig));
+const TOOL = "yt-thumbnail";
+const BASE_VOTES = 310;
+const BASE_RATING_SUM = 310 * 4.9;
+
+const $ = id => document.getElementById(id);
+
+async function loadRatingsSummary(){
+  try{
+    const snap = await getDocs(collection(db, "toolRatings"));
+    const toolRatings = snap.docs.map(d => d.data()).filter(x => x.tool === TOOL);
+    
+    let totalVotes = BASE_VOTES + toolRatings.length;
+    let totalSum = BASE_RATING_SUM;
+    toolRatings.forEach(r => totalSum += Number(r.rating || 5));
+    
+    let avgRating = (totalSum / totalVotes).toFixed(1);
+    
+    $("badgeCount").textContent = `(${totalVotes.toLocaleString()} votes)`;
+    $("badgeRating").textContent = avgRating;
+  }catch(e){
+    console.log("Error calculating ratings summary:", e.message);
+  }
+}
+
+const stars = document.querySelectorAll("#starContainer .star");
+const starContainer = $("starContainer");
+const savedRating = localStorage.getItem("userRated_" + TOOL);
+
+function lockRatingUI(ratingValue, messageText) {
+  stars.forEach((s, i) => {
+    if (i < ratingValue) s.classList.add("active");
+    else s.classList.remove("active");
+    s.classList.remove("hover");
+  });
+  starContainer.style.pointerEvents = "none";
+  starContainer.style.cursor = "default";
+  const msg = $("ratingMsg");
+  msg.style.display = "block";
+  msg.textContent = messageText;
+}
+
+if (savedRating) {
+  lockRatingUI(parseInt(savedRating, 10), `You have already rated this tool ${savedRating} / 5 stars!`);
+} else {
+  stars.forEach((star, idx) => {
+    star.addEventListener("mouseenter", () => {
+      if (localStorage.getItem("userRated_" + TOOL)) return;
+      stars.forEach((s, i) => {
+        if (i <= idx) s.classList.add("hover");
+        else s.classList.remove("hover");
+      });
+    });
+
+    star.addEventListener("mouseleave", () => {
+      if (localStorage.getItem("userRated_" + TOOL)) return;
+      stars.forEach(s => s.classList.remove("hover"));
+    });
+
+    star.addEventListener("click", async () => {
+      if (localStorage.getItem("userRated_" + TOOL)) return;
+
+      const selectedRating = idx + 1;
+      localStorage.setItem("userRated_" + TOOL, selectedRating);
+      lockRatingUI(selectedRating, `Thank you! You rated this tool ${selectedRating} / 5 stars.`);
+
+      let currentMatch = $("badgeCount").textContent.match(/[\d,]+/);
+      if(currentMatch){
+        let newCount = parseInt(currentMatch[0].replace(/,/g, ''), 10) + 1;
+        $("badgeCount").textContent = `(${newCount.toLocaleString()} votes)`;
+      }
+
+      try {
+        await addDoc(collection(db, "toolRatings"), {
+          tool: TOOL,
+          rating: selectedRating,
+          createdAt: serverTimestamp()
+        });
+        loadRatingsSummary();
+      } catch (e) {
+        console.error("Error saving rating to Firebase:", e.message);
+      }
+    });
+  });
+}
+
+loadRatingsSummary();
 </script>
 </body>
 </html>
