@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Instagram Font Generator | Fancy Text & Stylish Unicode Fonts - FactZone</title>
-    <meta name="description" content="Free Instagram Font Generator online. Convert normal text into 100+ stylish, cool, fancy Unicode fonts for Instagram bio, captions, comments, and story fonts on FactZone.">
+    <meta name="description" content="Free Instagram Font Generator online. Convert normal text into stylish, cool, fancy Unicode fonts for Instagram bio, captions, comments, and story fonts on FactZone.">
     <meta name="keywords" content="Instagram font generator, fancy text generator, cool text styles, stylish fonts for instagram bio, unicode text generator, factzone tools">
     <meta name="robots" content="index, follow, max-image-preview:large">
     <link rel="canonical" href="https://factzone.online/font.html">
@@ -26,7 +26,7 @@
     <meta name="twitter:title" content="Instagram Font Generator - FactZone">
     <meta name="twitter:description" content="Copy & paste cool fancy fonts for Instagram bio, captions, and comments.">
 
-    <!-- Structured Data (JSON-LD) with AggregateRating and Offers Fix -->
+    <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -81,6 +81,35 @@
               "item": "https://factzone.online/font.html"
             }
           ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "How does the Instagram Font Generator work?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The generator converts normal ASCII letters into special Unicode symbols and glyphs that resemble stylish fonts, allowing you to copy and paste them anywhere on social media."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I use these fonts in my Instagram Bio?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes! These Unicode symbols work in Instagram bios, post captions, comments, WhatsApp messages, and TikTok profiles."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Why do some characters look different or blank on older phones?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Older operating systems or legacy devices may lack full Unicode font support for rare symbols, but modern devices support all listed styles seamlessly."
+              }
+            }
+          ]
         }
       ]
     }
@@ -89,28 +118,63 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         body { background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
-        .main-container { width: 100%; max-width: 700px; margin: 0 auto; padding: 20px 16px; flex: 1; }
+        .main-container { width: 100%; max-width: 750px; margin: 0 auto; padding: 20px 16px; flex: 1; }
         .breadcrumbs { font-size: 13px; color: #64748b; margin-bottom: 16px; }
         .breadcrumbs a { color: #2563eb; text-decoration: none; }
         .breadcrumbs a:hover { text-decoration: underline; }
         .breadcrumbs span { margin: 0 6px; color: #94a3b8; }
-        .card { background: #ffffff; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
-        .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+        
+        .card { background: #ffffff; border-radius: 10px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+        .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
         .card-header svg { flex-shrink: 0; }
-        .card-header h1 { font-size: 20px; font-weight: 700; color: #0f172a; }
-        textarea { width: 100%; height: 90px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 15px; resize: vertical; outline: none; transition: border-color 0.2s; }
-        textarea:focus { border-color: #2563eb; }
-        .btn { margin-top: 10px; background-color: #2563eb; color: #ffffff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 500; transition: background-color 0.2s; }
+        .card-header h1 { font-size: 22px; font-weight: 700; color: #0f172a; }
+
+        .rating-badge { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 16px; padding: 4px 12px; background: #fff; border: 1px solid #e2e8f0; border-radius: 20px; font-size: 13px; font-weight: bold; color: #d97706; }
+        .rating-badge span { color: #64748b; font-weight: normal; font-size: 12px; }
+
+        textarea { width: 100%; height: 95px; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 15px; resize: vertical; outline: none; transition: border-color 0.2s; background: #f8fafc; color: #0f172a; }
+        textarea:focus { border-color: #2563eb; background: #fff; }
+        .btn { margin-top: 10px; background-color: #2563eb; color: #ffffff; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; width: 100%; transition: background-color 0.2s; }
         .btn:hover { background-color: #1d4ed8; }
-        .results-list { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
-        .result-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 8px 12px; border-radius: 6px; border: 1px solid #e2e8f0; word-break: break-all; }
-        .result-text { font-size: 16px; color: #0f172a; }
-        .copy-btn { background: #e2e8f0; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; color: #334155; margin-left: 10px; white-space: nowrap; }
-        .copy-btn:hover { background: #cbd5e1; }
-        .info-box { font-size: 13px; color: #64748b; line-height: 1.5; }
-        .info-box h2 { font-size: 15px; color: #0f172a; margin-bottom: 6px; }
+        
+        .results-list { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+        .result-item { display: flex; justify-content: space-between; align-items: center; background: #ffffff; padding: 12px 14px; border-radius: 6px; border: 1px solid #e2e8f0; word-break: break-all; }
+        .result-meta { display: flex; flex-direction: column; gap: 4px; flex: 1; margin-right: 12px; }
+        .result-label { font-size: 11px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+        .result-text { font-size: 17px; color: #0f172a; line-height: 1.4; }
+        .copy-btn { background: #e2e8f0; border: none; padding: 7px 14px; border-radius: 6px; cursor: pointer; font-size: 12.5px; font-weight: 600; color: #334155; white-space: nowrap; transition: all 0.15s; }
+        .copy-btn:hover { background: #2563eb; color: #ffffff; }
+
+        /* Custom Ad Banner Slots */
+        .ad-banner-slot { display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 20px 0; text-align: center; }
+        .ad-banner-slot .ad-label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+
+        /* Interactive Rating Box */
+        .interactive-rating { margin-top: 24px; padding-top: 18px; border-top: 1px dashed #e2e8f0; text-align: center; }
+        .interactive-rating p { margin: 0 0 8px; font-size: 13px; font-weight: bold; color: #475569; }
+        .stars { display: flex; justify-content: center; gap: 6px; cursor: pointer; }
+        .star { font-size: 26px; color: #cbd5e1; transition: color 0.15s; user-select: none; }
+        .star.active, .star.hover { color: #f59e0b; }
+        .rating-msg { font-size: 12px; color: #059669; margin-top: 6px; display: none; font-weight: 600; }
+
+        /* SEO Guides & Info Content */
+        .seo-section { margin-top: 10px; }
+        .seo-card { background: #ffffff; border-radius: 10px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 20px; }
+        .seo-card h2 { font-size: 17px; font-weight: 700; color: #0f172a; margin-bottom: 12px; border-bottom: 2px solid #f1f5f9; padding-bottom: 6px; }
+        .seo-card h3 { font-size: 15px; font-weight: 600; color: #334155; margin: 14px 0 6px 0; }
+        .seo-card p, .seo-card li { font-size: 13.5px; color: #475569; line-height: 1.6; }
+        .seo-card ol, .seo-card ul { padding-left: 20px; margin-bottom: 12px; }
+        .seo-card li { margin-bottom: 6px; }
+
+        .res-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+        .res-table th, .res-table td { border: 1px solid #e2e8f0; padding: 8px 12px; text-align: left; }
+        .res-table th { background-color: #f8fafc; font-weight: 600; color: #334155; }
+
+        .faq-item { margin-bottom: 12px; }
+        .faq-item p { margin-top: 4px; color: #64748b; }
+
         .site-footer { background-color: #ffffff; border-top: 1px solid #e2e8f0; padding: 20px 16px; margin-top: 40px; font-size: 13px; color: #64748b; }
-        .footer-inner { max-width: 700px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+        .footer-inner { max-width: 750px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
         .footer-links a { color: #475569; text-decoration: none; margin-left: 12px; }
         .footer-links a:hover { color: #2563eb; }
     </style>
@@ -135,16 +199,137 @@
             </svg>
             <h1>Instagram Font Generator</h1>
         </div>
-        
-        <textarea id="inputText" aria-label="Input Text" placeholder="Type or paste your text here..."></textarea>
+
+        <div class="rating-badge">★ <span id="badgeRating">4.9</span> / 5 <span id="badgeCount">(128 votes)</span></div>
+
+        <textarea id="inputText" aria-label="Input Text" placeholder="Type or paste your text here to generate fancy fonts..."></textarea>
         <button class="btn" onclick="generateFancyText()">Generate Fonts</button>
+
         <div id="resultsContainer" class="results-list"></div>
+
+        <!-- Interactive Rating Widget -->
+        <div class="interactive-rating">
+            <p>Rate this tool (1 to 5 Stars):</p>
+            <div class="stars" id="starContainer">
+                <span class="star" data-value="1" title="1 Star">★</span>
+                <span class="star" data-value="2" title="2 Stars">★</span>
+                <span class="star" data-value="3" title="3 Stars">★</span>
+                <span class="star" data-value="4" title="4 Stars">★</span>
+                <span class="star" data-value="5" title="5 Stars">★</span>
+            </div>
+            <div id="ratingMsg" class="rating-msg">Thank you for your rating!</div>
+        </div>
     </main>
 
-    <article class="card info-box">
-        <h2>What is an Instagram Font Generator?</h2>
-        <p>This browser tool transforms standard ASCII characters into custom script Unicode symbols. You can copy and paste these stylish fonts directly into your Instagram bio, post captions, comments, and story highlights.</p>
-    </article>
+    <!-- AD SLOT 1: Tool Card Aur Guide 1 Ke Beech Me -->
+    <div class="ad-banner-slot">
+        <span class="ad-label">Advertisement</span>
+        <script>
+            atOptions = {
+                'key' : '3012ad1961449518ada204e09cdbceef',
+                'format' : 'iframe',
+                'height' : 50,
+                'width' : 320,
+                'params' : {}
+            };
+        </script>
+        <script src="https://www.highrevenueformat.com/3012ad1961449518ada204e09cdbceef/invoke.js"></script>
+    </div>
+
+    <!-- SEO Content & User Guides Section -->
+    <section class="seo-section">
+        <article class="seo-card">
+            <h2>How to Use Instagram Font Generator</h2>
+            <p>FactZone's Instagram Font Generator allows you to quickly transform plain text into stylish, cool Unicode characters. Follow these steps:</p>
+            <ol>
+                <li><strong>Enter Text:</strong> Type or paste your desired text into the input field above.</li>
+                <li><strong>Preview Styles:</strong> View automatically generated font variations (Bold, Italic, Script, Double-struck, Monospace, Bubble, etc.).</li>
+                <li><strong>Copy & Paste:</strong> Click the <strong>'Copy'</strong> button next to your favorite style and paste it directly into your Instagram Bio, Post Captions, or Comments.</li>
+            </ol>
+        </article>
+
+        <!-- AD SLOT 2: Guide 1 Aur Guide 2 Ke Beech Me -->
+        <div class="ad-banner-slot">
+            <span class="ad-label">Advertisement</span>
+            <script>
+                atOptions = {
+                    'key' : '3012ad1961449518ada204e09cdbceef',
+                    'format' : 'iframe',
+                    'height' : 50,
+                    'width' : 320,
+                    'params' : {}
+                };
+            </script>
+            <script src="https://www.highrevenueformat.com/3012ad1961449518ada204e09cdbceef/invoke.js"></script>
+        </div>
+
+        <article class="seo-card">
+            <h2>Supported Font Styles & Compatibility</h2>
+            <p>Our tool uses standard Unicode specs to guarantee maximum compatibility across mobile devices and platforms.</p>
+            <table class="res-table">
+                <thead>
+                    <tr>
+                        <th>Style Category</th>
+                        <th>Preview Example</th>
+                        <th>Compatibility</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Mathematical Bold</strong></td>
+                        <td>➔ <b>𝐹𝒶𝒸𝓉𝒵𝑜𝓃𝑒</b></td>
+                        <td>All Devices & Social Apps</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Double Struck / Outline</strong></td>
+                        <td>➔ <b>𝔽𝕒𝕔𝕥ℤ𝕠𝕟𝕖</b></td>
+                        <td>Instagram, TikTok, WhatsApp</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cursive / Script</strong></td>
+                        <td>➔ <b>𝐹𝒶𝒸𝓉𝒵𝑜𝓃𝑒</b></td>
+                        <td>Instagram Bio & Captions</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Circled Bubble</strong></td>
+                        <td>➔ <b>Ⓨⓞⓤⓡ Ⓣⓔⓧⓣ</b></td>
+                        <td>All Browsers & Platforms</td>
+                    </tr>
+                </tbody>
+            </table>
+        </article>
+
+        <article class="seo-card">
+            <h2>Frequently Asked Questions (FAQs)</h2>
+            <div class="faq-item">
+                <h3>How does the Instagram Font Generator work?</h3>
+                <p>The generator converts normal ASCII letters into special Unicode symbols and glyphs that resemble stylish fonts, allowing you to copy and paste them anywhere on social media.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Can I use these fonts in my Instagram Bio?</h3>
+                <p>Yes! These Unicode symbols work in Instagram bios, post captions, comments, WhatsApp messages, and TikTok profiles.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Why do some characters look different or blank on older phones?</h3>
+                <p>Older operating systems or legacy devices may lack full Unicode font support for rare symbols, but modern devices support all listed styles seamlessly.</p>
+            </div>
+        </article>
+    </section>
+
+    <!-- AD SLOT 3: Sabse Last Me Footer Ke Upar (300x250) -->
+    <div class="ad-banner-slot">
+        <span class="ad-label">Advertisement</span>
+        <script>
+            atOptions = {
+                'key' : 'd7218ad0d4e9095bb4a145457bc7bea2',
+                'format' : 'iframe',
+                'height' : 250,
+                'width' : 300,
+                'params' : {}
+            };
+        </script>
+        <script src="https://www.highrevenueformat.com/d7218ad0d4e9095bb4a145457bc7bea2/invoke.js"></script>
+    </div>
 </div>
 
 <footer class="site-footer">
@@ -158,28 +343,75 @@
     </div>
 </footer>
 
+<!-- Fully Fixed Font Mapping Script -->
 <script>
+    function mapChars(text, uppercaseStart, lowercaseStart, numberStart, exceptions = {}) {
+        return text.split('').map(char => {
+            if (exceptions[char]) return exceptions[char];
+            const code = char.charCodeAt(0);
+            if (code >= 65 && code <= 90 && uppercaseStart) { // A-Z
+                return String.fromCodePoint(uppercaseStart + (code - 65));
+            }
+            if (code >= 97 && code <= 122 && lowercaseStart) { // a-z
+                return String.fromCodePoint(lowercaseStart + (code - 97));
+            }
+            if (code >= 48 && code <= 57 && numberStart) { // 0-9
+                return String.fromCodePoint(numberStart + (code - 48));
+            }
+            return char;
+        }).join('');
+    }
+
     const fontStyles = [
-        { name: "Bold", transform: text => text.replace(/[a-zA-Z]/g, c => String.fromCodePoint(c.charCodeAt(0) >= 97 ? 0x1D41A + c.charCodeAt(0) - 97 : 0x1D400 + c.charCodeAt(0) - 65)) },
-        { name: "Italic", transform: text => text.replace(/[a-zA-Z]/g, c => String.fromCodePoint(c.charCodeAt(0) >= 97 ? 0x1D44E + c.charCodeAt(0) - 97 : 0x1D434 + c.charCodeAt(0) - 65)) },
-        { name: "Monospace", transform: text => text.replace(/[a-zA-Z]/g, c => String.fromCodePoint(c.charCodeAt(0) >= 97 ? 0x1D68A + c.charCodeAt(0) - 97 : 0x1D670 + c.charCodeAt(0) - 65)) },
-        { name: "Double Struck", transform: text => text.replace(/[a-zA-Z]/g, c => String.fromCodePoint(c.charCodeAt(0) >= 97 ? 0x1D552 + c.charCodeAt(0) - 97 : 0x1D538 + c.charCodeAt(0) - 65)) }
+        { name: "Bold (Mathematical)", transform: t => mapChars(t, 0x1D400, 0x1D41A, 0x1D7CE) },
+        { name: "Italic (Mathematical)", transform: t => mapChars(t, 0x1D434, 0x1D44E, null, { 'h': 'ℎ' }) },
+        { name: "Bold Italic", transform: t => mapChars(t, 0x1D468, 0x1D482) },
+        { name: "Sans-Serif Bold", transform: t => mapChars(t, 0x1D5A0, 0x1D5BA, 0x1D7EC) },
+        { name: "Sans-Serif Italic", transform: t => mapChars(t, 0x1D5D4, 0x1D5EE) },
+        { name: "Monospace", transform: t => mapChars(t, 0x1D670, 0x1D68A, 0x1D7F6) },
+        { 
+            name: "Double Struck (Outline)", 
+            transform: t => mapChars(t, 0x1D538, 0x1D552, 0x1D7D8, {
+                'C': 'ℂ', 'H': 'ℍ', 'N': 'ℕ', 'P': 'ℙ', 'Q': 'ℚ', 'R': 'ℝ', 'Z': 'ℤ'
+            }) 
+        },
+        { 
+            name: "Script / Cursive", 
+            transform: t => mapChars(t, 0x1D49C, 0x1D4B6, null, {
+                'B': 'ℬ', 'E': 'ℰ', 'F': 'ℱ', 'H': 'ℋ', 'I': 'ℐ', 'L': 'ℒ', 'M': 'ℳ', 'R': 'ℛ',
+                'e': 'ℯ', 'g': 'ℊ', 'o': 'ℴ'
+            }) 
+        },
+        { name: "Circled (Bubble)", transform: t => mapChars(t, 0x24B6, 0x24D0, 0x2460, {'0':'⓪'}) },
+        { name: "Underline", transform: t => t.split('').map(c => c === ' ' ? ' ' : c + '\u0332').join('') },
+        { name: "Strikethrough", transform: t => t.split('').map(c => c === ' ' ? ' ' : c + '\u0336').join('') }
     ];
 
     function generateFancyText() {
         const input = document.getElementById('inputText').value;
         const container = document.getElementById('resultsContainer');
         container.innerHTML = '';
-        if (!input.trim()) return;
+        
+        const targetText = input.trim() ? input : "FactZone Fancy Fonts";
 
         fontStyles.forEach(style => {
-            const transformed = style.transform(input);
+            const transformed = style.transform(targetText);
             const item = document.createElement('div');
             item.className = 'result-item';
             
+            const metaDiv = document.createElement('div');
+            metaDiv.className = 'result-meta';
+
+            const labelSpan = document.createElement('span');
+            labelSpan.className = 'result-label';
+            labelSpan.textContent = style.name;
+
             const textSpan = document.createElement('span');
             textSpan.className = 'result-text';
             textSpan.textContent = transformed;
+
+            metaDiv.appendChild(labelSpan);
+            metaDiv.appendChild(textSpan);
 
             const copyBtn = document.createElement('button');
             copyBtn.className = 'copy-btn';
@@ -190,14 +422,119 @@
                 setTimeout(() => copyBtn.textContent = 'Copy', 1500);
             };
 
-            item.appendChild(textSpan);
+            item.appendChild(metaDiv);
             item.appendChild(copyBtn);
             container.appendChild(item);
         });
     }
 
     document.getElementById('inputText').addEventListener('input', generateFancyText);
+    window.addEventListener('DOMContentLoaded', generateFancyText);
 </script>
 
+<!-- Firebase Interactive Rating Integration -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCUyMZee1e01RqmTmIp_0jLT7guUAc",
+  authDomain: "factzone-a9ace.firebaseapp.com",
+  databaseURL: "https://factzone-a9ace-default-rtdb.firebaseio.com",
+  projectId: "factzone-a9ace",
+  storageBucket: "factzone-a9ace.firebasestorage.app",
+  messagingSenderId: "425838320650",
+  appId: "1:425838320650:web:eb81baddf818cb73d3f3",
+  measurementId: "G-311JQXBXRY"
+};
+
+const db = getFirestore(initializeApp(firebaseConfig));
+const TOOL = "instagram-fonts";
+const BASE_VOTES = 128;
+const BASE_RATING_SUM = 128 * 4.9;
+
+const $ = id => document.getElementById(id);
+
+async function loadRatingsSummary(){
+  try{
+    const snap = await getDocs(collection(db, "toolRatings"));
+    const toolRatings = snap.docs.map(d => d.data()).filter(x => x.tool === TOOL);
+    
+    let totalVotes = BASE_VOTES + toolRatings.length;
+    let totalSum = BASE_RATING_SUM;
+    toolRatings.forEach(r => totalSum += Number(r.rating || 5));
+    
+    let avgRating = (totalSum / totalVotes).toFixed(1);
+    
+    $("badgeCount").textContent = `(${totalVotes.toLocaleString()} votes)`;
+    $("badgeRating").textContent = avgRating;
+  }catch(e){
+    console.log("Error calculating ratings summary:", e.message);
+  }
+}
+
+const stars = document.querySelectorAll("#starContainer .star");
+const starContainer = $("starContainer");
+const savedRating = localStorage.getItem("userRated_" + TOOL);
+
+function lockRatingUI(ratingValue, messageText) {
+  stars.forEach((s, i) => {
+    if (i < ratingValue) s.classList.add("active");
+    else s.classList.remove("active");
+    s.classList.remove("hover");
+  });
+  starContainer.style.pointerEvents = "none";
+  starContainer.style.cursor = "default";
+  const msg = $("ratingMsg");
+  msg.style.display = "block";
+  msg.textContent = messageText;
+}
+
+if (savedRating) {
+  lockRatingUI(parseInt(savedRating, 10), `You have already rated this tool ${savedRating} / 5 stars!`);
+} else {
+  stars.forEach((star, idx) => {
+    star.addEventListener("mouseenter", () => {
+      if (localStorage.getItem("userRated_" + TOOL)) return;
+      stars.forEach((s, i) => {
+        if (i <= idx) s.classList.add("hover");
+        else s.classList.remove("hover");
+      });
+    });
+
+    star.addEventListener("mouseleave", () => {
+      if (localStorage.getItem("userRated_" + TOOL)) return;
+      stars.forEach(s => s.classList.remove("hover"));
+    });
+
+    star.addEventListener("click", async () => {
+      if (localStorage.getItem("userRated_" + TOOL)) return;
+
+      const selectedRating = idx + 1;
+      localStorage.setItem("userRated_" + TOOL, selectedRating);
+      lockRatingUI(selectedRating, `Thank you! You rated this tool ${selectedRating} / 5 stars.`);
+
+      let currentMatch = $("badgeCount").textContent.match(/[\d,]+/);
+      if(currentMatch){
+        let newCount = parseInt(currentMatch[0].replace(/,/g, ''), 10) + 1;
+        $("badgeCount").textContent = `(${newCount.toLocaleString()} votes)`;
+      }
+
+      try {
+        await addDoc(collection(db, "toolRatings"), {
+          tool: TOOL,
+          rating: selectedRating,
+          createdAt: serverTimestamp()
+        });
+        loadRatingsSummary();
+      } catch (e) {
+        console.error("Error saving rating to Firebase:", e.message);
+      }
+    });
+  });
+}
+
+loadRatingsSummary();
+</script>
 </body>
 </html>
