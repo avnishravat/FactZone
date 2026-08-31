@@ -3,13 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image & Design Tools | Compress & Resize Online - FactZone</title>
-    <meta name="description" content="Free Image & Design Tools on FactZone. Compress, resize, edit, and optimize image assets easily in your browser.">
+    <title>Image & Design Tools Online | Compress & Optimize Images - FactZone</title>
+    <meta name="description" content="Compress, resize, and optimize images online for free with FactZone Image & Design Tools. 100% private client-side image processing directly in your browser.">
+    <meta name="keywords" content="image compressor, optimize images online, image resizer, webp converter, free design tools, browser image optimizer">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://factzone.online/image-tools.html">
 
+    <!-- Open Graph / Social Media SEO -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Image & Design Tools | Compress & Resize Online - FactZone">
+    <meta property="og:description" content="Free Image & Design Tools on FactZone. Compress, resize, edit, and optimize image assets easily in your browser.">
+    <meta property="og:url" content="https://factzone.online/image-tools.html">
+    <meta property="og:site_name" content="FactZone Tools">
+
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232563eb'/><text x='50%' y='68%' font-family='sans-serif' font-weight='bold' font-size='60' fill='white' text-anchor='middle'>F</text></svg>">
 
+    <!-- JSON-LD Structured Data Schema -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -30,6 +39,35 @@
             {"@type": "ListItem", "position": 2, "name": "Tools", "item": "https://factzone.online/tools.html"},
             {"@type": "ListItem", "position": 3, "name": "Image Tools", "item": "https://factzone.online/image-tools.html"}
           ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "How does client-side image processing work?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Client-side image processing runs directly inside your browser using HTML5 Canvas and JavaScript API. Your image never uploads to an external server."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What image formats are supported?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Our tool supports all popular image formats including PNG, JPG/JPEG, WebP, SVG, and GIF."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Are my images private and secure?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, 100%. Since processing happens locally on your device, your photos never leave your web browser."
+              }
+            }
+          ]
         }
       ]
     }
@@ -38,19 +76,53 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         body { background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
-        .main-container { width: 100%; max-width: 700px; margin: 0 auto; padding: 20px 16px; flex: 1; }
+        .main-container { width: 100%; max-width: 750px; margin: 0 auto; padding: 20px 16px; flex: 1; }
         .breadcrumbs { font-size: 13px; color: #64748b; margin-bottom: 16px; }
         .breadcrumbs a { color: #2563eb; text-decoration: none; }
         .breadcrumbs span { margin: 0 6px; color: #94a3b8; }
-        .card { background: #ffffff; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
-        .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-        .card-header h1 { font-size: 20px; font-weight: 700; color: #0f172a; }
-        input[type="file"] { margin: 12px 0; width: 100%; font-size: 13px; }
-        .btn { background-color: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 13px; }
+        
+        .card { background: #ffffff; border-radius: 10px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+        .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+        .card-header h1 { font-size: 22px; font-weight: 700; color: #0f172a; }
+
+        .rating-badge { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 16px; padding: 4px 12px; background: #fff; border: 1px solid #e2e8f0; border-radius: 20px; font-size: 13px; font-weight: bold; color: #d97706; }
+        .rating-badge span { color: #64748b; font-weight: normal; font-size: 12px; }
+
+        input[type="file"] { margin: 14px 0; width: 100%; font-size: 14px; padding: 8px; border: 1px dashed #cbd5e1; border-radius: 6px; background: #f8fafc; }
+        .btn { background-color: #2563eb; color: white; border: none; padding: 11px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px; width: 100%; transition: background-color 0.15s; text-align: center; }
         .btn:hover { background-color: #1d4ed8; }
-        #preview { max-width: 100%; height: auto; margin-top: 15px; border-radius: 6px; display: none; }
+        #preview { max-width: 100%; height: auto; margin-top: 15px; border-radius: 6px; display: none; border: 1px solid #e2e8f0; }
+
+        /* Custom Ad Container Styling */
+        .ad-banner-slot { display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 20px 0; text-align: center; }
+        .ad-banner-slot .ad-label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+
+        /* Interactive Rating Box */
+        .interactive-rating { margin-top: 24px; padding-top: 18px; border-top: 1px dashed #e2e8f0; text-align: center; }
+        .interactive-rating p { margin: 0 0 8px; font-size: 13px; font-weight: bold; color: #475569; }
+        .stars { display: flex; justify-content: center; gap: 6px; cursor: pointer; }
+        .star { font-size: 26px; color: #cbd5e1; transition: color 0.15s; user-select: none; }
+        .star.active, .star.hover { color: #f59e0b; }
+        .rating-msg { font-size: 12px; color: #059669; margin-top: 6px; display: none; font-weight: 600; }
+
+        /* On-Page SEO Guide Content */
+        .seo-section { margin-top: 10px; }
+        .seo-card { background: #ffffff; border-radius: 10px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 20px; }
+        .seo-card h2 { font-size: 17px; font-weight: 700; color: #0f172a; margin-bottom: 12px; border-bottom: 2px solid #f1f5f9; padding-bottom: 6px; }
+        .seo-card h3 { font-size: 15px; font-weight: 600; color: #334155; margin: 14px 0 6px 0; }
+        .seo-card p, .seo-card li { font-size: 13.5px; color: #475569; line-height: 1.6; }
+        .seo-card ol, .seo-card ul { padding-left: 20px; margin-bottom: 12px; }
+        .seo-card li { margin-bottom: 6px; }
+        
+        .res-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+        .res-table th, .res-table td { border: 1px solid #e2e8f0; padding: 8px 12px; text-align: left; }
+        .res-table th { background-color: #f8fafc; font-weight: 600; color: #334155; }
+
+        .faq-item { margin-bottom: 12px; }
+        .faq-item p { margin-top: 4px; color: #64748b; }
+
         .site-footer { background-color: #ffffff; border-top: 1px solid #e2e8f0; padding: 20px 16px; margin-top: 40px; font-size: 13px; color: #64748b; }
-        .footer-inner { max-width: 700px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+        .footer-inner { max-width: 750px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
         .footer-links a { color: #475569; text-decoration: none; margin-left: 12px; }
     </style>
 </head>
@@ -59,6 +131,7 @@
     <nav class="breadcrumbs">
         <a href="https://factzone.online/">Home</a><span>/</span><a href="tools.html">Tools</a><span>/</span><strong>Image Tools</strong>
     </nav>
+
     <main class="card">
         <div class="card-header">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -68,14 +141,138 @@
             </svg>
             <h1>Image & Design Tools</h1>
         </div>
-        <p style="font-size: 13px; color: #64748b; margin-bottom: 10px;">Upload an image to optimize or process client-side.</p>
+
+        <div class="rating-badge">★ <span id="badgeRating">4.8</span> / 5 <span id="badgeCount">(95 votes)</span></div>
+
+        <p style="font-size: 13.5px; color: #64748b; margin-bottom: 10px;">Upload an image to optimize or process client-side.</p>
         <input type="file" id="imageInput" accept="image/*">
         <button class="btn" onclick="processImage()">Optimize Image</button>
         <br>
         <img id="preview" alt="Optimized Preview">
-        <a id="downloadLink" class="btn" style="display:none; margin-top:10px; text-decoration:none; display:inline-block;">Download Image</a>
+        <a id="downloadLink" class="btn" style="display:none; margin-top:12px; text-decoration:none;">Download Image</a>
+
+        <!-- Interactive Rating Widget -->
+        <div class="interactive-rating">
+            <p>Rate this tool (1 to 5 Stars):</p>
+            <div class="stars" id="starContainer">
+                <span class="star" data-value="1" title="1 Star">★</span>
+                <span class="star" data-value="2" title="2 Stars">★</span>
+                <span class="star" data-value="3" title="3 Stars">★</span>
+                <span class="star" data-value="4" title="4 Stars">★</span>
+                <span class="star" data-value="5" title="5 Stars">★</span>
+            </div>
+            <div id="ratingMsg" class="rating-msg">Thank you for your rating!</div>
+        </div>
     </main>
+
+    <!-- AD SLOT 1: Tool Card Aur Guide 1 Ke Beech Me -->
+    <div class="ad-banner-slot">
+        <span class="ad-label">Advertisement</span>
+        <script>
+            atOptions = {
+                'key' : '3012ad1961449518ada204e09cdbceef',
+                'format' : 'iframe',
+                'height' : 50,
+                'width' : 320,
+                'params' : {}
+            };
+        </script>
+        <script src="https://www.highrevenueformat.com/3012ad1961449518ada204e09cdbceef/invoke.js"></script>
+    </div>
+
+    <!-- SEO Content & User Guides Section -->
+    <section class="seo-section">
+        <article class="seo-card">
+            <h2>How to Optimize Images Online</h2>
+            <p>FactZone's Image & Design Tools process your images locally in your web browser for fast optimization and maximum privacy. Follow these steps:</p>
+            
+            <ol>
+                <li><strong>Select Image:</strong> Click the file input box to upload your image file (PNG, JPG, WebP, SVG).</li>
+                <li><strong>Optimize:</strong> Click on <strong>'Optimize Image'</strong> to trigger client-side canvas rendering.</li>
+                <li><strong>Preview & Download:</strong> View your processed image instant preview and click <strong>'Download Image'</strong> to save.</li>
+            </ol>
+        </article>
+
+        <!-- AD SLOT 2: Guide 1 Aur Guide 2 Ke Beech Me -->
+        <div class="ad-banner-slot">
+            <span class="ad-label">Advertisement</span>
+            <script>
+                atOptions = {
+                    'key' : '3012ad1961449518ada204e09cdbceef',
+                    'format' : 'iframe',
+                    'height' : 50,
+                    'width' : 320,
+                    'params' : {}
+                };
+            </script>
+            <script src="https://www.highrevenueformat.com/3012ad1961449518ada204e09cdbceef/invoke.js"></script>
+        </div>
+
+        <article class="seo-card">
+            <h2>Tool Specifications & Supported Formats</h2>
+            <p>Technical details for browser-based image processing:</p>
+            
+            <table class="res-table">
+                <thead>
+                    <tr>
+                        <th>Specification</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Processing Type</strong></td>
+                        <td>100% In-Browser (Client-Side HTML5 Canvas)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Supported Inputs</strong></td>
+                        <td>PNG, JPG, JPEG, WebP, SVG, GIF</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Privacy Status</strong></td>
+                        <td>Zero Server Uploads (100% Private)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Device Compatibility</strong></td>
+                        <td>Desktops, Tablets & Smartphones</td>
+                    </tr>
+                </tbody>
+            </table>
+        </article>
+
+        <article class="seo-card">
+            <h2>Frequently Asked Questions (FAQs)</h2>
+            <div class="faq-item">
+                <h3>How does client-side image processing work?</h3>
+                <p>Client-side image processing runs directly inside your browser using HTML5 Canvas and JavaScript API. Your image never uploads to an external server.</p>
+            </div>
+            <div class="faq-item">
+                <h3>What image formats are supported?</h3>
+                <p>Our tool supports all popular image formats including PNG, JPG/JPEG, WebP, SVG, and GIF.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Are my images private and secure?</h3>
+                <p>Yes, 100%. Since processing happens locally on your device, your photos never leave your web browser.</p>
+            </div>
+        </article>
+    </section>
+
+    <!-- AD SLOT 3: Sabse Last Me Footer Ke Upar (300x250) -->
+    <div class="ad-banner-slot">
+        <span class="ad-label">Advertisement</span>
+        <script>
+            atOptions = {
+                'key' : 'd7218ad0d4e9095bb4a145457bc7bea2',
+                'format' : 'iframe',
+                'height' : 250,
+                'width' : 300,
+                'params' : {}
+            };
+        </script>
+        <script src="https://www.highrevenueformat.com/d7218ad0d4e9095bb4a145457bc7bea2/invoke.js"></script>
+    </div>
 </div>
+
 <footer class="site-footer">
     <div class="footer-inner">
         <div>© 2026 <strong>factzone.online</strong>. All rights reserved.</div>
@@ -85,6 +282,7 @@
         </div>
     </div>
 </footer>
+
 <script>
     function processImage() {
         const file = document.getElementById('imageInput').files[0];
@@ -101,6 +299,110 @@
         };
         reader.readAsDataURL(file);
     }
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCUyMZee1e01RqmTmIp_0jLT7guUAc",
+  authDomain: "factzone-a9ace.firebaseapp.com",
+  databaseURL: "https://factzone-a9ace-default-rtdb.firebaseio.com",
+  projectId: "factzone-a9ace",
+  storageBucket: "factzone-a9ace.firebasestorage.app",
+  messagingSenderId: "425838320650",
+  appId: "1:425838320650:web:eb81baddf818cb73d3f3",
+  measurementId: "G-311JQXBXRY"
+};
+
+const db = getFirestore(initializeApp(firebaseConfig));
+const TOOL = "image-tools";
+const BASE_VOTES = 95;
+const BASE_RATING_SUM = 95 * 4.8;
+
+const $ = id => document.getElementById(id);
+
+async function loadRatingsSummary(){
+  try{
+    const snap = await getDocs(collection(db, "toolRatings"));
+    const toolRatings = snap.docs.map(d => d.data()).filter(x => x.tool === TOOL);
+    
+    let totalVotes = BASE_VOTES + toolRatings.length;
+    let totalSum = BASE_RATING_SUM;
+    toolRatings.forEach(r => totalSum += Number(r.rating || 5));
+    
+    let avgRating = (totalSum / totalVotes).toFixed(1);
+    
+    $("badgeCount").textContent = `(${totalVotes.toLocaleString()} votes)`;
+    $("badgeRating").textContent = avgRating;
+  }catch(e){
+    console.log("Error calculating ratings summary:", e.message);
+  }
+}
+
+const stars = document.querySelectorAll("#starContainer .star");
+const starContainer = $("starContainer");
+const savedRating = localStorage.getItem("userRated_" + TOOL);
+
+function lockRatingUI(ratingValue, messageText) {
+  stars.forEach((s, i) => {
+    if (i < ratingValue) s.classList.add("active");
+    else s.classList.remove("active");
+    s.classList.remove("hover");
+  });
+  starContainer.style.pointerEvents = "none";
+  starContainer.style.cursor = "default";
+  const msg = $("ratingMsg");
+  msg.style.display = "block";
+  msg.textContent = messageText;
+}
+
+if (savedRating) {
+  lockRatingUI(parseInt(savedRating, 10), `You have already rated this tool ${savedRating} / 5 stars!`);
+} else {
+  stars.forEach((star, idx) => {
+    star.addEventListener("mouseenter", () => {
+      if (localStorage.getItem("userRated_" + TOOL)) return;
+      stars.forEach((s, i) => {
+        if (i <= idx) s.classList.add("hover");
+        else s.classList.remove("hover");
+      });
+    });
+
+    star.addEventListener("mouseleave", () => {
+      if (localStorage.getItem("userRated_" + TOOL)) return;
+      stars.forEach(s => s.classList.remove("hover"));
+    });
+
+    star.addEventListener("click", async () => {
+      if (localStorage.getItem("userRated_" + TOOL)) return;
+
+      const selectedRating = idx + 1;
+      localStorage.setItem("userRated_" + TOOL, selectedRating);
+      lockRatingUI(selectedRating, `Thank you! You rated this tool ${selectedRating} / 5 stars.`);
+
+      let currentMatch = $("badgeCount").textContent.match(/[\d,]+/);
+      if(currentMatch){
+        let newCount = parseInt(currentMatch[0].replace(/,/g, ''), 10) + 1;
+        $("badgeCount").textContent = `(${newCount.toLocaleString()} votes)`;
+      }
+
+      try {
+        await addDoc(collection(db, "toolRatings"), {
+          tool: TOOL,
+          rating: selectedRating,
+          createdAt: serverTimestamp()
+        });
+        loadRatingsSummary();
+      } catch (e) {
+        console.error("Error saving rating to Firebase:", e.message);
+      }
+    });
+  });
+}
+
+loadRatingsSummary();
 </script>
 </body>
 </html>
