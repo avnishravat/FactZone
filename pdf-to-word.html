@@ -43,11 +43,24 @@
         .breadcrumbs a { color: #2563eb; text-decoration: none; }
         .breadcrumbs span { margin: 0 6px; color: #94a3b8; }
         .card { background: #ffffff; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
-        .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+        .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
         .card-header h1 { font-size: 20px; font-weight: 700; color: #0f172a; }
+
+        .rating-badge { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 14px; padding: 4px 12px; background: #fff; border: 1px solid #e2e8f0; border-radius: 20px; font-size: 13px; font-weight: bold; color: #d97706; }
+        .rating-badge span { color: #64748b; font-weight: normal; font-size: 12px; }
+
         input[type="file"] { margin: 12px 0; width: 100%; font-size: 13px; }
         .btn { background-color: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 13px; }
         .btn:hover { background-color: #1d4ed8; }
+
+        /* Interactive Rating Box (1 to 5 Order) */
+        .interactive-rating { margin-top: 24px; padding-top: 16px; border-top: 1px dashed #e2e8f0; text-align: center; }
+        .interactive-rating p { margin: 0 0 8px; font-size: 13px; font-weight: bold; color: #475569; }
+        .stars { display: flex; justify-content: center; gap: 6px; cursor: pointer; }
+        .star { font-size: 26px; color: #cbd5e1; transition: color 0.15s; user-select: none; }
+        .star.active, .star.hover { color: #f59e0b; }
+        .rating-msg { font-size: 12px; color: #059669; margin-top: 6px; display: none; font-weight: 600; }
+
         .site-footer { background-color: #ffffff; border-top: 1px solid #e2e8f0; padding: 20px 16px; margin-top: 40px; font-size: 13px; color: #64748b; }
         .footer-inner { max-width: 700px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
         .footer-links a { color: #475569; text-decoration: none; margin-left: 12px; }
@@ -68,9 +81,25 @@
             </svg>
             <h1>PDF to Word Converter</h1>
         </div>
+
+        <div class="rating-badge">★ <span id="badgeRating">4.9</span> / 5 <span id="badgeCount">(210 votes)</span></div>
+
         <p style="font-size: 13px; color: #64748b; margin-bottom: 10px;">Select your PDF file to convert into editable text/Word format.</p>
         <input type="file" id="pdfInput" accept=".pdf">
         <button class="btn" onclick="convertPdf()">Convert to DOCX</button>
+
+        <!-- Interactive Rating Widget -->
+        <div class="interactive-rating">
+            <p>Rate this tool (1 to 5 Stars):</p>
+            <div class="stars" id="starContainer">
+                <span class="star" data-value="1" title="1 Star">★</span>
+                <span class="star" data-value="2" title="2 Stars">★</span>
+                <span class="star" data-value="3" title="3 Stars">★</span>
+                <span class="star" data-value="4" title="4 Stars">★</span>
+                <span class="star" data-value="5" title="5 Stars">★</span>
+            </div>
+            <div id="ratingMsg" class="rating-msg">Thank you for your rating!</div>
+        </div>
     </main>
 </div>
 <footer class="site-footer">
@@ -82,12 +111,117 @@
         </div>
     </div>
 </footer>
+
 <script>
     function convertPdf() {
         const file = document.getElementById('pdfInput').files[0];
         if (!file) return alert('Please select a PDF file first.');
         alert('File selected! Processing PDF content...');
     }
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCUyMZee1e01RqmTmIp_0jLT7guUAc",
+  authDomain: "factzone-a9ace.firebaseapp.com",
+  databaseURL: "https://factzone-a9ace-default-rtdb.firebaseio.com",
+  projectId: "factzone-a9ace",
+  storageBucket: "factzone-a9ace.firebasestorage.app",
+  messagingSenderId: "425838320650",
+  appId: "1:425838320650:web:eb81baddf818cb73d3f3",
+  measurementId: "G-311JQXBXRY"
+};
+
+const db = getFirestore(initializeApp(firebaseConfig));
+const TOOL = "pdf-to-word";
+const BASE_VOTES = 210;
+const BASE_RATING_SUM = 210 * 4.9;
+
+const $ = id => document.getElementById(id);
+
+async function loadRatingsSummary(){
+  try{
+    const snap = await getDocs(collection(db, "toolRatings"));
+    const toolRatings = snap.docs.map(d => d.data()).filter(x => x.tool === TOOL);
+    
+    let totalVotes = BASE_VOTES + toolRatings.length;
+    let totalSum = BASE_RATING_SUM;
+    toolRatings.forEach(r => totalSum += Number(r.rating || 5));
+    
+    let avgRating = (totalSum / totalVotes).toFixed(1);
+    
+    $("badgeCount").textContent = `(${totalVotes.toLocaleString()} votes)`;
+    $("badgeRating").textContent = avgRating;
+  }catch(e){
+    console.log("Error calculating ratings summary:", e.message);
+  }
+}
+
+const stars = document.querySelectorAll("#starContainer .star");
+const starContainer = $("starContainer");
+const savedRating = localStorage.getItem("userRated_" + TOOL);
+
+function lockRatingUI(ratingValue, messageText) {
+  stars.forEach((s, i) => {
+    if (i < ratingValue) s.classList.add("active");
+    else s.classList.remove("active");
+    s.classList.remove("hover");
+  });
+  starContainer.style.pointerEvents = "none";
+  starContainer.style.cursor = "default";
+  const msg = $("ratingMsg");
+  msg.style.display = "block";
+  msg.textContent = messageText;
+}
+
+if (savedRating) {
+  lockRatingUI(parseInt(savedRating, 10), `You have already rated this tool ${savedRating} / 5 stars!`);
+} else {
+  stars.forEach((star, idx) => {
+    star.addEventListener("mouseenter", () => {
+      if (localStorage.getItem("userRated_" + TOOL)) return;
+      stars.forEach((s, i) => {
+        if (i <= idx) s.classList.add("hover");
+        else s.classList.remove("hover");
+      });
+    });
+
+    star.addEventListener("mouseleave", () => {
+      if (localStorage.getItem("userRated_" + TOOL)) return;
+      stars.forEach(s => s.classList.remove("hover"));
+    });
+
+    star.addEventListener("click", async () => {
+      if (localStorage.getItem("userRated_" + TOOL)) return;
+
+      const selectedRating = idx + 1;
+      localStorage.setItem("userRated_" + TOOL, selectedRating);
+      lockRatingUI(selectedRating, `Thank you! You rated this tool ${selectedRating} / 5 stars.`);
+
+      let currentMatch = $("badgeCount").textContent.match(/[\d,]+/);
+      if(currentMatch){
+        let newCount = parseInt(currentMatch[0].replace(/,/g, ''), 10) + 1;
+        $("badgeCount").textContent = `(${newCount.toLocaleString()} votes)`;
+      }
+
+      try {
+        await addDoc(collection(db, "toolRatings"), {
+          tool: TOOL,
+          rating: selectedRating,
+          createdAt: serverTimestamp()
+        });
+        loadRatingsSummary();
+      } catch (e) {
+        console.error("Error saving rating to Firebase:", e.message);
+      }
+    });
+  });
+}
+
+loadRatingsSummary();
 </script>
 </body>
 </html>
