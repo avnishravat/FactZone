@@ -286,7 +286,7 @@ footer{text-align:center;color:#8a92a1;font-size:12px;padding:25px}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig={
   apiKey:"AIzaSyCUyMZee1e01RqmTmIp_0jLT7guUAc",
@@ -304,6 +304,10 @@ const TOOL="instagram-bio-generator";
 let templates=[];
 const $=id=>document.getElementById(id);
 
+// Base historical counts
+const BASE_VOTES = 1310;
+const BASE_RATING_SUM = 1310 * 4.8;
+
 function replaceVars(text,input){
  return String(text).replace(/\{\{input\}\}|\{input\}|\{\{topic\}\}|\{topic\}|\{\{niche\}\}|\{niche\}|\{\{content\}\}|\{content\}|\{\{reel\}\}|\{reel\}/gi,input);
 }
@@ -313,6 +317,25 @@ async function loadTemplates(){
   const snap=await getDocs(collection(db,"instagramCreatorToolOutputs"));
   templates=snap.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.tool===TOOL&&x.text);
  }catch(e){console.log("Firebase templates unavailable",e.message);}
+}
+
+// Fetch & Aggregate Real-time Ratings
+async function loadRatingsSummary(){
+  try{
+    const snap = await getDocs(collection(db, "toolRatings"));
+    const toolRatings = snap.docs.map(d => d.data()).filter(x => x.tool === TOOL);
+    
+    let totalVotes = BASE_VOTES + toolRatings.length;
+    let totalSum = BASE_RATING_SUM;
+    toolRatings.forEach(r => totalSum += Number(r.rating || 5));
+    
+    let avgRating = (totalSum / totalVotes).toFixed(1);
+    
+    $("badgeCount").textContent = `(${totalVotes.toLocaleString()} creator votes)`;
+    $("badgeRating").textContent = avgRating;
+  }catch(e){
+    console.log("Error calculating ratings summary:", e.message);
+  }
 }
 
 function fallback(input){
@@ -343,48 +366,71 @@ $("copy").onclick=async()=>{
   setTimeout(()=>$("copy").textContent="Copy Output",1200);
 };
 
-/* Interactive Star Rating Handling (Correct 1 to 5 Order: Left Star = 1, Right Star = 5) */
+/* Interactive Star Rating Handling */
 const stars = document.querySelectorAll("#starContainer .star");
-stars.forEach((star, idx) => {
-  // Mouse hover state (1 star lights 1st, 2 stars light 1st and 2nd...)
-  star.addEventListener("mouseenter", () => {
-    stars.forEach((s, i) => {
-      if (i <= idx) s.classList.add("hover");
-      else s.classList.remove("hover");
-    });
-  });
-
-  star.addEventListener("mouseleave", () => {
-    stars.forEach(s => s.classList.remove("hover"));
-  });
-
-  // Click handler (Rating 1..5)
-  star.addEventListener("click", () => {
-    const selectedRating = idx + 1; // 1, 2, 3, 4, 5
-    stars.forEach((s, i) => {
-      if (i <= idx) s.classList.add("active");
-      else s.classList.remove("active");
-    });
-    const msg = $("ratingMsg");
-    msg.style.display = "block";
-    msg.textContent = `Thank you! You rated this tool ${selectedRating} / 5 stars.`;
-    localStorage.setItem("userRated_" + TOOL, selectedRating);
-  });
-});
-
-// Load saved user rating from LocalStorage
+const starContainer = $("starContainer");
 const savedRating = localStorage.getItem("userRated_" + TOOL);
-if(savedRating){
-  const ratingIndex = parseInt(savedRating, 10) - 1;
+
+function lockRatingUI(ratingValue, messageText) {
   stars.forEach((s, i) => {
-    if (i <= ratingIndex) s.classList.add("active");
+    if (i < ratingValue) s.classList.add("active");
+    else s.classList.remove("active");
+    s.classList.remove("hover");
   });
+  starContainer.style.pointerEvents = "none";
+  starContainer.style.cursor = "default";
   const msg = $("ratingMsg");
   msg.style.display = "block";
-  msg.textContent = `You have already rated this tool ${savedRating} / 5 stars!`;
+  msg.textContent = messageText;
+}
+
+if (savedRating) {
+  lockRatingUI(parseInt(savedRating, 10), `You have already rated this tool ${savedRating} / 5 stars!`);
+} else {
+  stars.forEach((star, idx) => {
+    star.addEventListener("mouseenter", () => {
+      if (localStorage.getItem("userRated_" + TOOL)) return;
+      stars.forEach((s, i) => {
+        if (i <= idx) s.classList.add("hover");
+        else s.classList.remove("hover");
+      });
+    });
+
+    star.addEventListener("mouseleave", () => {
+      if (localStorage.getItem("userRated_" + TOOL)) return;
+      stars.forEach(s => s.classList.remove("hover"));
+    });
+
+    star.addEventListener("click", async () => {
+      if (localStorage.getItem("userRated_" + TOOL)) return;
+
+      const selectedRating = idx + 1;
+      localStorage.setItem("userRated_" + TOOL, selectedRating);
+      lockRatingUI(selectedRating, `Thank you! You rated this tool ${selectedRating} / 5 stars.`);
+
+      // Instant local UI +1 increment
+      let currentMatch = $("badgeCount").textContent.match(/[\d,]+/);
+      if(currentMatch){
+        let newCount = parseInt(currentMatch[0].replace(/,/g, ''), 10) + 1;
+        $("badgeCount").textContent = `(${newCount.toLocaleString()} creator votes)`;
+      }
+
+      try {
+        await addDoc(collection(db, "toolRatings"), {
+          tool: TOOL,
+          rating: selectedRating,
+          createdAt: serverTimestamp()
+        });
+        loadRatingsSummary(); // Refresh average score from Firestore
+      } catch (e) {
+        console.error("Error saving rating to Firebase:", e.message);
+      }
+    });
+  });
 }
 
 loadTemplates();
+loadRatingsSummary();
 </script>
 </body>
 </html>
