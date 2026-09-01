@@ -25,7 +25,7 @@
 
 <link rel="icon" type="image/png" href="insta.png">
 
-<!-- 1. WebApplication Schema (Fixed aggregateRating Warning) -->
+<!-- 1. WebApplication Schema -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -121,107 +121,128 @@
   --muted: #64748b;
   --line: #e2e8f0;
   --accent: #8b5cf6;
-  --accent-hover: #7c3aed;
-  --accent2: #ec4899;
+  --accent-gradient: linear-gradient(135deg, #8b5cf6, #ec4899);
   --soft: #f5f3ff;
-  --shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08);
+  --shadow: 0 8px 25px -5px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+  --radius: 14px;
 }
+
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.5; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.5; -webkit-tap-highlight-color: transparent; }
 a { text-decoration: none; color: inherit; }
 
-/* Compact & Fitted Container */
-.container { width: min(880px, calc(100% - 24px)); margin: auto; }
+/* Responsive Container */
+.container { width: min(920px, calc(100% - 24px)); margin: auto; padding: 12px 0 24px; }
 
-header { padding: 14px 0 10px; }
-.brand { font-size: 11px; font-weight: 800; letter-spacing: 0.05em; color: var(--accent); text-transform: uppercase; }
+header { padding: 8px 0 12px; }
+.brand { font-size: 11px; font-weight: 800; letter-spacing: 0.06em; color: var(--accent); text-transform: uppercase; }
 
-/* Accessible Breadcrumbs */
-nav.breadcrumb { font-size: 12px; color: var(--muted); margin: 4px 0; }
+nav.breadcrumb { font-size: 12px; color: var(--muted); margin-top: 2px; }
 nav.breadcrumb ol { list-style: none; padding: 0; margin: 0; display: flex; gap: 6px; align-items: center; }
 nav.breadcrumb li::after { content: "/"; margin-left: 6px; color: #cbd5e1; }
 nav.breadcrumb li:last-child::after { content: ""; }
 nav.breadcrumb a { color: var(--accent); }
 nav.breadcrumb a:hover { text-decoration: underline; }
 
-/* Intro Hero Card */
-.hero { background: linear-gradient(135deg, #ffffff, #faf5ff); border: 1px solid var(--line); border-radius: 16px; padding: 20px; margin: 20px 0 16px; box-shadow: var(--shadow); }
-.hero h2 { font-size: clamp(20px, 3vw, 24px); margin: 0 0 6px; letter-spacing: -0.02em; color: #1e1b4b; }
-.hero p { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.5; }
+/* Dynamic Layout */
+.layout { display: grid; grid-template-columns: 360px 1fr; gap: 16px; align-items: start; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); }
+.card h2 { font-size: 15px; font-weight: 700; margin: 0 0 12px; display: flex; align-items: center; gap: 6px; color: #1e1b4b; }
 
-/* Grid Layout */
-.layout { display: grid; grid-template-columns: 340px 1fr; gap: 16px; align-items: start; }
-.card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px; box-shadow: var(--shadow); }
-h2 { font-size: 16px; margin: 0 0 14px; display: flex; align-items: center; gap: 6px; }
+label { display: flex; justify-content: space-between; align-items: center; font-size: 11px; font-weight: 700; margin: 10px 0 4px; color: #475569; text-transform: uppercase; letter-spacing: 0.03em; }
 
-label { display: block; font-size: 11px; font-weight: 700; margin: 10px 0 4px; color: #334155; text-transform: uppercase; letter-spacing: 0.03em; }
 input, select, button { font: inherit; }
-select, input[type=number], input[type=color] { width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; background: #fff; color: var(--text); outline: none; transition: border-color 0.2s; font-size: 13px; }
-select:focus, input:focus { border-color: var(--accent); }
+select, input[type=number] { width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; background: #fff; color: var(--text); outline: none; transition: all 0.2s; font-size: 12.5px; }
+select:focus, input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12); }
 
-/* Drag & Drop Zone */
-.dropzone { border: 2px dashed #cbd5e1; border-radius: 10px; padding: 14px; text-align: center; background: #f8fafc; cursor: pointer; transition: all 0.2s; position: relative; }
+/* Dropzone */
+.dropzone { border: 2px dashed #cbd5e1; border-radius: 10px; padding: 12px; text-align: center; background: #fafafa; cursor: pointer; transition: all 0.2s; position: relative; }
 .dropzone:hover, .dropzone.dragover { border-color: var(--accent); background: var(--soft); }
 .dropzone input[type=file] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
 .dropzone-text { font-size: 12px; color: var(--muted); }
 .dropzone-text b { color: var(--accent); }
 
-input[type=range] { width: 100%; accent-color: var(--accent); }
-.range-row { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 2px; }
-
+/* Interactive Visual Presets */
 .presets { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-.preset { border: 1px solid var(--line); background: #fff; border-radius: 8px; padding: 8px 6px; text-align: left; cursor: pointer; font-size: 11px; transition: all 0.15s; }
-.preset:hover { border-color: #c4b5fd; }
-.preset.active { border-color: var(--accent); background: var(--soft); color: #5b21b6; font-weight: 700; }
-.preset span { display: block; font-size: 9px; color: var(--muted); font-weight: normal; }
+.preset { border: 1px solid var(--line); background: #fff; border-radius: 9px; padding: 8px 10px; text-align: left; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 10px; }
+.preset:hover { border-color: #c4b5fd; background: #faf5ff; }
+.preset.active { border-color: var(--accent); background: var(--soft); box-shadow: 0 0 0 1px var(--accent); }
+.preset-shape { border: 2px solid var(--muted); border-radius: 3px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.preset.active .preset-shape { border-color: var(--accent); background: rgba(139, 92, 246, 0.15); }
 
+/* Preset Aspect Ratio Box Models */
+.shape-1-1 { width: 18px; height: 18px; }
+.shape-4-5 { width: 16px; height: 20px; }
+.shape-9-16 { width: 14px; height: 22px; }
+.shape-191-1 { width: 22px; height: 12px; }
+
+.preset-info { display: flex; flex-direction: column; min-width: 0; }
+.preset-title { font-size: 11px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.preset.active .preset-title { color: #5b21b6; }
+.preset-desc { font-size: 9px; color: var(--muted); }
+
+/* Compact Controls */
 .row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.tool-btns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 6px; }
-.tool-btn { border: 1px solid var(--line); background: #fff; border-radius: 8px; padding: 6px 4px; font-size: 11px; cursor: pointer; }
-.tool-btn:hover { background: #f1f5f9; }
+.tool-btns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.tool-btn { border: 1px solid var(--line); background: #fff; border-radius: 8px; padding: 6px 4px; font-size: 11px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+.tool-btn:hover { background: #f1f5f9; color: var(--text); }
 
-.btn { border: 0; border-radius: 9px; padding: 10px 12px; font-weight: 700; font-size: 13px; cursor: pointer; width: 100%; transition: opacity 0.2s; }
-.primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; }
-.primary:hover { opacity: 0.95; }
-.secondary { background: #f1f5f9; color: #334155; }
+/* Range & Color Row */
+.slider-group { display: flex; align-items: center; gap: 10px; }
+input[type=range] { flex: 1; accent-color: var(--accent); height: 5px; cursor: pointer; }
+.color-picker-wrap { display: flex; align-items: center; gap: 6px; }
+input[type=color] { border: 1px solid var(--line); padding: 0; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; background: none; }
+
+.actions { display: grid; grid-template-columns: 1fr 2fr; gap: 8px; margin-top: 14px; }
+.btn { border: 0; border-radius: 9px; padding: 9px 12px; font-weight: 700; font-size: 12.5px; cursor: pointer; transition: all 0.2s; text-align: center; }
+.primary { background: var(--accent-gradient); color: #fff; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25); }
+.primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(139, 92, 246, 0.35); }
+.secondary { background: #f1f5f9; color: #475569; }
 .secondary:hover { background: #e2e8f0; }
-.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; transform: none; }
 
-/* Fitted Live Preview Section */
-.preview-wrap { display: flex; flex-direction: column; }
-.preview { height: 350px; border-radius: 12px; background:
-  linear-gradient(45deg, #cbd5e1 25%, transparent 25%) 0 0/18px 18px,
-  linear-gradient(-45deg, #cbd5e1 25%, transparent 25%) 0 0/18px 18px,
-  linear-gradient(45deg, transparent 75%, #cbd5e1 75%) 0 0/18px 18px,
-  linear-gradient(-45deg, transparent 75%, #cbd5e1 75%) 0 0/18px 18px, #f1f5f9;
-  display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; border: 1px solid var(--line); }
-.preview img { max-width: 100%; max-height: 100%; display: block; object-fit: contain; }
-.empty { text-align: center; color: var(--muted); padding: 20px; font-size: 13px; }
+/* Preview Section */
+.preview-wrap { display: flex; flex-direction: column; height: 100%; justify-content: space-between; }
+.preview { height: 340px; border-radius: 10px; background:
+  linear-gradient(45deg, #e2e8f0 25%, transparent 25%) 0 0/16px 16px,
+  linear-gradient(-45deg, #e2e8f0 25%, transparent 25%) 0 0/16px 16px,
+  linear-gradient(45deg, transparent 75%, #e2e8f0 75%) 0 0/16px 16px,
+  linear-gradient(-45deg, transparent 75%, #e2e8f0 75%) 0 0/16px 16px, #f8fafc;
+  display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid var(--line); }
+.preview img { max-width: 100%; max-height: 100%; display: block; object-fit: contain; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.empty { text-align: center; color: var(--muted); padding: 20px; font-size: 12.5px; }
 
-.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 14px; }
-.stat { background: #f8fafc; border: 1px solid var(--line); border-radius: 10px; padding: 10px 4px; text-align: center; }
-.stat b { display: block; font-size: 12px; color: var(--text); }
-.stat span { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.02em; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 12px; }
+.stat { background: #f8fafc; border: 1px solid var(--line); border-radius: 8px; padding: 8px 2px; text-align: center; }
+.stat b { display: block; font-size: 11.5px; color: var(--text); }
+.stat span { font-size: 8.5px; color: var(--muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.02em; }
 
-.actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+/* Intro Hero */
+.hero { background: linear-gradient(135deg, #ffffff, #faf5ff); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; margin: 16px 0; box-shadow: var(--shadow); }
+.hero h1 { font-size: clamp(18px, 2.5vw, 22px); margin: 0 0 4px; color: #1e1b4b; font-weight: 800; }
+.hero p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
 
-/* SEO Content Section */
-.info-section { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 20px; box-shadow: var(--shadow); }
-.info-section h3 { font-size: 16px; color: #1e1b4b; margin-top: 0; }
-.info-section h4 { font-size: 14px; margin: 14px 0 6px; color: #334155; }
-.info-section p, .info-section li { font-size: 13px; color: var(--muted); line-height: 1.6; }
+/* Content Section */
+.info-section { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); }
+.info-section h3 { font-size: 15px; color: #1e1b4b; margin: 0 0 8px; }
+.info-section h4 { font-size: 13.5px; margin: 14px 0 6px; color: #334155; }
+.info-section p, .info-section li { font-size: 12.5px; color: var(--muted); line-height: 1.6; }
 .info-section ul { padding-left: 18px; margin: 0; }
-.faq-grid { display: grid; gap: 12px; margin-top: 10px; }
-.faq-item { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; background: #f8fafc; }
-.faq-item h5 { margin: 0 0 4px; font-size: 14px; color: var(--text); }
-.faq-item p { margin: 0; font-size: 12px; }
+.faq-grid { display: grid; gap: 8px; margin-top: 10px; }
+.faq-item { border: 1px solid var(--line); border-radius: 9px; padding: 10px 12px; background: #f8fafc; }
+.faq-item h5 { margin: 0 0 2px; font-size: 13px; color: var(--text); }
+.faq-item p { margin: 0; font-size: 11.5px; }
 
-footer { padding: 24px 0; color: var(--muted); font-size: 11px; text-align: center; }
+footer { padding: 20px 0 10px; color: var(--muted); font-size: 11px; text-align: center; }
 
+/* Mobile Optimizations */
 @media(max-width: 768px){
- .layout { grid-template-columns: 1fr; gap: 12px; }
- .preview { height: 280px; }
- .stats { grid-template-columns: repeat(2, 1fr); }
+ .layout { grid-template-columns: 1fr; gap: 14px; }
+ .preview-wrap { order: -1; } /* Shows live preview first on mobile for better UX */
+ .preview { height: 260px; }
+ .stats { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+ .card { padding: 14px; }
+ .presets { grid-template-columns: 1fr 1fr; }
 }
 </style>
 </head>
@@ -240,37 +261,76 @@ footer { padding: 24px 0; color: var(--muted); font-size: 11px; text-align: cent
 </header>
 
 <main>
-<!-- 1. MAIN TOOL LAYOUT AT TOP -->
+<!-- MAIN INTERACTIVE LAYOUT -->
 <div class="layout">
   <!-- Control Panel -->
   <section class="card" aria-label="Resizer Controls">
     <h2>⚙️ Resize Settings</h2>
 
-    <label>1. Select Image</label>
+    <label>1. Upload Photo</label>
     <div class="dropzone" id="dropzone">
       <input id="file" type="file" accept="image/*">
-      <div class="dropzone-text"><b>Choose a file</b> or drag & drop here</div>
+      <div class="dropzone-text">📷 <b>Choose Image</b> or drag here</div>
     </div>
 
     <label>2. Aspect Ratio Presets</label>
     <div class="presets">
-      <button class="preset active" data-w="1080" data-h="1080" data-name="Square Post">Square (1:1)<br><span>1080 × 1080</span></button>
-      <button class="preset" data-w="1080" data-h="1350" data-name="Portrait Post">Portrait (4:5)<br><span>1080 × 1350</span></button>
-      <button class="preset" data-w="1080" data-h="1920" data-name="Story / Reel">Story/Reel (9:16)<br><span>1080 × 1920</span></button>
-      <button class="preset" data-w="1200" data-h="628" data-name="Landscape">Landscape (1.91:1)<br><span>1200 × 628</span></button>
+      <button class="preset active" data-w="1080" data-h="1080">
+        <div class="preset-shape shape-1-1"></div>
+        <div class="preset-info">
+          <span class="preset-title">Square (1:1)</span>
+          <span class="preset-desc">1080 × 1080</span>
+        </div>
+      </button>
+
+      <button class="preset" data-w="1080" data-h="1350">
+        <div class="preset-shape shape-4-5"></div>
+        <div class="preset-info">
+          <span class="preset-title">Portrait (4:5)</span>
+          <span class="preset-desc">1080 × 1350</span>
+        </div>
+      </button>
+
+      <button class="preset" data-w="1080" data-h="1920">
+        <div class="preset-shape shape-9-16"></div>
+        <div class="preset-info">
+          <span class="preset-title">Story/Reel</span>
+          <span class="preset-desc">1080 × 1920</span>
+        </div>
+      </button>
+
+      <button class="preset" data-w="1200" data-h="628">
+        <div class="preset-shape shape-191-1"></div>
+        <div class="preset-info">
+          <span class="preset-title">Landscape</span>
+          <span class="preset-desc">1200 × 628</span>
+        </div>
+      </button>
     </div>
 
-    <label for="mode">3. Fitting Mode</label>
-    <select id="mode">
-      <option value="cover">Crop to Fill (No Borders)</option>
-      <option value="contain">Fit with Background Borders</option>
-      <option value="stretch">Stretch to Exact Size</option>
-    </select>
+    <div class="row" style="margin-top:4px;">
+      <div>
+        <label for="mode">Fitting Mode</label>
+        <select id="mode">
+          <option value="cover">Crop to Fill</option>
+          <option value="contain">Fit with Border</option>
+          <option value="stretch">Stretch</option>
+        </select>
+      </div>
+      <div>
+        <label for="format">Export Format</label>
+        <select id="format">
+          <option value="image/jpeg">JPG (Best)</option>
+          <option value="image/png">PNG</option>
+          <option value="image/webp">WebP</option>
+        </select>
+      </div>
+    </div>
 
     <label>Quick Adjustments</label>
     <div class="tool-btns">
-      <button class="tool-btn" id="rotateLeft">↺ Rotate 90°</button>
-      <button class="tool-btn" id="rotateRight">↻ Rotate 90°</button>
+      <button class="tool-btn" id="rotateLeft">↺ Left</button>
+      <button class="tool-btn" id="rotateRight">↻ Right</button>
       <button class="tool-btn" id="flipH">↔ Flip</button>
     </div>
 
@@ -285,31 +345,27 @@ footer { padding: 24px 0; color: var(--muted); font-size: 11px; text-align: cent
       </div>
     </div>
 
-    <label for="format">Export Format</label>
-    <select id="format">
-      <option value="image/jpeg">JPG (Recommended)</option>
-      <option value="image/png">PNG (Lossless)</option>
-      <option value="image/webp">WebP (Smallest Size)</option>
-    </select>
-
-    <label for="quality">Quality Output</label>
-    <div class="range-row"><span>Smaller File</span><b id="qualityValue">90%</b><span>Best Quality</span></div>
-    <input id="quality" type="range" min="30" max="100" value="90">
-
-    <label for="bg">Background Color (Border Fit Mode)</label>
-    <input id="bg" type="color" value="#ffffff">
+    <label for="quality">Quality Output <span id="qualityValue">90%</span></label>
+    <div class="slider-group">
+      <input id="quality" type="range" min="30" max="100" value="90">
+      <div class="color-picker-wrap" title="Border background color">
+        <input id="bg" type="color" value="#ffffff">
+      </div>
+    </div>
 
     <div class="actions">
       <button class="btn secondary" id="reset">Reset</button>
-      <button class="btn primary" id="download" disabled>⬇ Download Image</button>
+      <button class="btn primary" id="download" disabled>⬇ Download</button>
     </div>
   </section>
 
-  <!-- Preview Panel -->
+  <!-- Live Preview Panel -->
   <section class="card preview-wrap" aria-label="Live Preview Section">
-    <h2>🖼️ Live Preview</h2>
-    <div class="preview" id="preview">
-      <div class="empty">Upload an image to preview your resized content.</div>
+    <div>
+      <h2>🖼️ Live Preview</h2>
+      <div class="preview" id="preview">
+        <div class="empty">Select or drag an image to see live preview.</div>
+      </div>
     </div>
     
     <div class="stats">
@@ -321,20 +377,20 @@ footer { padding: 24px 0; color: var(--muted); font-size: 11px; text-align: cent
   </section>
 </div>
 
-<!-- 2. INTRO/HERO CARD -->
+<!-- HERO INTRO -->
 <section class="hero">
-  <h2>Instagram Image Resizer</h2>
-  <p>Resize, crop, and adjust high-resolution photos for Instagram Posts, Portrait, Stories, and Reels. 100% free, fast, and processed entirely inside your browser.</p>
+  <h1>Free Instagram Image Resizer</h1>
+  <p>Resize, crop, and transform images for Instagram Posts, Stories, Reels, and Portait formats directly in your browser without quality loss.</p>
 </section>
 
-<!-- 3. GUIDE & FAQ SECTION -->
+<!-- GUIDE & FAQ SECTION -->
 <article class="info-section">
-  <h3>Official Instagram Image Size Guide (2026 Standards)</h3>
-  <p>To keep your feed looking sharp and prevent Instagram from applying blurry compression, always upload images that match the platform's native aspect ratios:</p>
+  <h3>Official Instagram Image Sizes (2026 Standards)</h3>
+  <p>To avoid blurry compression or awkward automated cropping, always convert photos to match Instagram's standard dimensions:</p>
 
   <ul>
     <li><strong>Square Post (1:1):</strong> 1080 x 1080 px</li>
-    <li><strong>Portrait Post (4:5):</strong> 1080 x 1350 px <em>(Recommended for maximum vertical feed real estate)</em></li>
+    <li><strong>Portrait Post (4:5):</strong> 1080 x 1350 px <em>(Recommended for feed coverage)</em></li>
     <li><strong>Instagram Story & Reel (9:16):</strong> 1080 x 1920 px</li>
     <li><strong>Landscape Post (1.91:1):</strong> 1080 x 566 px</li>
   </ul>
@@ -342,23 +398,19 @@ footer { padding: 24px 0; color: var(--muted); font-size: 11px; text-align: cent
   <h4>Frequently Asked Questions</h4>
   <div class="faq-grid">
     <div class="faq-item">
-      <h5>What is the best format to post on Instagram?</h5>
-      <p>JPG format saved at 85%–90% quality is ideal for photos. PNG is best if your image contains text or transparent graphics.</p>
+      <h5>What is the best quality format for Instagram?</h5>
+      <p>JPG saved between 85% to 90% quality works best for standard photos. Use PNG for illustrations or graphics with text.</p>
     </div>
     <div class="faq-item">
-      <h5>Does this image resizer lower photo quality?</h5>
-      <p>No. We use browser-native HTML5 Canvas algorithms with high-quality smoothing to ensure your photos remain crisp.</p>
-    </div>
-    <div class="faq-item">
-      <h5>Is my data private?</h5>
-      <p>Yes, 100% private. Your image files never leave your device or get uploaded to any servers.</p>
+      <h5>Are my photos uploaded to any server?</h5>
+      <p>No, 100% private. All rendering happens locally in your browser using HTML5 Canvas technology.</p>
     </div>
   </div>
 </article>
 </main>
 
 <footer>
-  <p>© 2026 FactZone • Built for Creators & Photographers</p>
+  <p>© 2026 FactZone • Designed for Creators & Photographers</p>
 </footer>
 </div>
 
@@ -527,7 +579,7 @@ reset.addEventListener('click', () => {
  outputBlob = null;
  rotationDegrees = 0;
  isFlippedH = false;
- preview.innerHTML = '<div class="empty">Upload an image to preview your resized content.</div>';
+ preview.innerHTML = '<div class="empty">Select or drag an image to see live preview.</div>';
  dimensions.textContent = original.textContent = outputSize.textContent = aspectRatio.textContent = '—';
  download.disabled = true;
  widthInput.value = 1080;
