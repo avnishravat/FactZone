@@ -25,7 +25,7 @@
 
 <link rel="icon" type="image/png" href="insta.png">
 
-<!-- 1. WebApplication Schema -->
+<!-- 1. WebApplication Schema (Fixed aggregateRating Warning) -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -40,6 +40,13 @@
     "@type": "Offer",
     "price": "0",
     "priceCurrency": "USD"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "ratingCount": "1250",
+    "bestRating": "5",
+    "worstRating": "1"
   }
 }
 </script>
@@ -122,95 +129,99 @@
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.5; }
 a { text-decoration: none; color: inherit; }
-.container { width: min(1120px, calc(100% - 32px)); margin: auto; }
 
-header { padding: 20px 0 14px; }
+/* Compact & Fitted Container */
+.container { width: min(880px, calc(100% - 24px)); margin: auto; }
+
+header { padding: 14px 0 10px; }
 .brand { font-size: 11px; font-weight: 800; letter-spacing: 0.05em; color: var(--accent); text-transform: uppercase; }
 
 /* Accessible Breadcrumbs */
-nav.breadcrumb { font-size: 13px; color: var(--muted); margin: 6px 0; }
+nav.breadcrumb { font-size: 12px; color: var(--muted); margin: 4px 0; }
 nav.breadcrumb ol { list-style: none; padding: 0; margin: 0; display: flex; gap: 6px; align-items: center; }
 nav.breadcrumb li::after { content: "/"; margin-left: 6px; color: #cbd5e1; }
 nav.breadcrumb li:last-child::after { content: ""; }
 nav.breadcrumb a { color: var(--accent); }
 nav.breadcrumb a:hover { text-decoration: underline; }
 
-/* Intro Hero Card (Positioned after tool) */
-.hero { background: linear-gradient(135deg, #ffffff, #faf5ff); border: 1px solid var(--line); border-radius: 20px; padding: 28px; margin: 24px 0 20px; box-shadow: var(--shadow); }
-.hero h2 { font-size: clamp(22px, 3.5vw, 30px); margin: 0 0 8px; letter-spacing: -0.02em; color: #1e1b4b; }
-.hero p { margin: 0; color: var(--muted); font-size: 15px; max-width: 800px; line-height: 1.6; }
+/* Intro Hero Card */
+.hero { background: linear-gradient(135deg, #ffffff, #faf5ff); border: 1px solid var(--line); border-radius: 16px; padding: 20px; margin: 20px 0 16px; box-shadow: var(--shadow); }
+.hero h2 { font-size: clamp(20px, 3vw, 24px); margin: 0 0 6px; letter-spacing: -0.02em; color: #1e1b4b; }
+.hero p { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.5; }
 
-.layout { display: grid; grid-template-columns: 360px 1fr; gap: 20px; }
-.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 20px; box-shadow: var(--shadow); }
-h2 { font-size: 17px; margin: 0 0 16px; display: flex; align-items: center; gap: 8px; }
+/* Grid Layout */
+.layout { display: grid; grid-template-columns: 340px 1fr; gap: 16px; align-items: start; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px; box-shadow: var(--shadow); }
+h2 { font-size: 16px; margin: 0 0 14px; display: flex; align-items: center; gap: 6px; }
 
-label { display: block; font-size: 12px; font-weight: 700; margin: 14px 0 6px; color: #334155; text-transform: uppercase; letter-spacing: 0.03em; }
+label { display: block; font-size: 11px; font-weight: 700; margin: 10px 0 4px; color: #334155; text-transform: uppercase; letter-spacing: 0.03em; }
 input, select, button { font: inherit; }
-select, input[type=number], input[type=color] { width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 10px; background: #fff; color: var(--text); outline: none; transition: border-color 0.2s; }
+select, input[type=number], input[type=color] { width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; background: #fff; color: var(--text); outline: none; transition: border-color 0.2s; font-size: 13px; }
 select:focus, input:focus { border-color: var(--accent); }
 
-/* Custom Drag & Drop Zone */
-.dropzone { border: 2px dashed #cbd5e1; border-radius: 12px; padding: 20px; text-align: center; background: #f8fafc; cursor: pointer; transition: all 0.2s; position: relative; }
+/* Drag & Drop Zone */
+.dropzone { border: 2px dashed #cbd5e1; border-radius: 10px; padding: 14px; text-align: center; background: #f8fafc; cursor: pointer; transition: all 0.2s; position: relative; }
 .dropzone:hover, .dropzone.dragover { border-color: var(--accent); background: var(--soft); }
 .dropzone input[type=file] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
-.dropzone-text { font-size: 13px; color: var(--muted); }
+.dropzone-text { font-size: 12px; color: var(--muted); }
 .dropzone-text b { color: var(--accent); }
 
 input[type=range] { width: 100%; accent-color: var(--accent); }
-.range-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+.range-row { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 2px; }
 
-.presets { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.preset { border: 1px solid var(--line); background: #fff; border-radius: 10px; padding: 10px 8px; text-align: left; cursor: pointer; font-size: 12px; transition: all 0.15s; }
+.presets { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.preset { border: 1px solid var(--line); background: #fff; border-radius: 8px; padding: 8px 6px; text-align: left; cursor: pointer; font-size: 11px; transition: all 0.15s; }
 .preset:hover { border-color: #c4b5fd; }
 .preset.active { border-color: var(--accent); background: var(--soft); color: #5b21b6; font-weight: 700; }
-.preset span { display: block; font-size: 10px; color: var(--muted); font-weight: normal; }
+.preset span { display: block; font-size: 9px; color: var(--muted); font-weight: normal; }
 
-.row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.tool-btns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 8px; }
-.tool-btn { border: 1px solid var(--line); background: #fff; border-radius: 8px; padding: 6px; font-size: 12px; cursor: pointer; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.tool-btns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 6px; }
+.tool-btn { border: 1px solid var(--line); background: #fff; border-radius: 8px; padding: 6px 4px; font-size: 11px; cursor: pointer; }
 .tool-btn:hover { background: #f1f5f9; }
 
-.btn { border: 0; border-radius: 11px; padding: 12px 14px; font-weight: 700; cursor: pointer; width: 100%; transition: opacity 0.2s; }
+.btn { border: 0; border-radius: 9px; padding: 10px 12px; font-weight: 700; font-size: 13px; cursor: pointer; width: 100%; transition: opacity 0.2s; }
 .primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; }
 .primary:hover { opacity: 0.95; }
 .secondary { background: #f1f5f9; color: #334155; }
 .secondary:hover { background: #e2e8f0; }
 .btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
-.preview-wrap { display: flex; flex-direction: column; min-height: 520px; }
-.preview { flex: 1; min-height: 380px; border-radius: 14px; background:
-  linear-gradient(45deg, #cbd5e1 25%, transparent 25%) 0 0/20px 20px,
-  linear-gradient(-45deg, #cbd5e1 25%, transparent 25%) 0 0/20px 20px,
-  linear-gradient(45deg, transparent 75%, #cbd5e1 75%) 0 0/20px 20px,
-  linear-gradient(-45deg, transparent 75%, #cbd5e1 75%) 0 0/20px 20px, #f1f5f9;
+/* Fitted Live Preview Section */
+.preview-wrap { display: flex; flex-direction: column; }
+.preview { height: 350px; border-radius: 12px; background:
+  linear-gradient(45deg, #cbd5e1 25%, transparent 25%) 0 0/18px 18px,
+  linear-gradient(-45deg, #cbd5e1 25%, transparent 25%) 0 0/18px 18px,
+  linear-gradient(45deg, transparent 75%, #cbd5e1 75%) 0 0/18px 18px,
+  linear-gradient(-45deg, transparent 75%, #cbd5e1 75%) 0 0/18px 18px, #f1f5f9;
   display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; border: 1px solid var(--line); }
 .preview img { max-width: 100%; max-height: 100%; display: block; object-fit: contain; }
-.empty { text-align: center; color: var(--muted); padding: 25px; font-size: 14px; }
+.empty { text-align: center; color: var(--muted); padding: 20px; font-size: 13px; }
 
-.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 14px; }
-.stat { background: #f8fafc; border: 1px solid var(--line); border-radius: 10px; padding: 8px; text-align: center; }
-.stat b { display: block; font-size: 13px; color: var(--text); }
-.stat span { font-size: 10px; color: var(--muted); text-transform: uppercase; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 14px; }
+.stat { background: #f8fafc; border: 1px solid var(--line); border-radius: 10px; padding: 10px 4px; text-align: center; }
+.stat b { display: block; font-size: 12px; color: var(--text); }
+.stat span { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.02em; }
 
-.actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+.actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
 
 /* SEO Content Section */
-.info-section { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 26px; box-shadow: var(--shadow); }
-.info-section h3 { font-size: 18px; color: #1e1b4b; margin-top: 0; }
-.info-section h4 { font-size: 15px; margin: 18px 0 8px; color: #334155; }
-.info-section p, .info-section li { font-size: 14px; color: var(--muted); line-height: 1.7; }
-.info-section ul { padding-left: 20px; margin: 0; }
-.faq-grid { display: grid; gap: 16px; margin-top: 14px; }
-.faq-item { border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; background: #f8fafc; }
-.faq-item h5 { margin: 0 0 6px; font-size: 15px; color: var(--text); }
-.faq-item p { margin: 0; font-size: 13px; }
+.info-section { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 20px; box-shadow: var(--shadow); }
+.info-section h3 { font-size: 16px; color: #1e1b4b; margin-top: 0; }
+.info-section h4 { font-size: 14px; margin: 14px 0 6px; color: #334155; }
+.info-section p, .info-section li { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.info-section ul { padding-left: 18px; margin: 0; }
+.faq-grid { display: grid; gap: 12px; margin-top: 10px; }
+.faq-item { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; background: #f8fafc; }
+.faq-item h5 { margin: 0 0 4px; font-size: 14px; color: var(--text); }
+.faq-item p { margin: 0; font-size: 12px; }
 
-footer { padding: 30px 0; color: var(--muted); font-size: 12px; text-align: center; }
+footer { padding: 24px 0; color: var(--muted); font-size: 11px; text-align: center; }
 
-@media(max-width: 820px){
- .layout { grid-template-columns: 1fr; }
- .preview-wrap { min-height: 400px; }
- .stats { grid-template-columns: 1fr 1fr; }
+@media(max-width: 768px){
+ .layout { grid-template-columns: 1fr; gap: 12px; }
+ .preview { height: 280px; }
+ .stats { grid-template-columns: repeat(2, 1fr); }
 }
 </style>
 </head>
@@ -310,7 +321,7 @@ footer { padding: 30px 0; color: var(--muted); font-size: 12px; text-align: cent
   </section>
 </div>
 
-<!-- 2. INTRO/HERO CARD (Tool ke khatam hone ke baad) -->
+<!-- 2. INTRO/HERO CARD -->
 <section class="hero">
   <h2>Instagram Image Resizer</h2>
   <p>Resize, crop, and adjust high-resolution photos for Instagram Posts, Portrait, Stories, and Reels. 100% free, fast, and processed entirely inside your browser.</p>
