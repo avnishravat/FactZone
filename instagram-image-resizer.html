@@ -144,7 +144,7 @@ nav.breadcrumb li:last-child::after { content: ""; }
 nav.breadcrumb a { color: var(--accent); }
 nav.breadcrumb a:hover { text-decoration: underline; }
 
-/* Dynamic Layout */
+/* Grid Layout: Desktop Tool on Left, Mobile Tool on Top */
 .layout { display: grid; grid-template-columns: 360px 1fr; gap: 16px; align-items: start; }
 .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); }
 .card h2 { font-size: 15px; font-weight: 700; margin: 0 0 12px; display: flex; align-items: center; gap: 6px; color: #1e1b4b; }
@@ -235,10 +235,9 @@ input[type=color] { border: 1px solid var(--line); padding: 0; width: 28px; heig
 
 footer { padding: 20px 0 10px; color: var(--muted); font-size: 11px; text-align: center; }
 
-/* Mobile Optimizations */
+/* Mobile Optimizations (Tool on top, Image Preview below) */
 @media(max-width: 768px){
  .layout { grid-template-columns: 1fr; gap: 14px; }
- .preview-wrap { order: -1; } /* Shows live preview first on mobile for better UX */
  .preview { height: 260px; }
  .stats { grid-template-columns: repeat(2, 1fr); gap: 6px; }
  .card { padding: 14px; }
@@ -263,7 +262,7 @@ footer { padding: 20px 0 10px; color: var(--muted); font-size: 11px; text-align:
 <main>
 <!-- MAIN INTERACTIVE LAYOUT -->
 <div class="layout">
-  <!-- Control Panel -->
+  <!-- 1. Control Panel (Tool Section - Always Top) -->
   <section class="card" aria-label="Resizer Controls">
     <h2>⚙️ Resize Settings</h2>
 
@@ -359,7 +358,7 @@ footer { padding: 20px 0 10px; color: var(--muted); font-size: 11px; text-align:
     </div>
   </section>
 
-  <!-- Live Preview Panel -->
+  <!-- 2. Live Preview Panel (Image Section - Below Control Panel) -->
   <section class="card preview-wrap" aria-label="Live Preview Section">
     <div>
       <h2>🖼️ Live Preview</h2>
@@ -380,7 +379,7 @@ footer { padding: 20px 0 10px; color: var(--muted); font-size: 11px; text-align:
 <!-- HERO INTRO -->
 <section class="hero">
   <h1>Free Instagram Image Resizer</h1>
-  <p>Resize, crop, and transform images for Instagram Posts, Stories, Reels, and Portait formats directly in your browser without quality loss.</p>
+  <p>Resize, crop, and transform images for Instagram Posts, Stories, Reels, and Portrait formats directly in your browser without quality loss.</p>
 </section>
 
 <!-- GUIDE & FAQ SECTION -->
