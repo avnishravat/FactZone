@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>250+ Best AI Prompts Library | FactZone Online</title>
+    <meta name="description" content="Explore 250+ curated AI prompts across 10 categories for ChatGPT, Claude, and Midjourney on FactZone Online.">
+    <link rel="canonical" href="https://factzone.online/prompts.html">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://factzone.online/#website",
+          "url": "https://factzone.online/",
+          "name": "FactZone Online",
+          "description": "Premium AI Prompts Library for ChatGPT, Claude, and Midjourney",
+          "publisher": {
+            "@type": "Organization",
+            "name": "FactZone Online",
+            "url": "https://factzone.online/"
+          }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://factzone.online/prompts#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://factzone.online/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "AI Prompts",
+              "item": "https://factzone.online/prompts"
+            }
+          ]
+        },
+        {
+          "@type": "CollectionPage",
+          "@id": "https://factzone.online/prompts#webpage",
+          "url": "https://factzone.online/prompts",
+          "name": "250+ Best AI Prompts Library - FactZone Online",
+          "isPartOf": { "@id": "https://factzone.online/#website" },
+          "breadcrumb": { "@id": "https://factzone.online/prompts#breadcrumb" }
+        }
+      ]
+    }
+    </script>
+
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --text-main: #0f172a;
+            --text-sub: #64748b;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --input-bg: #ffffff;
+            --prompt-bg: #f8fafc;
+            --prompt-border: #e2e8f0;
+            --prompt-text: #334155;
+            --btn-bg: #0f172a;
+            --btn-hover: #1e293b;
+            --btn-text: #ffffff;
+            --link-color: #2563eb;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0f172a;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --card-bg: #1e293b;
+            --border-color: #334155;
+            --input-bg: #0f172a;
+            --prompt-bg: #0f172a;
+            --prompt-border: #334155;
+            --prompt-text: #e2e8f0;
+            --btn-bg: #3b82f6;
+            --btn-hover: #2563eb;
+            --btn-text: #ffffff;
+            --link-color: #60a5fa;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; transition: background-color 0.2s, color 0.2s, border-color 0.2s; }
+        body { background-color: var(--bg-color); color: var(--text-main); padding: 1.5rem 1rem; max-width: 1100px; margin: 0 auto; }
+        
+        /* Breadcrumbs UI */
+        .breadcrumbs {
+            font-size: 0.8rem;
+            color: var(--text-sub);
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .breadcrumbs a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+        .breadcrumbs a:hover { text-decoration: underline; }
+        .breadcrumbs span.current { color: var(--text-sub); font-weight: 600; }
+
+        /* Header */
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.8rem; }
+        .header-content { text-align: left; }
+        h1 { font-size: 1.5rem; color: var(--text-main); font-weight: 800; }
+        p.subtitle { color: var(--text-sub); font-size: 0.85rem; margin-top: 0.25rem; }
+        
+        /* Dark Mode Toggle */
+        .theme-toggle {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
+        }
+        .theme-toggle svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        
+        /* Filter Container */
+        .filter-container { 
+            display: flex; 
+            flex-direction: row; 
+            gap: 10px; 
+            max-width: 550px; 
+            margin: 0 auto 2rem auto; 
+            width: 100%;
+        }
+        .search-bar { 
+            flex: 2; 
+            height: 40px; 
+            padding: 0 0.85rem; 
+            border: 1px solid var(--border-color); 
+            border-radius: 8px; 
+            font-size: 0.85rem; 
+            outline: none; 
+            background: var(--input-bg);
+            color: var(--text-main);
+        }
+        .category-select { 
+            flex: 1; 
+            height: 40px; 
+            padding: 0 0.6rem; 
+            border: 1px solid var(--border-color); 
+            border-radius: 8px; 
+            font-size: 0.85rem; 
+            background-color: var(--input-bg); 
+            color: var(--text-main); 
+            outline: none; 
+            cursor: pointer; 
+        }
+        .search-bar:focus, .category-select:focus { 
+            border-color: #3b82f6; 
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); 
+        }
+        
+        /* Prompts Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.25rem; }
+        
+        /* Prompt Card */
+        .card { 
+            background: var(--card-bg); 
+            border: 1px solid var(--border-color); 
+            border-radius: 12px; 
+            padding: 1.25rem; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+        .card:hover { 
+            transform: translateY(-4px); 
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1); 
+            border-color: #3b82f6;
+        }
+        
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+        
+        /* Badges */
+        .badge { 
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.68rem; 
+            font-weight: 700; 
+            padding: 0.25rem 0.6rem; 
+            border-radius: 20px; 
+            text-transform: uppercase; 
+            letter-spacing: 0.03em;
+            background-color: #e2e8f0;
+            color: #334155;
+        }
+
+        .card h3 { font-size: 1.05rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.6rem; }
+        
+        /* Prompt Text Box */
+        .prompt-box { 
+            background: var(--prompt-bg); 
+            border: 1px solid var(--prompt-border); 
+            padding: 0.85rem; 
+            border-radius: 8px; 
+            font-size: 0.82rem; 
+            color: var(--prompt-text); 
+            line-height: 1.5;
+            margin-bottom: 1.2rem; 
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; 
+            white-space: pre-wrap; 
+            word-break: break-word; 
+            max-height: 110px;
+            overflow-y: auto;
+        }
+        
+        /* Copy Button */
+        .card-footer { display: flex; justify-content: flex-end; }
+        .copy-btn { 
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: var(--btn-bg); 
+            color: var(--btn-text); 
+            border: none; 
+            padding: 0.5rem 0.9rem; 
+            border-radius: 7px; 
+            font-size: 0.78rem; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: background 0.2s, transform 0.1s; 
+        }
+        .copy-btn:hover { background-color: var(--btn-hover); }
+        .copy-btn:active { transform: scale(0.97); }
+        .copy-btn.copied { background-color: #16a34a !important; color: #ffffff !important; }
+        .copy-btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+        @media (max-width: 500px) {
+            body { padding: 1rem 0.75rem; }
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body data-theme="light">
+
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="https://factzone.online/">Home</a> &gt;
+        <a href="https://factzone.online/prompts.html">AI Prompts</a> &gt;
+        <span class="current" id="breadcrumbCategory">All Categories</span>
+    </nav>
+
+    <header>
+        <div class="header-content">
+            <h1>FactZone AI Prompt Hub</h1>
+            <p class="subtitle">250+ Handcrafted Prompts for ChatGPT, Claude, and Midjourney</p>
+        </div>
+        <button class="theme-toggle" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+            <svg id="sunIcon" style="display:none;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            <svg id="moonIcon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+    </header>
+
+    <div class="filter-container">
+        <input type="text" id="searchInput" class="search-bar" placeholder="Search 250+ prompts..." oninput="filterPrompts()">
+        <select id="categorySelect" class="category-select" onchange="filterPrompts()">
+            <option value="all">All Categories (10)</option>
+            <option value="Writing">Writing (25)</option>
+            <option value="Coding">Coding (25)</option>
+            <option value="Marketing">Marketing (25)</option>
+            <option value="Design">Design (25)</option>
+            <option value="SEO">SEO (25)</option>
+            <option value="Productivity">Productivity (25)</option>
+            <option value="Education">Education (25)</option>
+            <option value="Social Media">Social Media (25)</option>
+            <option value="Support">Support (25)</option>
+            <option value="Data">Data & Analytics (25)</option>
+        </select>
+    </div>
+
+    <div class="grid" id="promptGrid"></div>
+
+    <script>
+        const promptList = [
+            // CATEGORY 1: WRITING (25)
+            { cat: "Writing", title: "Blog Post Outline", text: "Create a detailed 5-section blog post outline for [Topic] with target audience notes and key takeaways." },
+            { cat: "Writing", title: "Email Subject Lines", text: "Generate 10 magnetic email subject lines for promoting [Product/Service] with high open rates." },
+            { cat: "Writing", title: "Story Plot Builder", text: "Outline a suspenseful plot about a detective discovering an unexplained AI anomaly in a futuristic city." },
+            { cat: "Writing", title: "Proofreader & Editor", text: "Proofread the following text for grammar, tone consistency, and flow without changing its core message: [Text]" },
+            { cat: "Writing", title: "Cover Letter Generator", text: "Write a professional cover letter for a [Job Title] role highlighting expertise in [Key Skills]." },
+            { cat: "Writing", title: "Compelling Essay Hook", text: "Write 5 engaging introductory hooks for an essay discussing [Topic]." },
+            { cat: "Writing", title: "Tone Switcher", text: "Rewrite the following text in a warm, professional, and conversational tone: [Text]" },
+            { cat: "Writing", title: "Poetry Generator", text: "Write a 4-stanza poem capturing the quiet atmosphere of a rainy city evening." },
+            { cat: "Writing", title: "Character Backstory", text: "Develop a detailed backstory for a fantasy protagonist who possesses the ability to control time." },
+            { cat: "Writing", title: "Press Release Draft", text: "Draft a formal press release announcing the product launch of [New Feature/Product]." },
+            { cat: "Writing", title: "Dialogue Improver", text: "Enhance the dialogue between two characters arguing about [Conflict] to make it sound natural and sharp." },
+            { cat: "Writing", title: "Metaphor Creator", text: "Create 5 unique metaphors to explain complex concepts like [Concept] clearly." },
+            { cat: "Writing", title: "Keynote Speech Outline", text: "Create an inspiring 10-minute keynote speech outline on the topic of innovation in business." },
+            { cat: "Writing", title: "Smart Paraphraser", text: "Paraphrase this passage into concise sentences suitable for executive briefing: [Passage]" },
+            { cat: "Writing", title: "Book Chapter Summary", text: "Summarize the key events and theme developments in Chapter 1 of [Book Title]." },
+            { cat: "Writing", title: "Call-to-Action Writer", text: "Write 8 persuasive Call-to-Action (CTA) phrases for a landing page offering [Offer]." },
+            { cat: "Writing", title: "Passive to Active Voice", text: "Convert the following passive sentences into strong active voice sentences: [Sentences]" },
+            { cat: "Writing", title: "Creative Flash Fiction", text: "Write a 250-word flash fiction story ending with an unexpected twist involving an old pocket watch." },
+            { cat: "Writing", title: "Newsletter Intro", text: "Draft a friendly, engaging opening intro for a weekly tech newsletter covering AI trends." },
+            { cat: "Writing", title: "Slogan Generator", text: "Generate 15 catchy slogans for a modern eco-friendly coffee brand." },
+            { cat: "Writing", title: "Executive Summary", text: "Synthesize the following detailed report into a 1-page executive summary for C-level executives: [Report]" },
+            { cat: "Writing", title: "Case Study Narrative", text: "Transform these raw customer results into a compelling 3-part narrative case study: [Data]" },
+            { cat: "Writing", title: "Op-Ed Opinion Piece", text: "Draft an engaging 600-word Op-Ed article taking a thoughtful stance on [Current Trend/Issue]." },
+            { cat: "Writing", title: "Speech Opening Hook", text: "Write 3 powerful opening statements for a keynote speech addressing sustainable energy." },
+            { cat: "Writing", title: "Product FAQ Writer", text: "Draft 8 clear and comforting FAQ answers for customers inquiring about [Product]." },
+
+            // CATEGORY 2: CODING (25)
+            { cat: "Coding", title: "Code Refactoring", text: "Refactor the following JavaScript function for performance, readability, and modern ES6 syntax: [Code]" },
+            { cat: "Coding", title: "Debug Assistant", text: "Identify the root cause of this error log and explain how to fix it step by step: [Error Log]" },
+            { cat: "Coding", title: "API Route Creator", text: "Write an Express JS REST API route for user authentication with JWT token validation." },
+            { cat: "Coding", title: "Unit Test Writer", text: "Write Jest unit tests covering edge cases for this Python calculation function: [Function]" },
+            { cat: "Coding", title: "Regex Pattern Builder", text: "Create a regular expression pattern to validate international phone numbers and email formats." },
+            { cat: "Coding", title: "SQL Query Optimizer", text: "Optimize this slow SQL query using proper joins and indexing strategies: [Query]" },
+            { cat: "Coding", title: "CSS Flexbox Layout", text: "Write CSS flexbox code to center a responsive hero section vertically and horizontally." },
+            { cat: "Coding", title: "Dockerfile Creator", text: "Create a production-ready multi-stage Dockerfile for a Node.js web application." },
+            { cat: "Coding", title: "Python Data Automation", text: "Write a Python script using pandas to merge two CSV files and clean duplicate entries." },
+            { cat: "Coding", title: "Git Command Helper", text: "Provide the exact Git commands to resolve a merge conflict and push to a remote branch." },
+            { cat: "Coding", title: "TypeScript Interface", text: "Generate TypeScript interfaces for this JSON response object: [JSON Data]" },
+            { cat: "Coding", title: "Code Explainer", text: "Explain how this complex algorithm works step-by-step for a junior developer: [Code]" },
+            { cat: "Coding", title: "HTML Form Validation", text: "Create a modern HTML5 form with native pattern validation for credit card numbers." },
+            { cat: "Coding", title: "React Hook Custom", text: "Write a custom React hook `useLocalStorage` to persist state across page reloads." },
+            { cat: "Coding", title: "JSON Parser Script", text: "Write a JavaScript utility to safely parse nested JSON data without runtime errors." },
+            { cat: "Coding", title: "Code Commenter", text: "Add comprehensive JSDoc comments to all functions in the following code block: [Code]" },
+            { cat: "Coding", title: "Security Vulnerability Audit", text: "Audit this code snippet for common security vulnerabilities like XSS and SQL injection: [Code]" },
+            { cat: "Coding", title: "Big O Time Complexity", text: "Analyze the time and space complexity (Big O notation) of this sorting function: [Function]" },
+            { cat: "Coding", title: "JSON Formatter", text: "Format and validate the following minified JSON string into clean indented JSON: [JSON]" },
+            { cat: "Coding", title: "Env Variable Config", text: "Write a template `.env.example` file for a full-stack MERN application." },
+            { cat: "Coding", title: "GraphQL Schema", text: "Design a GraphQL schema type definition for a modern e-commerce platform product catalog." },
+            { cat: "Coding", title: "Bash Automation Script", text: "Write a Bash script to automate daily database backups and send notification logs." },
+            { cat: "Coding", title: "Kubernetes Deployment YAML", text: "Create a Kubernetes deployment configuration YAML file for a microservice with autoscaling." },
+            { cat: "Coding", title: "Database Migration Script", text: "Write a SQL migration script to add a new index and update schema constraints safely." },
+            { cat: "Coding", title: "CI/CD Pipeline Workflow", text: "Draft a GitHub Actions workflow file to run automated tests and build a production bundle." },
+
+            // CATEGORY 3: MARKETING (25)
+            { cat: "Marketing", title: "Facebook Ad Copy", text: "Write 3 high-converting Facebook ad copy variations targeting small business owners for [Product]." },
+            { cat: "Marketing", title: "Value Proposition", text: "Create a clear 1-sentence value proposition and 3 supporting benefit points for [SaaS Product]." },
+            { cat: "Marketing", title: "Cold Email Outreach", text: "Write a 4-paragraph personalized cold email to B2B prospects offering web development services." },
+            { cat: "Marketing", title: "Landing Page Headline", text: "Generate 10 high-impact landing page headlines designed to increase conversion rates for [Offer]." },
+            { cat: "Marketing", title: "Product Launch Plan", text: "Outline a 4-week marketing campaign timeline for launching a new mobile app." },
+            { cat: "Marketing", title: "Customer Buyer Persona", text: "Create a detailed buyer persona profile including demographics, goals, and pain points for [Target Audience]." },
+            { cat: "Marketing", title: "Competitor Analysis", text: "Draft a SWOT analysis template comparing [Brand A] against [Brand B] in the SaaS space." },
+            { cat: "Marketing", title: "Elevator Sales Pitch", text: "Craft a compelling 30-second elevator pitch explaining [Product] to potential investors." },
+            { cat: "Marketing", title: "Event Invitation Email", text: "Write an attractive email invitation for an upcoming live webinar on digital marketing growth." },
+            { cat: "Marketing", title: "Retargeting Ad Copy", text: "Write persuasive retargeting ad copy targeting users who abandoned their shopping carts." },
+            { cat: "Marketing", title: "Influencer Outreach Pitch", text: "Draft a friendly DM outreach template to pitch product sponsorships to micro-influencers." },
+            { cat: "Marketing", title: "Brand Positioning Statement", text: "Write a formal brand positioning statement for a premium organic skincare line." },
+            { cat: "Marketing", title: "Upsell Email Copy", text: "Draft an email sequence suggesting a premium plan upgrade to existing free-tier users." },
+            { cat: "Marketing", title: "Lead Magnet Ideas", text: "Brainstorm 5 attractive lead magnet ideas to build an email list in the fitness niche." },
+            { cat: "Marketing", title: "Case Study Outline", text: "Outline a B2B case study detailing how [Client] achieved 300% ROI using [Solution]." },
+            { cat: "Marketing", title: "Google Search Ad Copy", text: "Write 3 Google Search Ad headlines and descriptions with keywords for [Service]." },
+            { cat: "Marketing", title: "Referral Program Email", text: "Draft an email introducing a customer referral program with double-sided incentives." },
+            { cat: "Marketing", title: "Discount Offer Copy", text: "Write urgent, limited-time promotional copy for a 48-hour flash sale." },
+            { cat: "Marketing", title: "Testimonial Request", text: "Write a polite email asking satisfied clients to leave a review on Google Business." },
+            { cat: "Marketing", title: "Tagline Generator", text: "Generate 12 modern, punchy taglines for an AI-powered automation tool." },
+            { cat: "Marketing", title: "Affiliate Program Pitch", text: "Draft an inviting pitch email encouraging niche bloggers to join an affiliate marketing program." },
+            { cat: "Marketing", title: "SMS Marketing Campaign", text: "Write 3 punchy, under 160-character SMS marketing messages with trackable CTAs." },
+            { cat: "Marketing", title: "Content Distribution Blueprint", text: "Create a multi-channel strategy for repurposing 1 long blog post across 5 platforms." },
+            { cat: "Marketing", title: "Churn Prevention Offer", text: "Draft a retention email offer triggered when a user clicks 'Cancel Subscription'." },
+            { cat: "Marketing", title: "Product Hunt Pitch", text: "Write a maker's comment and launch post for a Product Hunt release of [Product]." },
+
+            // CATEGORY 4: DESIGN (25)
+            { cat: "Design", title: "Midjourney UI Mockup", text: "UI design of a modern dashboard mobile app, clean minimalist layout, dark theme, Figma style, 8k --ar 16:9" },
+            { cat: "Design", title: "Brand Color Palette", text: "Suggest 5 modern hex color palettes with primary, secondary, and accent colors for a luxury hotel." },
+            { cat: "Design", title: "Logo Concept Prompt", text: "Minimalist vector logo of a flying bird, geometric lines, modern tech aesthetic, white background --no realistic photorealistic" },
+            { cat: "Design", title: "Icon Set Description", text: "Describe a cohesive 6-icon set for an e-commerce website covering cart, user, checkout, support, search, and home." },
+            { cat: "Design", title: "Font Pairing Guide", text: "Suggest 3 typography pairings combining Google Fonts for a modern tech blog header and body text." },
+            { cat: "Design", title: "Moodboard Concept", text: "Create a moodboard concept description for a minimalist Scandinavian furniture catalog." },
+            { cat: "Design", title: "3D Render Prompt", text: "3D isometric render of a cozy home office setup, soft studio lighting, pastel colors, blender style --ar 4:3" },
+            { cat: "Design", title: "Minimalist Poster", text: "Swiss design style event poster, bold typography, abstract layout, high contrast red and black --ar 2:3" },
+            { cat: "Design", title: "Dark Mode Palette", text: "Provide accessible WCAG-compliant color hex codes for a dark mode interface." },
+            { cat: "Design", title: "Product Packaging Design", text: "Minimalist matte black coffee bag packaging design with gold foil lettering mock-up prompt." },
+            { cat: "Design", title: "YouTube Thumbnail Prompt", text: "Vibrant YouTube thumbnail design layout featuring expressional face, bold 3D text 'AI FUTURE', neon glow --ar 16:9" },
+            { cat: "Design", title: "Typography Scale", text: "Define a modular typography scale (in rem) starting from body font 16px for desktop UI." },
+            { cat: "Design", title: "Vector Illustration", text: "Flat vector illustration of team collaborating around a digital laptop, clean flat style --no gradient" },
+            { cat: "Design", title: "Landing Page Hero UI", text: "Draft a modern UI/UX layout breakdown for a SaaS landing page hero section." },
+            { cat: "Design", title: "Mobile Onboarding UI", text: "Write UX wireframe steps for a 3-screen mobile app user onboarding flow." },
+            { cat: "Design", title: "Website Wireframe Specs", text: "Outline UI components needed for an interactive real estate listing card." },
+            { cat: "Design", title: "Banner Art Prompt", text: "Cyberpunk neon city street at night banner background design, high detail --ar 3:1" },
+            { cat: "Design", title: "Pattern Texture Prompt", text: "Seamless abstract geometric line pattern texture, subtle gray tones, architectural background" },
+            { cat: "Design", title: "Photorealistic Portrait", text: "Studio portrait photograph of a creative designer, soft Rembrandt lighting, 85mm lens, sharp focus --ar 4:5" },
+            { cat: "Design", title: "UX Microcopy Writer", text: "Write reassuring UX microcopy for an error modal when payment fails during checkout." },
+            { cat: "Design", title: "App Screenshot Layout", text: "Outline layout specs and caption copy for 5 App Store promotional screenshots." },
+            { cat: "Design", title: "Email Newsletter Layout", text: "Describe a modern responsive HTML email layout structure for product releases." },
+            { cat: "Design", title: "Analytics Widget UI", text: "Specify layout and visual indicators for a real-time server status dashboard widget." },
+            { cat: "Design", title: "Brand Design System", text: "Create a foundational design system spec outline covering buttons, inputs, and spacing rules." },
+            { cat: "Design", title: "Design Tokens Setup", text: "Draft a JSON structure for design tokens specifying colors, typography, and elevation shadows." },
+
+            // CATEGORY 5: SEO (25)
+            { cat: "SEO", title: "SEO Title Tag", text: "Write 5 click-worthy SEO title tags under 60 characters for a landing page targeting [Keyword]." },
+            { cat: "SEO", title: "Keyword Clustering", text: "Group the following list of keywords into logical search intent clusters: [Keyword List]" },
+            { cat: "SEO", title: "Meta Description Writer", text: "Draft 3 engaging SEO meta descriptions under 155 characters with strong CTAs for [Topic]." },
+            { cat: "SEO", title: "Search Intent Analysis", text: "Analyze the search intent (Informational, Transactional, Navigational) for the query '[Query]'." },
+            { cat: "SEO", title: "Internal Linking Strategy", text: "Suggest an internal linking hierarchy linking 5 sub-topic articles back to a core pillar page on [Topic]." },
+            { cat: "SEO", title: "Article Schema Prompt", text: "Generate valid Schema.org Article JSON-LD markup for a blog post titled [Title]." },
+            { cat: "SEO", title: "FAQ Schema Content", text: "Write 4 relevant FAQ questions and concise answers for [Topic] to target Google PAA boxes." },
+            { cat: "SEO", title: "Content Gap Analysis", text: "Identify missing subtopics in this article draft compared to top-ranking competitors: [Content]" },
+            { cat: "SEO", title: "Local SEO Checklist", text: "Create an actionable local SEO optimization checklist for a dentistry practice." },
+            { cat: "SEO", title: "Anchor Text Planner", text: "Suggest 10 natural anchor text variations for backlink outreach targeting [URL]." },
+            { cat: "SEO", title: "LSI Keyword Generator", text: "List 15 Semantically Related (LSI) keywords for the target keyword '[Primary Keyword]'." },
+            { cat: "SEO", title: "Backlink Outreach Email", text: "Write a high-converting guest post pitch email to an editor in the tech niche." },
+            { cat: "SEO", title: "Featured Snippet Copy", text: "Draft a 45-word paragraph designed to win the Google Featured Snippet for '[Question]'." },
+            { cat: "SEO", title: "Image Alt Text Writer", text: "Write descriptive, keyword-rich image alt tags for 5 product images of [Product]." },
+            { cat: "SEO", title: "Canonical Audit Checklist", text: "Provide steps to diagnose and resolve canonical URL duplication issues on an e-commerce site." },
+            { cat: "SEO", title: "E-E-A-T Review", text: "Audit this article outline to improve Google's Experience, Expertise, Authoritativeness, and Trustworthiness." },
+            { cat: "SEO", title: "URL Slug Optimizer", text: "Convert these 5 long blog post titles into short, SEO-friendly URL slugs." },
+            { cat: "SEO", title: "Topic Cluster Creator", text: "Build a comprehensive topic cluster map around the core pillar topic '[Pillar Topic]'." },
+            { cat: "SEO", title: "Broken Link Outreach", text: "Write a friendly email notifying a webmaster of a broken link on their site while suggesting your replacement link." },
+            { cat: "SEO", title: "Pillar Page Structure", text: "Outline an ultimate 3,000-word guide pillar page structure for [Topic]." },
+            { cat: "SEO", title: "Programmatic SEO Plan", text: "Draft a database template layout for generating programmatic SEO pages for location services." },
+            { cat: "SEO", title: "Robots.txt Configuration", text: "Write a standard `robots.txt` configuration for a WordPress site blocking admin and search pages." },
+            { cat: "SEO", title: "Core Web Vitals Audit", text: "List 5 practical optimization steps to improve LCP and CLS scores for a blog." },
+            { cat: "SEO", title: "XML Sitemap Strategy", text: "Detail best practices for structuring multi-sitemap indexes on large websites." },
+            { cat: "SEO", title: "Search Console Audit", text: "Outline a step-by-step process to fix indexing errors flagged in Google Search Console." },
+
+            // CATEGORY 6: PRODUCTIVITY (25)
+            { cat: "Productivity", title: "Daily Task Prioritizer", text: "Organize the following unorganized list of daily tasks using the Eisenhower Matrix: [Task List]" },
+            { cat: "Productivity", title: "Meeting Summarizer", text: "Summarize these raw meeting notes into action items, key decisions, and designated owners: [Notes]" },
+            { cat: "Productivity", title: "Time Blocking Plan", text: "Create a balanced 8-hour daily time-blocking schedule for a full-stack developer." },
+            { cat: "Productivity", title: "Eisenhower Matrix Setup", text: "Categorize these 10 weekly business goals into Urgent vs Important quadrants: [Goals]" },
+            { cat: "Productivity", title: "Weekly Review Template", text: "Outline a 5-step weekly review process to audit accomplishments, bottlenecks, and next goals." },
+            { cat: "Productivity", title: "Inbox Zero Workflow", text: "Draft a systemized protocol for processing 50+ incoming emails efficiently every morning." },
+            { cat: "Productivity", title: "SOP Generator", text: "Draft a step-by-step Standard Operating Procedure (SOP) for publishing blog content." },
+            { cat: "Productivity", title: "Project Milestone Planner", text: "Break down a 3-month website redesign project into bi-weekly milestones." },
+            { cat: "Productivity", title: "Pomodoro Focus Schedule", text: "Design a 4-hour Pomodoro study block plan with targeted break intervals." },
+            { cat: "Productivity", title: "Habit Tracker Setup", text: "Design a 30-day habit tracking framework for establishing a morning workout routine." },
+            { cat: "Productivity", title: "Decision Matrix", text: "Create a decision matrix comparing 3 SaaS software tools based on price, features, and support." },
+            { cat: "Productivity", title: "Delegation Checklist", text: "Write a clear delegation briefing template for handing over a client report project to an assistant." },
+            { cat: "Productivity", title: "Daily Reflection Journal", text: "Provide 5 thought-provoking daily journaling prompts for self-improvement and focus." },
+            { cat: "Productivity", title: "SMART Goals Planner", text: "Refine this vague goal '[Goal]' into a fully structured S.M.A.R.T goal." },
+            { cat: "Productivity", title: "Conflict Resolution Plan", text: "Outline a 4-step framework for mediating a project disagreement between team members." },
+            { cat: "Productivity", title: "Meeting Agenda Writer", text: "Draft a concise 30-minute agenda for a project kickoff meeting." },
+            { cat: "Productivity", title: "Task Breakdown System", text: "Deconstruct the large goal 'Build a Portfolio Website' into 15 small actionable micro-tasks." },
+            { cat: "Productivity", title: "Brainstorming Framework", text: "Guide a 6-step SCAMPER brainstorming session to innovate [Product/Service]." },
+            { cat: "Productivity", title: "Zapier Automation Idea", text: "Suggest 5 automated workflows combining Gmail, Slack, and Trello to save 5 hours weekly." },
+            { cat: "Productivity", title: "Notion Template Setup", text: "Structure a database layout for managing freelance client projects in Notion." },
+            { cat: "Productivity", title: "Async Communication Rule", text: "Draft a set of guidelines for remote teams to reduce unnecessary meetings." },
+            { cat: "Productivity", title: "Daily Standup Template", text: "Create a 3-question daily standup check-in format for agile teams." },
+            { cat: "Productivity", title: "Burnout Prevention Plan", text: "Outline a weekly self-care audit checklist to maintain work-life balance." },
+            { cat: "Productivity", title: "Knowledge Base Structure", text: "Structure a wiki folder hierarchy for organizing company internal documentation." },
+            { cat: "Productivity", title: "Deep Work Protocol", text: "Draft a 4-rule protocol to eliminate digital distractions during 2-hour focus sessions." },
+
+            // CATEGORY 7: EDUCATION (25)
+            { cat: "Education", title: "Feynman Concept Explainer", text: "Explain quantum computing using simple analogies suitable for a 10-year-old child." },
+            { cat: "Education", title: "Quiz Generator", text: "Generate a 5-question multiple-choice quiz with answer key and explanations for [Topic]." },
+            { cat: "Education", title: "Lesson Plan Creator", text: "Draft a 45-minute lesson plan teaching high school students the basics of economics." },
+            { cat: "Education", title: "Study Flashcards", text: "Create 10 question-and-answer flashcard pairs for studying organic chemistry basics." },
+            { cat: "Education", title: "Debate Arguments", text: "List 5 strong pro and 5 strong con arguments for a debate on artificial intelligence in schools." },
+            { cat: "Education", title: "Research Paper Outline", text: "Create a formal academic research paper outline exploring renewable energy solutions." },
+            { cat: "Education", title: "Math Problem Solver", text: "Explain step-by-step how to solve this calculus derivative problem: [Problem]" },
+            { cat: "Education", title: "Language Translation", text: "Translate this paragraph into French while explaining key grammar rules used: [Text]" },
+            { cat: "Education", title: "Historical Event Summary", text: "Summarize the causes, major milestones, and long-term impacts of the Industrial Revolution." },
+            { cat: "Education", title: "Memory Mnemonic Creator", text: "Design a memorable mnemonic device to help memorize the order of planets in the solar system." },
+            { cat: "Education", title: "Grammar Correction", text: "Correct grammatical errors in this text and explain why the edits were necessary: [Text]" },
+            { cat: "Education", title: "Physics Formula Explanation", text: "Explain Einstein's theory of relativity formula E=mc² in simple intuitive terms." },
+            { cat: "Education", title: "Coding Tutor Prompt", text: "Act as a patient coding tutor. Explain object-oriented programming concepts using real-world analogies." },
+            { cat: "Education", title: "Mind Map Structure", text: "Create a hierarchical mind map layout for studying world geography." },
+            { cat: "Education", title: "Essay Feedback Assistant", text: "Review this draft essay for thesis strength, paragraph transitions, and argument clarity: [Essay]" },
+            { cat: "Education", title: "Critical Thinking Prompt", text: "Formulate 5 open-ended questions to stimulate critical thinking about climate policy." },
+            { cat: "Education", title: "Science Fair Project Idea", text: "Propose 3 creative, affordable science fair project ideas testing plant biology." },
+            { cat: "Education", title: "Literature Analysis", text: "Analyze the symbolism of the green light in F. Scott Fitzgerald's 'The Great Gatsby'." },
+            { cat: "Education", title: "Exam Study Schedule", text: "Design a 2-week intensive study schedule for preparing for final exams across 4 subjects." },
+            { cat: "Education", title: "Vocabulary Builder", text: "Provide 10 advanced English vocabulary words with definitions, pronunciations, and example sentences." },
+            { cat: "Education", title: "Socratic Questioner", text: "Act as a Socratic tutor guiding a student to discover the principles of gravity through questions." },
+            { cat: "Education", title: "Case Study Prompt", text: "Draft a business case study discussion scenario for university students analyzing marketing failures." },
+            { cat: "Education", title: "Peer Review Rubric", text: "Create a 4-criteria rubric for students to evaluate peer presentations effectively." },
+            { cat: "Education", title: "Interactive Workshop Plan", text: "Outline a 60-minute interactive workshop plan on public speaking and presentation skills." },
+            { cat: "Education", title: "Academic Abstract Draft", text: "Summarize the following research methodology and findings into a concise 150-word academic abstract." },
+
+            // CATEGORY 8: SOCIAL MEDIA (25)
+            { cat: "Social Media", title: "LinkedIn Viral Post", text: "Write a storytelling LinkedIn post about a major career lesson learned from failure, formatted for high readability." },
+            { cat: "Social Media", title: "YouTube Video Script", text: "Write a 60-second YouTube Shorts script with a strong hook about 3 mind-blowing AI facts." },
+            { cat: "Social Media", title: "Instagram Caption", text: "Draft an engaging Instagram caption with call-to-action and 10 targeted hashtags for a travel photo." },
+            { cat: "Social Media", title: "Tweet Thread Creator", text: "Write a 6-part Twitter/X thread summarizing key lessons from the book 'Atomic Habits'." },
+            { cat: "Social Media", title: "Carousel Post Plan", text: "Outline a 7-slide Instagram carousel post explaining 'How to Build a Morning Routine'." },
+            { cat: "Social Media", title: "TikTok Hook Generator", text: "Write 10 attention-grabbing 3-second opening video hooks for a fitness creator on TikTok." },
+            { cat: "Social Media", title: "Social Content Calendar", text: "Create a 7-day social media posting schedule tailored for a SaaS startup." },
+            { cat: "Social Media", title: "Hashtag Generator", text: "Generate 25 niche-specific hashtags divided into broad, medium, and targeted reach for [Topic]." },
+            { cat: "Social Media", title: "Poll Question Ideas", text: "Create 5 engaging poll questions for LinkedIn to drive comments and interaction." },
+            { cat: "Social Media", title: "Profile Bio Optimizer", text: "Write 3 optimized Twitter/X profile bios highlighting authority in digital marketing." },
+            { cat: "Social Media", title: "Meme Content Concept", text: "Describe a funny, relatable meme visual and text idea for software developers." },
+            { cat: "Social Media", title: "Community Response Draft", text: "Draft polite responses to 3 common negative comments on a brand's social post." },
+            { cat: "Social Media", title: "Reel Storyboard Idea", text: "Write a visual storyboard and audio suggestion for a 15-second recipe Reel." },
+            { cat: "Social Media", title: "Pinterest Pin Description", text: "Write an SEO-optimized Pinterest pin description for home decor DIY ideas." },
+            { cat: "Social Media", title: "Community Guidelines", text: "Draft clear rules and guidelines for a new Facebook Group community." },
+            { cat: "Social Media", title: "Collab Pitch Message", text: "Draft a concise direct message pitching a joint Instagram Live session to a peer." },
+            { cat: "Social Media", title: "Engagement Question", text: "Generate 10 conversation-starting questions to post on a Facebook Page." },
+            { cat: "Social Media", title: "Event Live Tweet Draft", text: "Draft 5 live-tweet templates for covering a keynote presentation at a tech conference." },
+            { cat: "Social Media", title: "Q&A Post Concept", text: "Draft an announcement post inviting followers to submit questions for an upcoming AMA." },
+            { cat: "Social Media", title: "Video Description SEO", text: "Write an SEO-optimized YouTube video description with timestamps for [Video Topic]." },
+            { cat: "Social Media", title: "UGC Campaign Pitch", text: "Draft a contest strategy encouraging users to create photo reviews for a chance to win." },
+            { cat: "Social Media", title: "YouTube Community Post", text: "Write a behind-the-scenes text update post for YouTube channel subscribers." },
+            { cat: "Social Media", title: "Shorts Title Ideas", text: "Generate 10 curiosity-inducing titles for short-form video clips about productivity." },
+            { cat: "Social Media", title: "IG Story Poll Prompts", text: "Create 5 interactive Instagram story poll and quiz sticker concepts for brand awareness." },
+            { cat: "Social Media", title: "Crisis Management Response", text: "Write an urgent, transparent social media public statement addressing a service disruption." },
+
+            // CATEGORY 9: SUPPORT (25)
+            { cat: "Support", title: "Customer Apology Email", text: "Write an empathetic customer support email apologizing for a service outage and offering a credit." },
+            { cat: "Support", title: "FAQ Generator", text: "Generate 5 helpful FAQ questions and answers for an e-commerce return policy." },
+            { cat: "Support", title: "Escalation Response", text: "Draft a calm, professional response de-escalating an angry email from a VIP client." },
+            { cat: "Support", title: "Refund Policy Notice", text: "Write a clear, friendly email explaining why a refund request falls outside policy guidelines." },
+            { cat: "Support", title: "Onboarding Welcome Email", text: "Draft a warm welcome email guiding a new user through their first 3 steps in a SaaS app." },
+            { cat: "Support", title: "Troubleshooting Guide", text: "Write a step-by-step customer guide on how to clear browser cache and cookies." },
+            { cat: "Support", title: "Feature Request Reply", text: "Draft a polite response thanking a user for a feature request and explaining it's on the roadmap." },
+            { cat: "Support", title: "Cancellation Saver Pitch", text: "Write an empathetic customer support response attempting to retain a subscriber cancelling their service." },
+            { cat: "Support", title: "Live Chat Greetings", text: "Draft 5 friendly, automated live chat greeting messages for an online store." },
+            { cat: "Support", title: "VIP Loyalty Offer Email", text: "Write a customer appreciation email offering early access to a sale for top buyers." },
+            { cat: "Support", title: "Scheduled Maintenance Notice", text: "Draft a clear notice informing users of planned system maintenance and potential downtime." },
+            { cat: "Support", title: "CSAT Survey Follow-up", text: "Write a quick 2-question follow-up email asking a customer to rate their support experience." },
+            { cat: "Support", title: "Billing Inquiry Reply", text: "Draft a response explaining a prorated charge on a customer's monthly invoice." },
+            { cat: "Support", title: "Product Feedback Request", text: "Draft a friendly request asking long-time users to complete a 3-minute feedback survey." },
+            { cat: "Support", title: "Account Recovery Steps", text: "Write clear instructions helping a user unlock a suspended account securely." },
+            { cat: "Support", title: "Upsell in Support Reply", text: "Naturally suggest an add-on product that solves a customer's specific problem during support." },
+            { cat: "Support", title: "Shipping Delay Notice", text: "Draft a proactive notification email informing a customer of unexpected delivery delays." },
+            { cat: "Support", title: "Terms Policy Update", text: "Draft a clear plain-English email summarizing changes to a website's Privacy Policy." },
+            { cat: "Support", title: "Customer Winback Email", text: "Write an email targeting inactive users offering an incentive to try the platform again." },
+            { cat: "Support", title: "SLA Breach Notification", text: "Write a formal email notifying a client of a temporary SLA breach with steps taken to fix it." },
+            { cat: "Support", title: "Password Reset Guide", text: "Write clear, concise steps for resetting a forgotten password securely." },
+            { cat: "Support", title: "Integration Setup Guide", text: "Draft simple instructions guiding non-technical users to connect their Zapier integration." },
+            { cat: "Support", title: "Bug Fix Confirmation", text: "Write a follow-up email informing a user that a bug they previously reported has been resolved." },
+            { cat: "Support", title: "Beta Test Invitation", text: "Draft an exclusive email inviting active support users to beta test upcoming app features." },
+            { cat: "Support", title: "Out of Office Support Note", text: "Write an informative out-of-office autoreply listing alternative emergency contact methods." },
+
+            // CATEGORY 10: DATA & ANALYTICS (25)
+            { cat: "Data", title: "Excel Formula Creator", text: "Provide an Excel formula using INDEX/MATCH to lookup values across multiple worksheets." },
+            { cat: "Data", title: "SQL Query Builder", text: "Write a SQL query to aggregate monthly revenue, total orders, and average order value." },
+            { cat: "Data", title: "Data Cleaning Script", text: "Write a Python script using pandas to fill missing values and strip whitespace from string columns." },
+            { cat: "Data", title: "Pandas GroupBy Query", text: "Provide pandas code to calculate the top 5 sales categories grouped by region." },
+            { cat: "Data", title: "Power BI DAX Measure", text: "Write a DAX measure to calculate Year-over-Year (YoY) sales growth rate in Power BI." },
+            { cat: "Data", title: "Regex Data Extraction", text: "Write a regex pattern to extract IP addresses and timestamps from raw server log files." },
+            { cat: "Data", title: "CSV Data Parsing Script", text: "Write a JavaScript Node.js script to read a large CSV file line-by-line efficiently." },
+            { cat: "Data", title: "Data Visualization Guide", text: "Suggest the best chart types (Bar, Scatter, Line, Heatmap) for representing 4 different data sets." },
+            { cat: "Data", title: "A/B Test Hypothesis", text: "Structure a statistical hypothesis statement and sample size calculation outline for an A/B test." },
+            { cat: "Data", title: "Pivot Table Breakdown", text: "Explain step-by-step how to create a dynamic Excel Pivot Table analyzing sales rep performance." },
+            { cat: "Data", title: "Outlier Detection Python", text: "Write Python code using Scikit-Learn or Z-Score method to detect data outliers in a dataset." },
+            { cat: "Data", title: "JSON Data Transposer", text: "Write a Python function to convert nested JSON API data into a flat pandas DataFrame." },
+            { cat: "Data", title: "SQL Window Functions", text: "Write a SQL query using `ROW_NUMBER()` and `PARTITION BY` to rank customer purchases." },
+            { cat: "Data", title: "Google Sheets Array Formula", text: "Provide a Google Sheets `ARRAYFORMULA` with `IFS` to automate grade assignments." },
+            { cat: "Data", title: "Metric KPI Dashboard List", text: "List 10 essential financial and operational KPIs for a SaaS business dashboard." },
+            { cat: "Data", title: "Database Schema Design", text: "Design a relational ERD schema (Tables, Keys) for an online learning management system." },
+            { cat: "Data", title: "Cohort Analysis Setup", text: "Explain how to calculate customer retention rate cohorts in SQL month-over-month." },
+            { cat: "Data", title: "Time Series Forecast Logic", text: "Write Python code using statsmodels ARIMA to forecast sales demand for the next 3 months." },
+            { cat: "Data", title: "Web Scraping BeautifulSoup", text: "Write a Python script using BeautifulSoup to parse product titles and prices from a webpage." },
+            { cat: "Data", title: "Correlation Matrix Script", text: "Provide Python Seaborn code to plot a heatmap correlation matrix for numeric columns." },
+            { cat: "Data", title: "Churn Prediction Model", text: "Outline machine learning steps in Python to build a customer churn prediction classifier." },
+            { cat: "Data", title: "GA4 Custom Dimensions", text: "Explain how to set up custom event parameters and user properties in Google Analytics 4." },
+            { cat: "Data", title: "Data Dictionary Specification", text: "Create a data dictionary table structure specifying column types, descriptions, and constraints." },
+            { cat: "Data", title: "Funnel Conversion Analysis", text: "Write a SQL query to calculate drop-off rates at each stage of a 4-step signup funnel." },
+            { cat: "Data", title: "ETL Pipeline Architecture", text: "Design a high-level data pipeline architecture using AWS S3, Glue, and Redshift." }
+        ];
+
+        function renderPrompts(prompts) {
+            const grid = document.getElementById('promptGrid');
+            grid.innerHTML = '';
+
+            if (prompts.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-sub); padding: 2rem;">No prompts found matching your search query.</p>';
+                return;
+            }
+
+            prompts.forEach((item, idx) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div>
+                        <div class="card-header">
+                            <span class="badge">${item.cat}</span>
+                        </div>
+                        <h3>${item.title}</h3>
+                        <div class="prompt-box" id="p_${idx}">${item.text}</div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="copy-btn" onclick="copyPrompt('p_${idx}', this)">
+                            <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            <span>Copy</span>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterPrompts() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const categorySelect = document.getElementById('categorySelect');
+            const category = categorySelect.value;
+            const breadcrumbCat = document.getElementById('breadcrumbCategory');
+
+            if (category === 'all') {
+                breadcrumbCat.innerText = 'All Categories';
+            } else {
+                const selectedText = categorySelect.options[categorySelect.selectedIndex].text;
+                breadcrumbCat.innerText = selectedText.split(' ')[0];
+            }
+
+            const filtered = promptList.filter(item => {
+                const matchesSearch = item.title.toLowerCase().includes(search) || item.text.toLowerCase().includes(search);
+                const matchesCat = category === 'all' || item.cat === category;
+                return matchesSearch && matchesCat;
+            });
+
+            renderPrompts(filtered);
+        }
+
+        function copyPrompt(elementId, btn) {
+            const text = document.getElementById(elementId).innerText;
+            const btnText = btn.querySelector('span');
+            
+            function showSuccess() {
+                const originalText = btnText.innerText;
+                btnText.innerText = "Copied!";
+                btn.classList.add("copied");
+                setTimeout(() => {
+                    btnText.innerText = originalText;
+                    btn.classList.remove("copied");
+                }, 2000);
+            }
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(showSuccess).catch(() => {
+                    fallbackCopy(text, showSuccess);
+                });
+            } else {
+                fallbackCopy(text, showSuccess);
+            }
+        }
+
+        function fallbackCopy(text, callback) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-999999px";
+            textArea.style.top = "-999999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                if (callback) callback();
+            } catch (err) {
+                console.error('Fallback copy failed: ', err);
+            }
+            document.body.removeChild(textArea);
+        }
+
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        document.body.setAttribute('data-theme', currentTheme);
+        updateThemeIcon(currentTheme);
+
+        function toggleTheme() {
+            const body = document.body;
+            let theme = body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+            body.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            updateThemeIcon(theme);
+        }
+
+        function updateThemeIcon(theme) {
+            document.getElementById('sunIcon').style.display = theme === 'dark' ? 'block' : 'none';
+            document.getElementById('moonIcon').style.display = theme === 'dark' ? 'none' : 'block';
+        }
+
+        renderPrompts(promptList);
+    </script>
+</body>
+</html>
