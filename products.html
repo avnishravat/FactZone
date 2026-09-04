@@ -22,9 +22,9 @@
     <meta name="twitter:title" content="FactZone Digital Store">
     <meta name="twitter:description" content="Premium eBooks, Canva Templates, and Source Codes for Instant Download.">
 
-    <link rel="preconnect" href="https://api.qrserver.com">
-    <link rel="preconnect" href="https://www.gstatic.com">
-    <link rel="preconnect" href="https://firestore.googleapis.com">
+    <link rel="preconnect" href="https://api.qrserver.com" crossorigin>
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
     <link rel="dns-prefetch" href="https://api.qrserver.com">
     <link rel="dns-prefetch" href="https://firestore.googleapis.com">
 
@@ -42,9 +42,7 @@
     }
     </script>
 
-    <!-- WebSite + sitelinks search box structured data — lets Google show
-         a search box directly in search results, and the products page
-         itself now understands ?q= so that search is functional. -->
+    <!-- WebSite + sitelinks search box structured data -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -58,13 +56,6 @@
         }
     }
     </script>
-
-    <!-- Firestore is accessed via the plain REST API (fetch calls below) —
-         no Firebase JS SDK. The SDK's realtime listener opens a persistent
-         WebChannel/long-polling connection that Googlebot's renderer can't
-         complete in time, which was causing Search Console to see an empty
-         "no products" page. Plain REST calls are simple one-shot requests
-         that resolve fast for both users and crawlers. -->
 
     <style>
         :root {
@@ -89,8 +80,6 @@
 
         .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
-        /* Hero stays for SEO (page needs one clear h1) but sits compact,
-           right under the toolbar instead of taking a tall block above it. */
         .hero { text-align: center; padding: 0.5rem 0 0.2rem; }
         .hero h1 { font-size: 1.05rem; margin-bottom: 0.1rem; font-weight: 700; }
         .hero p { color: var(--text-muted); font-size: 0.75rem; }
@@ -101,8 +90,6 @@
         .toolbar input, .toolbar select { padding: 0.5rem 0.65rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-body); color: var(--text-main); font-size: 0.8rem; }
         .toolbar input { flex: 1; min-width: 140px; }
 
-        /* Meesho/Flipkart-style grid: exactly 2 columns on phones,
-           4 columns from tablet/desktop width up. */
         .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.6rem; margin-top: 0.5rem; }
         @media (min-width: 700px) {
             .product-grid { grid-template-columns: repeat(4, 1fr); gap: 1rem; }
@@ -136,12 +123,6 @@
         .download-btn { width: 100%; background-color: var(--primary); color: #ffffff; border: none; padding: 0.3rem 0.4rem; border-radius: 6px; font-size: 0.68rem; font-weight: 600; cursor: pointer; transition: 0.2s; text-decoration:none; display:inline-block; text-align:center; }
         .download-btn:hover { background-color: var(--primary-hover); }
 
-        /* Card size stays the same small/compact size on every screen width
-           on purpose — only the grid column count changes below. */
-
-        /* Compact mobile spacing so 4 products (2x2) fit in one screen
-           without scrolling. Nothing removed — just tighter paddings,
-           margins and a shorter image box to cut wasted vertical space. */
         @media (max-width: 699px) {
             header { padding: 0.4rem 0.5rem; flex-wrap: nowrap; gap: 0.3rem; }
             .logo { font-size: 0.85rem; flex-shrink: 0; }
@@ -154,9 +135,6 @@
             .hero h1 { font-size: 0.95rem; margin-bottom: 0.05rem; }
             .hero p { font-size: 0.68rem; }
             .container { padding: 0.4rem 0.6rem 1rem; }
-            /* Search + category always share one row, same width the
-               search bar used to take up alone — neither wraps to its
-               own line, they just shrink to fit side by side. */
             .toolbar { gap: 0.4rem; flex-wrap: nowrap; }
             .toolbar input { flex: 1.3; min-width: 0; padding: 0.45rem 0.5rem; font-size: 0.75rem; }
             .toolbar select { flex: 1; min-width: 0; padding: 0.45rem 0.3rem; font-size: 0.72rem; }
@@ -289,9 +267,6 @@
     </footer>
 
     <script>
-        // ---------------------------------------------------------------
-        // FIRESTORE REST API — no SDK, just fetch() calls.
-        // ---------------------------------------------------------------
         const FS_PROJECT_ID = "factzone-a9ace";
         const FS_BASE = `https://firestore.googleapis.com/v1/projects/${FS_PROJECT_ID}/databases/(default)/documents`;
 
@@ -325,10 +300,6 @@
             if (where) structuredQuery.where = where;
             if (orderBy) structuredQuery.orderBy = orderBy;
             if (limit) structuredQuery.limit = limit;
-            // "select" trims the response to only the fields the caller
-            // actually reads — same rows/ids back, just a lighter payload
-            // to transfer and JSON-parse (nothing about what's rendered
-            // changes since callers only ever request fields they use).
             if (select) structuredQuery.select = { fields: select.map(f => ({ fieldPath: f })) };
             const res = await fetch(`${FS_BASE}:runQuery`, {
                 method: 'POST',
@@ -341,9 +312,6 @@
         }
 
         async function fsGetDoc(collectionId, docId, fieldMask) {
-            // Same field-mask idea as fsRunQuery above — only used by
-            // loadSettings() to fetch the handful of fields it needs
-            // instead of the whole settings document.
             const maskQS = fieldMask ? '?' + fieldMask.map(f => `mask.fieldPaths=${encodeURIComponent(f)}`).join('&') : '';
             const res = await fetch(`${FS_BASE}/${collectionId}/${docId}${maskQS}`);
             if (res.status === 404) return null;
@@ -365,8 +333,6 @@
             return fsDocId(doc.name);
         }
 
-        // Approved downloads stop working after this many hours (security).
-        // Admin can override this from the admin panel's UPI settings card.
         const DEFAULT_EXPIRY_HOURS = 48;
 
         const translations = {
@@ -378,13 +344,13 @@
         let activeProduct = null;
         let activeReviewProductId = null;
         let selectedStars = 0;
-        let appliedCoupon = null; // { code, type, value }
+        let appliedCoupon = null;
 
         let allProducts = [];
-        let reviewsByProduct = {}; // productId -> [ {rating, name, text} ]
+        let reviewsByProduct = {};
         let upiSettings = { upiId: '', qrUrl: '', adminWhatsapp: '', expiryHours: DEFAULT_EXPIRY_HOURS };
-        let myOrders = JSON.parse(localStorage.getItem('fz_my_orders') || '[]'); // [{orderId, productId}]
-        let myOrderStatus = {}; // productId -> order data (from Firestore, fetched by id)
+        let myOrders = JSON.parse(localStorage.getItem('fz_my_orders') || '[]');
+        let myOrderStatus = {};
 
         function escapeHtml(str) {
             return String(str ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -404,8 +370,6 @@
             renderProducts();
         }
 
-        // Uses the same WhatsApp number the admin already set up for order
-        // alerts (settings/store → adminWhatsapp) — nothing hardcoded here.
         function renderSupportLine() {
             const el = document.getElementById('supportLine');
             if (!el) return;
@@ -417,11 +381,28 @@
             }
         }
 
-        // ---------------------------------------------------------------
-        // DATA LOADING — plain REST fetches instead of realtime listeners.
-        // A single request resolves fast for both visitors and crawlers.
-        // A light poll keeps things reasonably fresh across open tabs.
-        // ---------------------------------------------------------------
+        // --- INSTANT LOAD CACHE INITIALIZATION ---
+        function initCacheLoad() {
+            try {
+                const cachedP = localStorage.getItem('fz_cache_products');
+                if (cachedP) {
+                    allProducts = JSON.parse(cachedP);
+                    populateCategoryFilter();
+                    renderProducts();
+                }
+                const cachedR = localStorage.getItem('fz_cache_reviews');
+                if (cachedR) {
+                    reviewsByProduct = JSON.parse(cachedR);
+                    renderProducts();
+                }
+                const cachedS = localStorage.getItem('fz_cache_settings');
+                if (cachedS) {
+                    upiSettings = JSON.parse(cachedS);
+                    renderSupportLine();
+                }
+            } catch(e) { console.error('Cache load error:', e); }
+        }
+
         async function loadProducts(isRetry) {
             try {
                 const rows = await fsRunQuery('products', {
@@ -429,17 +410,12 @@
                     select: ['title', 'desc', 'tag', 'price', 'previewUrl', 'fileUrl', 'createdAt']
                 });
                 allProducts = rows;
+                try { localStorage.setItem('fz_cache_products', JSON.stringify(rows)); } catch(e){}
                 populateCategoryFilter();
-                // Render right away — don't make the visitor wait on the
-                // "did I already pay for this?" lookups below. Those run
-                // in the background and just re-render once they resolve.
                 renderProducts();
                 refreshMyOrderStatuses().then(renderProducts);
             } catch (e) {
                 console.error('Products fetch error:', e);
-                // A "Failed to fetch" here is usually a brief network blip
-                // (weak mobile signal, momentary DNS hiccup) — retry once
-                // before showing the error state to the visitor.
                 if (!isRetry) {
                     setTimeout(() => loadProducts(true), 1500);
                     return;
@@ -460,6 +436,7 @@
                     grouped[r.productId].push(r);
                 });
                 reviewsByProduct = grouped;
+                try { localStorage.setItem('fz_cache_reviews', JSON.stringify(grouped)); } catch(e){}
                 renderProducts();
             } catch (e) {
                 console.error('Reviews fetch error:', e);
@@ -471,6 +448,7 @@
                 const doc = await fsGetDoc('settings', 'store', ['upiId', 'qrUrl', 'adminWhatsapp', 'expiryHours']);
                 if (doc) {
                     upiSettings = { upiId: '', qrUrl: '', adminWhatsapp: '', expiryHours: DEFAULT_EXPIRY_HOURS, ...doc };
+                    try { localStorage.setItem('fz_cache_settings', JSON.stringify(upiSettings)); } catch(e){}
                     renderSupportLine();
                 }
             } catch (e) {
@@ -478,12 +456,12 @@
             }
         }
 
+        // Run Cache immediately for instant 0ms render
+        initCacheLoad();
         loadProducts();
         loadReviews();
         loadSettings();
 
-        // Refresh every 25s so approvals/new products/reviews still show up
-        // without a manual reload — without ever opening a long-lived stream.
         setInterval(() => { loadProducts(); loadReviews(); loadSettings(); }, 25000);
 
         function populateCategoryFilter() {
@@ -495,10 +473,6 @@
             if (tags.includes(current)) select.value = current;
         }
 
-        // Because non-admins can only "get" an order by its known ID (not
-        // list the whole collection — see firestore.rules), we look up each
-        // order we personally created. Done in parallel (not one-by-one)
-        // so a long order history never delays the page.
         async function refreshMyOrderStatuses() {
             myOrderStatus = {};
             const stillValid = [];
@@ -509,9 +483,6 @@
                         myOrderStatus[entry.productId] = doc;
                         stillValid.push(entry);
                     }
-                    // doc === null means a confirmed 404 (order was deleted
-                    // by admin) — drop it below so it's never looked up
-                    // again. A thrown error (network blip) keeps it as-is.
                 } catch (e) {
                     console.error('Could not refresh order status:', e);
                     stillValid.push(entry);
@@ -583,10 +554,7 @@
                     ? `<div class="rating-line">${'★'.repeat(Math.round(rating.avg))}${'☆'.repeat(5 - Math.round(rating.avg))} ${rating.avg} <span class="count">(${rating.count})</span></div>`
                     : `<div class="rating-line count">No reviews yet</div>`;
 
-                // First 4 cards are the ones visible without scrolling, so
-                // load them eagerly for a faster first paint; everything
-                // below stays lazy as before.
-                const imgLoadAttr = i < 4 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"';
+                const imgLoadAttr = i < 4 ? 'loading="eager" fetchpriority="high" decoding="async"' : 'loading="lazy" decoding="async"';
                 const previewHTML = p.previewUrl
                     ? `<img src="${escapeHtml(p.previewUrl)}" alt="${escapeHtml(p.title)} preview" class="preview-thumb" ${imgLoadAttr} onclick="window.open('${escapeHtml(p.previewUrl)}','_blank')">`
                     : `<span class="icon-box">📦</span>`;
@@ -625,11 +593,7 @@
                 scriptTag.id = 'productSchema';
                 document.head.appendChild(scriptTag);
             }
-            // Offers valid for a year out — Google flags offers with no
-            // priceValidUntil as an "improve appearance" warning.
             const priceValidUntil = new Date(Date.now() + 365 * 24 * 3600 * 1000).toISOString().slice(0, 10);
-            // Offer is valid starting from today — Google also flags offers
-            // with no validFrom as an "improve appearance" warning.
             const validFrom = new Date().toISOString().slice(0, 10);
 
             const schema = {
@@ -652,10 +616,6 @@
                             "availability": "https://schema.org/InStock",
                             "priceValidUntil": priceValidUntil,
                             "validFrom": validFrom,
-                            // These are digital, instant-download products —
-                            // "shipping" is just the download becoming
-                            // available (up to 24 hrs while payment is
-                            // verified), no physical transit.
                             "shippingDetails": {
                                 "@type": "OfferShippingDetails",
                                 "shippingRate": { "@type": "MonetaryAmount", "value": "0", "currency": "INR" },
@@ -666,10 +626,6 @@
                                 },
                                 "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "IN" }
                             },
-                            // Digital files delivered instantly on approval
-                            // can't be "returned" — stating this truthfully
-                            // (rather than omitting it) is what satisfies
-                            // the Merchant listing return-policy check.
                             "hasMerchantReturnPolicy": {
                                 "@type": "MerchantReturnPolicy",
                                 "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted",
@@ -677,10 +633,6 @@
                             }
                         }
                     };
-                    // Only attach a rating when real reviews exist for this
-                    // product — it must match what's visibly shown on the
-                    // page (the ★ rating-line). A fabricated/no-review
-                    // aggregateRating is a structured-data policy violation.
                     if (rating) {
                         item.aggregateRating = {
                             "@type": "AggregateRating",
@@ -694,9 +646,6 @@
             scriptTag.textContent = JSON.stringify(schema);
         }
 
-        // ---------------------------------------------------------------
-        // PAYMENT FLOW
-        // ---------------------------------------------------------------
         function handleProductClick(id) {
             const prod = allProducts.find(p => p.id === id);
             if (!prod) { alert('This product is no longer available.'); return; }
@@ -724,7 +673,7 @@
             document.getElementById('payModal').style.display = 'flex';
         }
 
-        let currentUpiLink = ''; // rebuilt below whenever price/coupon changes
+        let currentUpiLink = '';
 
         function updateModalPrice() {
             const base = Number(activeProduct.price);
@@ -742,10 +691,6 @@
             const upiHint = document.getElementById('upiPayHint');
 
             if (upiSettings.upiId) {
-                // UPI deep link: opens the customer's UPI app directly with the
-                // payee, amount and a note pre-filled — they just enter their
-                // PIN to finish. Rebuilt here so it always reflects the coupon-
-                // discounted amount, not the original price.
                 currentUpiLink = `upi://pay?pa=${upiSettings.upiId}&pn=${encodeURIComponent('FactZone')}&am=${final}&cu=INR&tn=${encodeURIComponent(activeProduct.title)}`;
                 upiBtn.style.display = 'block';
                 upiHint.style.display = 'block';
@@ -763,11 +708,6 @@
 
         function openUpiApp() {
             if (!currentUpiLink) return;
-            // Navigate the current tab to the upi:// link — the OS/browser
-            // intercepts this and hands off to whichever UPI app the
-            // customer has installed (GPay, PhonePe, Paytm, etc). Using a
-            // new tab here often just opens a blank tab on mobile, so we
-            // deliberately avoid target="_blank".
             window.location.href = currentUpiLink;
         }
 
@@ -849,9 +789,6 @@
                 await refreshMyOrderStatuses();
                 renderProducts();
 
-                // Free "click-to-send" WhatsApp alert to the seller — opens
-                // WhatsApp with the order details pre-filled; the customer
-                // just taps Send. No paid API/backend involved.
                 if (upiSettings.adminWhatsapp) {
                     const text = encodeURIComponent(
                         `New order on FactZone\nProduct: ${activeProduct.title}\nAmount: ₹${finalPrice}\nName: ${name}\nContact: ${contact}\nUTR: ${utr}`
@@ -870,9 +807,6 @@
             }
         }
 
-        // ---------------------------------------------------------------
-        // REVIEWS
-        // ---------------------------------------------------------------
         function openReviewModal(productId) {
             activeReviewProductId = productId;
             selectedStars = 0;
@@ -944,8 +878,6 @@
             const savedTheme = localStorage.getItem('fz_theme');
             if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
 
-            // Supports ?q=... so the SearchAction structured data (sitelinks
-            // search box) and any shared/search-engine links actually work.
             const qParam = new URLSearchParams(window.location.search).get('q');
             if (qParam) document.getElementById('searchInput').value = qParam;
 
