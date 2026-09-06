@@ -1,27 +1,30 @@
-name: Google Indexing API
+name: Smart Google Indexing
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: # Manual trigger GitHub dashboard se
+  schedule:
+    - cron: '0 0 * * *' # Har din raat 12:00 AM UTC par chalega
   push:
     branches:
-      - main
+      - main # Code push hone par chalega
 
 jobs:
   index-urls:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20' # Node.js 20 me fetch api natively available hai
 
-      - name: Install Dependencies
+      - name: Install Google APIs Library
         run: npm install googleapis
 
-      - name: Run Indexing Script
+      - name: Run Smart Indexing Script
         env:
           INDEXING_KEY: ${{ secrets.INDEXING_KEY }}
         run: node scripts/index-urls.js
