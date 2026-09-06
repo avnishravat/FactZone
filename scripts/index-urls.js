@@ -7,19 +7,22 @@ async function main() {
     process.exit(1);
   }
 
+  // Secret parse karein
   const key = JSON.parse(keySecret);
+
+  // Private key me newlines (\n) fix karein
+  const privateKey = key.private_key.replace(/\\n/g, '\n');
 
   const client = new google.auth.JWT(
     key.client_email,
     null,
-    key.private_key,
+    privateKey,
     ['https://www.googleapis.com/auth/indexing'],
     null
   );
 
   await client.authorize();
 
-  // Yahan wo URL rakhein jise index karwana hai
   const targetUrl = 'https://factzone.online/';
 
   try {
@@ -34,6 +37,7 @@ async function main() {
     console.log('Successfully submitted:', response.data);
   } catch (err) {
     console.error('Error submitting URL:', err.response ? err.response.data : err.message);
+    process.exit(1);
   }
 }
 
