@@ -7,19 +7,15 @@ async function main() {
     process.exit(1);
   }
 
-  // Secret parse karein
+  // Parse secret
   const key = JSON.parse(keySecret);
 
-  // Private key me newlines (\n) fix karein
-  const privateKey = key.private_key.replace(/\\n/g, '\n');
-
-  const client = new google.auth.JWT(
-    key.client_email,
-    null,
-    privateKey,
-    ['https://www.googleapis.com/auth/indexing'],
-    null
-  );
+  // Initialize JWT client using options object syntax
+  const client = new google.auth.JWT({
+    email: key.client_email,
+    key: key.private_key,
+    scopes: ['https://www.googleapis.com/auth/indexing'],
+  });
 
   await client.authorize();
 
@@ -34,7 +30,7 @@ async function main() {
         type: 'URL_UPDATED',
       },
     });
-    console.log('Successfully submitted:', response.data);
+    console.log('Successfully submitted for indexing:', response.data);
   } catch (err) {
     console.error('Error submitting URL:', err.response ? err.response.data : err.message);
     process.exit(1);
