@@ -1,12 +1,15 @@
 name: Smart Google Indexing
 
 on:
-  workflow_dispatch: # Manual trigger GitHub dashboard se
+  workflow_dispatch:
+
   schedule:
-    - cron: '0 0 * * *' # Har din raat 12:00 AM UTC par chalega
+    # हर दिन 12:00 AM UTC = 5:30 AM IST
+    - cron: '0 0 * * *'
+
   push:
     branches:
-      - main # Code push hone par chalega
+      - main
 
 jobs:
   index-urls:
@@ -19,7 +22,7 @@ jobs:
       - name: Setup Node.js Environment
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Node.js 20 me fetch api natively available hai
+          node-version: '20'
 
       - name: Install Google APIs Library
         run: npm install googleapis
