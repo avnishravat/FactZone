@@ -201,16 +201,34 @@
     }
   </script>
 
+  <!-- Performance Boost: User-Interaction Lazy Loading for Ad Scripts -->
   <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      setTimeout(() => {
+    (function() {
+      let adsLoaded = false;
+      function loadAds() {
+        if (adsLoaded) return;
+        adsLoaded = true;
+
+        // Google AdSense
         const adsScript = document.createElement('script');
         adsScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6974190466298538";
         adsScript.crossOrigin = "anonymous";
         adsScript.async = true;
         document.head.appendChild(adsScript);
-      }, 1500);
-    });
+
+        // Profitablerate CPM Network
+        const cpmScript = document.createElement('script');
+        cpmScript.src = "https://pl30385026.profitableratecpmnetwork.com/c8/65/da/c865dac59f2fef8825e792ef3b7f91f4.js";
+        cpmScript.async = true;
+        document.body.appendChild(cpmScript);
+      }
+
+      ['touchstart', 'mousemove', 'scroll', 'keydown'].forEach(event => {
+        window.addEventListener(event, loadAds, { once: true, passive: true });
+      });
+
+      setTimeout(loadAds, 4000);
+    })();
   </script>
 
   <!-- Unified @graph JSON-LD: Organization + WebSite + BreadcrumbList + ItemList (Carousel) -->
@@ -353,6 +371,7 @@
       <p>यह वेबसाइट पूरी तरह देखने के लिए JavaScript enable करें। FactZone पर विज्ञान, टेक्नोलॉजी, इतिहास और रहस्य से जुड़े रोचक तथ्य पढ़ें।</p>
     </div>
   </noscript>
+
   <!-- Footer -->
   <footer class="bg-black text-white mt-10 border-t dark:border-gray-900">
     <div class="max-w-7xl mx-auto px-5 py-8 text-center">
@@ -592,6 +611,5 @@
       });
     });
   </script>
-  <script async src="https://pl30385026.profitableratecpmnetwork.com/c8/65/da/c865dac59f2fef8825e792ef3b7f91f4.js"></script>
 </body>
 </html>
