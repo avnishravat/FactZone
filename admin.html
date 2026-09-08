@@ -346,13 +346,9 @@ select.form-input{cursor:pointer; appearance:none; background-image:url("data:im
           <div class="form-grid">
             <div class="form-group">
               <label class="form-label">Title *</label>
-              <input class="form-input" id="q-title" placeholder="Post title..." oninput="autoGenSlug('q')">
+              <input class="form-input" id="q-title" placeholder="Post title...">
             </div>
             <div class="form-group">
-              <label class="form-label">Slug (URL Name)</label>
-              <input class="form-input" id="q-slug" placeholder="post-slug (auto-generated if empty)" oninput="this.dataset.userEdited='true'">
-            </div>
-            <div class="form-group full">
               <label class="form-label">Category *</label>
               <select class="form-input" id="q-category">
                 <option value="science">Science / विज्ञान</option>
@@ -361,6 +357,10 @@ select.form-input{cursor:pointer; appearance:none; background-image:url("data:im
                 <option value="mystery">Mystery / रहस्य</option>
                 <option value="viral">Viral / रोचक तथ्य</option>
               </select>
+            </div>
+            <div class="form-group full">
+              <label class="form-label">URL Slug</label>
+              <input class="form-input" id="q-slug" placeholder="Auto-generated from title if left blank">
             </div>
             <div class="form-group full">
               <label class="form-label">Image URL</label>
@@ -408,13 +408,9 @@ select.form-input{cursor:pointer; appearance:none; background-image:url("data:im
           <div class="form-grid">
             <div class="form-group">
               <label class="form-label">Title *</label>
-              <input class="form-input" id="u-title" placeholder="Post title..." oninput="autoGenSlug('u')">
+              <input class="form-input" id="u-title" placeholder="Post title...">
             </div>
             <div class="form-group">
-              <label class="form-label">Slug (URL Name)</label>
-              <input class="form-input" id="u-slug" placeholder="post-slug (auto-generated if empty)" oninput="this.dataset.userEdited='true'">
-            </div>
-            <div class="form-group full">
               <label class="form-label">Category *</label>
               <select class="form-input" id="u-category">
                 <option value="science">Science / विज्ञान</option>
@@ -423,6 +419,10 @@ select.form-input{cursor:pointer; appearance:none; background-image:url("data:im
                 <option value="mystery">Mystery / रहस्य</option>
                 <option value="viral">Viral / रोचक तथ्य</option>
               </select>
+            </div>
+            <div class="form-group full">
+              <label class="form-label">URL Slug</label>
+              <input class="form-input" id="u-slug" placeholder="Auto-generated from title if left blank">
             </div>
             <div class="form-group full">
               <label class="form-label">Image URL</label>
@@ -583,11 +583,7 @@ You can use placeholders:
     </div>
     <div class="form-group" style="margin-bottom:14px">
       <label class="form-label">Title</label>
-      <input class="form-input" id="e-title" oninput="autoGenSlug('e')">
-    </div>
-    <div class="form-group" style="margin-bottom:14px">
-      <label class="form-label">Slug (URL Name)</label>
-      <input class="form-input" id="e-slug" placeholder="post-slug (auto-generated if empty)" oninput="this.dataset.userEdited='true'">
+      <input class="form-input" id="e-title">
     </div>
     <div class="form-group" style="margin-bottom:14px">
       <label class="form-label">Category</label>
@@ -691,26 +687,6 @@ let allPostsCache = [];
 let currentEditId = null;
 let quillEditor = null;     
 let editQuillEditor = null; 
-
-// ── Helper to generate clean slug ──
-window.generateSlug = function(text) {
-  if (!text) return '';
-  return text
-    .toString()
-    .trim()
-    .toLowerCase()
-    .replace(/[^\p{L}\p{N}]+/gu, '-')
-    .replace(/^-+|-+$/g, '');
-};
-
-window.autoGenSlug = function(prefix) {
-  const titleInput = document.getElementById(`${prefix}-title`);
-  const slugInput  = document.getElementById(`${prefix}-slug`);
-  if (!titleInput || !slugInput) return;
-  if (!slugInput.dataset.userEdited) {
-    slugInput.value = window.generateSlug(titleInput.value);
-  }
-};
 
 // ── ImgBB Upload Helpers ──
 window.triggerImgUpload = function(prefix) {
@@ -947,6 +923,24 @@ function escapeHtml(str) {
     .replace(/'/g, "&#39;");
 }
 
+// ── Build a URL-safe slug from text (Unicode-aware, keeps Hindi/Devanagari) ──
+function slugify(str) {
+  let s = String(str == null ? "" : str).trim().toLowerCase();
+  s = s.replace(/[^\p{L}\p{N}\p{M}]+/gu, '-');
+  s = s.replace(/^-+|-+$/g, '');
+  return s;
+}
+
+// ── Ensure a slug doesn't collide with an already-loaded post's slug ──
+function makeUniqueSlug(baseSlug) {
+  if (!baseSlug) return baseSlug;
+  const existing = new Set((allPostsCache || []).map(p => p.slug).filter(Boolean));
+  if (!existing.has(baseSlug)) return baseSlug;
+  let i = 2;
+  while (existing.has(`${baseSlug}-${i}`)) i++;
+  return `${baseSlug}-${i}`;
+}
+
 // ── Build post card HTML ──
 function buildCard(post, index) {
   const date = post.createdAt
@@ -1041,11 +1035,10 @@ window.filterDash = function() {
 // ── Upload ──
 window.uploadPost = async function(prefix) {
   const title    = document.getElementById(`${prefix}-title`).value.trim();
-  const rawSlug  = document.getElementById(`${prefix}-slug`)?.value.trim() || '';
-  const slug     = rawSlug ? window.generateSlug(rawSlug) : window.generateSlug(title);
   const desc     = document.getElementById(`${prefix}-desc`).value.trim();
   const image    = document.getElementById(`${prefix}-image`).value.trim();
   const category = document.getElementById(`${prefix}-category`)?.value || '';
+  const slugRaw  = document.getElementById(`${prefix}-slug`)?.value.trim() || '';
   
   let content = '';
   if (prefix === 'u' && quillEditor) {
@@ -1062,14 +1055,12 @@ window.uploadPost = async function(prefix) {
   btn.disabled = true; btn.innerHTML = '<span>⏳</span> Publishing...';
   
   try {
-    await addDoc(collection(db,"posts"), { title, slug, desc, image, content, category, createdAt: Date.now() });
+    const slug = makeUniqueSlug(slugify(slugRaw) || slugify(title));
+    await addDoc(collection(db,"posts"), { title, desc, image, content, category, slug, createdAt: Date.now() });
     
-    ['title','slug','desc','image'].forEach(f => { 
+    ['title','desc','image','slug'].forEach(f => { 
       const inputEl = document.getElementById(`${prefix}-${f}`);
-      if(inputEl) {
-        inputEl.value = ''; 
-        delete inputEl.dataset.userEdited;
-      }
+      if(inputEl) inputEl.value=''; 
     });
     const catEl = document.getElementById(`${prefix}-category`);
     if (catEl) catEl.selectedIndex = 0;
@@ -1118,14 +1109,9 @@ window.openEditModal = function(id) {
   const post = allPostsCache.find(p => p.id === id);
   if (!post) return;
   currentEditId = id;
-  document.getElementById('e-title').value = post.title || '';
-  const slugInput = document.getElementById('e-slug');
-  if (slugInput) {
-    slugInput.value = post.slug || '';
-    delete slugInput.dataset.userEdited;
-  }
-  document.getElementById('e-desc').value  = post.desc  || '';
-  document.getElementById('e-image').value = post.image || '';
+  document.getElementById('e-title').value   = post.title   || '';
+  document.getElementById('e-desc').value    = post.desc    || '';
+  document.getElementById('e-image').value   = post.image   || '';
   const catEl = document.getElementById('e-category');
   if (catEl) catEl.value = post.category || 'science';
   
@@ -1157,14 +1143,9 @@ window.saveEdit = async function() {
     content = editQuillEditor.root.innerHTML.trim();
   }
 
-  const title   = document.getElementById('e-title').value.trim();
-  const rawSlug = document.getElementById('e-slug')?.value.trim() || '';
-  const slug    = rawSlug ? window.generateSlug(rawSlug) : window.generateSlug(title);
-
   try {
     await updateDoc(doc(db,"posts",currentEditId), {
-      title:    title,
-      slug:     slug,
+      title:    document.getElementById('e-title').value,
       desc:     document.getElementById('e-desc').value,
       image:    document.getElementById('e-image').value,
       category: document.getElementById('e-category')?.value || '',
@@ -1430,6 +1411,8 @@ async function deleteInstagramOutput(id) {
     showToast("❌ " + e.message, "error");
   }
 }
+
+
 
 // ── Instagram Bulk Import ──
 // Only writes to instagramCreatorToolOutputs; posts, products and auth are untouched.
