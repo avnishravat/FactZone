@@ -346,9 +346,13 @@ select.form-input{cursor:pointer; appearance:none; background-image:url("data:im
           <div class="form-grid">
             <div class="form-group">
               <label class="form-label">Title *</label>
-              <input class="form-input" id="q-title" placeholder="Post title...">
+              <input class="form-input" id="q-title" placeholder="Post title..." oninput="autoGenSlug('q')">
             </div>
             <div class="form-group">
+              <label class="form-label">Slug (URL Name)</label>
+              <input class="form-input" id="q-slug" placeholder="post-slug (auto-generated if empty)" oninput="this.dataset.userEdited='true'">
+            </div>
+            <div class="form-group full">
               <label class="form-label">Category *</label>
               <select class="form-input" id="q-category">
                 <option value="science">Science / विज्ञान</option>
@@ -404,9 +408,13 @@ select.form-input{cursor:pointer; appearance:none; background-image:url("data:im
           <div class="form-grid">
             <div class="form-group">
               <label class="form-label">Title *</label>
-              <input class="form-input" id="u-title" placeholder="Post title...">
+              <input class="form-input" id="u-title" placeholder="Post title..." oninput="autoGenSlug('u')">
             </div>
             <div class="form-group">
+              <label class="form-label">Slug (URL Name)</label>
+              <input class="form-input" id="u-slug" placeholder="post-slug (auto-generated if empty)" oninput="this.dataset.userEdited='true'">
+            </div>
+            <div class="form-group full">
               <label class="form-label">Category *</label>
               <select class="form-input" id="u-category">
                 <option value="science">Science / विज्ञान</option>
@@ -575,7 +583,11 @@ You can use placeholders:
     </div>
     <div class="form-group" style="margin-bottom:14px">
       <label class="form-label">Title</label>
-      <input class="form-input" id="e-title">
+      <input class="form-input" id="e-title" oninput="autoGenSlug('e')">
+    </div>
+    <div class="form-group" style="margin-bottom:14px">
+      <label class="form-label">Slug (URL Name)</label>
+      <input class="form-input" id="e-slug" placeholder="post-slug (auto-generated if empty)" oninput="this.dataset.userEdited='true'">
     </div>
     <div class="form-group" style="margin-bottom:14px">
       <label class="form-label">Category</label>
@@ -679,6 +691,26 @@ let allPostsCache = [];
 let currentEditId = null;
 let quillEditor = null;     
 let editQuillEditor = null; 
+
+// ── Helper to generate clean slug ──
+window.generateSlug = function(text) {
+  if (!text) return '';
+  return text
+    .toString()
+    .trim()
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, '-')
+    .replace(/^-+|-+$/g, '');
+};
+
+window.autoGenSlug = function(prefix) {
+  const titleInput = document.getElementById(`${prefix}-title`);
+  const slugInput  = document.getElementById(`${prefix}-slug`);
+  if (!titleInput || !slugInput) return;
+  if (!slugInput.dataset.userEdited) {
+    slugInput.value = window.generateSlug(titleInput.value);
+  }
+};
 
 // ── ImgBB Upload Helpers ──
 window.triggerImgUpload = function(prefix) {
@@ -1009,6 +1041,8 @@ window.filterDash = function() {
 // ── Upload ──
 window.uploadPost = async function(prefix) {
   const title    = document.getElementById(`${prefix}-title`).value.trim();
+  const rawSlug  = document.getElementById(`${prefix}-slug`)?.value.trim() || '';
+  const slug     = rawSlug ? window.generateSlug(rawSlug) : window.generateSlug(title);
   const desc     = document.getElementById(`${prefix}-desc`).value.trim();
   const image    = document.getElementById(`${prefix}-image`).value.trim();
   const category = document.getElementById(`${prefix}-category`)?.value || '';
@@ -1028,11 +1062,14 @@ window.uploadPost = async function(prefix) {
   btn.disabled = true; btn.innerHTML = '<span>⏳</span> Publishing...';
   
   try {
-    await addDoc(collection(db,"posts"), { title, desc, image, content, category, createdAt: Date.now() });
+    await addDoc(collection(db,"posts"), { title, slug, desc, image, content, category, createdAt: Date.now() });
     
-    ['title','desc','image'].forEach(f => { 
+    ['title','slug','desc','image'].forEach(f => { 
       const inputEl = document.getElementById(`${prefix}-${f}`);
-      if(inputEl) inputEl.value=''; 
+      if(inputEl) {
+        inputEl.value = ''; 
+        delete inputEl.dataset.userEdited;
+      }
     });
     const catEl = document.getElementById(`${prefix}-category`);
     if (catEl) catEl.selectedIndex = 0;
@@ -1081,9 +1118,14 @@ window.openEditModal = function(id) {
   const post = allPostsCache.find(p => p.id === id);
   if (!post) return;
   currentEditId = id;
-  document.getElementById('e-title').value   = post.title   || '';
-  document.getElementById('e-desc').value    = post.desc    || '';
-  document.getElementById('e-image').value   = post.image   || '';
+  document.getElementById('e-title').value = post.title || '';
+  const slugInput = document.getElementById('e-slug');
+  if (slugInput) {
+    slugInput.value = post.slug || '';
+    delete slugInput.dataset.userEdited;
+  }
+  document.getElementById('e-desc').value  = post.desc  || '';
+  document.getElementById('e-image').value = post.image || '';
   const catEl = document.getElementById('e-category');
   if (catEl) catEl.value = post.category || 'science';
   
@@ -1115,9 +1157,14 @@ window.saveEdit = async function() {
     content = editQuillEditor.root.innerHTML.trim();
   }
 
+  const title   = document.getElementById('e-title').value.trim();
+  const rawSlug = document.getElementById('e-slug')?.value.trim() || '';
+  const slug    = rawSlug ? window.generateSlug(rawSlug) : window.generateSlug(title);
+
   try {
     await updateDoc(doc(db,"posts",currentEditId), {
-      title:    document.getElementById('e-title').value,
+      title:    title,
+      slug:     slug,
       desc:     document.getElementById('e-desc').value,
       image:    document.getElementById('e-image').value,
       category: document.getElementById('e-category')?.value || '',
@@ -1383,8 +1430,6 @@ async function deleteInstagramOutput(id) {
     showToast("❌ " + e.message, "error");
   }
 }
-
-
 
 // ── Instagram Bulk Import ──
 // Only writes to instagramCreatorToolOutputs; posts, products and auth are untouched.
