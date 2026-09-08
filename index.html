@@ -515,7 +515,8 @@
                 { fieldPath: "image" },
                 { fieldPath: "desc" },
                 { fieldPath: "category" },
-                { fieldPath: "createdAt" }
+                { fieldPath: "createdAt" },
+                { fieldPath: "slug" }
               ]
             },
             from: [{ collectionId: "posts" }],
@@ -559,6 +560,7 @@
           const safeImage    = (post.image && post.image.trim() !== '') ? escapeHtml(post.image) : SVG_FALLBACK;
           const safeDesc     = escapeHtml(post.desc || '');
           const safeId       = encodeURIComponent(post.id);
+          const safeSlug     = post.slug ? encodeURIComponent(post.slug) : '';
           const safeCategory = escapeHtml(post.category || '');
 
           const isFirst = index === 0;
@@ -570,7 +572,7 @@
             : '';
 
           htmlContent += `
-          <a href="detail.html?id=${safeId}" class="card" data-category="${safeCategory}">
+          <a href="detail.html?${safeSlug ? ('slug=' + safeSlug) : ('id=' + safeId)}" class="card" data-category="${safeCategory}">
             <div class="post-image-container">
               <img src="${safeImage}" alt="${safeTitle}" class="post-image" loading="${loadingAttr}" decoding="async" ${priorityAttr} width="300" height="120" onerror="this.onerror=null;this.src='${SVG_FALLBACK}';">
             </div>
