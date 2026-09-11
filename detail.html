@@ -195,6 +195,10 @@
     .sk-p { height: 0.85rem; width: 100%; margin-bottom: 0.4rem; }
     .sk-p.s { width: 55%; }
 
+    .ns-loading { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; padding: 2rem 1rem; color: var(--muted); }
+    .ns-spinner { width: 28px; height: 28px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: ns-spin 0.8s linear infinite; }
+    @keyframes ns-spin { to { transform: rotate(360deg); } }
+
     .err { text-align: center; padding: 2rem 1rem; color: var(--muted); }
     .err h2 { font-family: 'Merriweather', serif; color: var(--ink); margin-bottom: .4rem; }
 
@@ -250,7 +254,11 @@
       </div>
     </div>
     <noscript>
-      <p>Please enable JavaScript to read this article on FactZone. यह लेख पढ़ने के लिए JavaScript enable करें।</p>
+      <div class="err">
+        <h2>JavaScript Disabled / जावास्क्रिप्ट बंद है</h2>
+        <p>Please enable JavaScript in your browser to read articles on FactZone.</p>
+        <p style="margin-top: 0.3rem; font-size: 0.9rem;">इस लेख को पढ़ने के लिए कृपया अपने ब्राउज़र में JavaScript चालू करें।</p>
+      </div>
     </noscript>
   </article>
 
