@@ -307,6 +307,12 @@ select.form-input{cursor:pointer; appearance:none; background-image:url("data:im
       <button id="nav-instagram-tools" class="nav-item" onclick="switchPage('instagram-tools',this)">
         <span class="nav-icon">📸</span><span>Instagram Tools</span>
       </button>
+      <button id="nav-comments" class="nav-item" onclick="switchPage('comments',this)">
+        <span class="nav-icon">💬</span><span>Comments</span>
+      </button>
+      <button id="nav-subscribers" class="nav-item" onclick="switchPage('subscribers',this)">
+        <span class="nav-icon">📧</span><span>Subscribers</span>
+      </button>
     </nav>
     <div class="sidebar-footer">
       <div class="sync-badge">
@@ -569,6 +575,36 @@ You can use placeholders:
               <div class="ig-empty">Open this page to load saved outputs.</div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-comments" class="page">
+      <div class="content" style="padding-top:24px">
+        <div class="posts-header">
+          <div class="section-header" style="margin-bottom:0">
+            <div class="section-icon">💬</div>
+            <div class="section-title" id="commentsAdminCount">Comments</div>
+          </div>
+          <input class="search-box" id="commentsSearchBox" placeholder="🔍 Search comments..." oninput="filterCommentsAdmin()">
+        </div>
+        <div id="comments-admin-list" class="ig-list" style="max-height:none">
+          <div class="ig-empty">Open this page to load comments.</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-subscribers" class="page">
+      <div class="content" style="padding-top:24px">
+        <div class="posts-header">
+          <div class="section-header" style="margin-bottom:0">
+            <div class="section-icon">📧</div>
+            <div class="section-title" id="subscribersAdminCount">Subscribers</div>
+          </div>
+          <input class="search-box" id="subscribersSearchBox" placeholder="🔍 Search..." oninput="filterSubscribersAdmin()">
+        </div>
+        <div id="subscribers-admin-list" class="ig-list" style="max-height:none">
+          <div class="ig-empty">Open this page to load subscribers.</div>
         </div>
       </div>
     </div>
@@ -1564,6 +1600,142 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+// ── Comments Admin ──
+// Reads/deletes the "comments" collection written by detail.html on the public site.
+let allCommentsCache = [];
+let commentsLoadedOnce = false;
+
+function fmtAdminDate(ms) {
+  if (!ms) return "";
+  try { return new Date(Number(ms)).toLocaleString('en-IN'); } catch(e) { return ""; }
+}
+
+async function loadCommentsAdmin() {
+  const list = document.getElementById("comments-admin-list");
+  list.innerHTML = `<div class="ig-empty">Loading comments...</div>`;
+  try {
+    const snap = await getDocs(collection(db, "comments"));
+    allCommentsCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    allCommentsCache.sort((a,b) => (Number(b.createdAt)||0) - (Number(a.createdAt)||0));
+    renderCommentsAdmin(allCommentsCache);
+    commentsLoadedOnce = true;
+  } catch(e) {
+    list.innerHTML = `<div class="ig-empty">❌ Error: ${escapeHtml(e.message)}</div>`;
+  }
+}
+
+function renderCommentsAdmin(items) {
+  const list = document.getElementById("comments-admin-list");
+  document.getElementById("commentsAdminCount").textContent = `Comments (${allCommentsCache.length})`;
+  if (!items.length) {
+    list.innerHTML = `<div class="ig-empty">No comments yet.</div>`;
+    return;
+  }
+  list.innerHTML = items.map(c => {
+    const name = escapeHtml(c.name || "Anonymous");
+    const text = escapeHtml(c.comment || "");
+    const post = allPostsCache.find(p => p.id === c.postId);
+    const postLabel = escapeHtml(post ? post.title : (c.postId || "Unknown post"));
+    return `
+    <div class="ig-item">
+      <div class="ig-item-top">
+        <div class="ig-badges">
+          <span class="ig-badge">${postLabel}</span>
+          <span class="ig-badge category">${escapeHtml(fmtAdminDate(c.createdAt))}</span>
+        </div>
+        <div class="ig-actions">
+          <button class="ig-small-btn delete" data-comment-delete="${c.id}">Delete</button>
+        </div>
+      </div>
+      <div class="ig-item-text"><strong>${name}:</strong> ${text}</div>
+    </div>`;
+  }).join("");
+}
+
+window.filterCommentsAdmin = function() {
+  const q = document.getElementById("commentsSearchBox").value.toLowerCase();
+  const filtered = q ? allCommentsCache.filter(c => ((c.name||"")+(c.comment||"")).toLowerCase().includes(q)) : allCommentsCache;
+  renderCommentsAdmin(filtered);
+};
+
+document.getElementById("comments-admin-list").addEventListener("click", async (e) => {
+  const id = e.target.dataset.commentDelete;
+  if (!id) return;
+  if (!confirm("Delete this comment permanently?")) return;
+  try {
+    await deleteDoc(doc(db, "comments", id));
+    showToast("🗑️ Comment deleted.", "success");
+    await loadCommentsAdmin();
+  } catch(err) {
+    showToast("❌ " + err.message, "error");
+  }
+});
+
+// ── Subscribers Admin ──
+// Reads/deletes the "subscribers" collection (email/WhatsApp) written by detail.html.
+let allSubscribersCache = [];
+let subscribersLoadedOnce = false;
+
+async function loadSubscribersAdmin() {
+  const list = document.getElementById("subscribers-admin-list");
+  list.innerHTML = `<div class="ig-empty">Loading subscribers...</div>`;
+  try {
+    const snap = await getDocs(collection(db, "subscribers"));
+    allSubscribersCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    allSubscribersCache.sort((a,b) => (Number(b.createdAt)||0) - (Number(a.createdAt)||0));
+    renderSubscribersAdmin(allSubscribersCache);
+    subscribersLoadedOnce = true;
+  } catch(e) {
+    list.innerHTML = `<div class="ig-empty">❌ Error: ${escapeHtml(e.message)}</div>`;
+  }
+}
+
+function renderSubscribersAdmin(items) {
+  const list = document.getElementById("subscribers-admin-list");
+  document.getElementById("subscribersAdminCount").textContent = `Subscribers (${allSubscribersCache.length})`;
+  if (!items.length) {
+    list.innerHTML = `<div class="ig-empty">No subscribers yet.</div>`;
+    return;
+  }
+  list.innerHTML = items.map(s => {
+    const typeLabel = s.type === "whatsapp" ? "WhatsApp" : "Email";
+    const value = escapeHtml(s.value || "");
+    return `
+    <div class="ig-item">
+      <div class="ig-item-top">
+        <div class="ig-badges">
+          <span class="ig-badge">${typeLabel}</span>
+          <span class="ig-badge category">${escapeHtml(fmtAdminDate(s.createdAt))}</span>
+        </div>
+        <div class="ig-actions">
+          <button class="ig-small-btn delete" data-sub-delete="${s.id}">Delete</button>
+        </div>
+      </div>
+      <div class="ig-item-text">${value}</div>
+    </div>`;
+  }).join("");
+}
+
+window.filterSubscribersAdmin = function() {
+  const q = document.getElementById("subscribersSearchBox").value.toLowerCase();
+  const filtered = q ? allSubscribersCache.filter(s => (s.value||"").toLowerCase().includes(q)) : allSubscribersCache;
+  renderSubscribersAdmin(filtered);
+};
+
+document.getElementById("subscribers-admin-list").addEventListener("click", async (e) => {
+  const id = e.target.dataset.subDelete;
+  if (!id) return;
+  if (!confirm("Delete this subscriber permanently?")) return;
+  try {
+    await deleteDoc(doc(db, "subscribers", id));
+    showToast("🗑️ Subscriber deleted.", "success");
+    await loadSubscribersAdmin();
+  } catch(err) {
+    showToast("❌ " + err.message, "error");
+  }
+});
+
+
 // ── Page switch ──
 window.switchPage = function(page, btn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1573,11 +1745,17 @@ window.switchPage = function(page, btn) {
   if(targetPage) targetPage.classList.add('active');
   if(btn) btn.classList.add('active');
   
-  const titles = {dashboard:'Dashboard', upload:'New Post', posts:'All Posts', 'instagram-tools':'Instagram Creator Tools'};
+  const titles = {dashboard:'Dashboard', upload:'New Post', posts:'All Posts', 'instagram-tools':'Instagram Creator Tools', comments:'Comments', subscribers:'Subscribers'};
   document.getElementById('pageTitle').textContent = titles[page] || 'Dashboard';
 
   if(page === 'instagram-tools' && !instagramLoadedOnce) {
     loadInstagramOutputs();
+  }
+  if(page === 'comments' && !commentsLoadedOnce) {
+    loadCommentsAdmin();
+  }
+  if(page === 'subscribers' && !subscribersLoadedOnce) {
+    loadSubscribersAdmin();
   }
 };
 </script>
