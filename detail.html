@@ -215,6 +215,42 @@
     .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin-bottom: 0.4rem; }
     .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.8rem; font-weight: 600; }
     .footer-copy { font-size: 0.75rem; color: var(--muted); }
+
+    /* ── Like / Comments jump bar ── */
+    .reaction-bar { display: flex; align-items: center; gap: 1rem; margin: 0.6rem 0 0.2rem; }
+    .like-btn { display: inline-flex; align-items: center; gap: 0.35rem; background: var(--surface); border: 1px solid var(--border); color: var(--ink); font-size: 0.85rem; font-weight: 700; padding: 0.4rem 0.8rem; border-radius: 2rem; cursor: pointer; transition: all .15s; font-family: inherit; }
+    .like-btn:hover { border-color: var(--accent); }
+    .like-btn.liked { background: #fef2f2; border-color: var(--accent); color: var(--accent); }
+    .like-btn:disabled { opacity: 0.7; cursor: default; }
+    .comment-jump-link { font-size: 0.85rem; font-weight: 700; color: var(--muted); text-decoration: none; }
+    .comment-jump-link:hover { color: var(--accent); }
+
+    /* ── Comments & Subscribe sections ── */
+    #commentsSection, #subscribeSection { margin-top: 0.85rem; background: var(--surface); border-radius: var(--r); padding: 0.85rem 1rem; box-shadow: 0 2px 12px rgba(0,0,0,.05); }
+    #commentsSection h2, #subscribeSection h2 { font-family: 'Merriweather', serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 0.6rem; padding-bottom: 0.35rem; border-bottom: 2px solid var(--ink); }
+
+    .comment-form { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 0.85rem; }
+    .comment-input, .comment-textarea { width: 100%; font-family: inherit; font-size: 0.9rem; padding: 0.55rem 0.7rem; border: 1px solid var(--border); border-radius: 0.5rem; background: var(--bg); color: var(--ink); resize: vertical; }
+    .comment-input:focus, .comment-textarea:focus { outline: none; border-color: var(--accent); }
+    .comment-form-footer { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+    .comment-submit-btn { background: var(--ink); color: #fff; border: none; font-weight: 700; font-size: 0.85rem; padding: 0.5rem 1rem; border-radius: 0.4rem; cursor: pointer; transition: background .15s; font-family: inherit; }
+    .comment-submit-btn:hover { background: #333; }
+    .comment-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .form-status { font-size: 0.8rem; color: var(--muted); }
+
+    .comments-list { display: flex; flex-direction: column; gap: 0.6rem; }
+    .comment-item { border: 1px solid var(--border); border-radius: 0.5rem; padding: 0.55rem 0.7rem; background: var(--bg); }
+    .comment-head { font-size: 0.85rem; margin-bottom: 0.2rem; }
+    .comment-head strong { color: var(--ink); }
+    .comment-date { color: var(--muted); font-weight: 400; font-size: 0.78rem; }
+    .comment-text { font-size: 0.9rem; color: #1f2937; white-space: pre-wrap; word-break: break-word; }
+    .no-comments { color: var(--muted); font-size: 0.88rem; }
+
+    .subscribe-desc { font-size: 0.85rem; color: var(--muted); margin-bottom: 0.6rem; line-height: 1.5; }
+    .subscribe-type-row { display: flex; gap: 1rem; margin-bottom: 0.5rem; font-size: 0.85rem; }
+    .radio-label { display: flex; align-items: center; gap: 0.3rem; cursor: pointer; }
+    .subscribe-input-row { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .subscribe-input-row .comment-input { flex: 1; min-width: 180px; }
   </style>
 
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=DM+Sans:wght@400;500;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
@@ -261,6 +297,39 @@
       </div>
     </noscript>
   </article>
+
+  <section id="commentsSection" aria-label="Comments">
+    <h2>टिप्पणियाँ / Comments (<span id="commentsCount">0</span>)</h2>
+
+    <div class="comment-form">
+      <input type="text" id="commentName" class="comment-input" placeholder="आपका नाम (वैकल्पिक) / Your name (optional)" maxlength="60">
+      <textarea id="commentText" class="comment-textarea" rows="3" placeholder="अपनी टिप्पणी लिखें... / Write your comment..." maxlength="1000"></textarea>
+      <div class="comment-form-footer">
+        <button type="button" id="commentSubmitBtn" class="comment-submit-btn">टिप्पणी भेजें / Post Comment</button>
+        <span id="commentStatus" class="form-status"></span>
+      </div>
+    </div>
+
+    <div id="commentsList" class="comments-list">
+      <p class="no-comments">लोड हो रहा है... / Loading...</p>
+    </div>
+  </section>
+
+  <section id="subscribeSection" aria-label="Get notified of new articles">
+    <h2>नए आर्टिकल की सूचना पाएं / Get Notified</h2>
+    <p class="subscribe-desc">अपना ईमेल या व्हाट्सएप नंबर डालें, नया आर्टिकल आने पर हम आपको बताएंगे। / Share your email or WhatsApp number and we'll notify you about new articles.</p>
+    <div class="subscribe-form">
+      <div class="subscribe-type-row">
+        <label class="radio-label"><input type="radio" name="subscribeType" value="email" checked> ईमेल / Email</label>
+        <label class="radio-label"><input type="radio" name="subscribeType" value="whatsapp"> व्हाट्सएप / WhatsApp</label>
+      </div>
+      <div class="subscribe-input-row">
+        <input type="text" id="subscribeValue" class="comment-input" placeholder="अपना ईमेल या व्हाट्सएप नंबर डालें">
+        <button type="button" id="subscribeBtn" class="comment-submit-btn">सब्सक्राइब करें / Subscribe</button>
+      </div>
+      <div><span id="subscribeStatus" class="form-status"></span></div>
+    </div>
+  </section>
 
   <div class="ad-slot" style="margin: 0.6rem 0;">
     <div class="banner-300x250-slot"></div>
@@ -692,6 +761,10 @@
       '<p class="meta-line">' + metaLine + '</p>' +
       '<div class="hero-wrap"><img class="hero" src="' + escapeHtml(image) + '" alt="' + title + '" itemprop="image" loading="eager" fetchpriority="high" width="300" height="169" onerror="this.style.display=\'none\'"></div>' +
       '<div class="content" itemprop="articleBody">' + contentWithAd + '</div>' +
+      '<div class="reaction-bar">' +
+        '<button type="button" id="likeBtn" class="like-btn" aria-label="Like this article">🤍 <span id="likeCount">0</span></button>' +
+        '<a href="#commentsSection" class="comment-jump-link">💬 <span id="commentsCountInline">0</span> Comments</a>' +
+      '</div>' +
       '<div class="share-container">' +
         '<div class="share-title">Share this Fact:</div>' +
         '<div class="share-buttons">' +
@@ -716,10 +789,15 @@
     });
 
     injectAdNetworkScripts();
+
+    currentPostId = post._id;
+    initLikes(post);
+    loadComments(post._id);
   }
 
   var currentPostCategory = null;
   var relatedItemsRaw = null;
+  var currentPostId = null;
 
   function maybeResortRelated() {
     if (!relatedItemsRaw) return;
@@ -804,6 +882,211 @@
     }).join("");
   }
 
+  /* ---------- LIKES ---------- */
+  function likeStorageKey(pid) { return "fz-liked-" + pid; }
+
+  function renderLikeUI(count, liked) {
+    var btn = $("likeBtn");
+    if (!btn) return;
+    var countEl = $("likeCount");
+    btn.classList.toggle("liked", !!liked);
+    btn.innerHTML = (liked ? "❤️" : "🤍") + ' <span id="likeCount">' + count + '</span>';
+  }
+
+  function initLikes(post) {
+    var pid = post._id;
+    var count = parseInt(post.likes || 0, 10) || 0;
+    var liked = false;
+    try { liked = localStorage.getItem(likeStorageKey(pid)) === "1"; } catch(e){}
+    renderLikeUI(count, liked);
+
+    var btn = $("likeBtn");
+    if (!btn) return;
+    btn.onclick = function() {
+      if (btn.dataset.busy === "1") return;
+      btn.dataset.busy = "1";
+      var newLiked = !liked;
+      var delta = newLiked ? 1 : -1;
+      fetch(FS_BASE + ":commit?key=" + API_KEY, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          writes: [{
+            transform: {
+              document: "projects/" + PROJECT_ID + "/databases/(default)/documents/posts/" + pid,
+              fieldTransforms: [{ fieldPath: "likes", increment: { integerValue: String(delta) } }]
+            }
+          }]
+        })
+      }).then(function(r){
+        if (!r.ok) throw new Error("failed");
+        liked = newLiked;
+        count = Math.max(0, count + delta);
+        try {
+          if (liked) localStorage.setItem(likeStorageKey(pid), "1");
+          else localStorage.removeItem(likeStorageKey(pid));
+        } catch(e){}
+        renderLikeUI(count, liked);
+      }).catch(function(){
+        /* silently ignore; button state unchanged */
+      }).then(function(){
+        btn.dataset.busy = "0";
+      });
+    };
+  }
+
+  /* ---------- COMMENTS ---------- */
+  function loadComments(postId) {
+    fetch(FS_BASE + ":runQuery?key=" + API_KEY, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        structuredQuery: {
+          from: [{ collectionId: "comments" }],
+          where: { fieldFilter: { field: { fieldPath: "postId" }, op: "EQUAL", value: { stringValue: postId } } },
+          orderBy: [{ field: { fieldPath: "createdAt" }, direction: "DESCENDING" }],
+          limit: 100
+        }
+      })
+    }).then(function(r){ return r.json(); }).then(function(data){
+      var docs = Array.isArray(data) ? data : [];
+      var items = [];
+      docs.forEach(function(d){
+        if (!d.document) return;
+        items.push(parseDoc(d.document.fields));
+      });
+      renderComments(items);
+    }).catch(function(){
+      renderComments([]);
+    });
+  }
+
+  function renderComments(items) {
+    var list = $("commentsList");
+    if (!list) return;
+    var count = items.length;
+    var countEl = $("commentsCount");
+    if (countEl) countEl.textContent = count;
+    var inlineEl = $("commentsCountInline");
+    if (inlineEl) inlineEl.textContent = count;
+
+    if (!count) {
+      list.innerHTML = '<p class="no-comments">अभी तक कोई टिप्पणी नहीं। पहली टिप्पणी आप करें! / No comments yet — be the first!</p>';
+      return;
+    }
+    list.innerHTML = items.map(function(c){
+      var name = escapeHtml(c.name || "Anonymous");
+      var text = escapeHtml(c.comment || "");
+      var when = "";
+      var d = toSafeDate(c.createdAt);
+      if (d) when = formatDate(d.toISOString());
+      return '<div class="comment-item">' +
+               '<div class="comment-head"><strong>' + name + '</strong>' + (when ? ' <span class="comment-date">' + when + '</span>' : '') + '</div>' +
+               '<div class="comment-text">' + text + '</div>' +
+             '</div>';
+    }).join("");
+  }
+
+  function submitComment(postId) {
+    if (!postId) return;
+    var nameEl = $("commentName");
+    var textEl = $("commentText");
+    var statusEl = $("commentStatus");
+    var name = nameEl ? nameEl.value.trim() : "";
+    var text = textEl ? textEl.value.trim() : "";
+
+    if (!text) {
+      if (statusEl) statusEl.textContent = "कृपया अपनी टिप्पणी लिखें। / Please write a comment.";
+      return;
+    }
+
+    var btn = $("commentSubmitBtn");
+    if (btn) { btn.disabled = true; btn.textContent = "भेजा जा रहा है... / Posting..."; }
+    if (statusEl) statusEl.textContent = "";
+
+    fetch(FS_BASE + "/comments?key=" + API_KEY, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        fields: {
+          postId: { stringValue: postId },
+          name: { stringValue: name || "Anonymous" },
+          comment: { stringValue: text },
+          createdAt: { integerValue: String(Date.now()) }
+        }
+      })
+    }).then(function(r){
+      if (!r.ok) throw new Error("failed");
+      return r.json();
+    }).then(function(){
+      if (textEl) textEl.value = "";
+      if (statusEl) statusEl.textContent = "✅ टिप्पणी सफलतापूर्वक जोड़ी गई। / Comment posted.";
+      loadComments(postId);
+    }).catch(function(){
+      if (statusEl) statusEl.textContent = "❌ टिप्पणी भेजने में समस्या हुई, दोबारा कोशिश करें। / Something went wrong, please try again.";
+    }).then(function(){
+      if (btn) { btn.disabled = false; btn.textContent = "टिप्पणी भेजें / Post Comment"; }
+    });
+  }
+
+  /* ---------- SUBSCRIBE (Email / WhatsApp) ---------- */
+  function submitSubscriber(postId) {
+    var typeEls = document.getElementsByName("subscribeType");
+    var type = "email";
+    for (var i = 0; i < typeEls.length; i++) { if (typeEls[i].checked) type = typeEls[i].value; }
+
+    var valEl = $("subscribeValue");
+    var statusEl = $("subscribeStatus");
+    var val = valEl ? valEl.value.trim() : "";
+
+    if (!val) {
+      if (statusEl) statusEl.textContent = "कृपया अपनी जानकारी भरें। / Please enter a value.";
+      return;
+    }
+
+    if (type === "email") {
+      var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRe.test(val)) {
+        if (statusEl) statusEl.textContent = "कृपया सही ईमेल पता डालें। / Please enter a valid email.";
+        return;
+      }
+    } else {
+      var digits = val.replace(/\D/g, "");
+      if (digits.length < 10) {
+        if (statusEl) statusEl.textContent = "कृपया सही व्हाट्सएप नंबर डालें। / Please enter a valid WhatsApp number.";
+        return;
+      }
+      val = digits;
+    }
+
+    var btn = $("subscribeBtn");
+    if (btn) { btn.disabled = true; btn.textContent = "भेजा जा रहा है... / Submitting..."; }
+    if (statusEl) statusEl.textContent = "";
+
+    fetch(FS_BASE + "/subscribers?key=" + API_KEY, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        fields: {
+          type: { stringValue: type },
+          value: { stringValue: val },
+          postId: { stringValue: postId || "" },
+          createdAt: { integerValue: String(Date.now()) }
+        }
+      })
+    }).then(function(r){
+      if (!r.ok) throw new Error("failed");
+      return r.json();
+    }).then(function(){
+      if (valEl) valEl.value = "";
+      if (statusEl) statusEl.textContent = "✅ धन्यवाद! नए आर्टिकल की सूचना आपको मिलेगी। / Thanks, you're subscribed!";
+    }).catch(function(){
+      if (statusEl) statusEl.textContent = "❌ कुछ गड़बड़ हुई, दोबारा कोशिश करें। / Something went wrong, please try again.";
+    }).then(function(){
+      if (btn) { btn.disabled = false; btn.textContent = "सब्सक्राइब करें / Subscribe"; }
+    });
+  }
+
   function fetchPostByIdOnce(idVal) {
     return fetch(FS_BASE + "/posts/" + idVal + "?key=" + API_KEY)
       .then(function(r){ return r.json(); })
@@ -886,6 +1169,11 @@
       renderPost(post);
     });
   }
+
+  var commentBtn = $("commentSubmitBtn");
+  if (commentBtn) commentBtn.onclick = function(){ submitComment(currentPostId); };
+  var subscribeBtn = $("subscribeBtn");
+  if (subscribeBtn) subscribeBtn.onclick = function(){ submitSubscriber(currentPostId); };
 
   fetchPost();
 
