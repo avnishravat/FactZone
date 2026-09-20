@@ -888,51 +888,68 @@
   function renderLikeUI(count, liked) {
     var btn = $("likeBtn");
     if (!btn) return;
-    var countEl = $("likeCount");
     btn.classList.toggle("liked", !!liked);
     btn.innerHTML = (liked ? "❤️" : "🤍") + ' <span id="likeCount">' + count + '</span>';
   }
 
+  function fetchLikeCount(pid) {
+    return fetch(FS_BASE + "/postLikes/" + pid + "?key=" + API_KEY)
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        if (data && data.fields && data.fields.count && data.fields.count.integerValue !== undefined) {
+          return parseInt(data.fields.count.integerValue, 10) || 0;
+        }
+        return 0;
+      })
+      .catch(function(){ return 0; });
+  }
+
+  function saveLikeCount(pid, count) {
+    return fetch(FS_BASE + "/postLikes/" + pid + "?updateMask.fieldPaths=count&key=" + API_KEY, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fields: { count: { integerValue: String(count) } } })
+    });
+  }
+
   function initLikes(post) {
     var pid = post._id;
-    var count = parseInt(post.likes || 0, 10) || 0;
     var liked = false;
     try { liked = localStorage.getItem(likeStorageKey(pid)) === "1"; } catch(e){}
-    renderLikeUI(count, liked);
 
     var btn = $("likeBtn");
     if (!btn) return;
-    btn.onclick = function() {
-      if (btn.dataset.busy === "1") return;
-      btn.dataset.busy = "1";
-      var newLiked = !liked;
-      var delta = newLiked ? 1 : -1;
-      fetch(FS_BASE + ":commit?key=" + API_KEY, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          writes: [{
-            transform: {
-              document: "projects/" + PROJECT_ID + "/databases/(default)/documents/posts/" + pid,
-              fieldTransforms: [{ fieldPath: "likes", increment: { integerValue: String(delta) } }]
-            }
-          }]
-        })
-      }).then(function(r){
-        if (!r.ok) throw new Error("failed");
-        liked = newLiked;
-        count = Math.max(0, count + delta);
-        try {
-          if (liked) localStorage.setItem(likeStorageKey(pid), "1");
-          else localStorage.removeItem(likeStorageKey(pid));
-        } catch(e){}
-        renderLikeUI(count, liked);
-      }).catch(function(){
-        /* silently ignore; button state unchanged */
-      }).then(function(){
-        btn.dataset.busy = "0";
-      });
-    };
+    renderLikeUI(0, liked);
+
+    fetchLikeCount(pid).then(function(count){
+      renderLikeUI(count, liked);
+
+      btn.onclick = function() {
+        if (btn.dataset.busy === "1") return;
+        btn.dataset.busy = "1";
+        btn.disabled = true;
+
+        fetchLikeCount(pid).then(function(freshCount){
+          var newLiked = !liked;
+          var delta = newLiked ? 1 : -1;
+          var newCount = Math.max(0, freshCount + delta);
+          return saveLikeCount(pid, newCount).then(function(r){
+            if (!r.ok) throw new Error("save failed");
+            liked = newLiked;
+            try {
+              if (liked) localStorage.setItem(likeStorageKey(pid), "1");
+              else localStorage.removeItem(likeStorageKey(pid));
+            } catch(e){}
+            renderLikeUI(newCount, liked);
+          });
+        }).catch(function(){
+          /* real failure (e.g. Firestore rule not published yet) - leave count as last known, don't fake a change */
+        }).then(function(){
+          btn.dataset.busy = "0";
+          btn.disabled = false;
+        });
+      };
+    });
   }
 
   /* ---------- COMMENTS ---------- */
