@@ -326,8 +326,8 @@
 
     </div>
 
-    <!-- Category Tabs -->
-    <nav aria-label="Topic navigation" class="border-t border-gray-800">
+    <!-- Category Tabs (data-nosnippet added to prevent Google from using nav text in snippets) -->
+    <nav aria-label="Topic navigation" class="border-t border-gray-800" data-nosnippet>
       <div id="filterScrollArea" class="max-w-7xl mx-auto px-4 overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing">
         <div id="filterTabs" class="flex items-center gap-2 py-2 whitespace-nowrap w-max">
           <button type="button" data-value="all" class="filter-tab active-tab text-white text-xs font-semibold px-4 py-1.5 rounded-full border border-gray-700 transition-colors">All Topics</button>
@@ -563,9 +563,10 @@
           const safeSlug     = post.slug ? encodeURIComponent(post.slug) : '';
           const safeCategory = escapeHtml(post.category || '');
 
-          const isFirst = index === 0;
-          const loadingAttr = isFirst ? 'eager' : 'lazy';
-          const priorityAttr = isFirst ? 'fetchpriority="high"' : 'fetchpriority="low"';
+          // Performance Boost: First 4 images eager load for above-the-fold speed
+          const isAboveFold = index < 4;
+          const loadingAttr = isAboveFold ? 'eager' : 'lazy';
+          const priorityAttr = isAboveFold ? 'fetchpriority="high"' : 'fetchpriority="low"';
 
           const descHtml = safeDesc
             ? `<p class="text-gray-500 dark:text-gray-400 text-xs line-clamp-3 opacity-80 mt-1">${safeDesc}</p>`
