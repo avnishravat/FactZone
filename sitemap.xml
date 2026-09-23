@@ -1,539 +1,410 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <!-- Main Homepage -->
   <url>
     <loc>https://factzone.online/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
-  <!-- Tools Hub (50+ Free Online Tools) -->
   <url>
     <loc>https://factzone.online/tools.html</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- Image & Design Tools -->
-  <url>
-    <loc>https://factzone.online/image-tools</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- Love Calculator -->
-  <url>
-    <loc>https://factzone.online/love-calculator</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- Instagram Font Generator -->
-  <url>
-    <loc>https://factzone.online/font</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- PDF to Word Converter -->
-  <url>
-    <loc>https://factzone.online/pdf-to-word</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- Word to PDF Converter -->
-  <url>
-    <loc>https://factzone.online/word-to-pdf</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- YouTube Thumbnail Downloader -->
-  <url>
-    <loc>https://factzone.online/yt-thumbnail</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- PDF से Word Workflow Guide -->
-  <url>
-    <loc>https://factzone.online/pdf-word-guide</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- Digital Product Store -->
-  <url>
-    <loc>https://factzone.online/products</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- All Instagram Tools -->
-  <url>
-    <loc>https://factzone.online/instagram-bio-generator</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://factzone.online/instagram-caption-generator</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/instagram-carousel-idea-generator</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/instagram-comment-generator</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/instagram-content-idea-generator</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/instagram-hashtag-generator</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/instagram-quote-generator</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/instagram-reel-hook-generator</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/instagram-reel-idea-generator</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/instagram-reel-script-generator</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/instagram-story-idea-generator</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/instagram-username-generator</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/prompts</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- Static Pages -->
-  <url>
-    <loc>https://factzone.online/author.html</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://factzone.online/categories/science/</loc>
+    <lastmod>2026-09-22</lastmod>
+    <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://factzone.online/about.html</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://factzone.online/categories/history/</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://factzone.online/contact.html</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://factzone.online/categories/tech/</loc>
+    <lastmod>2026-09-03</lastmod>
+    <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://factzone.online/privacy.html</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
+    <loc>https://factzone.online/categories/mystery/</loc>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://factzone.online/terms.html</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
+    <loc>https://factzone.online/categories/viral/</loc>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://factzone.online/disclaimer.html</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-  </url>
-
-  <!-- ARTICLES -->
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=yRb0lSDDx5LpYuyBUDYz</loc>
-    <lastmod>2026-05-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=oyRQJOPYtgAeksy91WrO</loc>
-    <lastmod>2026-05-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=064O2yQDQJaciaZH0jNt</loc>
+    <loc>https://factzone.online/posts/3-mobile-settings-%E0%A4%9C%E0%A5%8B-%E0%A4%A4%E0%A5%81%E0%A4%B0%E0%A4%82%E0%A4%A4-%E0%A4%AC%E0%A4%82%E0%A4%A6-%E0%A4%95%E0%A4%B0-%E0%A4%A6%E0%A5%87%E0%A4%A8%E0%A5%80-%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%8F-%EF%B8%8F.html</loc>
     <lastmod>2026-05-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://factzone.online/detail.html?id=sDxEguYZK6cn12ABkNi5</loc>
-    <lastmod>2026-05-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=ibJFxusW7CwjtuEaH63y</loc>
-    <lastmod>2026-05-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=sEO9jG7EjfaV8XychMKW</loc>
-    <lastmod>2026-04-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=1Ha3PD0AMFKvsxuJk32L</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=1eAf8ZKCz3eyprEyc6kN</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=4qkeSs8NlYVaNbWefZEo</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=55o2cIWQJYR0Mu55tFYo</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=5HHFszkq6ZbHvvmAjVR1</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=CUPpEhAkJ5sg9KUsRGb0</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=CvvQCLT1gg84dh9GCWFa</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=HInFmr1Qo6z4j9GGQtZh</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=HkyVR9DleyhcNp95kkNL</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=IhxVm2xkdl26nFPiMNRH</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=J7ca3689Wm36xCbw54pk</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=JcmkoTTqpkjd6uk4171b</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=NpID1utbz7FkCuJzbSnz</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=NytvLXwbJoVyCuwmIqEe</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=PTwpHi7ZEn4XjMUgboj1</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=TjrGR7YPlEnZEAp9BXAC</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=X5oFYrKGdv6wn9DT7XNy</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=XDmlvpfrBymVgfciMnTD</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=aoBa4nYep0utmuuaoHRG</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=cua71RSePf9vwV3AcTbG</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=gK7dscXqdRQUY1LMM5kZ</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=grouIyCIHRWmSGOauECb</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=j7sQHdyyyJEFibYWdU3A</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=qYKbjLpFVHrS7BpXxV6A</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=snMOIh91kZgBEea52S6h</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=x17XhtJ7eHGQnEhIUca8</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=yNQggdmPoDkWQhs6D35t</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=yag7WvQOvIxoPulYnyB8</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=JHQkbxOnWBzSIzWjaoXX</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/worlds-most-dangerous-roads-highest-death-rate-hindi</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://factzone.online/detail.html?id=dn4frv6BW04dCo8qdvsj</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://factzone.online/detail.html?id=IeqlWHr3lipRbNoOBEXE</loc>
-    <lastmod>2026-09-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-  <loc>https://factzone.online/detail.html?slug=why-sky-appears-blue-scientific-reason-hindi</loc>
+    <loc>https://factzone.online/posts/why-sky-appears-blue-scientific-reason-hindi.html</loc>
     <lastmod>2026-09-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
+
   <url>
-  <loc>https://factzone.online/detail.html?slug=why-sea-water-is-salty-scientific-reason-hindi</loc>
-    <lastmod>2026-09-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <loc>https://factzone.online/posts/5-most-mysterious-places-on-earth-%E0%A4%9C%E0%A4%B9%E0%A4%BE%E0%A4%81-%E0%A4%B5%E0%A4%BF%E0%A4%9C%E0%A5%8D%E0%A4%9E%E0%A4%BE%E0%A4%A8-%E0%A4%AD%E0%A5%80-%E0%A4%AB%E0%A5%87%E0%A4%B2-%E0%A4%B9%E0%A5%88.html</loc>
+    <lastmod>2026-07-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
+
   <url>
-  <loc>https://factzone.online/detail.html?slug=what-if-human-travels-at-speed-of-light-hindi</loc>
-    <lastmod>2026-09-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <loc>https://factzone.online/posts/2026-%E0%A4%95%E0%A5%80-top-5-high-paying-tech-skills.html</loc>
+    <lastmod>2026-06-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
+
   <url>
-  <loc>https://factzone.online/detail.html?slug=why-honey-never-spoils-expiration-date-science-hindi</loc>
-    <lastmod>2026-09-12</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-  <loc>https://factzone.online/detail.html?slug=why-we-cannot-see-in-dark-eyes-science-hindi</loc>
-    <lastmod>2026-09-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-  <loc>https://factzone.online/detail.html?slug=human-memory-how-it-works-and-why-we-forget-in-hindi</loc>
+    <loc>https://factzone.online/posts/human-memory-how-it-works-and-why-we-forget-in-hindi.html</loc>
     <lastmod>2026-09-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
-   <url>
-  <loc>https://factzone.online/detail.html?slug=why-do-fingers-wrinkle-in-water-science-in-hindi</loc>
-    <lastmod>2026-09-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+
+  <url>
+    <loc>https://factzone.online/posts/3-am-sleep-mystery-%E0%A4%B0%E0%A4%BE%E0%A4%A4-3-%E0%A4%AC%E0%A4%9C%E0%A5%87-%E0%A4%85%E0%A4%9A%E0%A4%BE%E0%A4%A8%E0%A4%95-%E0%A4%86%E0%A4%81%E0%A4%96-%E0%A4%96%E0%A5%81%E0%A4%B2%E0%A4%A8%E0%A5%87-%E0%A4%95%E0%A4%BE-%E0%A4%B8%E0%A4%9A.html</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
-   <url>
-  <loc>https://factzone.online/detail.html?slug=why-do-we-respond-to-our-own-name-science-in-hindi</loc>
+
+  <url>
+    <loc>https://factzone.online/posts/emerging-cyber-threats-%E0%A4%9C%E0%A4%BE%E0%A4%A8%E0%A4%BF%E0%A4%8F-%E0%A4%B8%E0%A4%BE%E0%A4%87%E0%A4%AC%E0%A4%B0-%E0%A4%85%E0%A4%9F%E0%A5%88%E0%A4%95-%E0%A4%95%E0%A4%BE-%E0%A4%A8%E0%A4%AF%E0%A4%BE-%E0%A4%9C%E0%A4%BE%E0%A4%B2-%EF%B8%8F.html</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/chatgpt-%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A4%BE-%E0%A4%B9%E0%A5%88-%E0%A4%94%E0%A4%B0-%E0%A4%AF%E0%A4%B9-%E0%A4%95%E0%A4%BE%E0%A4%AE-%E0%A4%95%E0%A5%88%E0%A4%B8%E0%A5%87-%E0%A4%95%E0%A4%B0%E0%A4%A4%E0%A4%BE-%E0%A4%B9%E0%A5%88.html</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/why-honey-never-spoils-expiration-date-science-hindi.html</loc>
+    <lastmod>2026-09-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/why-we-cannot-see-in-dark-eyes-science-hindi.html</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/why-do-we-respond-to-our-own-name-science-in-hindi.html</loc>
     <lastmod>2026-09-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
-   <url>
-  <loc>https://factzone.online/detail.html?slug=why-face-looks-weird-in-mirror-science-in-hindi</loc>
+
+  <url>
+    <loc>https://factzone.online/posts/why-we-feel-someone-is-watching-us-science-hindi.html</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/reels-addiction-%E0%A4%95%E0%A4%B9%E0%A5%80%E0%A4%82-%E0%A4%86%E0%A4%AA%E0%A4%95%E0%A4%BE-phone-%E0%A4%86%E0%A4%AA%E0%A4%95%E0%A5%80-life-%E0%A4%A4%E0%A5%8B-%E0%A4%AC%E0%A4%B0%E0%A5%8D%E0%A4%AC%E0%A4%BE%E0%A4%A6-%E0%A4%A8%E0%A4%B9%E0%A5%80%E0%A4%82-%E0%A4%95%E0%A4%B0-%E0%A4%B0%E0%A4%B9%E0%A4%BE-%EF%B8%8F.html</loc>
+    <lastmod>2026-06-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/einstein-%E0%A4%95%E0%A4%BE-spooky-science-%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A4%BE-%E0%A4%95%E0%A4%A3-%E0%A4%86%E0%A4%AA%E0%A4%B8-%E0%A4%AE%E0%A5%87%E0%A4%82-%E0%A4%AC%E0%A4%BE%E0%A4%A4%E0%A5%87%E0%A4%82-%E0%A4%95%E0%A4%B0%E0%A4%A4%E0%A5%87-%E0%A4%B9%E0%A5%88%E0%A4%82-%EF%B8%8F.html</loc>
+    <lastmod>2026-07-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/why-do-fingers-wrinkle-in-water-science-in-hindi.html</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/rahasyo-se-bhari-duniya-10-aise-hairan-karne-wale-tathya.html</loc>
+    <lastmod>2026-06-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/fifa-world-cup-2026-post-match-rows-%E0%A4%B2%E0%A4%BF%E0%A4%AF%E0%A5%8B%E0%A4%A8%E0%A5%87%E0%A4%B2-%E0%A4%AE%E0%A5%87%E0%A4%B8%E0%A5%80-%E0%A4%94%E0%A4%B0-%E0%A4%B8%E0%A5%8D%E0%A4%AA%E0%A5%87%E0%A4%A8%E0%A4%BF%E0%A4%B6-%E0%A4%96%E0%A4%BF%E0%A4%B2%E0%A4%BE%E0%A4%A1%E0%A4%BC%E0%A4%BF%E0%A4%AF%E0%A5%8B%E0%A4%82-%E0%A4%95%E0%A5%87-%E0%A4%AC%E0%A5%80%E0%A4%9A-%E0%A4%AE%E0%A5%88%E0%A4%A6%E0%A4%BE%E0%A4%A8-%E0%A4%AA%E0%A4%B0-%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A4%BE-%E0%A4%B9%E0%A5%81%E0%A4%86-%E0%A4%A5%E0%A4%BE.html</loc>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/%E0%A4%9B%E0%A5%80%E0%A4%82%E0%A4%95-%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A5%8B%E0%A4%82-%E0%A4%86%E0%A4%A4%E0%A5%80-%E0%A4%B9%E0%A5%88-%E0%A4%9B%E0%A5%80%E0%A4%82%E0%A4%95%E0%A4%A4%E0%A5%87-%E0%A4%B8%E0%A4%AE%E0%A4%AF-%E0%A4%86%E0%A4%82%E0%A4%96%E0%A5%87%E0%A4%82-%E0%A4%AC%E0%A4%82%E0%A4%A6-%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A5%8B%E0%A4%82-%E0%A4%B9%E0%A5%8B-%E0%A4%9C%E0%A4%BE%E0%A4%A4%E0%A5%80-%E0%A4%B9%E0%A5%88%E0%A4%82-%E0%A4%9C%E0%A4%BE%E0%A4%A8%E0%A4%BF%E0%A4%8F-%E0%A4%B5%E0%A5%88%E0%A4%9C%E0%A5%8D%E0%A4%9E%E0%A4%BE%E0%A4%A8%E0%A4%BF%E0%A4%95-%E0%A4%B8%E0%A4%9A.html</loc>
+    <lastmod>2026-09-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/6g-speed-test-5g-%E0%A4%B8%E0%A5%87-%E0%A4%95%E0%A4%BF%E0%A4%A4%E0%A4%A8%E0%A5%80-%E0%A4%A4%E0%A5%87%E0%A4%9C%E0%A4%BC-%E0%A4%B9%E0%A5%8B%E0%A4%97%E0%A5%80-6g-technology.html</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/%E0%A4%AA%E0%A5%83%E0%A4%A5%E0%A5%8D%E0%A4%B5%E0%A5%80-%E0%A4%95%E0%A4%BE-%E0%A4%85%E0%A4%82%E0%A4%A4-%E0%A4%B5%E0%A5%88%E0%A4%9C%E0%A5%8D%E0%A4%9E%E0%A4%BE%E0%A4%A8%E0%A4%BF%E0%A4%95%E0%A5%8B%E0%A4%82-%E0%A4%95%E0%A5%87-%E0%A4%85%E0%A4%A8%E0%A5%81%E0%A4%B8%E0%A4%BE%E0%A4%B0-%E0%A4%B9%E0%A4%AE%E0%A4%BE%E0%A4%B0%E0%A5%80-%E0%A4%A7%E0%A4%B0%E0%A4%A4%E0%A5%80-%E0%A4%95%E0%A4%BE-%E0%A4%85%E0%A4%82%E0%A4%A4-%E0%A4%95%E0%A5%88%E0%A4%B8%E0%A5%87-%E0%A4%B9%E0%A5%8B-%E0%A4%B8%E0%A4%95%E0%A4%A4%E0%A4%BE-%E0%A4%B9%E0%A5%88.html</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/work-from-home-%E0%A4%AE%E0%A4%B9%E0%A4%BF%E0%A4%B2%E0%A4%BE%E0%A4%93%E0%A4%82-%E0%A4%94%E0%A4%B0-%E0%A4%9B%E0%A4%BE%E0%A4%A4%E0%A5%8D%E0%A4%B0%E0%A5%8B%E0%A4%82-%E0%A4%95%E0%A5%87-%E0%A4%B2%E0%A4%BF%E0%A4%8F-%E0%A4%AC%E0%A5%87%E0%A4%B8%E0%A5%8D%E0%A4%9F-%E0%A4%9C%E0%A5%89%E0%A4%AC-%E0%A4%86%E0%A4%87%E0%A4%A1%E0%A4%BF%E0%A4%AF%E0%A4%BE%E0%A4%9C-2026-%E0%A4%AC%E0%A4%BF%E0%A4%A8%E0%A4%BE-%E0%A4%87%E0%A4%A8%E0%A5%8D%E0%A4%B5%E0%A5%87%E0%A4%B8%E0%A5%8D%E0%A4%9F%E0%A4%AE%E0%A5%87%E0%A4%82%E0%A4%9F-%E0%A4%95%E0%A4%AE%E0%A4%BE%E0%A4%88.html</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/wow-signal-antariksh-ka-ansuljha-message.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/0-%E0%A4%AB%E0%A5%89%E0%A4%B2%E0%A5%8B%E0%A4%85%E0%A4%B0%E0%A5%8D%E0%A4%B8-%E0%A4%B8%E0%A5%87-50-000-%E0%A4%AE%E0%A4%B9%E0%A5%80%E0%A4%A8%E0%A4%BE-%E0%A4%87%E0%A4%82%E0%A4%B8%E0%A5%8D%E0%A4%9F%E0%A4%BE%E0%A4%97%E0%A5%8D%E0%A4%B0%E0%A4%BE%E0%A4%AE-%E0%A4%8F%E0%A4%AB%E0%A4%BF%E0%A4%B2%E0%A4%BF%E0%A4%8F%E0%A4%9F-%E0%A4%AE%E0%A4%BE%E0%A4%B0%E0%A5%8D%E0%A4%95%E0%A5%87%E0%A4%9F%E0%A4%BF%E0%A4%82%E0%A4%97-%E0%A4%95%E0%A4%BE-%E0%A4%B5%E0%A5%8B-%E0%A4%B8%E0%A5%80%E0%A4%95%E0%A5%8D%E0%A4%B0%E0%A5%87%E0%A4%9F-%E0%A4%9C%E0%A5%8B-%E0%A4%95%E0%A5%8B%E0%A4%88-%E0%A4%A8%E0%A4%B9%E0%A5%80%E0%A4%82-%E0%A4%AC%E0%A4%A4%E0%A4%BE%E0%A4%A4%E0%A4%BE.html</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/autonomous-ai-agents-%E0%A4%85%E0%A4%AC-%E0%A4%96%E0%A5%81%E0%A4%A6-%E0%A4%AB%E0%A5%88%E0%A4%B8%E0%A4%B2%E0%A5%87-%E0%A4%B2%E0%A5%87%E0%A4%A8%E0%A5%87-%E0%A4%B5%E0%A4%BE%E0%A4%B2%E0%A4%BE-ai-%E0%A4%86-%E0%A4%9A%E0%A5%81%E0%A4%95%E0%A4%BE-%E0%A4%B9%E0%A5%88.html</loc>
+    <lastmod>2026-07-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/internet-se-paise-kaise-kamaye-5-asli-tarike.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/what-if-human-travels-at-speed-of-light-hindi.html</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/america-s-hidden-places-you-won-t-believe-exist.html</loc>
+    <lastmod>2026-07-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/%E0%A4%AD%E0%A4%BE%E0%A4%B0%E0%A4%A4-%E0%A4%AE%E0%A5%87%E0%A4%82-ai-jobs-%E0%A4%A4%E0%A5%87%E0%A4%9C%E0%A5%80-%E0%A4%B8%E0%A5%87-%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A5%8B%E0%A4%82-%E0%A4%AC%E0%A4%A2%E0%A4%BC-%E0%A4%B0%E0%A4%B9%E0%A5%80-%E0%A4%B9%E0%A5%88%E0%A4%82-%E0%A4%9C%E0%A4%BE%E0%A4%A8%E0%A4%BF%E0%A4%8F-%E0%A4%AE%E0%A5%81%E0%A4%96%E0%A5%8D%E0%A4%AF-%E0%A4%95%E0%A4%BE%E0%A4%B0%E0%A4%A3-%E0%A4%94%E0%A4%B0-%E0%A4%AD%E0%A4%B5%E0%A4%BF%E0%A4%B7%E0%A5%8D%E0%A4%AF-%E0%A4%95%E0%A5%87-%E0%A4%9F%E0%A5%8D%E0%A4%B0%E0%A5%87%E0%A4%82%E0%A4%A1%E0%A5%8D%E0%A4%B8.html</loc>
+    <lastmod>2026-09-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/copper-water-%E0%A4%A4%E0%A4%BE%E0%A4%82%E0%A4%AC%E0%A5%87-%E0%A4%95%E0%A5%87-%E0%A4%AC%E0%A4%B0%E0%A5%8D%E0%A4%A4%E0%A4%A8-%E0%A4%AE%E0%A5%87%E0%A4%82-%E0%A4%AA%E0%A4%BE%E0%A4%A8%E0%A5%80-%E0%A4%AA%E0%A5%80%E0%A4%A8%E0%A4%BE-%E0%A4%B8%E0%A4%B9%E0%A5%80-%E0%A4%AF%E0%A4%BE-%E0%A4%97%E0%A4%B2%E0%A4%A4.html</loc>
+    <lastmod>2026-07-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/secrets-of-antarctica-%E0%A4%AC%E0%A4%B0%E0%A5%8D%E0%A4%AB-%E0%A4%AA%E0%A4%BF%E0%A4%98%E0%A4%B2%E0%A4%A4%E0%A5%87-%E0%A4%B9%E0%A5%80-%E0%A4%AC%E0%A4%BE%E0%A4%B9%E0%A4%B0-%E0%A4%86%E0%A4%88-%E0%A4%AF%E0%A5%87-%E0%A4%9A%E0%A5%8C%E0%A4%82%E0%A4%95%E0%A4%BE%E0%A4%A8%E0%A5%87-%E0%A4%B5%E0%A4%BE%E0%A4%B2%E0%A5%80-%E0%A4%9A%E0%A5%80%E0%A4%9C%E0%A5%87%E0%A4%82-%EF%B8%8F.html</loc>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/why-sea-water-is-salty-scientific-reason-hindi.html</loc>
+    <lastmod>2026-09-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/whatsapp-new-features-2026-%E0%A4%AC%E0%A4%A6%E0%A4%B2-%E0%A4%9C%E0%A4%BE%E0%A4%8F%E0%A4%97%E0%A4%BE-%E0%A4%90%E0%A4%AA-%E0%A4%9A%E0%A4%B2%E0%A4%BE%E0%A4%A8%E0%A5%87-%E0%A4%95%E0%A4%BE-%E0%A4%A4%E0%A4%B0%E0%A5%80%E0%A4%95%E0%A4%BE.html</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/why-8-hours-sleep-is-important-%E0%A4%A8%E0%A5%80%E0%A4%82%E0%A4%A6-%E0%A4%95%E0%A4%BE-%E0%A4%B8%E0%A4%9A-%E0%A4%9C%E0%A5%8B-%E0%A4%86%E0%A4%AA%E0%A4%95%E0%A5%80-life-%E0%A4%AC%E0%A4%A6%E0%A4%B2-%E0%A4%A6%E0%A5%87%E0%A4%97%E0%A4%BE.html</loc>
+    <lastmod>2026-06-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/%E0%A4%AE%E0%A4%BE%E0%A4%89%E0%A4%82%E0%A4%9F-%E0%A4%8F%E0%A4%B5%E0%A4%B0%E0%A5%87%E0%A4%B8%E0%A5%8D%E0%A4%9F-%E0%A4%95%E0%A5%80-%E0%A4%8A%E0%A4%81%E0%A4%9A%E0%A4%BE%E0%A4%88-%E0%A4%B9%E0%A4%B0-%E0%A4%B8%E0%A4%BE%E0%A4%B2-%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A5%8B%E0%A4%82-%E0%A4%AC%E0%A4%A2%E0%A4%BC-%E0%A4%B0%E0%A4%B9%E0%A5%80-%E0%A4%B9%E0%A5%88-%E0%A4%9C%E0%A4%BE%E0%A4%A8%E0%A4%BF%E0%A4%8F-%E0%A4%B5%E0%A5%88%E0%A4%9C%E0%A5%8D%E0%A4%9E%E0%A4%BE%E0%A4%A8%E0%A4%BF%E0%A4%95-%E0%A4%95%E0%A4%BE%E0%A4%B0%E0%A4%A3.html</loc>
+    <lastmod>2026-09-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/multitasking-ai-war-chatgpt-vs-claude-vs-gemini-%E0%A4%95%E0%A5%8C%E0%A4%A8-%E0%A4%B8%E0%A4%BE-%E0%A4%AC%E0%A5%87%E0%A4%B8%E0%A5%8D%E0%A4%9F-%E0%A4%B9%E0%A5%88.html</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/neuralink-brain-chip-%E0%A4%9C%E0%A4%BE%E0%A4%A8%E0%A4%BF%E0%A4%8F-%E0%A4%87%E0%A4%82%E0%A4%B8%E0%A4%BE%E0%A4%A8-%E0%A4%95%E0%A5%88%E0%A4%B8%E0%A5%87-%E0%A4%AC%E0%A4%A8%E0%A5%87%E0%A4%97%E0%A4%BE-superhuman.html</loc>
+    <lastmod>2026-07-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/5-technology-facts-jo-aapko-super-smart-bana-denge.html</loc>
+    <lastmod>2026-05-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/cold-drink-fast-food-facts.html</loc>
+    <lastmod>2026-07-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/%E0%A4%AC%E0%A4%BE%E0%A4%B0%E0%A4%BF%E0%A4%B6-%E0%A4%95%E0%A5%87-%E0%A4%AC%E0%A4%BE%E0%A4%A6-%E0%A4%AE%E0%A4%BF%E0%A4%9F%E0%A5%8D%E0%A4%9F%E0%A5%80-%E0%A4%B8%E0%A5%87-%E0%A4%96%E0%A5%81%E0%A4%B6%E0%A4%AC%E0%A5%82-%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A5%8B%E0%A4%82-%E0%A4%86%E0%A4%A4%E0%A5%80-%E0%A4%B9%E0%A5%88-%E0%A4%9C%E0%A4%BE%E0%A4%A8%E0%A4%BF%E0%A4%8F-%E0%A4%AA%E0%A5%87%E0%A4%9F%E0%A5%8D%E0%A4%B0%E0%A5%80%E0%A4%9A%E0%A5%8B%E0%A4%B0-%E0%A4%95%E0%A4%BE-%E0%A4%85%E0%A4%B8%E0%A4%B2%E0%A5%80-%E0%A4%B5%E0%A4%BF%E0%A4%9C%E0%A5%8D%E0%A4%9E%E0%A4%BE%E0%A4%A8.html</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/duniya-ki-sabse-rahasyamayi-kitab.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/%E0%A4%87%E0%A4%82%E0%A4%A6%E0%A5%8D%E0%A4%B0%E0%A4%A7%E0%A4%A8%E0%A5%81%E0%A4%B7-%E0%A4%B8%E0%A4%BF%E0%A4%B0%E0%A5%8D%E0%A4%AB-%E0%A4%AC%E0%A4%BE%E0%A4%B0%E0%A4%BF%E0%A4%B6-%E0%A4%95%E0%A5%87-%E0%A4%AC%E0%A4%BE%E0%A4%A6-%E0%A4%B9%E0%A5%80-%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A5%8B%E0%A4%82-%E0%A4%A6%E0%A4%BF%E0%A4%96%E0%A4%BE%E0%A4%88-%E0%A4%A6%E0%A5%87%E0%A4%A4%E0%A4%BE-%E0%A4%B9%E0%A5%88-%E0%A4%9C%E0%A4%BE%E0%A4%A8%E0%A4%BF%E0%A4%8F-%E0%A4%85%E0%A4%B8%E0%A4%B2%E0%A5%80-%E0%A4%B5%E0%A5%88%E0%A4%9C%E0%A5%8D%E0%A4%9E%E0%A4%BE%E0%A4%A8%E0%A4%BF%E0%A4%95-%E0%A4%95%E0%A4%BE%E0%A4%B0%E0%A4%A3.html</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/digital-mayajal-technology-facts.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/antariksh-mein-rone-par-aansu-neeche-kyun-nahi-girte.html</loc>
+    <lastmod>2026-05-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/skill-based-income-bina-investment-online-tarika.html</loc>
+    <lastmod>2026-04-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/%E0%A4%9A%E0%A4%BE%E0%A4%AF-%E0%A4%AA%E0%A5%80%E0%A4%A8%E0%A5%87-%E0%A4%95%E0%A5%87-%E0%A4%A8%E0%A5%81%E0%A4%95%E0%A4%B8%E0%A4%BE%E0%A4%A8.html</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/why-face-looks-weird-in-mirror-science-in-hindi.html</loc>
     <lastmod>2026-09-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
+
+  <url>
+    <loc>https://factzone.online/posts/biscuits-%E0%A4%AE%E0%A5%87%E0%A4%82-holes-%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A5%8B%E0%A4%82-%E0%A4%B9%E0%A5%8B%E0%A4%A4%E0%A5%87-%E0%A4%B9%E0%A5%88%E0%A4%82-%E0%A4%B8%E0%A4%BF%E0%A4%B0%E0%A5%8D%E0%A4%AB-design-%E0%A4%A8%E0%A4%B9%E0%A5%80%E0%A4%82-%E0%A4%AF%E0%A4%B9-%E0%A4%B9%E0%A5%88-%E0%A4%85%E0%A4%B8%E0%A4%B2%E0%A5%80-%E0%A4%B5%E0%A4%9C%E0%A4%B9.html</loc>
+    <lastmod>2026-07-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/youtube-channel-grow-%E0%A4%95%E0%A5%88%E0%A4%B8%E0%A5%87-%E0%A4%95%E0%A4%B0%E0%A5%87%E0%A4%82-0-%E0%A4%B8%E0%A5%87-100k-subscribers-%E0%A4%95%E0%A4%BE-secret-formula.html</loc>
+    <lastmod>2026-06-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/walking-tree-%E0%A4%8F%E0%A4%95-%E0%A4%90%E0%A4%B8%E0%A4%BE-tree-%E0%A4%9C%E0%A5%8B-%E0%A4%B8%E0%A4%9A-%E0%A4%AE%E0%A5%87%E0%A4%82-%E0%A4%9A%E0%A4%B2%E0%A4%95%E0%A4%B0-%E0%A4%9C%E0%A4%97%E0%A4%B9-%E0%A4%AC%E0%A4%A6%E0%A4%B2%E0%A4%A4%E0%A4%BE-%E0%A4%B9%E0%A5%88-%EF%B8%8F.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/%E0%A4%B8%E0%A4%AA%E0%A4%A8%E0%A5%87-%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A5%8B%E0%A4%82-%E0%A4%86%E0%A4%A4%E0%A5%87-%E0%A4%B9%E0%A5%88%E0%A4%82-%E0%A4%9C%E0%A4%BE%E0%A4%A8%E0%A4%BF%E0%A4%8F-%E0%A4%87%E0%A4%B8%E0%A4%95%E0%A5%87-%E0%A4%AA%E0%A5%80%E0%A4%9B%E0%A5%87-%E0%A4%95%E0%A4%BE-%E0%A4%85%E0%A4%B8%E0%A4%B2%E0%A5%80-%E0%A4%B5%E0%A5%88%E0%A4%9C%E0%A5%8D%E0%A4%9E%E0%A4%BE%E0%A4%A8%E0%A4%BF%E0%A4%95-%E0%A4%95%E0%A4%BE%E0%A4%B0%E0%A4%A3-%E0%A4%A6-%E0%A4%B8%E0%A4%BE%E0%A4%87%E0%A4%82%E0%A4%B8-%E0%A4%91%E0%A4%AB-%E0%A4%A1%E0%A5%8D%E0%A4%B0%E0%A5%80%E0%A4%AE%E0%A5%8D%E0%A4%B8.html</loc>
+    <lastmod>2026-08-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/why-songs-get-stuck-in-head-earworm-hindi.html</loc>
+    <lastmod>2026-09-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
 </urlset>
