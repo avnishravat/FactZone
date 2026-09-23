@@ -365,6 +365,14 @@
   var idParam   = params.get("id") || "";
   var slugParam = params.get("slug") || "";
 
+  /* Legacy URL migration: every post now has a canonical static page at /posts/<slug>.html.
+     If we already know the slug from the URL, send the visitor (and any crawler that
+     executes JS) straight there instead of rendering this legacy page. */
+  if (slugParam) {
+    location.replace("/posts/" + encodeURIComponent(slugParam) + ".html");
+    return;
+  }
+
   function $(q) { return document.getElementById(q); }
   function sleep(ms) { return new Promise(function (resolve) { setTimeout(resolve, ms); }); }
 
@@ -1177,6 +1185,7 @@
         var parsed = JSON.parse(cachedRaw);
         if (Date.now() - parsed.ts < CACHE_TTL_MS) {
           cachedPost = parsed.data;
+          if (cachedPost.slug) { location.replace("/posts/" + encodeURIComponent(cachedPost.slug) + ".html"); return; }
           renderPost(cachedPost);
         }
       } catch (e) {}
@@ -1189,6 +1198,7 @@
         if (!cachedPost) $("post-content").innerHTML = '<div class="err"><h2>Post Not Found</h2><p>This article may have been removed.</p></div>';
         return;
       }
+      if (post.slug) { location.replace("/posts/" + encodeURIComponent(post.slug) + ".html"); return; }
       ssSet(cacheKey, JSON.stringify({ ts: Date.now(), data: post }));
       renderPost(post);
     });

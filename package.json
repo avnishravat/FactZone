@@ -1,0 +1,14 @@
+{
+  "name": "factzone-static-generator",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Static SEO article/category generator for factzone.online. Reads Firestore posts and writes posts/<slug>.html, categories/<cat>/index.html, sitemap.xml, and the homepage's crawlable-links block.",
+  "scripts": {
+    "generate": "node scripts/generate-static.js",
+    "generate:dry-run": "node scripts/generate-static.js --dry-run=scripts/fixtures/sample-posts.json"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.7.0",
+    "sanitize-html": "^2.13.1"
+  }
+}
