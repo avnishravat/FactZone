@@ -55,7 +55,7 @@
 
 - **Main Website:** [factzone.online](https://factzone.online/)
 - **Tools Suite:** [factzone.online/tools](https://factzone.online/tools)
-- **Privacy Policy:** [factzone.online/privacy-policy](https://factzone.online/privacy-policy.html)
+- **Privacy Policy:** [factzone.online/privacy-policy](https://factzone.online/privacy.html)
 
 ---
 
