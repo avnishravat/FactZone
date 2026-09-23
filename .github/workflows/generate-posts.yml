@@ -1,0 +1,101 @@
+name: Generate static article pages
+
+# Runs the SEO static generator (scripts/generate-static.js) and commits its
+# output (posts/*.html, categories/*/index.html, sitemap.xml, index.html's
+# crawlable-links block) straight back to main. GitHub Pages is set to
+# deploy from main, so a successful push here republishes the site - no
+# extra deploy step or repo Settings change needed.
+
+"on":
+  workflow_dispatch: {}          # manual "Run workflow" button
+  schedule:
+    - cron: '0 */6 * * *'        # every 6 hours - adjust as needed
+  push:
+    branches: [main]             # pick up new/edited posts quickly after any push
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    # Guard against the bot's own commit re-triggering this workflow
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run static generator
+        env:
+          FIREBASE_SERVICE_ACCOUNT_FACTZONE: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_FACTZONE }}
+        run: node scripts/generate-static.js
+
+      - name: Validate generated output
+        run: |
+          set -e
+          echo "---- Validating generated output ----"
+
+          POST_COUNT=$(find posts -maxdepth 1 -name '*.html' | wc -l)
+          echo "Article pages: $POST_COUNT"
+          if [ "$POST_COUNT" -lt 1 ]; then
+            echo "::error::No article pages were generated - failing the build."
+            exit 1
+          fi
+
+          for f in posts/*.html; do
+            H1_COUNT=$(grep -c '<h1' "$f" || true)
+            if [ "$H1_COUNT" -ne 1 ]; then
+              echo "::error::$f does not have exactly one <h1> (found $H1_COUNT)"
+              exit 1
+            fi
+            if ! grep -q 'rel="canonical"' "$f"; then
+              echo "::error::$f is missing a canonical tag"
+              exit 1
+            fi
+            if ! grep -q 'application/ld+json' "$f"; then
+              echo "::error::$f is missing JSON-LD structured data"
+              exit 1
+            fi
+          done
+
+          for cat in science history tech mystery viral; do
+            if [ ! -f "categories/$cat/index.html" ]; then
+              echo "::error::categories/$cat/index.html was not generated"
+              exit 1
+            fi
+          done
+
+          if [ ! -f sitemap.xml ]; then
+            echo "::error::sitemap.xml is missing"
+            exit 1
+          fi
+          python3 -c "import xml.etree.ElementTree as ET; ET.parse('sitemap.xml')" \
+            || { echo "::error::sitemap.xml is not well-formed XML"; exit 1; }
+
+          if ! grep -q 'SSG:CRAWLABLE-LINKS:START' index.html; then
+            echo "::error::index.html is missing the SSG:CRAWLABLE-LINKS markers"
+            exit 1
+          fi
+
+          echo "---- Validation passed ----"
+
+      - name: Commit and push generated files
+        run: |
+          git config user.name "factzone-static-generator"
+          git config user.email "actions@users.noreply.github.com"
+          git add posts/ categories/ sitemap.xml index.html
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore: regenerate static article/category pages [skip ci]"
+            git push
+          fi
