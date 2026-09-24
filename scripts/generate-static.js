@@ -1,19 +1,19 @@
-```javascript
 // ---------------------------------------------------------------------------
 // Sitemap - APPEND ONLY
 // ---------------------------------------------------------------------------
 // IMPORTANT:
 // - Existing sitemap URLs are NEVER regenerated.
 // - Existing <lastmod>, <changefreq>, and <priority> are NEVER changed.
-// - Existing homepage and tools.html dates are preserved exactly as they are.
-// - Only URLs that do not already exist in sitemap.xml are added.
-// - New article URLs use createdAt as <lastmod>.
-// - Existing article URLs are NOT affected by updatedAt changes.
-// - Existing category URLs are NOT affected by category changes.
+// - Existing homepage/tools/category/article entries are preserved exactly.
+// - Only missing/new URLs are appended.
+// - New article URLs use createdAt for <lastmod>.
+// - updatedAt is NEVER used for sitemap article <lastmod>.
+// - If createdAt is missing, <lastmod> is omitted.
+// - If there are no new URLs, sitemap.xml is NOT rewritten.
 // ---------------------------------------------------------------------------
 
-function escapeXml(str) {
-  return String(str == null ? '' : str)
+function escapeXml(value) {
+  return String(value == null ? '' : value)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
@@ -52,7 +52,9 @@ function buildSitemapEntry({
 function extractSitemapUrls(xml) {
   const urls = new Set();
 
-  if (!xml) return urls;
+  if (!xml) {
+    return urls;
+  }
 
   const locRegex = /<loc>\s*([^<]+?)\s*<\/loc>/gi;
 
@@ -72,38 +74,41 @@ function extractSitemapUrls(xml) {
 function buildSitemap(posts, categoryLastmods) {
   const sitemapPath = path.join(ROOT, 'sitemap.xml');
 
-  // -------------------------------------------------------------------------
+  // =========================================================================
   // FIRST RUN
-  // -------------------------------------------------------------------------
-  // If sitemap.xml does not exist, create it normally.
-  // -------------------------------------------------------------------------
+  // =========================================================================
 
   if (!fs.existsSync(sitemapPath)) {
     const entries = [];
 
-    // Homepage.
-    // IMPORTANT: No automatic current-date <lastmod>.
+    // -----------------------------------------------------------------------
+    // Homepage
+    // -----------------------------------------------------------------------
+    // No fake/current-date lastmod.
     entries.push(
       buildSitemapEntry({
         loc: `${SITE_URL}/`,
-        lastmod: null,
         changefreq: 'daily',
         priority: '1.0'
       })
     );
 
-    // Tools page.
-    // IMPORTANT: No automatic current-date <lastmod>.
+    // -----------------------------------------------------------------------
+    // Tools
+    // -----------------------------------------------------------------------
+    // No fake/current-date lastmod.
     entries.push(
       buildSitemapEntry({
         loc: `${SITE_URL}/tools.html`,
-        lastmod: null,
         changefreq: 'weekly',
         priority: '0.9'
       })
     );
 
-    // Categories.
+    // -----------------------------------------------------------------------
+    // Categories
+    // -----------------------------------------------------------------------
+
     CATEGORY_ORDER.forEach(cat => {
       entries.push(
         buildSitemapEntry({
@@ -115,9 +120,18 @@ function buildSitemap(posts, categoryLastmods) {
       );
     });
 
-    // Articles.
+    // -----------------------------------------------------------------------
+    // Articles
+    // -----------------------------------------------------------------------
+    // IMPORTANT:
+    // New article sitemap lastmod = createdAt ONLY.
+    // updatedAt is intentionally ignored.
+    // -----------------------------------------------------------------------
+
     posts.forEach(post => {
-      if (!post.slug) return;
+      if (!post.slug) {
+        return;
+      }
 
       const createdDate = toSafeDate(post.createdAt);
 
@@ -154,32 +168,22 @@ function buildSitemap(posts, categoryLastmods) {
     return;
   }
 
-  // -------------------------------------------------------------------------
+  // =========================================================================
   // EXISTING SITEMAP
-  // -------------------------------------------------------------------------
-  // From this point onward:
-  //
-  // EXISTING CONTENT IS NEVER REGENERATED.
-  //
-  // This means:
-  //
-  // homepage old date       -> preserved
-  // tools.html old date     -> preserved
-  // old category dates      -> preserved
-  // old article dates       -> preserved
-  // old changefreq          -> preserved
-  // old priority            -> preserved
-  // -------------------------------------------------------------------------
+  // =========================================================================
 
   const existingXml = fs.readFileSync(
     sitemapPath,
     'utf8'
   );
 
-  const existingUrls =
-    extractSitemapUrls(existingXml);
+  const existingUrls = extractSitemapUrls(existingXml);
 
   const newEntries = [];
+
+  // -------------------------------------------------------------------------
+  // Add only if URL does not already exist
+  // -------------------------------------------------------------------------
 
   function addIfMissing({
     loc,
@@ -187,37 +191,31 @@ function buildSitemap(posts, categoryLastmods) {
     changefreq = null,
     priority = null
   }) {
-    // Existing URL:
-    // DO NOTHING.
+    // IMPORTANT:
+    // Existing URL = DO NOTHING.
     //
-    // This is what protects old homepage/tools/article/category dates.
+    // This preserves ALL existing sitemap metadata exactly as it is.
     if (existingUrls.has(loc)) {
       return;
     }
 
-    const entry = buildSitemapEntry({
-      loc,
-      lastmod,
-      changefreq,
-      priority
-    });
+    newEntries.push(
+      buildSitemapEntry({
+        loc,
+        lastmod,
+        changefreq,
+        priority
+      })
+    );
 
-    newEntries.push(entry);
-
-    // Prevent duplicate addition during this same run.
+    // Prevent duplicate URLs during this same generator run.
     existingUrls.add(loc);
   }
 
-  // -------------------------------------------------------------------------
+  // =========================================================================
   // Homepage
-  // -------------------------------------------------------------------------
-  //
-  // If homepage already exists:
-  //   NOTHING happens.
-  //
-  // If homepage does not exist:
-  //   It is added WITHOUT <lastmod>.
-  //
+  // =========================================================================
+
   addIfMissing({
     loc: `${SITE_URL}/`,
     lastmod: null,
@@ -225,14 +223,10 @@ function buildSitemap(posts, categoryLastmods) {
     priority: '1.0'
   });
 
-  // -------------------------------------------------------------------------
-  // Tools page
-  // -------------------------------------------------------------------------
-  //
-  // Existing tools.html entry is preserved exactly.
-  //
-  // If missing, it is added WITHOUT <lastmod>.
-  //
+  // =========================================================================
+  // Tools
+  // =========================================================================
+
   addIfMissing({
     loc: `${SITE_URL}/tools.html`,
     lastmod: null,
@@ -240,9 +234,10 @@ function buildSitemap(posts, categoryLastmods) {
     priority: '0.9'
   });
 
-  // -------------------------------------------------------------------------
+  // =========================================================================
   // Categories
-  // -------------------------------------------------------------------------
+  // =========================================================================
+
   CATEGORY_ORDER.forEach(cat => {
     addIfMissing({
       loc: `${SITE_URL}/categories/${cat}/`,
@@ -252,28 +247,27 @@ function buildSitemap(posts, categoryLastmods) {
     });
   });
 
-  // -------------------------------------------------------------------------
+  // =========================================================================
   // Articles
-  // -------------------------------------------------------------------------
-  //
-  // IMPORTANT:
-  // For NEW article URLs only, use createdAt.
-  //
-  // updatedAt is deliberately NOT used here.
-  //
+  // =========================================================================
+
   posts.forEach(post => {
-    if (!post.slug) return;
+    if (!post.slug) {
+      return;
+    }
 
     const loc =
       `${SITE_URL}/posts/${encodeURIComponent(post.slug)}.html`;
 
-    const createdDate =
-      toSafeDate(post.createdAt);
+    // IMPORTANT:
+    // Only createdAt is used for a NEW sitemap URL.
+    //
+    // updatedAt is NOT used.
+    const createdDate = toSafeDate(post.createdAt);
 
-    const lastmod =
-      createdDate
-        ? createdDate.toISOString().slice(0, 10)
-        : null;
+    const lastmod = createdDate
+      ? createdDate.toISOString().slice(0, 10)
+      : null;
 
     addIfMissing({
       loc,
@@ -283,15 +277,9 @@ function buildSitemap(posts, categoryLastmods) {
     });
   });
 
-  // -------------------------------------------------------------------------
+  // =========================================================================
   // Nothing new
-  // -------------------------------------------------------------------------
-  //
-  // IMPORTANT:
-  // Do not even rewrite sitemap.xml.
-  //
-  // This means the existing file remains byte-for-byte unchanged.
-  // -------------------------------------------------------------------------
+  // =========================================================================
 
   if (newEntries.length === 0) {
     console.log(
@@ -301,14 +289,13 @@ function buildSitemap(posts, categoryLastmods) {
     return;
   }
 
-  // -------------------------------------------------------------------------
-  // Add ONLY new entries before </urlset>
-  // -------------------------------------------------------------------------
+  // =========================================================================
+  // Append new entries before </urlset>
+  // =========================================================================
 
   const closingTag = '</urlset>';
 
-  const closingIndex =
-    existingXml.lastIndexOf(closingTag);
+  const closingIndex = existingXml.lastIndexOf(closingTag);
 
   if (closingIndex === -1) {
     throw new Error(
@@ -316,24 +303,35 @@ function buildSitemap(posts, categoryLastmods) {
     );
   }
 
-  const before =
-    existingXml.slice(0, closingIndex);
+  const before = existingXml.slice(
+    0,
+    closingIndex
+  );
 
-  const after =
-    existingXml.slice(closingIndex);
+  const after = existingXml.slice(
+    closingIndex
+  );
 
-  const separator =
-    before.endsWith('\n')
-      ? ''
-      : '\n';
+  const newBlock =
+    newEntries.join('\n\n');
 
-  const updatedXml =
-    before +
-    separator +
-    '\n' +
-    newEntries.join('\n\n') +
-    '\n\n' +
-    after;
+  let updatedXml;
+
+  if (before.endsWith('\n')) {
+    updatedXml =
+      before +
+      '\n' +
+      newBlock +
+      '\n\n' +
+      after;
+  } else {
+    updatedXml =
+      before +
+      '\n\n' +
+      newBlock +
+      '\n\n' +
+      after;
+  }
 
   fs.writeFileSync(
     sitemapPath,
@@ -349,4 +347,3 @@ function buildSitemap(posts, categoryLastmods) {
     'sitemap.xml: all existing URLs and metadata were preserved.'
   );
 }
-```
