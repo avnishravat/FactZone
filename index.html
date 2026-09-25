@@ -7,7 +7,7 @@
 
   <title>Amazing Facts in Hindi | विज्ञान, टेक्नोलॉजी, इतिहास के रोचक तथ्य - FactZone</title>
   <meta name="description" content="FactZone पर पढ़ें विज्ञान, टेक्नोलॉजी, इतिहास और रहस्य से जुड़े हैरान कर देने वाले रोचक तथ्य। Amazing facts, science facts और viral knowledge हिंदी में।">
-  <meta name="keywords" content="amazing facts hindi, रोचक तथ्य, science facts hindi, विज्ञान तथ्य, technology facts, history facts hindi, mystery facts, viral facts">
+  <meta name="keywords" content="hindi science facts, मनोविज्ञान, psychology facts hindi, nature facts hindi, everyday science, curious questions hindi, रोचक सवाल">
   <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
   <meta name="googlebot" content="index,follow,max-image-preview:large">
   <meta name="author" content="Awaneesh">
@@ -31,16 +31,16 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="FactZone">
   <meta property="og:locale" content="hi_IN">
-  <meta property="og:title" content="Amazing Facts in Hindi | विज्ञान, टेक्नोलॉजी, इतिहास के रोचक तथ्य - FactZone">
-  <meta property="og:description" content="विज्ञान, टेक्नोलॉजी, इतिहास और रहस्य से जुड़े रोचक तथ्य हिंदी में। रोज नए Amazing Facts पढ़ें।">
+  <meta property="og:title" content="Hindi में विज्ञान, मनोविज्ञान और प्रकृति से जुड़े रोचक सवाल | FactZone">
+  <meta property="og:description" content="दिमाग, मनोविज्ञान, प्रकृति और रोज़मर्रा के विज्ञान से जुड़े दिलचस्प सवालों के जवाब सरल हिंदी में।">
   <meta property="og:url" content="https://factzone.online/">
   <meta property="og:image" content="https://factzone.online/logo.png">
   <meta property="og:image:width" content="512">
   <meta property="og:image:height" content="512">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Amazing Facts in Hindi - FactZone">
-  <meta name="twitter:description" content="विज्ञान, टेक्नोलॉजी, इतिहास और रहस्य से जुड़े रोचक तथ्य हिंदी में।">
+  <meta name="twitter:title" content="Hindi विज्ञान, मनोविज्ञान और प्रकृति के रोचक सवाल - FactZone">
+  <meta name="twitter:description" content="दिमाग, मनोविज्ञान, प्रकृति और रोज़मर्रा के विज्ञान से जुड़े सवालों के जवाब हिंदी में।">
   <meta name="twitter:image" content="https://factzone.online/logo.png">
 
   <link rel="icon" href="https://factzone.online/logo.png" sizes="48x48" type="image/png">
@@ -110,6 +110,40 @@
       align-items:stretch;
       min-height:300px;
     }
+    .card-category-badge{
+      display:inline-block;
+      font-size:0.6rem;
+      font-weight:700;
+      color:#8b5cf6;
+      background:rgba(139,92,246,0.1);
+      padding:0.1rem 0.4rem;
+      border-radius:9999px;
+      width:fit-content;
+    }
+    .card-footer{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-top:auto;
+      padding-top:0.4rem;
+      font-size:0.65rem;
+    }
+    .card-date{ color:#94a3b8; }
+    .card-read-link{ color:#8b5cf6; font-weight:700; }
+    html.dark .card-category-badge{ color:#c4b5fd; background:rgba(139,92,246,0.18); }
+
+    .editorial-box{
+      border:1px solid #e2e8f0;
+      border-radius:12px;
+      padding:0.9rem 1rem;
+      font-size:0.78rem;
+      color:#475569;
+      line-height:1.6;
+      background:#f8fafc;
+    }
+    html.dark .editorial-box{ background:#1e293b; border-color:#334155; color:#cbd5e1; }
+    .editorial-links{ margin-top:0.5rem; font-weight:600; }
+    .editorial-links a{ color:#8b5cf6; }
     ::-webkit-scrollbar{
       width:8px;
     }
@@ -139,6 +173,38 @@
       border-color:transparent !important;
       color:#fff !important;
     }
+
+    .pillar-nav-link{
+      font-size:0.7rem;
+      font-weight:600;
+      padding:0.3rem 0.7rem;
+      border-radius:9999px;
+      border:1px solid #e2e8f0;
+      color:#334155;
+      background:#fff;
+      white-space:nowrap;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .pillar-nav-link:hover{ border-color:#8b5cf6; color:#8b5cf6; }
+    html.dark .pillar-nav-link{ background:#1e293b; border-color:#334155; color:#cbd5e1; }
+    html.dark .pillar-nav-link:hover{ border-color:#a78bfa; color:#a78bfa; }
+
+    .pillar-block{ margin-bottom:1.1rem; }
+    .pillar-block[hidden]{ display:none; }
+    .pillar-heading{
+      font-size:0.95rem;
+      font-weight:700;
+      margin-bottom:0.5rem;
+      padding-bottom:0.3rem;
+      border-bottom:2px solid #e2e8f0;
+    }
+    html.dark .pillar-heading{ border-bottom-color:#334155; }
+    .pillar-grid{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap:0.75rem;
+    }
+    @media (min-width:640px){ .pillar-grid{ grid-template-columns: repeat(4, minmax(0,1fr)); } }
 
     .dense-grid {
       display: grid;
@@ -231,7 +297,7 @@
     })();
   </script>
 
-  <!-- Unified @graph JSON-LD: Organization + WebSite + BreadcrumbList + ItemList (Carousel) -->
+  <!-- Unified @graph JSON-LD: Organization + WebSite (with a working SearchAction) + BreadcrumbList -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -242,7 +308,7 @@
         "name": "FactZone",
         "url": "https://factzone.online",
         "logo": "https://factzone.online/logo.png",
-        "description": "Hindi educational facts platform sharing amazing science, technology, history and mystery facts.",
+        "description": "Hindi-language publication explaining everyday science, psychology, nature and curious questions in simple language.",
         "sameAs": [
           "https://www.instagram.com/avnish__123/",
           "https://www.youtube.com/DirectionNewsWorldwide08"
@@ -270,19 +336,6 @@
             "position": 1,
             "name": "Home",
             "item": "https://factzone.online/"
-          }
-        ]
-      },
-      {
-        "@type": "ItemList",
-        "@id": "https://factzone.online/#itemlist",
-        "name": "FactZone Amazing Facts",
-        "itemListElement": [
-          {
-            "@type": "ListItem",
-            "position": 1,
-            "url": "https://factzone.online/detail.html?id=NpID1utbz7FkCuJzbSnz",
-            "name": "विज्ञान से जुड़े कुछ बेहद हैरान करने वाले रोचक तथ्य"
           }
         ]
       }
@@ -315,8 +368,8 @@
 
       <!-- Inline Search Bar -->
       <div class="flex-1 max-w-xs mx-2">
-        <label for="searchInput" class="visually-hidden">Posts खोजें</label>
-        <input type="text" id="searchInput" placeholder="Search posts..." aria-label="Posts खोजें" class="w-full px-3 py-1.5 rounded-full outline-none text-xs text-black border border-gray-700 bg-white placeholder-gray-400 dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder-gray-500">
+        <label for="searchInput" class="visually-hidden">आप क्या जानना चाहते हैं?</label>
+        <input type="text" id="searchInput" placeholder="आप क्या जानना चाहते हैं?" aria-label="आप क्या जानना चाहते हैं?" class="w-full px-3 py-1.5 rounded-full outline-none text-xs text-black border border-gray-700 bg-white placeholder-gray-400 dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder-gray-500">
       </div>
 
       <!-- Theme Toggle Button -->
@@ -342,11 +395,39 @@
   </header>
 
   <section class="max-w-7xl mx-auto px-4 py-3">
-    <h1 class="text-xl font-bold dark:text-white">Amazing Facts, Science Facts &amp; रोचक ज्ञान (Hindi)</h1>
-    <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">विज्ञान, तकनीक, इतिहास, रहस्य और वायरल तथ्यों से जुड़े हिंदी लेख पढ़ें — रोज नई जानकारी FactZone पर।</p>
+    <h1 class="text-xl font-bold dark:text-white">हर सवाल के पीछे छिपी है एक दिलचस्प कहानी</h1>
+    <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">FactZone विज्ञान, मनोविज्ञान, प्रकृति और रोज़मर्रा से जुड़े जिज्ञासा भरे सवालों को आसान हिंदी में समझाता है।</p>
+    <nav aria-label="मुख्य विषय" class="flex flex-wrap gap-2 mt-3">
+      <a href="#pillar-mind" class="pillar-nav-link">🧠 Mind &amp; Psychology</a>
+      <a href="#pillar-science" class="pillar-nav-link">🔬 Everyday Science</a>
+      <a href="#pillar-nature" class="pillar-nav-link">🌿 Nature &amp; Earth</a>
+      <a href="#pillar-mysteries" class="pillar-nav-link">🔮 Mysteries &amp; History</a>
+      <a href="tools.html" class="pillar-nav-link">🛠️ Tools</a>
+    </nav>
+  </section>
+
+  <!-- Pillar Showcase: real posts, grouped editorially into the 4 content pillars (see PILLAR_MAP below) -->
+  <section id="pillars" class="max-w-7xl mx-auto px-4 py-2" aria-label="मुख्य विषय अनुसार लेख">
+    <div id="pillar-mind" class="pillar-block">
+      <h2 class="pillar-heading">🧠 Human Mind &amp; Psychology</h2>
+      <div class="pillar-grid" data-pillar="mind"></div>
+    </div>
+    <div id="pillar-science" class="pillar-block">
+      <h2 class="pillar-heading">🔬 Everyday Science</h2>
+      <div class="pillar-grid" data-pillar="science"></div>
+    </div>
+    <div id="pillar-nature" class="pillar-block">
+      <h2 class="pillar-heading">🌿 Nature &amp; Earth</h2>
+      <div class="pillar-grid" data-pillar="nature"></div>
+    </div>
+    <div id="pillar-mysteries" class="pillar-block">
+      <h2 class="pillar-heading">🔮 Mysteries &amp; History</h2>
+      <div class="pillar-grid" data-pillar="mysteries"></div>
+    </div>
   </section>
 
   <!-- Dense Grid Container -->
+  <h2 class="max-w-7xl mx-auto px-4 pt-2 text-sm font-bold dark:text-white">नवीनतम लेख / Latest Articles</h2>
   <main id="posts" class="max-w-7xl mx-auto px-4 py-2 dense-grid">
     <!-- Skeleton cards -->
     <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
@@ -359,12 +440,7 @@
 
   <!-- SEO-only fallback: real crawlable article links, regenerated automatically by scripts/generate-static.js -->
   <div id="seo-placeholder-cards" class="visually-hidden">
-  <!-- SSG:CRAWLABLE-LINKS:START (do not edit by hand between these two markers - generator owns this block) -->
-    <a href="/posts/can-our-brain-see-the-future-while-we-sleep.html" data-category="science">
-      <img src="https://i.ibb.co/MxjVDQ37/clipboard-image.png" alt="क्या हमारा दिमाग सोते समय भविष्य देख सकता है?" width="300" height="120">
-      <h2>क्या हमारा दिमाग सोते समय भविष्य देख सकता है?</h2>
-      <p>कल्पना कीजिए कि रात को सोते समय आप एक अजीब सपना देखते हैं। सपने में आपका एक पुराना दोस्त, जिससे सालों से कोई बात नहीं हुई है, एक लाल रंग की </p>
-    </a>
+    <!-- SSG:CRAWLABLE-LINKS:START (do not edit by hand between these two markers - generator owns this block) -->
     <a href="/posts/why-songs-get-stuck-in-head-earworm-hindi.html" data-category="science">
       <img src="https://i.ibb.co/00Xr4CR/clipboard-image.png" alt="एक ही गाना दिमाग में बार-बार क्यों बजता रहता है? जानिए इयरवॉर्म का असली विज्ञान" width="300" height="120">
       <h2>एक ही गाना दिमाग में बार-बार क्यों बजता रहता है? जानिए इयरवॉर्म का असली विज्ञान</h2>
@@ -625,9 +701,21 @@
 
   <noscript>
     <div class="max-w-7xl mx-auto px-5 pb-10 dark:text-white">
-      <p>यह वेबसाइट पूरी तरह देखने के लिए JavaScript enable करें। FactZone पर विज्ञान, टेक्नोलॉजी, इतिहास और रहस्य से जुड़े रोचक तथ्य पढ़ें।</p>
+      <p>यह वेबसाइट पूरी तरह देखने के लिए JavaScript enable करें। FactZone पर विज्ञान, मनोविज्ञान, प्रकृति और रोज़मर्रा से जुड़े रोचक सवालों के जवाब पढ़ें।</p>
     </div>
   </noscript>
+
+  <!-- Editorial trust section -->
+  <section class="max-w-7xl mx-auto px-4 py-4" aria-label="FactZone के बारे में">
+    <div class="editorial-box">
+      <p>FactZone का उद्देश्य जिज्ञासा से जुड़े सवालों को आसान भाषा में समझाना है। वैज्ञानिक विषयों में उपलब्ध विश्वसनीय स्रोतों और संदर्भों को प्राथमिकता दी जाती है।</p>
+      <p class="editorial-links">
+        <a href="about.html">About</a> ·
+        <a href="contact.html">सुधार या शिकायत के लिए संपर्क करें (Contact)</a>
+        <!-- TODO(dev): add Editorial Policy / Fact-Checking Policy links here once those pages exist. Do not link to a URL that doesn't exist yet. -->
+      </p>
+    </div>
+  </section>
 
   <!-- Footer -->
   <footer class="bg-black text-white mt-10 border-t dark:border-gray-900">
@@ -641,7 +729,7 @@
         <a href="tools.html" class="hover:text-gray-300">Tools</a>
         <a href="products.html" class="hover:text-gray-300">Products</a>
         <a href="prompts.html" class="hover:text-gray-300">Prompts</a>
-         <a href="editorial-policy.html" class="hover:text-gray-300">Editorial Policy</a>
+        <a href="editorial-policy.html" class="hover:text-gray-300">Editorial Policy</a>
       </div>
       <p class="text-gray-400 text-sm">
         © 2026 FactZone • <a href="author.html" class="hover:text-white underline transition">Awaneesh</a>
@@ -705,6 +793,13 @@
     let selectedCategory = "all";
 
     const CACHE_KEY = "factzone_posts_v7";
+    const CATEGORY_LABELS = {
+      science: "Science / विज्ञान",
+      tech:    "Tech / तकनीक",
+      history: "History / इतिहास",
+      mystery: "Mystery / रहस्य",
+      viral:   "Viral / रोचक तथ्य"
+    };
     const SVG_FALLBACK = "data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22300%22%20height%3D%22120%22%20viewBox%3D%220%200%20300%20120%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%231e293b%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22%2394a3b8%22%20font-family%3D%22sans-serif%22%20font-size%3D%2216%22%3EFactZone%3C%2Ftext%3E%3C%2Fsvg%3E";
 
     function escapeHtml(str) {
@@ -755,6 +850,115 @@
       if (typeof val === 'string') return new Date(val);
       if (val.seconds) return new Date(val.seconds * 1000);
       return new Date(val);
+    }
+
+    let renderedImageCount = 0; // running count across pillar previews + main grid, in actual page order
+
+    function buildCardHtml(post) {
+      const safeTitle    = escapeHtml(post.title || 'FactZone Post');
+      const safeImage    = (post.image && post.image.trim() !== '') ? escapeHtml(post.image) : SVG_FALLBACK;
+      const safeDesc     = escapeHtml(post.desc || '');
+      const safeId       = encodeURIComponent(post.id);
+      const safeSlug     = post.slug ? encodeURIComponent(post.slug) : '';
+      const safeCategory = escapeHtml(post.category || '');
+      const categoryLabel = escapeHtml(CATEGORY_LABELS[post.category] || post.category || '');
+      const postDate = parseDate(post.createdAt);
+      const dateLabel = (post.createdAt && !isNaN(postDate.getTime()))
+        ? postDate.toLocaleDateString('hi-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+        : '';
+      // Real posts always carry a slug (auto-backfilled by the static generator); the
+      // ?id= form only remains as a defensive fallback and should not normally be hit.
+      const href = safeSlug ? `posts/${safeSlug}.html` : `detail.html?id=${safeId}`;
+
+      // Performance: the first few images actually painted on the page (pillar previews
+      // render before the main grid in the DOM) get eager/high-priority; the rest lazy-load.
+      const isAboveFold = renderedImageCount < 4;
+      renderedImageCount++;
+      const loadingAttr = isAboveFold ? 'eager' : 'lazy';
+      const priorityAttr = isAboveFold ? 'fetchpriority="high"' : 'fetchpriority="low"';
+
+      const descHtml = safeDesc
+        ? `<p class="text-gray-500 dark:text-gray-400 text-xs line-clamp-3 opacity-80 mt-1">${safeDesc}</p>`
+        : '';
+
+      return `
+      <a href="${href}" class="card" data-category="${safeCategory}">
+        <div class="post-image-container">
+          <img src="${safeImage}" alt="${safeTitle}" class="post-image" loading="${loadingAttr}" decoding="async" ${priorityAttr} width="300" height="120" onerror="this.onerror=null;this.src='${SVG_FALLBACK}';">
+        </div>
+        <div class="p-2.5 flex flex-col flex-1">
+          ${categoryLabel ? `<span class="card-category-badge">${categoryLabel}</span>` : ''}
+          <h3 class="font-bold text-xs sm:text-sm text-gray-900 dark:text-white leading-snug mt-1">${safeTitle}</h3>
+          ${descHtml}
+          <div class="card-footer">
+            ${dateLabel ? `<span class="card-date">${dateLabel}</span>` : '<span></span>'}
+            <span class="card-read-link">पढ़ें →</span>
+          </div>
+        </div>
+      </a>`;
+    }
+
+    // ---- Pillar classification -------------------------------------------------
+    // One-time curated mapping for existing posts, based on their actual titles
+    // (e.g. sleep/memory/dreams -> mind; rainbow/sea/Everest -> nature). New posts
+    // are not silently left out: they fall back to the category rule below, so a
+    // future "science" post always lands in Everyday Science, a future "mystery"
+    // or "history" post always lands in Mysteries & History, and a future "tech"
+    // post lands in Everyday Science unless its slug is added to the exclude list
+    // (kept for posts that are really money-making/career tips, not tech-science).
+    const PILLAR_OVERRIDE = {
+      "3-am-sleep-mystery-रात-3-बजे-अचानक-आँख-खुलने-का-सच": "mind",
+      "human-memory-how-it-works-and-why-we-forget-in-hindi": "mind",
+      "why-8-hours-sleep-is-important-नींद-का-सच-जो-आपकी-life-बदल-देगा": "mind",
+      "why-do-we-respond-to-our-own-name-science-in-hindi": "mind",
+      "why-face-looks-weird-in-mirror-science-in-hindi": "mind",
+      "why-songs-get-stuck-in-head-earworm-hindi": "mind",
+      "why-we-feel-someone-is-watching-us-science-hindi": "mind",
+      "सपने-क्यों-आते-हैं-जानिए-इसके-पीछे-का-असली-वैज्ञानिक-कारण-द-साइंस-ऑफ-ड्रीम्स": "mind",
+      "reels-addiction-कहीं-आपका-phone-आपकी-life-तो-बर्बाद-नहीं-कर-रहा-️": "mind",
+      "walking-tree-एक-ऐसा-tree-जो-सच-में-चलकर-जगह-बदलता-है-️": "nature",
+      "why-honey-never-spoils-expiration-date-science-hindi": "nature",
+      "why-sea-water-is-salty-scientific-reason-hindi": "nature",
+      "why-sky-appears-blue-scientific-reason-hindi": "nature",
+      "इंद्रधनुष-सिर्फ-बारिश-के-बाद-ही-क्यों-दिखाई-देता-है-जानिए-असली-वैज्ञानिक-कारण": "nature",
+      "पृथ्वी-का-अंत-वैज्ञानिकों-के-अनुसार-हमारी-धरती-का-अंत-कैसे-हो-सकता-है": "nature",
+      "बारिश-के-बाद-मिट्टी-से-खुशबू-क्यों-आती-है-जानिए-पेट्रीचोर-का-असली-विज्ञान": "nature",
+      "माउंट-एवरेस्ट-की-ऊँचाई-हर-साल-क्यों-बढ़-रही-है-जानिए-वैज्ञानिक-कारण": "nature",
+      "duniya-ki-sabse-rahasyamayi-kitab": "mysteries"
+    };
+    const TECH_MONEY_CAREER_SLUGS = new Set([
+      "0-फॉलोअर्स-से-50-000-महीना-इंस्टाग्राम-एफिलिएट-मार्केटिंग-का-वो-सीक्रेट-जो-कोई-नहीं-बताता",
+      "internet-se-paise-kaise-kamaye-5-asli-tarike",
+      "skill-based-income-bina-investment-online-tarika",
+      "work-from-home-महिलाओं-और-छात्रों-के-लिए-बेस्ट-जॉब-आइडियाज-2026-बिना-इन्वेस्टमेंट-कमाई",
+      "youtube-channel-grow-कैसे-करें-0-से-100k-subscribers-का-secret-formula",
+      "2026-की-top-5-high-paying-tech-skills",
+      "भारत-में-ai-jobs-तेजी-से-क्यों-बढ़-रही-हैं-जानिए-मुख्य-कारण-और-भविष्य-के-ट्रेंड्स"
+    ]);
+
+    function classifyPillar(post) {
+      if (post.slug && PILLAR_OVERRIDE[post.slug]) return PILLAR_OVERRIDE[post.slug];
+      if (post.category === 'mystery' || post.category === 'history') return 'mysteries';
+      if (post.category === 'science') return 'science';
+      if (post.category === 'tech' && !TECH_MONEY_CAREER_SLUGS.has(post.slug)) return 'science';
+      return null; // viral + money/career tech posts: reachable via Latest Articles / their category page, not forced into a pillar
+    }
+
+    function renderPillars(postsArray) {
+      const buckets = { mind: [], science: [], nature: [], mysteries: [] };
+      postsArray.forEach(post => {
+        const pillar = classifyPillar(post);
+        if (pillar) buckets[pillar].push(post);
+      });
+      Object.keys(buckets).forEach(key => {
+        const grid = document.querySelector(`.pillar-grid[data-pillar="${key}"]`);
+        const block = document.getElementById(`pillar-${key}`);
+        if (!grid || !block) return;
+        const items = buckets[key].slice(0, 4);
+        if (items.length === 0) { block.hidden = true; return; }
+        block.hidden = false;
+        grid.innerHTML = items.map(post => buildCardHtml(post)).join('');
+      });
     }
 
     async function loadPosts(){
@@ -812,35 +1016,11 @@
           return;
         }
 
+        renderedImageCount = 0; // reset per load so priority always reflects current page order
+        renderPillars(postsArray);
+
         let htmlContent = "";
-        postsArray.forEach((post, index)=>{
-          const safeTitle    = escapeHtml(post.title || 'FactZone Post');
-          const safeImage    = (post.image && post.image.trim() !== '') ? escapeHtml(post.image) : SVG_FALLBACK;
-          const safeDesc     = escapeHtml(post.desc || '');
-          const safeId       = encodeURIComponent(post.id);
-          const safeSlug     = post.slug ? encodeURIComponent(post.slug) : '';
-          const safeCategory = escapeHtml(post.category || '');
-
-          // Performance Boost: First 4 images eager load for above-the-fold speed
-          const isAboveFold = index < 4;
-          const loadingAttr = isAboveFold ? 'eager' : 'lazy';
-          const priorityAttr = isAboveFold ? 'fetchpriority="high"' : 'fetchpriority="low"';
-
-          const descHtml = safeDesc
-            ? `<p class="text-gray-500 dark:text-gray-400 text-xs line-clamp-3 opacity-80 mt-1">${safeDesc}</p>`
-            : '';
-
-          htmlContent += `
-          <a href="detail.html?${safeSlug ? ('slug=' + safeSlug) : ('id=' + safeId)}" class="card" data-category="${safeCategory}">
-            <div class="post-image-container">
-              <img src="${safeImage}" alt="${safeTitle}" class="post-image" loading="${loadingAttr}" decoding="async" ${priorityAttr} width="300" height="120" onerror="this.onerror=null;this.src='${SVG_FALLBACK}';">
-            </div>
-            <div class="p-2.5 flex flex-col flex-1">
-              <h2 class="font-bold text-xs sm:text-sm text-gray-900 dark:text-white leading-snug">${safeTitle}</h2>
-              ${descHtml}
-            </div>
-          </a>`;
-        });
+        postsArray.forEach(post => { htmlContent += buildCardHtml(post); });
 
         if (postsContainer.innerHTML !== htmlContent) {
           postsContainer.innerHTML = htmlContent;
@@ -852,6 +1032,14 @@
         console.error("Error fetching data:", error);
       }
     }
+
+    // Makes the WebSite JSON-LD's SearchAction genuinely work: a visit to
+    // /?search=X pre-fills the existing search box, which filterPosts() (called
+    // from loadPosts() below) then applies against the real post data as usual.
+    (function prefillSearchFromUrl() {
+      const q = new URLSearchParams(location.search).get("search");
+      if (q) document.getElementById("searchInput").value = q;
+    })();
 
     loadPosts();
 
