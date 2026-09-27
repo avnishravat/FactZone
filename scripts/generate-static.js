@@ -207,7 +207,7 @@ function buildJsonLd(post, ctx) {
       name: 'FactZone',
       url: `${SITE_URL}/`,
       logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png`, width: 512, height: 512 },
-      sameAs: ['https://www.instagram.com/avnish__1203/', 'https://www.youtube.com/@FinupFact'],
+      sameAs: ['https://www.instagram.com/avnish__1203/', 'https://www.youtube.com/@DirectionNews08'],
       contactPoint: {
         '@type': 'ContactPoint', contactType: 'customer support',
         email: 'avnishravat20@gmail.com', areaServed: 'IN', availableLanguage: ['Hindi', 'English']
