@@ -174,37 +174,6 @@
       color:#fff !important;
     }
 
-    .pillar-nav-link{
-      font-size:0.7rem;
-      font-weight:600;
-      padding:0.3rem 0.7rem;
-      border-radius:9999px;
-      border:1px solid #e2e8f0;
-      color:#334155;
-      background:#fff;
-      white-space:nowrap;
-      transition: border-color 0.15s, color 0.15s;
-    }
-    .pillar-nav-link:hover{ border-color:#8b5cf6; color:#8b5cf6; }
-    html.dark .pillar-nav-link{ background:#1e293b; border-color:#334155; color:#cbd5e1; }
-    html.dark .pillar-nav-link:hover{ border-color:#a78bfa; color:#a78bfa; }
-
-    .pillar-block{ margin-bottom:1.1rem; }
-    .pillar-block[hidden]{ display:none; }
-    .pillar-heading{
-      font-size:0.95rem;
-      font-weight:700;
-      margin-bottom:0.5rem;
-      padding-bottom:0.3rem;
-      border-bottom:2px solid #e2e8f0;
-    }
-    html.dark .pillar-heading{ border-bottom-color:#334155; }
-    .pillar-grid{
-      display:grid;
-      grid-template-columns: repeat(2, minmax(0,1fr));
-      gap:0.75rem;
-    }
-    @media (min-width:640px){ .pillar-grid{ grid-template-columns: repeat(4, minmax(0,1fr)); } }
 
     .dense-grid {
       display: grid;
@@ -397,33 +366,6 @@
   <section class="max-w-7xl mx-auto px-4 py-3">
     <h1 class="text-xl font-bold dark:text-white">हर सवाल के पीछे छिपी है एक दिलचस्प कहानी</h1>
     <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">FactZone विज्ञान, मनोविज्ञान, प्रकृति और रोज़मर्रा से जुड़े जिज्ञासा भरे सवालों को आसान हिंदी में समझाता है।</p>
-    <nav aria-label="मुख्य विषय" class="flex flex-wrap gap-2 mt-3">
-      <a href="#pillar-mind" class="pillar-nav-link">🧠 Mind &amp; Psychology</a>
-      <a href="#pillar-science" class="pillar-nav-link">🔬 Everyday Science</a>
-      <a href="#pillar-nature" class="pillar-nav-link">🌿 Nature &amp; Earth</a>
-      <a href="#pillar-mysteries" class="pillar-nav-link">🔮 Mysteries &amp; History</a>
-      <a href="tools.html" class="pillar-nav-link">🛠️ Tools</a>
-    </nav>
-  </section>
-
-  <!-- Pillar Showcase: real posts, grouped editorially into the 4 content pillars (see PILLAR_MAP below) -->
-  <section id="pillars" class="max-w-7xl mx-auto px-4 py-2" aria-label="मुख्य विषय अनुसार लेख">
-    <div id="pillar-mind" class="pillar-block">
-      <h2 class="pillar-heading">🧠 Human Mind &amp; Psychology</h2>
-      <div class="pillar-grid" data-pillar="mind"></div>
-    </div>
-    <div id="pillar-science" class="pillar-block">
-      <h2 class="pillar-heading">🔬 Everyday Science</h2>
-      <div class="pillar-grid" data-pillar="science"></div>
-    </div>
-    <div id="pillar-nature" class="pillar-block">
-      <h2 class="pillar-heading">🌿 Nature &amp; Earth</h2>
-      <div class="pillar-grid" data-pillar="nature"></div>
-    </div>
-    <div id="pillar-mysteries" class="pillar-block">
-      <h2 class="pillar-heading">🔮 Mysteries &amp; History</h2>
-      <div class="pillar-grid" data-pillar="mysteries"></div>
-    </div>
   </section>
 
   <!-- Dense Grid Container -->
@@ -802,7 +744,8 @@
     const postsContainer = document.getElementById("posts");
     let selectedCategory = "all";
 
-    const CACHE_KEY = "factzone_posts_v7";
+    const CACHE_KEY = "factzone_posts_v8";
+    try { localStorage.removeItem("factzone_posts_v7"); } catch (e) {}
     const CATEGORY_LABELS = {
       science: "Science / विज्ञान",
       tech:    "Tech / तकनीक",
@@ -862,9 +805,7 @@
       return new Date(val);
     }
 
-    let renderedImageCount = 0; // running count across pillar previews + main grid, in actual page order
-
-    function buildCardHtml(post) {
+    function buildCardHtml(post, index) {
       const safeTitle    = escapeHtml(post.title || 'FactZone Post');
       const safeImage    = (post.image && post.image.trim() !== '') ? escapeHtml(post.image) : SVG_FALLBACK;
       const safeDesc     = escapeHtml(post.desc || '');
@@ -880,10 +821,9 @@
       // ?id= form only remains as a defensive fallback and should not normally be hit.
       const href = safeSlug ? `posts/${safeSlug}.html` : `detail.html?id=${safeId}`;
 
-      // Performance: the first few images actually painted on the page (pillar previews
-      // render before the main grid in the DOM) get eager/high-priority; the rest lazy-load.
-      const isAboveFold = renderedImageCount < 4;
-      renderedImageCount++;
+      // Performance: the first 4 cards (the newest posts, at the top of the page) load eagerly;
+      // everything below the fold lazy-loads.
+      const isAboveFold = index < 4;
       const loadingAttr = isAboveFold ? 'eager' : 'lazy';
       const priorityAttr = isAboveFold ? 'fetchpriority="high"' : 'fetchpriority="low"';
 
@@ -906,69 +846,6 @@
           </div>
         </div>
       </a>`;
-    }
-
-    // ---- Pillar classification -------------------------------------------------
-    // One-time curated mapping for existing posts, based on their actual titles
-    // (e.g. sleep/memory/dreams -> mind; rainbow/sea/Everest -> nature). New posts
-    // are not silently left out: they fall back to the category rule below, so a
-    // future "science" post always lands in Everyday Science, a future "mystery"
-    // or "history" post always lands in Mysteries & History, and a future "tech"
-    // post lands in Everyday Science unless its slug is added to the exclude list
-    // (kept for posts that are really money-making/career tips, not tech-science).
-    const PILLAR_OVERRIDE = {
-      "3-am-sleep-mystery-रात-3-बजे-अचानक-आँख-खुलने-का-सच": "mind",
-      "human-memory-how-it-works-and-why-we-forget-in-hindi": "mind",
-      "why-8-hours-sleep-is-important-नींद-का-सच-जो-आपकी-life-बदल-देगा": "mind",
-      "why-do-we-respond-to-our-own-name-science-in-hindi": "mind",
-      "why-face-looks-weird-in-mirror-science-in-hindi": "mind",
-      "why-songs-get-stuck-in-head-earworm-hindi": "mind",
-      "why-we-feel-someone-is-watching-us-science-hindi": "mind",
-      "सपने-क्यों-आते-हैं-जानिए-इसके-पीछे-का-असली-वैज्ञानिक-कारण-द-साइंस-ऑफ-ड्रीम्स": "mind",
-      "reels-addiction-कहीं-आपका-phone-आपकी-life-तो-बर्बाद-नहीं-कर-रहा-️": "mind",
-      "walking-tree-एक-ऐसा-tree-जो-सच-में-चलकर-जगह-बदलता-है-️": "nature",
-      "why-honey-never-spoils-expiration-date-science-hindi": "nature",
-      "why-sea-water-is-salty-scientific-reason-hindi": "nature",
-      "why-sky-appears-blue-scientific-reason-hindi": "nature",
-      "इंद्रधनुष-सिर्फ-बारिश-के-बाद-ही-क्यों-दिखाई-देता-है-जानिए-असली-वैज्ञानिक-कारण": "nature",
-      "पृथ्वी-का-अंत-वैज्ञानिकों-के-अनुसार-हमारी-धरती-का-अंत-कैसे-हो-सकता-है": "nature",
-      "बारिश-के-बाद-मिट्टी-से-खुशबू-क्यों-आती-है-जानिए-पेट्रीचोर-का-असली-विज्ञान": "nature",
-      "माउंट-एवरेस्ट-की-ऊँचाई-हर-साल-क्यों-बढ़-रही-है-जानिए-वैज्ञानिक-कारण": "nature",
-      "duniya-ki-sabse-rahasyamayi-kitab": "mysteries"
-    };
-    const TECH_MONEY_CAREER_SLUGS = new Set([
-      "0-फॉलोअर्स-से-50-000-महीना-इंस्टाग्राम-एफिलिएट-मार्केटिंग-का-वो-सीक्रेट-जो-कोई-नहीं-बताता",
-      "internet-se-paise-kaise-kamaye-5-asli-tarike",
-      "skill-based-income-bina-investment-online-tarika",
-      "work-from-home-महिलाओं-और-छात्रों-के-लिए-बेस्ट-जॉब-आइडियाज-2026-बिना-इन्वेस्टमेंट-कमाई",
-      "youtube-channel-grow-कैसे-करें-0-से-100k-subscribers-का-secret-formula",
-      "2026-की-top-5-high-paying-tech-skills",
-      "भारत-में-ai-jobs-तेजी-से-क्यों-बढ़-रही-हैं-जानिए-मुख्य-कारण-और-भविष्य-के-ट्रेंड्स"
-    ]);
-
-    function classifyPillar(post) {
-      if (post.slug && PILLAR_OVERRIDE[post.slug]) return PILLAR_OVERRIDE[post.slug];
-      if (post.category === 'mystery' || post.category === 'history') return 'mysteries';
-      if (post.category === 'science') return 'science';
-      if (post.category === 'tech' && !TECH_MONEY_CAREER_SLUGS.has(post.slug)) return 'science';
-      return null; // viral + money/career tech posts: reachable via Latest Articles / their category page, not forced into a pillar
-    }
-
-    function renderPillars(postsArray) {
-      const buckets = { mind: [], science: [], nature: [], mysteries: [] };
-      postsArray.forEach(post => {
-        const pillar = classifyPillar(post);
-        if (pillar) buckets[pillar].push(post);
-      });
-      Object.keys(buckets).forEach(key => {
-        const grid = document.querySelector(`.pillar-grid[data-pillar="${key}"]`);
-        const block = document.getElementById(`pillar-${key}`);
-        if (!grid || !block) return;
-        const items = buckets[key].slice(0, 4);
-        if (items.length === 0) { block.hidden = true; return; }
-        block.hidden = false;
-        grid.innerHTML = items.map(post => buildCardHtml(post)).join('');
-      });
     }
 
     async function loadPosts(){
@@ -1017,7 +894,10 @@
           postsArray.push({ id, ...data });
         });
 
-        postsArray.sort((a, b) => parseDate(b.createdAt) - parseDate(a.createdAt));
+        // Newest first. A missing/invalid date counts as 0 so it sinks to the bottom instead of
+        // producing NaN and scrambling the order of everything else.
+        const postTime = p => { const ms = parseDate(p.createdAt).getTime(); return isNaN(ms) ? 0 : ms; };
+        postsArray.sort((a, b) => postTime(b) - postTime(a));
 
         if (postsArray.length === 0) {
           if (!cachedPosts) {
@@ -1026,11 +906,8 @@
           return;
         }
 
-        renderedImageCount = 0; // reset per load so priority always reflects current page order
-        renderPillars(postsArray);
-
         let htmlContent = "";
-        postsArray.forEach(post => { htmlContent += buildCardHtml(post); });
+        postsArray.forEach((post, index) => { htmlContent += buildCardHtml(post, index); });
 
         if (postsContainer.innerHTML !== htmlContent) {
           postsContainer.innerHTML = htmlContent;
