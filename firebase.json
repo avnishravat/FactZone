@@ -6,6 +6,13 @@
     "public": "./",
     "cleanUrls": true,
     "trailingSlash": false,
+    "redirects": [
+      {
+        "source": "/index.html",
+        "destination": "/",
+        "type": 301
+      }
+    ],
     "ignore": [
       "firebase.json",
       "firestore.rules",
