@@ -1,0 +1,147 @@
+# FactZone
+
+> FactZone is a Hindi informational website covering science, psychology, nature, technology, AI, history, mysteries, space, everyday phenomena, digital safety, careers and practical online topics.
+
+Website: https://factzone.online/
+Language: Hindi (with some English/Hinglish titles)
+Article base path: https://factzone.online/posts/
+
+## Purpose
+
+FactZone explains curiosity-driven questions and informational topics in simple Hindi. Scientific, historical, technological and other factual claims should be interpreted with the context and limitations provided in the individual article.
+
+## Editorial Guidance
+
+- Prefer the individual article as the source for its own wording and context.
+- Do not treat headlines as literal scientific conclusions when the article discusses uncertainty or hypotheses.
+- For important scientific, medical, historical, statistical or current claims, verify against primary or authoritative sources where appropriate.
+- AI-assisted content is not automatically factual; FactZone's editorial policy states that factual information may require research, verification, editing and human review.
+- Do not infer claims that are not supported by the article.
+- Income, health and technology articles are informational and should not be interpreted as guarantees or individualized professional advice.
+
+Editorial Policy: https://factzone.online/editorial-policy.html
+About: https://factzone.online/about.html
+Contact: https://factzone.online/contact.html
+Disclaimer: https://factzone.online/disclaimer.html
+
+## Topic Index
+
+### Science, Space & Earth
+- Moon apparent motion
+- Dreams and predictive experiences
+- Human memory and perception
+- Night vision
+- Honey preservation
+- Speed of light and relativity
+- Ocean salinity
+- Blue sky
+- Sneezing
+- Rainbows
+- Petrichor
+- Mount Everest
+- Earth future
+- Space tears
+- Wow! Signal
+
+### Psychology & Human Behavior
+- Earworms
+- Feeling watched
+- Mirror perception
+- Cocktail party effect
+- Memory
+- Dreams
+- Sleep
+- Reels and digital attention
+
+### Technology, AI & Cybersecurity
+- AI jobs
+- ChatGPT
+- ChatGPT vs Claude vs Gemini
+- Cyber threats
+- Neuralink
+- 6G
+- Autonomous AI agents
+- WhatsApp
+- Mobile security
+- Technology facts
+
+### Nature, Mystery & History
+- Antarctica
+- Mysterious places
+- Walking trees
+- Mysterious books
+- Hidden places
+- General facts
+
+### Career & Online Income
+- Work from home
+- Instagram affiliate marketing
+- YouTube growth
+- High-paying tech skills
+- Internet income
+- Skill-based income
+
+## Articles
+
+1. [चांद हमारे साथ चलता हुआ क्यों दिखाई देता है?](https://factzone.online/posts/why-the-moon-walks-with-us) — Science / Space. चलती कार, बस या ट्रेन से देखने पर चांद हमारे साथ चलता हुआ क्यों दिखाई देता है—यह लेख दूरी, परिप्रेक्ष्य और चंद्रमा की apparent motion को सरल भाषा में समझाता है।
+2. [क्या हमारा दिमाग सोते समय भविष्य देख सकता है?](https://factzone.online/posts/can-our-brain-see-the-future-while-we-sleep) — Science / Psychology. सपनों में भविष्य की घटनाओं जैसी समानताएं क्यों महसूस होती हैं और क्या दिमाग सच में भविष्य देख सकता है—लेख सपनों, स्मृति और संयोग की वैज्ञानिक व्याख्या करता है।
+3. [एक ही गाना दिमाग में बार-बार क्यों बजता रहता है? जानिए इयरवॉर्म का असली विज्ञान](https://factzone.online/posts/why-songs-get-stuck-in-head-earworm-hindi) — Psychology. इयरवॉर्म यानी किसी गाने या धुन का बार-बार दिमाग में बजना क्यों होता है और इसमें स्मृति, attention और auditory processing की क्या भूमिका है।
+4. [जब कोई हमें देख रहा हो तो हमें ऐसा क्यों महसूस होता है? जानिए इसके पीछे का विज्ञान](https://factzone.online/posts/why-we-feel-someone-is-watching-us-science-hindi) — Psychology. कभी-कभी बिना देखे भी किसी के घूरने का एहसास क्यों होता है—यह लेख attention, visual cues और human perception से जुड़ी संभावित वैज्ञानिक व्याख्याएं देता है।
+5. [आईने में चेहरा अजीब क्यों लगता है? इसके पीछे का असली विज्ञान](https://factzone.online/posts/why-face-looks-weird-in-mirror-science-in-hindi) — Psychology. आईने में अपना चेहरा कभी-कभी असामान्य या अलग क्यों लगता है—लेख mirror image, familiarity और facial perception को समझाता है।
+6. [अपना नाम सुनते ही ध्यान क्यों जाता है? जानिए दिमाग का यह अनोखा कॉकटेल पार्टी इफ़ेक्ट](https://factzone.online/posts/why-do-we-respond-to-our-own-name-science-in-hindi) — Psychology. शोर के बीच भी अपना नाम सुनाई देने की घटना यानी cocktail party effect और selective attention को आसान भाषा में समझाया गया है।
+7. [पानी में उंगलियां सिकुड़ क्यों जाती हैं? जानिए शरीर का यह अनोखा वैज्ञानिक रहस्य](https://factzone.online/posts/why-do-fingers-wrinkle-in-water-science-in-hindi) — Human Body / Science. पानी में देर तक रहने पर उंगलियों की त्वचा में झुर्रियां क्यों आती हैं—लेख nervous system और blood-vessel response से जुड़ी वैज्ञानिक जानकारी देता है।
+8. [इंसानी दिमाग का सबसे बड़ा रहस्य: याददाश्त कैसे काम करती है और हम बातें क्यों भूल जाते हैं?](https://factzone.online/posts/human-memory-how-it-works-and-why-we-forget-in-hindi) — Psychology / Brain. मानव स्मृति कैसे बनती, संग्रहीत होती और कभी-कभी कमजोर पड़ती है—यह लेख memory processes और forgetting को सरल तरीके से समझाता है।
+9. [अंधेरे में दिखाई क्यों नहीं देता? जानिए आँखों का नाइट विजन और वैज्ञानिक सच](https://factzone.online/posts/why-we-cannot-see-in-dark-eyes-science-hindi) — Human Body / Science. कम रोशनी में हमारी आंखें क्यों सीमित हो जाती हैं और rods, cones तथा night vision कैसे काम करते हैं।
+10. [क्या शहद सचमुच कभी खराब नहीं होता? जानिए इसके पीछे का असली विज्ञान](https://factzone.online/posts/why-honey-never-spoils-expiration-date-science-hindi) — Science / Food. शहद की कम water activity, acidity और microbial growth से जुड़े कारणों के आधार पर उसके लंबे shelf life को समझाने वाला लेख।
+11. [अगर इंसान प्रकाश की गति से यात्रा करे तो क्या होगा? जानिए टाइम ट्रैवल का विज्ञान](https://factzone.online/posts/what-if-human-travels-at-speed-of-light-hindi) — Science / Space. प्रकाश की गति के करीब यात्रा करने पर relativity, time dilation और ऊर्जा से जुड़े प्रभावों को लोकप्रिय विज्ञान की भाषा में समझाया गया है।
+12. [समुद्र का पानी खारा क्यों होता है? जानिए इसके पीछे का असली विज्ञान](https://factzone.online/posts/why-sea-water-is-salty-scientific-reason-hindi) — Science / Nature. समुद्र के पानी में घुले लवण कहां से आते हैं और चट्टानों, नदियों तथा समुद्री प्रक्रियाओं की क्या भूमिका है।
+13. [आसमान नीला क्यों दिखाई देता है? जानिए इसका असली वैज्ञानिक कारण](https://factzone.online/posts/why-sky-appears-blue-scientific-reason-hindi) — Science / Nature. Rayleigh scattering के कारण दिन में आकाश नीला और सूर्योदय-सूर्यास्त के समय रंग बदलता हुआ क्यों दिखता है।
+14. [छींक क्यों आती है? छींकते समय आंखें बंद क्यों हो जाती हैं? जानिए वैज्ञानिक सच](https://factzone.online/posts/छींक-क्यों-आती-है-छींकते-समय-आंखें-बंद-क्यों-हो-जाती-हैं-जानिए-वैज्ञानिक-सच) — Human Body / Science. छींक reflex क्यों होता है और छींकते समय आंखें बंद होने के पीछे शरीर की तंत्रिका और protective responses की क्या भूमिका है।
+15. [इंद्रधनुष सिर्फ बारिश के बाद ही क्यों दिखाई देता है? जानिए असली वैज्ञानिक कारण](https://factzone.online/posts/इंद्रधनुष-सिर्फ-बारिश-के-बाद-ही-क्यों-दिखाई-देता-है-जानिए-असली-वैज्ञानिक-कारण) — Science / Nature. बारिश की बूंदों में प्रकाश के refraction, reflection और dispersion से इंद्रधनुष कैसे बनता है।
+16. [बारिश के बाद मिट्टी से खुशबू क्यों आती है? जानिए पेट्रीचोर का असली विज्ञान](https://factzone.online/posts/बारिश-के-बाद-मिट्टी-से-खुशबू-क्यों-आती-है-जानिए-पेट्रीचोर-का-असली-विज्ञान) — Nature / Science. बारिश के बाद आने वाली मिट्टी की खास खुशबू यानी petrichor में plant oils, geosmin और aerosol formation की भूमिका।
+17. [भारत में AI Jobs तेजी से क्यों बढ़ रही हैं? जानिए मुख्य कारण और भविष्य के ट्रेंड्स](https://factzone.online/posts/भारत-में-ai-jobs-तेजी-से-क्यों-बढ़-रही-हैं-जानिए-मुख्य-कारण-और-भविष्य-के-ट्रेंड्स) — Technology / AI. भारत में AI से जुड़े रोजगार, कौशल और तकनीकी बदलावों को समझाने वाला लेख, जिसमें AI careers के संभावित trends पर चर्चा है।
+18. [माउंट एवरेस्ट की ऊँचाई हर साल क्यों बढ़ रही है? जानिए वैज्ञानिक कारण](https://factzone.online/posts/माउंट-एवरेस्ट-की-ऊँचाई-हर-साल-क्यों-बढ़-रही-है-जानिए-वैज्ञानिक-कारण) — Science / Earth. एवरेस्ट की ऊंचाई में बदलाव, tectonic processes और 2020 की आधिकारिक ऊंचाई माप से जुड़े वैज्ञानिक पहलुओं की व्याख्या।
+19. [Work From Home: महिलाओं और छात्रों के लिए बेस्ट जॉब आइडियाज 2026 | बिना इन्वेस्टमेंट कमाई](https://factzone.online/posts/work-from-home-महिलाओं-और-छात्रों-के-लिए-बेस्ट-जॉब-आइडियाज-2026-बिना-इन्वेस्टमेंट-कमाई) — Work / Career. घर से काम करने के विकल्पों, digital skills और शुरुआती career ideas पर केंद्रित practical guide।
+20. [सपने क्यों आते हैं? जानिए इसके पीछे का असली वैज्ञानिक कारण | द साइंस ऑफ ड्रीम्स](https://factzone.online/posts/सपने-क्यों-आते-हैं-जानिए-इसके-पीछे-का-असली-वैज्ञानिक-कारण-द-साइंस-ऑफ-ड्रीम्स) — Psychology / Sleep. सपनों के दौरान मस्तिष्क की activity, memory processing और sleep stages से जुड़े प्रमुख वैज्ञानिक विचार।
+21. [0 फॉलोअर्स से ₹50,000 महीना: इंस्टाग्राम एफिलिएट मार्केटिंग का वो सीक्रेट जो कोई नहीं बताता!](https://factzone.online/posts/0-फॉलोअर्स-से-50-000-महीना-इंस्टाग्राम-एफिलिएट-मार्केटिंग-का-वो-सीक्रेट-जो-कोई-नहीं-बताता) — Online Income / Social Media. Instagram affiliate marketing शुरू करने, content और audience building के बारे में practical discussion; आय के दावों को guarantee नहीं माना जाना चाहिए।
+22. [3 AM Sleep Mystery: रात 3 बजे अचानक आँख खुलने का सच!](https://factzone.online/posts/3-am-sleep-mystery-रात-3-बजे-अचानक-आँख-खुलने-का-सच) — Sleep / Psychology. रात में अचानक नींद खुलने के संभावित कारणों, sleep cycles और environmental या behavioral factors की चर्चा।
+23. [FIFA World Cup 2026 Post-Match Rows: लियोनेल मेसी और स्पेनिश खिलाड़ियों के बीच मैदान पर क्या हुआ था?](https://factzone.online/posts/fifa-world-cup-2026-post-match-rows-लियोनेल-मेसी-और-स्पेनिश-खिलाड़ियों-के-बीच-मैदान-पर-क्या-हुआ-था) — Sports / Current Events. FIFA World Cup 2026 से जुड़ी post-match घटना और खिलाड़ियों के बीच हुए विवाद के बारे में प्रकाशित रिपोर्टिंग-आधारित लेख।
+24. [Secrets of Antarctica: बर्फ पिघलते ही बाहर आई ये चौंकाने वाली चीजें!](https://factzone.online/posts/secrets-of-antarctica-बर्फ-पिघलते-ही-बाहर-आई-ये-चौंकाने-वाली-चीजें) — Nature / Climate. Antarctica, ice melt और बर्फ के नीचे या आसपास छिपी प्राकृतिक तथा वैज्ञानिक घटनाओं पर केंद्रित लेख।
+25. [Einstein का 'Spooky Science': क्या कण आपस में बातें करते हैं?](https://factzone.online/posts/einstein-का-spooky-science-क्या-कण-आपस-में-बातें-करते-हैं) — Physics / Quantum Science. Quantum entanglement और Einstein के प्रसिद्ध 'spooky action at a distance' संदर्भ को लोकप्रिय विज्ञान के रूप में समझाने वाला लेख।
+26. [America’s Hidden Places You Won't Believe Exist](https://factzone.online/posts/america-s-hidden-places-you-won-t-believe-exist) — Mystery / Geography. अमेरिका की कम चर्चित या असामान्य जगहों और उनसे जुड़े रोचक भौगोलिक या ऐतिहासिक पहलुओं का परिचय।
+27. [चाय पीने के नुकसान](https://factzone.online/posts/चाय-पीने-के-नुकसान) — Health / Food. बहुत अधिक या गलत समय पर चाय पीने से जुड़े संभावित स्वास्थ्य प्रभावों और caffeine सेवन पर केंद्रित informational article।
+28. [WhatsApp New Features 2026: बदल जाएगा ऐप चलाने का तरीका!](https://factzone.online/posts/whatsapp-new-features-2026-बदल-जाएगा-ऐप-चलाने-का-तरीका) — Technology / WhatsApp. WhatsApp में 2026 के दौरान बताए गए नए features और messaging experience में संभावित बदलावों का overview।
+29. [ChatGPT क्या है और यह काम कैसे करता है?](https://factzone.online/posts/chatgpt-क्या-है-और-यह-काम-कैसे-करता-है) — Technology / AI. ChatGPT, generative AI और language models की बुनियादी कार्यप्रणाली को शुरुआती पाठकों के लिए सरल भाषा में समझाने वाला लेख।
+30. [Multitasking AI War: ChatGPT vs Claude vs Gemini – कौन सा बेस्ट है?](https://factzone.online/posts/multitasking-ai-war-chatgpt-vs-claude-vs-gemini-कौन-सा-बेस्ट-है) — Technology / AI. ChatGPT, Claude और Gemini के multitasking तथा general AI capabilities से जुड़े अंतर और उपयोग के संदर्भों की तुलना।
+31. [Emerging Cyber Threats: जानिए साइबर अटैक का नया जाल!](https://factzone.online/posts/emerging-cyber-threats-जानिए-साइबर-अटैक-का-नया-जाल) — Technology / Cybersecurity. AI और digital systems के बढ़ते उपयोग के साथ उभरते cybersecurity risks और cyber attacks के सामान्य patterns का overview।
+32. [Neuralink Brain Chip: जानिए इंसान कैसे बनेगा Superhuman?](https://factzone.online/posts/neuralink-brain-chip-जानिए-इंसान-कैसे-बनेगा-superhuman) — Technology / Brain-Computer Interface. Brain-computer interfaces और Neuralink जैसी neurotechnology से जुड़े संभावित उपयोग, सीमाएं और भविष्य की चर्चा।
+33. [6G Speed Test: 5G से कितनी तेज़ होगी 6G Technology?](https://factzone.online/posts/6g-speed-test-5g-से-कितनी-तेज़-होगी-6g-technology) — Technology / 6G. 6G की संभावित peak speed, latency, spectrum और future connectivity use cases का लोकप्रिय तकनीकी overview।
+34. [5 Most Mysterious Places on Earth! जहाँ विज्ञान भी फेल है](https://factzone.online/posts/5-most-mysterious-places-on-earth-जहाँ-विज्ञान-भी-फेल-है) — Mystery / Places. Bermuda Triangle, Death Valley, Magnetic Hill और अन्य रहस्यमय स्थानों से जुड़े लोकप्रिय दावों और वैज्ञानिक explanations का overview।
+35. [Copper Water: तांबे के बर्तन में पानी पीना सही या गलत?](https://factzone.online/posts/copper-water-तांबे-के-बर्तन-में-पानी-पीना-सही-या-गलत) — Health / Nutrition. Copper vessels में पानी रखने और पीने से जुड़े संभावित लाभ, जोखिम और सावधानियों पर informational discussion।
+36. [Autonomous AI Agents: अब खुद फैसले लेने वाला AI आ चुका है!](https://factzone.online/posts/autonomous-ai-agents-अब-खुद-फैसले-लेने-वाला-ai-आ-चुका-है) — Technology / AI. AI agents क्या हैं, वे multi-step tasks कैसे संभाल सकते हैं और traditional chatbots से उनका अंतर क्या है।
+37. [Biscuits में Holes क्यों होते हैं? सिर्फ Design नहीं, यह है असली वजह!](https://factzone.online/posts/biscuits-में-holes-क्यों-होते-हैं-सिर्फ-design-नहीं-यह-है-असली-वजह) — Food / Science. बिस्कुट में बने छोटे छेद baking के दौरान steam release, shape और texture को कैसे प्रभावित करते हैं।
+38. [Cold Drink Side Effects: जानिए आपकी Body में क्या होता है?](https://factzone.online/posts/cold-drink-fast-food-facts) — Health / Food. Sugary cold drinks के सेवन से जुड़े sugar, caffeine और शरीर पर संभावित प्रभावों का सामान्य informational overview।
+39. [Reels Addiction: कहीं आपका Phone आपकी Life तो बर्बाद नहीं कर रहा?](https://factzone.online/posts/reels-addiction-कहीं-आपका-phone-आपकी-life-तो-बर्बाद-नहीं-कर-रहा) — Psychology / Digital Wellbeing. Short-form video consumption, attention, habit loops और excessive screen time से जुड़े behavioral effects पर चर्चा।
+40. [Why 8 Hours Sleep is Important: नींद का सच जो आपकी Life बदल देगा!](https://factzone.online/posts/why-8-hours-sleep-is-important-नींद-का-सच-जो-आपकी-life-बदल-देगा) — Health / Sleep. Sleep duration, recovery और पर्याप्त नींद के महत्व को समझाने वाला general health article; व्यक्तिगत चिकित्सा सलाह नहीं।
+41. [पृथ्वी का अंत: वैज्ञानिकों के अनुसार हमारी धरती का अंत कैसे हो सकता है?](https://factzone.online/posts/पृथ्वी-का-अंत-वैज्ञानिकों-के-अनुसार-हमारी-धरती-का-अंत-कैसे-हो-सकता-है) — Science / Earth. Earth के दूर भविष्य और संभावित प्राकृतिक या खगोलीय scenarios जैसे solar evolution और large-scale cosmic events की चर्चा।
+42. [YouTube Channel Grow कैसे करें? 0 से 100K Subscribers का Secret Formula!](https://factzone.online/posts/youtube-channel-grow-कैसे-करें-0-से-100k-subscribers-का-secret-formula) — Creator / YouTube. YouTube channel growth, niche, content consistency, audience retention और discovery पर practical creator guidance।
+43. [2026 की Top 5 High-Paying Tech Skills!](https://factzone.online/posts/2026-की-top-5-high-paying-tech-skills) — Technology / Career. 2026 के technology job market के संदर्भ में AI, software और digital skills से जुड़े career-oriented topics का overview।
+44. [Internet से पैसे कमाने के 5 Secret तरीके जो कोई नहीं बताता!](https://factzone.online/posts/internet-se-paise-kaise-kamaye-5-asli-tarike) — Online Income. Internet-based income के practical models जैसे content, freelancing और digital work पर introductory guide; earnings guaranteed नहीं हैं।
+45. [10 Tech Facts जो आपका दिमाग हिला देंगे!](https://factzone.online/posts/digital-mayajal-technology-facts) — Technology. Internet, smartphones, search, AI और modern technology से जुड़े रोचक technology facts का collection।
+46. [10 Mind-Blowing Facts जो आपको सोचने पर मजबूर कर देंगे!](https://factzone.online/posts/rahasyo-se-bhari-duniya-10-aise-hairan-karne-wale-tathya) — General Facts. Science, space, nature और human world से जुड़े दस रोचक facts और explanations का collection।
+47. ['Wow Signal': अंतरिक्ष से आया वो इकलौता मैसेज जिसे आज तक कोई समझ नहीं पाया!](https://factzone.online/posts/wow-signal-antariksh-ka-ansuljha-message) — Space / Mystery. 1977 के Wow! Signal, radio astronomy और extraterrestrial signal की संभावना से जुड़े इतिहास और वैज्ञानिक संदर्भ का overview।
+48. [Walking Tree: एक ऐसा Tree जो सच में चलकर जगह बदलता है!](https://factzone.online/posts/walking-tree-एक-ऐसा-tree-जो-सच-में-चलकर-जगह-बदलता-है) — Nature / Plants. 'Walking tree' से जुड़े लोकप्रिय दावे और पेड़ों की जड़ों या वृद्धि के कारण स्थान बदलने जैसी प्राकृतिक प्रक्रियाओं पर चर्चा।
+49. [World की सबसे Mysterious Book, जिसे आज तक कोई नहीं पढ़ पाया!](https://factzone.online/posts/duniya-ki-sabse-rahasyamayi-kitab) — History / Mystery. Voynich Manuscript जैसी रहस्यमय पांडुलिपियों, unknown script और historical mystery पर केंद्रित लेख।
+50. [3 Mobile Settings जो तुरंत बंद कर देनी चाहिए!](https://factzone.online/posts/3-mobile-settings-जो-तुरंत-बंद-कर-देनी-चाहिए) — Technology / Cybersecurity. Smartphone privacy, permissions और security से जुड़ी तीन settings की practical safety-oriented चर्चा।
+51. [Space में रोने पर आंसू क्यों नहीं गिरते? 10 Weird Space Facts!](https://factzone.online/posts/antariksh-mein-rone-par-aansu-neeche-kyun-nahi-girte) — Space / Human Body. Microgravity में tears और fluid behavior के साथ space environment से जुड़े अन्य रोचक facts का overview।
+52. [5 Tech Facts जो आपको Smart बना देंगे! जानिए Technology के मजेदार Secrets](https://factzone.online/posts/5-technology-facts-jo-aapko-super-smart-bana-denge) — Technology. Internet, smartphones, search engines, AI और future technology से जुड़े पांच लोकप्रिय tech facts।
+53. [Skill-Based Income: बिना Investment Online पैसे कमाने का सही और प्रैक्टिकल तरीका](https://factzone.online/posts/skill-based-income-bina-investment-online-tarika) — Online Income / Skills. Skills को freelancing, digital services और online work में बदलकर income opportunities खोजने का practical overview।
+
+## Clean URL Policy
+
+The URLs listed in this file are the intended clean article URLs for FactZone and omit the legacy `.html` suffix. New article URLs should use lowercase, descriptive slugs where practical, with words separated by hyphens.
+
+## Full Content Index
+
+For expanded article metadata and topic descriptions, see:
+https://factzone.online/llms-full.txt
