@@ -29,56 +29,74 @@
     <!-- JSON-LD Structured Data Schema -->
     <script type="application/ld+json">
     {
-      "@context": "https://schema.org",
-      "@graph": [
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Word to PDF Converter",
+      "url": "https://factzone.online/word-to-pdf.html",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
         {
-          "@type": "WebApplication",
-          "name": "Word to PDF Converter",
-          "url": "https://factzone.online/word-to-pdf.html",
-          "applicationCategory": "UtilitiesApplication",
-          "operatingSystem": "All",
-          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-          "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "ratingCount": "180", "bestRating": "5", "worstRating": "1" }
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://factzone.online/"
         },
         {
-          "@type": "BreadcrumbList",
-          "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://factzone.online/"},
-            {"@type": "ListItem", "position": 2, "name": "Tools", "item": "https://factzone.online/tools.html"},
-            {"@type": "ListItem", "position": 3, "name": "Word to PDF", "item": "https://factzone.online/word-to-pdf.html"}
-          ]
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Tools",
+          "item": "https://factzone.online/tools.html"
         },
         {
-          "@type": "FAQPage",
-          "mainEntity": [
-            {
-              "@type": "Question",
-              "name": "How to convert Word document to PDF online?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Select your .doc or .docx file using the file chooser, click 'Convert to PDF', and download your newly created PDF document instantly."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "Are my uploaded Word documents safe and private?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Yes! All processing happens securely and files are automatically removed after conversion to ensure maximum privacy."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "Can I convert DOCX files on mobile devices?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Yes, our online Word to PDF converter is fully optimized for Android, iOS, Windows, and Mac browsers."
-              }
-            }
-          ]
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Word to PDF",
+          "item": "https://factzone.online/word-to-pdf.html"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How to convert Word document to PDF online?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Select your .doc or .docx file using the file chooser, click 'Convert to PDF', and download your newly created PDF document instantly."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are my uploaded Word documents safe and private?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! All processing happens securely and files are automatically removed after conversion to ensure maximum privacy."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I convert DOCX files on mobile devices?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, our online Word to PDF converter is fully optimized for Android, iOS, Windows, and Mac browsers."
+          }
         }
       ]
     }
+  ]
+}
     </script>
 
     <style>

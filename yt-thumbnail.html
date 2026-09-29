@@ -30,56 +30,74 @@
     <!-- JSON-LD Structured Data Schema -->
     <script type="application/ld+json">
     {
-      "@context": "https://schema.org",
-      "@graph": [
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "YouTube Thumbnail Downloader",
+      "url": "https://factzone.online/yt-thumbnail.html",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "All",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
         {
-          "@type": "WebApplication",
-          "name": "YouTube Thumbnail Downloader",
-          "url": "https://factzone.online/yt-thumbnail.html",
-          "applicationCategory": "MultimediaApplication",
-          "operatingSystem": "All",
-          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-          "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "310", "bestRating": "5", "worstRating": "1" }
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://factzone.online/"
         },
         {
-          "@type": "BreadcrumbList",
-          "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://factzone.online/"},
-            {"@type": "ListItem", "position": 2, "name": "Tools", "item": "https://factzone.online/tools.html"},
-            {"@type": "ListItem", "position": 3, "name": "YT Thumbnail Downloader", "item": "https://factzone.online/yt-thumbnail.html"}
-          ]
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Tools",
+          "item": "https://factzone.online/tools.html"
         },
         {
-          "@type": "FAQPage",
-          "mainEntity": [
-            {
-              "@type": "Question",
-              "name": "How to download YouTube video thumbnails in HD?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Copy the YouTube video or Shorts link, paste it into the input box on FactZone YouTube Thumbnail Downloader, and click 'Get HD Thumbnail'. Select your preferred resolution to download."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "Does this tool work for YouTube Shorts?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Yes! You can paste any YouTube Shorts URL to grab high-resolution cover images."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "Is downloading YouTube thumbnails free and legal?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Yes, our downloader tool is completely free. Downloading thumbnails for personal use, fair use, or inspiration is common, though copyright belongs to original creators."
-              }
-            }
-          ]
+          "@type": "ListItem",
+          "position": 3,
+          "name": "YT Thumbnail Downloader",
+          "item": "https://factzone.online/yt-thumbnail.html"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How to download YouTube video thumbnails in HD?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Copy the YouTube video or Shorts link, paste it into the input box on FactZone YouTube Thumbnail Downloader, and click 'Get HD Thumbnail'. Select your preferred resolution to download."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does this tool work for YouTube Shorts?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! You can paste any YouTube Shorts URL to grab high-resolution cover images."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is downloading YouTube thumbnails free and legal?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, our downloader tool is completely free. Downloading thumbnails for personal use, fair use, or inspiration is common, though copyright belongs to original creators."
+          }
         }
       ]
     }
+  ]
+}
     </script>
 
     <style>
