@@ -1185,7 +1185,8 @@ window.saveEdit = async function() {
       desc:     document.getElementById('e-desc').value,
       image:    document.getElementById('e-image').value,
       category: document.getElementById('e-category')?.value || '',
-      content:  content
+      content:  content,
+      updatedAt: Date.now()
     });
     closeModal();
     showToast('✅ Post updated successfully!', 'success');
