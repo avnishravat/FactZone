@@ -1169,6 +1169,7 @@ window.closeModal = function() {
   currentEditId = null;
 };
 
+// ── Save Edit (Updates updatedAt ONLY when 200+ words are added/replaced or post changes substantially) ──
 window.saveEdit = async function() {
   if (!currentEditId) return;
   const btn = document.getElementById('saveEditBtn');
@@ -1179,15 +1180,62 @@ window.saveEdit = async function() {
     content = editQuillEditor.root.innerHTML.trim();
   }
 
+  // Cache se purani post nikalna
+  const oldPost = allPostsCache.find(p => p.id === currentEditId);
+  const oldContent = oldPost ? (oldPost.content || '') : '';
+
+  // 200+ words add, replace ya major change check karne ka logic
+  const isMajorUpdate = (oldHtml, newHtml) => {
+    const getWords = (html) => {
+      const div = document.createElement('div');
+      div.innerHTML = html || '';
+      return (div.textContent || div.innerText || '').trim().split(/\s+/).filter(Boolean);
+    };
+
+    const oldWords = getWords(oldHtml);
+    const newWords = getWords(newHtml);
+
+    // 1. Agar 200 ya usse zyada naye words judey hain
+    if (newWords.length - oldWords.length >= 200) return true;
+
+    // Purane aur naye words mein matching check karna
+    let matchingCount = 0;
+    const oldWordMap = new Map();
+    oldWords.forEach(w => oldWordMap.set(w, (oldWordMap.get(w) || 0) + 1));
+
+    newWords.forEach(w => {
+      if (oldWordMap.get(w) > 0) {
+        matchingCount++;
+        oldWordMap.set(w, oldWordMap.get(w) - 1);
+      }
+    });
+
+    const replacedOrNewWords = newWords.length - matchingCount;
+
+    // 2. Agar 200 ya usse zyada words replace/change kiye gaye hain
+    if (replacedOrNewWords >= 200) return true;
+
+    // 3. Agar puri post majorly badal gayi hai (purane content se 50% se kam match)
+    if (oldWords.length > 0 && (matchingCount / oldWords.length) < 0.5) return true;
+
+    return false;
+  };
+
   try {
-    await updateDoc(doc(db,"posts",currentEditId), {
+    const updateData = {
       title:    document.getElementById('e-title').value,
       desc:     document.getElementById('e-desc').value,
       image:    document.getElementById('e-image').value,
       category: document.getElementById('e-category')?.value || '',
-      content:  content,
-      updatedAt: Date.now()
-    });
+      content:  content
+    };
+
+    // Condition sahi hone par hi last update add/change hoga
+    if (isMajorUpdate(oldContent, content)) {
+      updateData.updatedAt = Date.now();
+    }
+
+    await updateDoc(doc(db,"posts",currentEditId), updateData);
     closeModal();
     showToast('✅ Post updated successfully!', 'success');
     await loadPosts();
@@ -1449,11 +1497,7 @@ async function deleteInstagramOutput(id) {
   }
 }
 
-
-
 // ── Instagram Bulk Import ──
-// Only writes to instagramCreatorToolOutputs; posts, products and auth are untouched.
-
 function setInstagramBulkStatus(message, type="") {
   const el = document.getElementById("igBulkStatus");
   if (!el) return;
@@ -1600,9 +1644,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-
 // ── Comments Admin ──
-// Reads/deletes the "comments" collection written by detail.html on the public site.
 let allCommentsCache = [];
 let commentsLoadedOnce = false;
 
@@ -1673,7 +1715,6 @@ document.getElementById("comments-admin-list").addEventListener("click", async (
 });
 
 // ── Subscribers Admin ──
-// Reads/deletes the "subscribers" collection (email/WhatsApp) written by detail.html.
 let allSubscribersCache = [];
 let subscribersLoadedOnce = false;
 
@@ -1735,7 +1776,6 @@ document.getElementById("subscribers-admin-list").addEventListener("click", asyn
     showToast("❌ " + err.message, "error");
   }
 });
-
 
 // ── Page switch ──
 window.switchPage = function(page, btn) {
