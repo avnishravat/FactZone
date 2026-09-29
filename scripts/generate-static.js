@@ -115,7 +115,10 @@ function escapeHtml(str) {
 
 function sanitizeContent(html) {
   return sanitizeHtml(html || '', {
-    allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'span', 'u', 's', 'h1', 'h2']),
+    allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'span', 'u', 's', 'h2']),
+    transformTags: {
+      h1: 'h2'
+    },
     allowedAttributes: Object.assign({}, sanitizeHtml.defaults.allowedAttributes, {
       a: ['href', 'name', 'target', 'rel'],
       img: ['src', 'srcset', 'alt', 'title', 'width', 'height', 'loading', 'decoding'],
