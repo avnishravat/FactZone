@@ -52,13 +52,54 @@ const SITEMAP_FILE = path.join(
 );
 
 // ---------------------------------------------------------------------------
-// FIREBASE
+// FIREBASE (Updated with GitHub Actions Secrets support)
 // ---------------------------------------------------------------------------
 
 if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.applicationDefault()
-  });
+  const serviceAccountRaw =
+    process.env.FIREBASE_SERVICE_ACCOUNT_JSON ||
+    process.env.FIREBASE_SERVICE_ACCOUNT_FACTZONE ||
+    process.env.FIREBASE_SERVICE_ACCOUNT;
+
+  if (serviceAccountRaw) {
+    try {
+      const serviceAccount =
+        typeof serviceAccountRaw === "string"
+          ? JSON.parse(serviceAccountRaw)
+          : serviceAccountRaw;
+
+      admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount)
+      });
+      console.log("Firebase initialized successfully using GitHub Secret.");
+    } catch (err) {
+      console.error("Error parsing FIREBASE_SERVICE_ACCOUNT JSON Secret:", err);
+      process.exit(1);
+    }
+  } else {
+    const localKeyPath = path.join(__dirname, "serviceAccountKey.json");
+    if (fs.existsSync(localKeyPath)) {
+      admin.initializeApp({
+        credential: admin.credential.cert(require(localKeyPath))
+      });
+      console.log("Firebase initialized locally using serviceAccountKey.json.");
+    } else {
+      try {
+        admin.initializeApp({
+          credential: admin.credential.applicationDefault()
+        });
+        console.log("Firebase initialized using applicationDefault().");
+      } catch (e) {
+        try {
+          admin.initializeApp();
+          console.log("Firebase initialized using default configuration.");
+        } catch (initErr) {
+          console.error("Failed to initialize Firebase Admin:", initErr);
+          process.exit(1);
+        }
+      }
+    }
+  }
 }
 
 const db = admin.firestore();
@@ -751,8 +792,14 @@ function renderArticlePage(post, allPosts) {
     "{{TITLE}}":
       escapeHtml(post.title),
 
+    "{{META_DESCRIPTION}}":
+      escapeHtml(description),
+
     "{{DESCRIPTION}}":
       escapeHtml(description),
+
+    "{{CANONICAL_URL}}":
+      escapeHtml(canonicalUrl),
 
     "{{CANONICAL}}":
       escapeHtml(canonicalUrl),
@@ -769,8 +816,14 @@ function renderArticlePage(post, allPosts) {
     "{{CATEGORY}}":
       escapeHtml(post.category),
 
+    "{{CATEGORY_LABEL}}":
+      escapeHtml(post.category),
+
     "{{CATEGORY_NAME}}":
       escapeHtml(post.category),
+
+    "{{CATEGORY_URL}}":
+      categoryUrl(post.category),
 
     "{{CONTENT_HTML}}":
       contentHtml,
@@ -793,12 +846,27 @@ function renderArticlePage(post, allPosts) {
         post.publishedDate || ""
       ),
 
+    "{{PUBLISHED_ISO}}":
+      escapeHtml(
+        post.publishedDate || today()
+      ),
+
     "{{UPDATED_DATE}}":
       escapeHtml(
         post.updatedDate ||
         post.publishedDate ||
         ""
       ),
+
+    "{{MODIFIED_ISO}}":
+      escapeHtml(
+        post.updatedDate ||
+        post.publishedDate ||
+        today()
+      ),
+
+    "{{POST_ID}}":
+      escapeHtml(post.id),
 
     "{{JSONLD}}":
       buildJsonLd(post)
@@ -991,17 +1059,27 @@ function updateIndexFile(posts) {
   const endMarker =
     "<!-- CRAWLABLE_ARTICLE_LINKS_END -->";
 
-  const start =
-    index.indexOf(startMarker);
+  let start = index.indexOf(startMarker);
+  let end = index.indexOf(endMarker);
 
-  const end =
-    index.indexOf(endMarker);
-
+  // Fallback support for SSG markers
   if (start === -1 || end === -1) {
-    console.warn(
-      "Crawlable link markers not found in index.html."
-    );
+    const ssgStart = "<!-- SSG:CRAWLABLE-LINKS:START (do not edit by hand between these two markers - generator owns this block) -->";
+    const ssgEnd = "<!-- SSG:CRAWLABLE-LINKS:END -->";
+    
+    const s1 = index.indexOf(ssgStart);
+    const e1 = index.indexOf(ssgEnd);
 
+    if (s1 !== -1 && e1 !== -1) {
+      const before = index.slice(0, s1 + ssgStart.length);
+      const after = index.slice(e1);
+      index = `${before}\n${block}\n${after}`;
+      writeFile(INDEX_FILE, index);
+      console.log("index.html crawlable links updated (SSG markers).");
+      return;
+    }
+
+    console.warn("Crawlable link markers not found in index.html.");
     return;
   }
 
