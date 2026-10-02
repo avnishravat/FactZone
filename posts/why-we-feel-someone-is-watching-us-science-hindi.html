@@ -191,8 +191,9 @@
     .back-btn:hover { background: #333; }
 
     #post { background: var(--surface); border-radius: var(--r); padding: 1rem 1.15rem; box-shadow: 0 2px 12px rgba(0,0,0,.05); margin-top: 0; }
-    .hero-wrap { margin-bottom: 0.6rem; display: flex; justify-content: center; }
-    #post img.hero { width: auto; height: auto; max-width: 100%; max-height: 320px; border-radius: 0.5rem; display: block; box-shadow: 0 2px 10px rgba(0,0,0,.12); }
+    .hero-wrap { margin: 0.6rem 0; display: flex; justify-content: center; }
+    #post img.hero { width: auto; height: auto; max-width: 100%; max-height: 320px; border-radius: 0; display: block; box-shadow: 0 2px 10px rgba(0,0,0,.12); }
+    @media (min-width: 640px) { #post img.hero { max-height: 460px; } }
     #post h1 { font-family: 'Merriweather', serif; font-size: clamp(1.25rem, 3.8vw, 1.75rem); line-height: 1.25; font-weight: 700; margin-bottom: 0.35rem; }
     .meta-line { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.6rem; display: flex; flex-wrap: wrap; gap: 0.3rem; align-items: center; }
 
@@ -238,10 +239,24 @@
 
     #relatedSection { margin-top: 0.85rem; background: var(--surface); border-radius: var(--r); padding: 0.85rem 1rem; box-shadow: 0 2px 12px rgba(0,0,0,.05); }
     #relatedSection h2 { font-family: 'Merriweather', serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 0.6rem; padding-bottom: 0.35rem; border-bottom: 2px solid var(--ink); }
-    #relatedGrid { display: grid; gap: 0.5rem; }
-    .rc { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem; border: 1px solid var(--border); border-radius: 0.5rem; background: var(--bg); text-decoration: none; color: inherit; }
-    .rc img { width: 82px; height: 82px; object-fit: contain; background: var(--bg); border-radius: 0.4rem; flex-shrink: 0; }
-    .rc h3 { font-size: 0.85rem; font-weight: 700; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.3; }
+
+    /* Horizontal scrollable story-card row - used for both the end-of-article related
+       section and the matching card row inserted mid-article (see script at the bottom) */
+    .rc-row { display: flex; overflow-x: auto; gap: 0.6rem; padding-bottom: 0.3rem; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; }
+    .rc-row::-webkit-scrollbar { height: 5px; }
+    .rc-row::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .rc { flex: 0 0 132px; display: flex; flex-direction: column; gap: 0.35rem; text-decoration: none; color: inherit; scroll-snap-align: start; }
+    .rc img { width: 132px; height: 88px; object-fit: cover; background: var(--bg); border-radius: 0.5rem; flex-shrink: 0; }
+    .rc h3 { font-size: 0.78rem; font-weight: 700; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.3; }
+
+    .story-carousel-section { margin: 0.9rem 0; }
+    .story-carousel-heading { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; font-weight: 700; color: var(--ink); margin-bottom: 0.5rem; white-space: nowrap; }
+    .story-carousel-heading::after { content: ""; flex: 1; border-bottom: 2px dotted var(--border); margin-left: 0.3rem; }
+
+    .topic-pills { display: flex; gap: 0.5rem; overflow-x: auto; padding: 0.5rem 0; margin-bottom: 0.3rem; border-bottom: 1px solid var(--border); -webkit-overflow-scrolling: touch; }
+    .topic-pills::-webkit-scrollbar { display: none; }
+    .topic-pill { flex: 0 0 auto; font-size: 0.78rem; font-weight: 600; color: var(--muted); padding: 0.3rem 0.75rem; border-radius: 9999px; background: var(--bg); white-space: nowrap; text-decoration: none; border: 1px solid var(--border); }
+    .topic-pill:hover { color: var(--accent); border-color: var(--accent); }
 
     @media(max-width:600px) { #post,#relatedSection { padding: 0.85rem 0.75rem; } }
 
@@ -309,6 +324,15 @@
     </a>
     <a href="/" class="back-btn">← Back</a>
   </header>
+
+  <nav class="topic-pills" aria-label="विषय">
+    <a href="/" class="topic-pill">🔥 ट्रेंडिंग</a>
+    <a href="/categories/science/" class="topic-pill">विज्ञान</a>
+    <a href="/categories/tech/" class="topic-pill">तकनीक</a>
+    <a href="/categories/mystery/" class="topic-pill">रहस्य</a>
+    <a href="/categories/history/" class="topic-pill">इतिहास</a>
+    <a href="/categories/viral/" class="topic-pill">रोचक तथ्य</a>
+  </nav>
 
   <article id="post" itemscope itemtype="https://schema.org/Article">
     <div id="post-content">
@@ -384,7 +408,7 @@
 
   <section id="relatedSection" aria-label="Related Facts">
     <h2>Related Facts</h2>
-    <div id="relatedGrid"><a href="/posts/raat-mein-jyada-sochne-ki-wajah.html" class="rc" aria-label="Read: 🧠 दिमाग रात में ज्यादा क्यों सोचता है?"><img src="https://i.ibb.co/27vwycDG/clipboard-image.png" loading="lazy" width="55" height="55" alt="🧠 दिमाग रात में ज्यादा क्यों सोचता है?" onerror="this.style.display='none'"><h3>🧠 दिमाग रात में ज्यादा क्यों सोचता है?</h3></a><a href="/posts/why-the-moon-walks-with-us.html" class="rc" aria-label="Read: चांद हमारे साथ चलता हुआ क्यों दिखाई देता है?"><img src="https://i.ibb.co/N2P7tkJH/clipboard-image.png" loading="lazy" width="55" height="55" alt="चांद हमारे साथ चलता हुआ क्यों दिखाई देता है?" onerror="this.style.display='none'"><h3>चांद हमारे साथ चलता हुआ क्यों दिखाई देता है?</h3></a><a href="/posts/can-our-brain-see-the-future-while-we-sleep.html" class="rc" aria-label="Read: क्या हमारा दिमाग सोते समय भविष्य देख सकता है?"><img src="https://i.ibb.co/MxjVDQ37/clipboard-image.png" loading="lazy" width="55" height="55" alt="क्या हमारा दिमाग सोते समय भविष्य देख सकता है?" onerror="this.style.display='none'"><h3>क्या हमारा दिमाग सोते समय भविष्य देख सकता है?</h3></a><a href="/posts/why-songs-get-stuck-in-head-earworm-hindi.html" class="rc" aria-label="Read: एक ही गाना दिमाग में बार-बार क्यों बजता है? इयरवॉर्म"><img src="https://i.ibb.co/00Xr4CR/clipboard-image.png" loading="lazy" width="55" height="55" alt="एक ही गाना दिमाग में बार-बार क्यों बजता है? इयरवॉर्म" onerror="this.style.display='none'"><h3>एक ही गाना दिमाग में बार-बार क्यों बजता है? इयरवॉर्म</h3></a><a href="/posts/why-face-looks-weird-in-mirror-science-in-hindi.html" class="rc" aria-label="Read: 🪞 आईने में चेहरा अजीब क्यों लगता है? इसके पीछे का असली विज्ञान"><img src="https://i.ibb.co/whymvSCq/clipboard-image.png" loading="lazy" width="55" height="55" alt="🪞 आईने में चेहरा अजीब क्यों लगता है? इसके पीछे का असली विज्ञान" onerror="this.style.display='none'"><h3>🪞 आईने में चेहरा अजीब क्यों लगता है? इसके पीछे का असली विज्ञान</h3></a><a href="/posts/why-do-we-respond-to-our-own-name-science-in-hindi.html" class="rc" aria-label="Read: अपना नाम सुनते ही ध्यान क्यों जाता है? Cocktail Party Effect"><img src="https://i.ibb.co/BVMzwJYW/clipboard-image.png" loading="lazy" width="55" height="55" alt="अपना नाम सुनते ही ध्यान क्यों जाता है? Cocktail Party Effect" onerror="this.style.display='none'"><h3>अपना नाम सुनते ही ध्यान क्यों जाता है? Cocktail Party Effect</h3></a></div>
+    <div id="relatedGrid" class="rc-row"><a href="/posts/raat-mein-jyada-sochne-ki-wajah.html" class="rc" aria-label="Read: 🧠 दिमाग रात में ज्यादा क्यों सोचता है?"><img src="https://i.ibb.co/27vwycDG/clipboard-image.png" loading="lazy" width="55" height="55" alt="🧠 दिमाग रात में ज्यादा क्यों सोचता है?" onerror="this.style.display='none'"><h3>🧠 दिमाग रात में ज्यादा क्यों सोचता है?</h3></a><a href="/posts/why-the-moon-walks-with-us.html" class="rc" aria-label="Read: चांद हमारे साथ चलता हुआ क्यों दिखाई देता है?"><img src="https://i.ibb.co/N2P7tkJH/clipboard-image.png" loading="lazy" width="55" height="55" alt="चांद हमारे साथ चलता हुआ क्यों दिखाई देता है?" onerror="this.style.display='none'"><h3>चांद हमारे साथ चलता हुआ क्यों दिखाई देता है?</h3></a><a href="/posts/can-our-brain-see-the-future-while-we-sleep.html" class="rc" aria-label="Read: क्या हमारा दिमाग सोते समय भविष्य देख सकता है?"><img src="https://i.ibb.co/MxjVDQ37/clipboard-image.png" loading="lazy" width="55" height="55" alt="क्या हमारा दिमाग सोते समय भविष्य देख सकता है?" onerror="this.style.display='none'"><h3>क्या हमारा दिमाग सोते समय भविष्य देख सकता है?</h3></a><a href="/posts/why-songs-get-stuck-in-head-earworm-hindi.html" class="rc" aria-label="Read: एक ही गाना दिमाग में बार-बार क्यों बजता है? इयरवॉर्म"><img src="https://i.ibb.co/00Xr4CR/clipboard-image.png" loading="lazy" width="55" height="55" alt="एक ही गाना दिमाग में बार-बार क्यों बजता है? इयरवॉर्म" onerror="this.style.display='none'"><h3>एक ही गाना दिमाग में बार-बार क्यों बजता है? इयरवॉर्म</h3></a><a href="/posts/why-face-looks-weird-in-mirror-science-in-hindi.html" class="rc" aria-label="Read: 🪞 आईने में चेहरा अजीब क्यों लगता है? इसके पीछे का असली विज्ञान"><img src="https://i.ibb.co/whymvSCq/clipboard-image.png" loading="lazy" width="55" height="55" alt="🪞 आईने में चेहरा अजीब क्यों लगता है? इसके पीछे का असली विज्ञान" onerror="this.style.display='none'"><h3>🪞 आईने में चेहरा अजीब क्यों लगता है? इसके पीछे का असली विज्ञान</h3></a><a href="/posts/why-do-we-respond-to-our-own-name-science-in-hindi.html" class="rc" aria-label="Read: अपना नाम सुनते ही ध्यान क्यों जाता है? Cocktail Party Effect"><img src="https://i.ibb.co/BVMzwJYW/clipboard-image.png" loading="lazy" width="55" height="55" alt="अपना नाम सुनते ही ध्यान क्यों जाता है? Cocktail Party Effect" onerror="this.style.display='none'"><h3>अपना नाम सुनते ही ध्यान क्यों जाता है? Cocktail Party Effect</h3></a></div>
   </section>
 
   <footer class="site-footer">
@@ -407,6 +431,31 @@
      (public Firestore REST reads+writes, unchanged collections/fields) - just pointed at this
      post's ID directly instead of parsing it from a ?slug=/?id= URL, since the content itself
      is already rendered server-side above. */
+
+  // Move the hero image from above the content to right after the first paragraph.
+  // If no <p> is found (unusual content), it safely stays in its original spot.
+  (function relocateHeroImage() {
+    var heroWrap = document.querySelector('.hero-wrap');
+    var content = document.querySelector('#post .content');
+    if (!heroWrap || !content) return;
+    var firstP = content.querySelector('p');
+    if (firstP) firstP.insertAdjacentElement('afterend', heroWrap);
+  })();
+
+  // Insert a second copy of the related-stories card row in the middle of the article
+  // (same real data as the one at the end of the article - nothing invented).
+  (function insertMidArticleStoryRow() {
+    var relatedGrid = document.getElementById('relatedGrid');
+    var content = document.querySelector('#post .content');
+    if (!relatedGrid || !content || !relatedGrid.children.length) return;
+    var children = Array.prototype.slice.call(content.children);
+    if (children.length < 4) return; // article too short to meaningfully split
+    var midNode = children[Math.floor(children.length / 2) - 1];
+    var section = document.createElement('div');
+    section.className = 'story-carousel-section';
+    section.innerHTML = '<div class="story-carousel-heading">Related Facts</div><div class="rc-row">' + relatedGrid.innerHTML + '</div>';
+    midNode.insertAdjacentElement('afterend', section);
+  })();
 
   var PROJECT_ID = "factzone-a9ace";
   var API_KEY    = "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc";
