@@ -134,8 +134,7 @@
     #relatedSection { margin-top: 0.85rem; background: var(--surface); border-radius: var(--r); padding: 0.85rem 1rem; box-shadow: 0 2px 12px rgba(0,0,0,.05); }
     #relatedSection h2 { font-family: 'Merriweather', serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 0.6rem; padding-bottom: 0.35rem; border-bottom: 2px solid var(--ink); }
 
-    /* Story-card grid - 2 columns on mobile, 3 on desktop - used for both the end-of-article
-       related section and the matching card grid inserted mid-article (see script below) */
+    /* Story-card grid - 2 columns on mobile, 3 on desktop */
     .rc-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.7rem; }
     @media (min-width: 640px) { .rc-row { grid-template-columns: repeat(3, 1fr); } }
     .rc { display: flex; flex-direction: column; gap: 0.4rem; text-decoration: none; color: inherit; }
@@ -145,6 +144,11 @@
     .story-carousel-section { margin: 0.9rem 0; }
     .story-carousel-heading { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; font-weight: 700; color: var(--ink); margin-bottom: 0.5rem; white-space: nowrap; }
     .story-carousel-heading::after { content: ""; flex: 1; border-bottom: 2px dotted var(--border); margin-left: 0.3rem; }
+
+    /* Mid-article section responsive setting: 2 cards on mobile, 3 on desktop */
+    @media (max-width: 639px) {
+      .story-carousel-section .rc-row .rc:nth-child(3) { display: none !important; }
+    }
 
     .topic-pills { display: flex; gap: 0.5rem; overflow-x: auto; padding: 0.5rem 0; margin-bottom: 0.3rem; border-bottom: 1px solid var(--border); -webkit-overflow-scrolling: touch; }
     .topic-pills::-webkit-scrollbar { display: none; }
@@ -258,12 +262,6 @@
         <a href="/author.html" class="author-profile-link">View Author Profile →</a>
       </div>
     </div>
-    <noscript>
-      <div class="err">
-        <h2>JavaScript Disabled / जावास्क्रिप्ट बंद है</h2>
-        <p>Comments, likes and subscriptions need JavaScript. The article above works without it.</p>
-      </div>
-    </noscript>
   </article>
 
   <div class="widget-card">
@@ -378,7 +376,7 @@
     catch (e) { return ""; }
   }
 
-  // Setup exactly 3 cards mid-article, and fill bottom section (#relatedGrid) up to 9 distinct cards
+  // Setup cards mid-article, and fill bottom section (#relatedGrid) up to 9 distinct cards
   (function setupRelatedPosts() {
     var relatedGrid = document.getElementById('relatedGrid');
     var content = document.querySelector('#post .content');
@@ -391,7 +389,7 @@
     var currentPath = window.location.pathname.toLowerCase();
     usedUrls[currentPath] = true;
 
-    // 1. Take first 3 cards for mid-article
+    // 1. Take first 3 cards for mid-article (CSS handles hiding 3rd on mobile)
     var midCards = [];
     var remainingCards = [];
 
