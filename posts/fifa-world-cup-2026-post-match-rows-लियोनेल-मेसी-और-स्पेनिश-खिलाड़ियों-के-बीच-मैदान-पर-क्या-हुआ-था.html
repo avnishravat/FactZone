@@ -450,42 +450,6 @@
     if (firstP) firstP.insertAdjacentElement('afterend', heroWrap);
   })();
 
-  // Insert 3 related post cards in the middle of the article,
-  // and keep 9 different cards in the bottom section (#relatedGrid).
-  (function insertMidArticleStoryRow() {
-    var relatedGrid = document.getElementById('relatedGrid');
-    var content = document.querySelector('#post .content');
-    if (!relatedGrid || !content || !relatedGrid.children.length) return;
-    var children = Array.prototype.slice.call(content.children);
-    if (children.length < 4) return; // article too short to meaningfully split
-
-    var allCards = Array.prototype.slice.call(relatedGrid.children);
-    if (allCards.length <= 3) return; // Need at least 4 cards
-
-    var midCards = allCards.slice(0, 3);        // First 3 cards for mid-article
-    var bottomCards = allCards.slice(3, 12);    // Next 9 cards for bottom section
-
-    // Clear bottom grid and keep up to 9 cards
-    relatedGrid.innerHTML = '';
-    bottomCards.forEach(function(card) {
-      relatedGrid.appendChild(card);
-    });
-
-    var midNode = children[Math.floor(children.length / 2) - 1];
-    var section = document.createElement('div');
-    section.className = 'story-carousel-section';
-    var midContainer = document.createElement('div');
-    midContainer.className = 'rc-row';
-
-    midCards.forEach(function(card) {
-      midContainer.appendChild(card);
-    });
-
-    section.innerHTML = '<div class="story-carousel-heading">Related Facts</div>';
-    section.appendChild(midContainer);
-    midNode.insertAdjacentElement('afterend', section);
-  })();
-
   var PROJECT_ID = "factzone-a9ace";
   var API_KEY    = "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc";
   var FS_BASE    = "https://firestore.googleapis.com/v1/projects/" + PROJECT_ID + "/databases/(default)/documents";
@@ -525,6 +489,120 @@
     try { var d = new Date(iso); if (isNaN(d.getTime())) return ""; return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }); }
     catch (e) { return ""; }
   }
+
+  // Setup exactly 3 cards mid-article, and fill bottom section (#relatedGrid) up to 9 distinct cards
+  (function setupRelatedPosts() {
+    var relatedGrid = document.getElementById('relatedGrid');
+    var content = document.querySelector('#post .content');
+    if (!relatedGrid || !content) return;
+
+    var allCards = Array.prototype.slice.call(relatedGrid.children);
+    if (allCards.length < 1) return;
+
+    var usedUrls = {};
+    var currentPath = window.location.pathname.toLowerCase();
+    usedUrls[currentPath] = true;
+
+    // 1. Take first 3 cards for mid-article
+    var midCards = [];
+    var remainingCards = [];
+
+    allCards.forEach(function(card) {
+      var href = (card.getAttribute('href') || '').toLowerCase();
+      if (midCards.length < 3 && href && !usedUrls[href]) {
+        midCards.push(card);
+        usedUrls[href] = true;
+      } else {
+        remainingCards.push(card);
+      }
+    });
+
+    var children = Array.prototype.slice.call(content.children);
+    if (midCards.length === 3 && children.length >= 4) {
+      var midNode = children[Math.floor(children.length / 2) - 1];
+      var section = document.createElement('div');
+      section.className = 'story-carousel-section';
+      var midContainer = document.createElement('div');
+      midContainer.className = 'rc-row';
+      midCards.forEach(function(c) { midContainer.appendChild(c); });
+      section.innerHTML = '<div class="story-carousel-heading">Related Facts</div>';
+      section.appendChild(midContainer);
+      midNode.insertAdjacentElement('afterend', section);
+    }
+
+    // 2. Put remaining unique cards into bottom grid
+    relatedGrid.innerHTML = '';
+    var bottomUniqueCards = [];
+    remainingCards.forEach(function(card) {
+      var href = (card.getAttribute('href') || '').toLowerCase();
+      if (!href || !usedUrls[href]) {
+        bottomUniqueCards.push(card);
+        if (href) usedUrls[href] = true;
+      }
+    });
+
+    bottomUniqueCards.forEach(function(card) {
+      relatedGrid.appendChild(card);
+    });
+
+    // Fill up to 9 cards instantly using placeholders if needed so layout stays complete
+    var sourcePool = bottomUniqueCards.length > 0 ? bottomUniqueCards : midCards;
+    var cloneIdx = 0;
+    while (relatedGrid.children.length < 9 && sourcePool.length > 0) {
+      var clone = sourcePool[cloneIdx % sourcePool.length].cloneNode(true);
+      clone.setAttribute('data-is-placeholder', 'true');
+      relatedGrid.appendChild(clone);
+      cloneIdx++;
+    }
+
+    // 3. Fetch real posts from Firestore API to fill up to 9 unique posts (no duplicates with mid-article)
+    fetch(FS_BASE + ":runQuery?key=" + API_KEY, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        structuredQuery: {
+          from: [{ collectionId: "posts" }],
+          orderBy: [{ field: { fieldPath: "createdAt" }, direction: "DESCENDING" }],
+          limit: 30
+        }
+      })
+    }).then(function(r){ return r.json(); }).then(function(data){
+      var docs = Array.isArray(data) ? data : [];
+      docs.forEach(function(d){
+        if (!d.document || !d.document.fields) return;
+        var f = d.document.fields;
+        var title = parseField(f.title) || parseField(f.headline) || "";
+        var img = parseField(f.ogImage) || parseField(f.image) || parseField(f.heroImage) || "";
+        var slug = parseField(f.slug) || "";
+        var cat = parseField(f.category) || "";
+        var url = parseField(f.canonicalUrl) || parseField(f.url) || "";
+        if (!url && slug) {
+          url = cat ? "/categories/" + cat + "/" + slug + ".html" : "/posts/" + slug + ".html";
+        }
+        if (!url || !title) return;
+        var lowerUrl = url.toLowerCase();
+        if (usedUrls[lowerUrl]) return;
+
+        var placeholder = relatedGrid.querySelector('[data-is-placeholder="true"]');
+        if (placeholder) {
+          usedUrls[lowerUrl] = true;
+          placeholder.removeAttribute('data-is-placeholder');
+          placeholder.setAttribute('href', url);
+          var imgEl = placeholder.querySelector('img');
+          if (imgEl) { imgEl.src = img; imgEl.alt = title; }
+          var h3El = placeholder.querySelector('h3');
+          if (h3El) { h3El.textContent = title; }
+        } else if (relatedGrid.children.length < 9) {
+          usedUrls[lowerUrl] = true;
+          var a = document.createElement('a');
+          a.className = 'rc';
+          a.href = url;
+          a.innerHTML = '<img src="' + escapeHtml(img) + '" alt="' + escapeHtml(title) + '" loading="lazy"><h3>' + escapeHtml(title) + '</h3>';
+          relatedGrid.appendChild(a);
+        }
+      });
+    }).catch(function(e){});
+  })();
 
   window.copyArticleLink = function(btn) {
     var currentUrl = location.href;
