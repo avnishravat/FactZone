@@ -232,7 +232,20 @@
     .author-box p { margin-bottom: 0.3rem; line-height: 1.35; }
     .author-box .author-profile-link { display: inline-block; font-weight: 700; }
 
-    .share-container { margin-top: 0.75rem; padding-top: 0.6rem; border-top: 1px dashed var(--border); }
+    /* Flex container for Share & Subscribe in the same row */
+    .share-container {
+      margin-top: 0.75rem;
+      padding-top: 0.6rem;
+      border-top: 1px dashed var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.8rem;
+    }
+    .share-block { flex: 1; min-width: 250px; }
+    .subscribe-inline-block { flex: 1; min-width: 250px; }
+
     .share-title { font-size: 0.82rem; font-weight: 700; color: var(--ink); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.04em; }
     .share-buttons { display: flex; flex-wrap: wrap; gap: 0.4rem; }
     .share-btn { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.35rem 0.7rem; border-radius: 0.35rem; font-size: 0.8rem; font-weight: 700; text-decoration: none; color: #fff; cursor: pointer; border: none; }
@@ -283,11 +296,10 @@
     .comment-jump-link { font-size: 0.85rem; font-weight: 700; color: var(--muted); text-decoration: none; }
     .comment-jump-link:hover { color: var(--accent); }
 
-    /* Single compact card container for both Comments and Subscribe */
+    /* Single compact card container for Comments */
     .widget-card { margin-top: 0.5rem; background: var(--surface); border-radius: var(--r); padding: 0.5rem 0.65rem; box-shadow: 0 2px 10px rgba(0,0,0,.04); }
-    #commentsSection, #subscribeSection { margin-top: 0; background: transparent; border-radius: 0; padding: 0; box-shadow: none; }
-    #subscribeSection { margin-top: 0.55rem; padding-top: 0.45rem; border-top: 1px dashed var(--border); }
-    #commentsSection h2, #subscribeSection h2 { font-family: 'Merriweather', serif; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.25rem; padding-bottom: 0.15rem; border-bottom: 2px solid var(--ink); }
+    #commentsSection { margin-top: 0; background: transparent; border-radius: 0; padding: 0; box-shadow: none; }
+    #commentsSection h2 { font-family: 'Merriweather', serif; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.25rem; padding-bottom: 0.15rem; border-bottom: 2px solid var(--ink); }
 
     .comment-form { display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 0.4rem; }
     .comment-input, .comment-textarea { width: 100%; font-family: inherit; font-size: 0.8rem; padding: 0.32rem 0.5rem; border: 1px solid var(--border); border-radius: 0.4rem; background: var(--bg); color: var(--ink); resize: vertical; }
@@ -306,10 +318,8 @@
     .comment-text { font-size: 0.84rem; color: #1f2937; white-space: pre-wrap; word-break: break-word; }
     .no-comments { color: var(--muted); font-size: 0.82rem; }
 
-    .subscribe-type-row { display: flex; gap: 0.85rem; margin-bottom: 0.3rem; font-size: 0.76rem; }
-    .radio-label { display: flex; align-items: center; gap: 0.25rem; cursor: pointer; }
     .subscribe-input-row { display: flex; gap: 0.4rem; flex-wrap: wrap; }
-    .subscribe-input-row .comment-input { flex: 1; min-width: 180px; }
+    .subscribe-input-row .comment-input { flex: 1; min-width: 150px; }
   </style>
 
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=DM+Sans:wght@400;500;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
@@ -361,15 +371,32 @@
         <button type="button" id="likeBtn" class="like-btn" aria-label="Like this article">🤍 <span id="likeCount">0</span></button>
         <a href="#commentsSection" class="comment-jump-link">💬 <span id="commentsCountInline">0</span> Comments</a>
       </div>
+
+      <!-- Share buttons and Subscribe box in the same row -->
       <div class="share-container">
-        <div class="share-title">Share this Fact:</div>
-        <div class="share-buttons">
-          <a href="https://api.whatsapp.com/send?text=%205%20Tech%20Facts%20%E0%A4%9C%E0%A5%8B%20%E0%A4%86%E0%A4%AA%E0%A4%95%E0%A5%8B%20Smart%20%E0%A4%AC%E0%A4%A8%E0%A4%BE%20%E0%A4%A6%E0%A5%87%E0%A4%82%E0%A4%97%E0%A5%87%20-%20Read%20more%20on%20FactZone%3A%0Ahttps%3A%2F%2Ffactzone.online%2Fposts%2F5-technology-facts-jo-aapko-super-smart-bana-denge.html" target="_blank" rel="noopener" class="share-btn btn-wa">WhatsApp</a>
-          <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ffactzone.online%2Fposts%2F5-technology-facts-jo-aapko-super-smart-bana-denge.html" target="_blank" rel="noopener" class="share-btn btn-fb">Facebook</a>
-          <a href="https://twitter.com/intent/tweet?text=%205%20Tech%20Facts%20%E0%A4%9C%E0%A5%8B%20%E0%A4%86%E0%A4%AA%E0%A4%95%E0%A5%8B%20Smart%20%E0%A4%AC%E0%A4%A8%E0%A4%BE%20%E0%A4%A6%E0%A5%87%E0%A4%82%E0%A4%97%E0%A5%87%20-%20Read%20more%20on%20FactZone%3A%0A&url=https%3A%2F%2Ffactzone.online%2Fposts%2F5-technology-facts-jo-aapko-super-smart-bana-denge.html" target="_blank" rel="noopener" class="share-btn btn-tw">X / Twitter</a>
-          <button onclick="window.copyArticleLink(this)" class="share-btn btn-cp">Copy Link</button>
+        <div class="share-block">
+          <div class="share-title">Share this Fact:</div>
+          <div class="share-buttons">
+            <a href="https://api.whatsapp.com/send?text=%205%20Tech%20Facts%20%E0%A4%9C%E0%A5%8B%20%E0%A4%86%E0%A4%AA%E0%A4%95%E0%A5%8B%20Smart%20%E0%A4%AC%E0%A4%A8%E0%A4%BE%20%E0%A4%A6%E0%A5%87%E0%A4%82%E0%A4%97%E0%A5%87%20-%20Read%20more%20on%20FactZone%3A%0Ahttps%3A%2F%2Ffactzone.online%2Fposts%2F5-technology-facts-jo-aapko-super-smart-bana-denge.html" target="_blank" rel="noopener" class="share-btn btn-wa">WhatsApp</a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ffactzone.online%2Fposts%2F5-technology-facts-jo-aapko-super-smart-bana-denge.html" target="_blank" rel="noopener" class="share-btn btn-fb">Facebook</a>
+            <a href="https://twitter.com/intent/tweet?text=%205%20Tech%20Facts%20%E0%A4%9C%E0%A5%8B%20%E0%A4%86%E0%A4%AA%E0%A4%95%E0%A5%8B%20Smart%20%E0%A4%AC%E0%A4%A8%E0%A4%BE%20%E0%A4%A6%E0%A5%87%E0%A4%82%E0%A4%97%E0%A5%87%20-%20Read%20more%20on%20FactZone%3A%0A&url=https%3A%2F%2Ffactzone.online%2Fposts%2F5-technology-facts-jo-aapko-super-smart-bana-denge.html" target="_blank" rel="noopener" class="share-btn btn-tw">X / Twitter</a>
+            <button onclick="window.copyArticleLink(this)" class="share-btn btn-cp">Copy Link</button>
+          </div>
+        </div>
+
+        <div class="subscribe-inline-block" id="subscribeSection">
+          <div class="share-title">सब्सक्राइब करें</div>
+          <div class="subscribe-form">
+            <input type="radio" name="subscribeType" value="email" checked style="display:none;">
+            <div class="subscribe-input-row">
+              <input type="text" id="subscribeValue" class="comment-input" placeholder="ईमेल या व्हाट्सएप नंबर">
+              <button type="button" id="subscribeBtn" class="comment-submit-btn">सब्सक्राइब करें</button>
+            </div>
+            <div><span id="subscribeStatus" class="form-status"></span></div>
+          </div>
         </div>
       </div>
+
       <div class="author-box" itemprop="author" itemscope itemtype="https://schema.org/Person">
         <p>Written by <a href="/author.html" itemprop="url"><span itemprop="name">Awaneesh</span></a>, a tech enthusiast sharing verified facts.</p>
         <a href="/author.html" class="author-profile-link">View Author Profile →</a>
@@ -381,8 +408,7 @@
     <section id="commentsSection" aria-label="Comments">
       <h2>टिप्पणियाँ / Comments (<span id="commentsCount">0</span>)</h2>
       <div class="comment-form">
-        <input type="text" id="commentName" class="comment-input" placeholder="आपका नाम (वैकल्पिक) / Your name (optional)" maxlength="60">
-        <textarea id="commentText" class="comment-textarea" rows="2" placeholder="अपनी टिप्पणी लिखें... / Write your comment..." maxlength="1000"></textarea>
+        <textarea id="commentText" class="comment-textarea" rows="2" placeholder="आपका नाम और टिप्पणी लिखें... / Write your name & comment..." maxlength="1000"></textarea>
         <div class="comment-form-footer">
           <button type="button" id="commentSubmitBtn" class="comment-submit-btn">टिप्पणी भेजें / Post Comment</button>
           <span id="commentStatus" class="form-status"></span>
@@ -392,30 +418,15 @@
         <p class="no-comments">लोड हो रहा है... / Loading...</p>
       </div>
     </section>
-
-    <section id="subscribeSection" aria-label="Get notified of new articles">
-      <h2>नए आर्टिकल की सूचना पाएं / Get Notified</h2>
-      <div class="subscribe-form">
-        <div class="subscribe-type-row">
-          <label class="radio-label"><input type="radio" name="subscribeType" value="email" checked> ईमेल / Email</label>
-          <label class="radio-label"><input type="radio" name="subscribeType" value="whatsapp"> व्हाट्सएप / WhatsApp</label>
-        </div>
-        <div class="subscribe-input-row">
-          <input type="text" id="subscribeValue" class="comment-input" placeholder="अपना ईमेल या व्हाट्सएप नंबर डालें">
-          <button type="button" id="subscribeBtn" class="comment-submit-btn">सब्सक्राइब करें / Subscribe</button>
-        </div>
-        <div><span id="subscribeStatus" class="form-status"></span></div>
-      </div>
-    </section>
   </div>
 
   <div class="ad-slot" style="margin: 0.6rem 0;">
     <div class="banner-300x250-slot"></div>
   </div>
 
-  <section id="relatedSection" aria-label="Related Facts">
+  <section id="relatedSection" aria-label="Related Facts" style="display:none">
     <h2>Related Facts</h2>
-    <div id="relatedGrid" class="rc-row"><a href="/posts/fifa-world-cup-2026-post-match-rows-%E0%A4%B2%E0%A4%BF%E0%A4%AF%E0%A5%8B%E0%A4%A8%E0%A5%87%E0%A4%B2-%E0%A4%AE%E0%A5%87%E0%A4%B8%E0%A5%80-%E0%A4%94%E0%A4%B0-%E0%A4%B8%E0%A5%8D%E0%A4%AA%E0%A5%87%E0%A4%A8%E0%A4%BF%E0%A4%B6-%E0%A4%96%E0%A4%BF%E0%A4%B2%E0%A4%BE%E0%A4%A1%E0%A4%BC%E0%A4%BF%E0%A4%AF%E0%A5%8B%E0%A4%82-%E0%A4%95%E0%A5%87-%E0%A4%AC%E0%A5%80%E0%A4%9A-%E0%A4%AE%E0%A5%88%E0%A4%A6%E0%A4%BE%E0%A4%A8-%E0%A4%AA%E0%A4%B0-%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A4%BE-%E0%A4%B9%E0%A5%81%E0%A4%86-%E0%A4%A5%E0%A4%BE.html" class="rc" aria-label="Read: FIFA World Cup 2026: मैच के बाद क्या हुआ था?"><img src="https://i.ibb.co/X0mQMvQ/clipboard-image.png" loading="lazy" width="55" height="55" alt="FIFA World Cup 2026: मैच के बाद क्या हुआ था?" onerror="this.style.display='none'"><h3>FIFA World Cup 2026: मैच के बाद क्या हुआ था?</h3></a><a href="/posts/reels-addiction-%E0%A4%95%E0%A4%B9%E0%A5%80%E0%A4%82-%E0%A4%86%E0%A4%AA%E0%A4%95%E0%A4%BE-phone-%E0%A4%86%E0%A4%AA%E0%A4%95%E0%A5%80-life-%E0%A4%A4%E0%A5%8B-%E0%A4%AC%E0%A4%B0%E0%A5%8D%E0%A4%AC%E0%A4%BE%E0%A4%A6-%E0%A4%A8%E0%A4%B9%E0%A5%80%E0%A4%82-%E0%A4%95%E0%A4%B0-%E0%A4%B0%E0%A4%B9%E0%A4%BE-%EF%B8%8F.html" class="rc" aria-label="Read: क्या आपका फोन आपको चला रहा है? सोशल मीडिया की लत का सच"><img src="https://i.ibb.co/fdTkCVSs/clipboard-image.png" loading="lazy" width="55" height="55" alt="क्या आपका फोन आपको चला रहा है? सोशल मीडिया की लत का सच" onerror="this.style.display='none'"><h3>क्या आपका फोन आपको चला रहा है? सोशल मीडिया की लत का सच</h3></a></div>
+    <div id="relatedGrid" class="rc-row"></div>
   </section>
 
   <footer class="site-footer">
