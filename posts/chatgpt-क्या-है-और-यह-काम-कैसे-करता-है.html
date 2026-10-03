@@ -450,8 +450,8 @@
     if (firstP) firstP.insertAdjacentElement('afterend', heroWrap);
   })();
 
-  // Insert exactly 3 related post cards in the middle of the article
-  // and leave the remaining different cards at the bottom (no duplicates).
+  // Insert 3 related post cards in the middle of the article,
+  // and keep 9 different cards in the bottom section (#relatedGrid).
   (function insertMidArticleStoryRow() {
     var relatedGrid = document.getElementById('relatedGrid');
     var content = document.querySelector('#post .content');
@@ -460,9 +460,17 @@
     if (children.length < 4) return; // article too short to meaningfully split
 
     var allCards = Array.prototype.slice.call(relatedGrid.children);
-    if (allCards.length <= 3) return; // Need more than 3 cards to split between mid and bottom
+    if (allCards.length <= 3) return; // Need at least 4 cards
 
-    var midCards = allCards.slice(0, 3);
+    var midCards = allCards.slice(0, 3);        // First 3 cards for mid-article
+    var bottomCards = allCards.slice(3, 12);    // Next 9 cards for bottom section
+
+    // Clear bottom grid and keep up to 9 cards
+    relatedGrid.innerHTML = '';
+    bottomCards.forEach(function(card) {
+      relatedGrid.appendChild(card);
+    });
+
     var midNode = children[Math.floor(children.length / 2) - 1];
     var section = document.createElement('div');
     section.className = 'story-carousel-section';
@@ -470,7 +478,7 @@
     midContainer.className = 'rc-row';
 
     midCards.forEach(function(card) {
-      midContainer.appendChild(card); // moves cards from bottom grid into mid-article section
+      midContainer.appendChild(card);
     });
 
     section.innerHTML = '<div class="story-carousel-heading">Related Facts</div>';
