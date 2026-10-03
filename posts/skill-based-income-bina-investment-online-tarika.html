@@ -587,7 +587,7 @@
         var cat = parseField(f.category) || "";
         var url = parseField(f.canonicalUrl) || parseField(f.url) || "";
         if (!url && slug) {
-          url = cat ? "/categories/" + cat + "/" + slug + ".html" : "/posts/" + slug + ".html";
+          url = "/posts/" + slug + ".html";
         }
         if (!url || !title) return;
         var lowerUrl = url.toLowerCase();
