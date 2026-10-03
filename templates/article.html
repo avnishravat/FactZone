@@ -337,18 +337,31 @@
     if (firstP) firstP.insertAdjacentElement('afterend', heroWrap);
   })();
 
-  // Insert a second copy of the related-stories card row in the middle of the article
-  // (same real data as the one at the end of the article - nothing invented).
+  // Insert exactly 3 related post cards in the middle of the article
+  // and leave the remaining different cards at the bottom (no duplicates).
   (function insertMidArticleStoryRow() {
     var relatedGrid = document.getElementById('relatedGrid');
     var content = document.querySelector('#post .content');
     if (!relatedGrid || !content || !relatedGrid.children.length) return;
     var children = Array.prototype.slice.call(content.children);
     if (children.length < 4) return; // article too short to meaningfully split
+
+    var allCards = Array.prototype.slice.call(relatedGrid.children);
+    if (allCards.length <= 3) return; // Need more than 3 cards to split between mid and bottom
+
+    var midCards = allCards.slice(0, 3);
     var midNode = children[Math.floor(children.length / 2) - 1];
     var section = document.createElement('div');
     section.className = 'story-carousel-section';
-    section.innerHTML = '<div class="story-carousel-heading">Related Facts</div><div class="rc-row">' + relatedGrid.innerHTML + '</div>';
+    var midContainer = document.createElement('div');
+    midContainer.className = 'rc-row';
+
+    midCards.forEach(function(card) {
+      midContainer.appendChild(card); // moves cards from bottom grid into mid-article section
+    });
+
+    section.innerHTML = '<div class="story-carousel-heading">Related Facts</div>';
+    section.appendChild(midContainer);
     midNode.insertAdjacentElement('afterend', section);
   })();
 
@@ -548,7 +561,7 @@
     var count = items.length;
     var countEl = $("commentsCount"); if (countEl) countEl.textContent = count;
     var inlineEl = $("commentsCountInline"); if (inlineEl) inlineEl.textContent = count;
-    if (!count) { list.innerHTML = '<p class="no-comments"></p>'; return; }
+    if (!count) { list.innerHTML = '<p class="no-comments">अभी तक कोई टिप्पणी नहीं। पहली टिप्पणी आप करें! / No comments yet — be the first!</p>'; return; }
     list.innerHTML = items.map(function(c){
       var name = escapeHtml(c.name || "Anonymous");
       var text = escapeHtml(c.comment || "");
