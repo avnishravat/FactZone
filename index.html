@@ -98,6 +98,10 @@
       height:100%;
       object-fit:cover;
       display:block;
+      transition: transform 0.3s ease;
+    }
+    .card:hover .post-image{
+      transform: scale(1.08);
     }
     .line-clamp-3{
       display:-webkit-box;
@@ -742,15 +746,9 @@
     function buildCardHtml(post, index) {
       const safeTitle    = escapeHtml(post.title || 'FactZone Post');
       const safeImage    = (post.image && post.image.trim() !== '') ? escapeHtml(post.image) : SVG_FALLBACK;
-      const safeDesc     = escapeHtml(post.desc || '');
       const safeId       = encodeURIComponent(post.id);
       const safeSlug     = post.slug ? encodeURIComponent(post.slug) : '';
       const safeCategory = escapeHtml(post.category || '');
-      const categoryLabel = escapeHtml(CATEGORY_LABELS[post.category] || post.category || '');
-      const postDate = parseDate(post.createdAt);
-      const dateLabel = (post.createdAt && !isNaN(postDate.getTime()))
-        ? postDate.toLocaleDateString('hi-IN', { day: 'numeric', month: 'short', year: 'numeric' })
-        : '';
       // Real posts always carry a slug (auto-backfilled by the static generator); the
       // ?id= form only remains as a defensive fallback and should not normally be hit.
       const href = safeSlug ? `posts/${safeSlug}.html` : `detail.html?id=${safeId}`;
@@ -761,23 +759,13 @@
       const loadingAttr = isAboveFold ? 'eager' : 'lazy';
       const priorityAttr = isAboveFold ? 'fetchpriority="high"' : 'fetchpriority="low"';
 
-      const descHtml = safeDesc
-        ? `<p class="text-gray-500 dark:text-gray-400 text-xs line-clamp-3 opacity-80 mt-1">${safeDesc}</p>`
-        : '';
-
       return `
       <a href="${href}" class="card" data-category="${safeCategory}">
         <div class="post-image-container">
           <img src="${safeImage}" alt="${safeTitle}" class="post-image" loading="${loadingAttr}" decoding="async" ${priorityAttr} width="300" height="120" onerror="this.onerror=null;this.src='${SVG_FALLBACK}';">
         </div>
         <div class="p-2.5 flex flex-col flex-1">
-          ${categoryLabel ? `<span class="card-category-badge">${categoryLabel}</span>` : ''}
-          <h3 class="font-bold text-xs sm:text-sm text-gray-900 dark:text-white leading-snug mt-1">${safeTitle}</h3>
-          ${descHtml}
-          <div class="card-footer">
-            ${dateLabel ? `<span class="card-date">${dateLabel}</span>` : '<span></span>'}
-            <span class="card-read-link">पढ़ें →</span>
-          </div>
+          <h3 class="font-bold text-xs sm:text-sm text-gray-900 dark:text-white leading-snug">${safeTitle}</h3>
         </div>
       </a>`;
     }
