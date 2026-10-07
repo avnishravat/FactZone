@@ -235,7 +235,7 @@ function buildJsonLd(post, ctx) {
       breadcrumb: { '@id': `${url}#breadcrumb` }, mainEntity: { '@id': `${url}#article` }
     },
     {
-      '@type': 'Article', '@id': `${url}#article`, mainEntityOfPage: { '@id': `${url}#webpage` },
+      '@type': ['Article', 'BlogPosting'], '@id': `${url}#article`, mainEntityOfPage: { '@id': `${url}#webpage` },
       headline: ctx.title, description: ctx.desc, image: [ctx.image], inLanguage: 'hi',
       articleSection: ctx.categoryLabel, wordCount: ctx.wordCount,
       datePublished: ctx.publishedISO, dateModified: ctx.updatedISO,
