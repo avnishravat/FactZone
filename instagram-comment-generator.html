@@ -302,7 +302,7 @@ function replaceVars(text,input){
  return String(text).replace(/\{\{input\}\}|\{input\}|\{\{topic\}\}|\{topic\}|\{\{niche\}\}|\{niche\}|\{\{content\}\}|\{content\}|\{\{reel\}\}|\{reel\}/gi,input);
 }
 
-async function loadTemplates(){ try { const r=await fetch("/data/instagram-templates.json",{cache:"no-store"}); const d=await r.json(); templates=Array.isArray(d)?d.filter(x=>x.tool===TOOL&&x.text):[]; } catch(e){ templates=[]; } }
+async function loadTemplates(){try{const r=await fetch("/data/instagram-templates.json",{cache:"no-store"});const d=await r.json();templates=Array.isArray(d)?d.filter(x=>x.tool===TOOL&&x.text):[]}catch(e){templates=[];}}
 
 // Fetch & Aggregate Real-time Ratings
 function loadRatingsSummary(){ const total=Number(typeof BASE_VOTES==="number"?BASE_VOTES:0); const sum=Number(typeof BASE_RATING_SUM==="number"?BASE_RATING_SUM:total*5); if($("badgeCount")) $("badgeCount").textContent="("+total.toLocaleString()+" creator votes)"; if($("badgeRating")) $("badgeRating").textContent=total?(sum/total).toFixed(1):"5.0"; }
