@@ -38,7 +38,6 @@ function buildArticle(p,all){
  const relatedCard=x=>'<a class="rc" href="/posts/'+encodeURIComponent(x.slug)+'.html" aria-label="Read: '+esc(x.title)+'"><img src="'+esc(imageFor(x))+'" alt="'+esc(x.title)+'" loading="lazy" decoding="async" width="300" height="169" onerror="this.style.display=\'none\'"><h3>'+esc(x.title)+'</h3></a>';
  const relatedHtml=related.map(relatedCard).join('');
  const midRelatedHtml=related.slice(0,2).map((x,i)=>'<div class="mid-related-block" data-mid-related="'+(i+1)+'"><div class="story-carousel-heading">📚 Related Fact</div><div class="rc-row mid-related-row">'+relatedCard(x)+'</div></div>').join('');
- const midRelatedHtml=related.slice(0,2).map((x,i)=>'<div class="mid-related-block" data-mid-related="'+(i+1)+'"><div class="story-carousel-heading">📚 Related Fact</div><div class="rc-row mid-related-row">'+relatedCard(x)+'</div></div>').join('');
  const jsonld={"@context":"https://schema.org","@graph":[
   {"@type":"Organization","@id":SITE_URL+"/#organization","name":"FactZone","url":SITE_URL+"/","logo":{"@type":"ImageObject","url":SITE_URL+"/logo.png","width":512,"height":512}},
   {"@type":"WebSite","@id":SITE_URL+"/#website","name":"FactZone","url":SITE_URL+"/","inLanguage":"hi","publisher":{"@id":SITE_URL+"/#organization"}},
