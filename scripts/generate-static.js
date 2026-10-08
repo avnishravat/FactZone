@@ -57,7 +57,8 @@ function main(){
  const current=new Set(posts.map(p=>p.slug+'.html'));
  for(const f of fs.readdirSync(outputPostsDir)){if(f.endsWith('.html')&&!current.has(f)){try{fs.unlinkSync(path.join(outputPostsDir,f));}catch(e){}}}
  for(const p of posts)fs.writeFileSync(path.join(outputPostsDir,p.slug+'.html'),buildArticle(p,posts));
- fs.writeFileSync(postsIndexJsonPath,JSON.stringify(posts,null,2));
+ const indexPosts=posts.map(p=>({...p,image:imageFor(p),content:localizeContentImages(p.content,p.slug)}));
+ fs.writeFileSync(postsIndexJsonPath,JSON.stringify(indexPosts,null,2));
  for(const cat of Object.keys(CATEGORY_LABELS))buildCategory(cat,posts.filter(p=>categorySlug(p.category)===cat));
  const urls=[SITE_URL+'/',...posts.map(canonical),...Object.keys(CATEGORY_LABELS).map(c=>SITE_URL+'/categories/'+c+'/')];
  fs.writeFileSync(sitemapPath,'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+urls.map(u=>'  <url><loc>'+esc(u)+'</loc></url>').join('\n')+'\n</urlset>\n');
