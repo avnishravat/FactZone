@@ -5,17 +5,19 @@ const path = require('path');
 const inputDir = path.join(__dirname, '../raw-images');
 const outputDir = path.join(__dirname, '../assets/images/posts');
 
-if (!fs.existsSync(inputDir)) {
-    fs.mkdirSync(inputDir, { recursive: true });
-}
-if (!fs.existsSync(outputDir)) {
-    fs.mkdirSync(outputDir, { recursive: true });
-}
+// Ensure directories exist on clean checkout
+if (!fs.existsSync(inputDir)) fs.mkdirSync(inputDir, { recursive: true });
+if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
 
 async function convertImages() {
     try {
         const files = fs.readdirSync(inputDir);
         const validExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.avif'];
+
+        if (files.length === 0) {
+            console.log('[INFO] No raw images found in raw-images/ folder. Skipping conversion.');
+            return;
+        }
 
         for (const file of files) {
             const ext = path.extname(file).toLowerCase();
