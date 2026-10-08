@@ -306,10 +306,6 @@
     </section>
   </div>
 
-  <div class="ad-slot" style="margin: 0.6rem 0;">
-    <div class="banner-300x250-slot"></div>
-  </div>
-
   <section id="relatedSection" aria-label="Related Facts"{{RELATED_SECTION_HIDDEN}}>
     <h2>Related Facts</h2>
     <div id="relatedGrid" class="rc-row">{{RELATED_HTML}}</div>
@@ -346,21 +342,21 @@
     if (firstP) firstP.insertAdjacentElement('afterend', heroWrap);
   })();
 
-  // Restore the original two mid-article 320x50 ad blocks.
-  // The old article page inserted two slots at roughly equal gaps in the content.
-  (function injectTwoMidArticleAds() {
+  // Keep exactly four 320x50 ad slots inside the article content,
+  // distributed as evenly as possible across the post.
+  (function injectFourMidArticleAds() {
     var content = document.querySelector('#post .content');
     if (!content || content.querySelectorAll('.mid-article-ad').length) return;
     var nodes = Array.prototype.slice.call(content.childNodes).filter(function(n) {
       return n.nodeType === 1 || (n.nodeType === 3 && n.textContent.trim() !== '');
     });
-    if (nodes.length < 3) return;
+    if (nodes.length < 5) return;
 
     var totalGaps = nodes.length - 1;
     var used = {};
     var positions = [];
-    for (var i = 1; i <= 2; i++) {
-      var pos = Math.round((i * totalGaps) / 3) - 1;
+    for (var i = 1; i <= 4; i++) {
+      var pos = Math.round((i * totalGaps) / 5) - 1;
       pos = Math.max(0, Math.min(totalGaps - 1, pos));
       while (used[pos] && pos < totalGaps - 1) pos++;
       used[pos] = true;
