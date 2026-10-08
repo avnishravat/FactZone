@@ -30,17 +30,24 @@ function localizeContentImages(content,slug){
  });
 }
 function canonical(p){return SITE_URL+'/posts/'+encodeURIComponent(p.slug)+'.html';}
-function adsterra320(){return '<div class="ad-slot mid-article-ad"><script>atOptions = {\\'key\\' : \\'3012ad1961449518ada204e09cdbceef\\', \\'format\\' : \\'iframe\\', \\'height\\' : 50, \\'width\\' : 320, \\'params\\' : {}};<\\/script><script src="https://www.highrevenueformat.com/3012ad1961449518ada204e09cdbceef/invoke.js"><\\/script></div>';}
+function adsterra320(){return `<div class="ad-slot mid-article-ad"><script>atOptions = {'key' : '3012ad1961449518ada204e09cdbceef', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {}};<\/script><script src="https://www.highrevenueformat.com/3012ad1961449518ada204e09cdbceef/invoke.js"><\/script></div>`;}
 function relatedCardHtml(x){return '<a class="rc" href="/posts/'+encodeURIComponent(x.slug)+'.html" aria-label="Read: '+esc(x.title)+'"><img src="'+esc(imageFor(x))+'" alt="'+esc(x.title)+'" loading="lazy" decoding="async" width="300" height="169" onerror="this.style.display=\\'none\\'"><h3>'+esc(x.title)+'</h3></a>';}
 function midRelatedHtml(x,i){return '<div class="mid-related-block" data-mid-related="'+(i+1)+'"><div class="story-carousel-heading">📚 Related Fact</div><div class="rc-row mid-related-row">'+relatedCardHtml(x)+'</div></div>';}
 function buildArticleBody(content,slug,related){
- const parts=String(content||'').split(/(?=<p\b[^>]*>)/i);
- const cleanParts=parts.filter(x=>x.trim());
- if(cleanParts.length<2)return content;
- const adPositions=[Math.max(0,Math.floor(cleanParts.length/5)-1),Math.max(0,Math.floor((2*cleanParts.length)/5)-1),Math.max(0,Math.floor((3*cleanParts.length)/5)-1),Math.max(0,Math.floor((4*cleanParts.length)/5)-1)];
- const relatedPositions=[Math.max(0,Math.floor(cleanParts.length/3)-1),Math.max(0,Math.floor((2*cleanParts.length)/3)-1)];
+ const parts=String(content||'').split(/(?=<p\b[^>]*>)/i).filter(x=>x.trim());
+ if(parts.length<2)return content;
+ const gapCount=parts.length-1;
+ const pickPositions=(count)=>{const used={};const out=[];for(let i=1;i<=count;i++){let pos=Math.round(i*gapCount/(count+1))-1;pos=Math.max(0,Math.min(gapCount-1,pos));while(used[pos]&&pos<gapCount-1)pos++;used[pos]=true;out.push(pos);}return out;};
+ const adPositions=pickPositions(Math.min(4,gapCount));
+ const relatedPositions=pickPositions(Math.min(2,gapCount));
  let out='';
- cleanParts.forEach((part,i)=>{out+=part;if(i===0)out+='<div class="article-image-anchor" aria-hidden="true"></div>';if(relatedPositions.indexOf(i)!==-1&&related[i===relatedPositions[0]?0:1])out+=midRelatedHtml(related[i===relatedPositions[0]?0:1],i===relatedPositions[0]?0:1);if(adPositions.indexOf(i)!==-1)out+=adsterra320();});
+ parts.forEach((part,i)=>{
+  out+=part;
+  if(i===0)out+='<div class="article-image-anchor" aria-hidden="true"></div>';
+  const ri=relatedPositions.indexOf(i);
+  if(ri!==-1&&related[ri])out+=midRelatedHtml(related[ri],ri);
+  if(adPositions.indexOf(i)!==-1)out+=adsterra320();
+ });
  return out;
 }
 function buildArticle(p,all){
