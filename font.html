@@ -434,7 +434,7 @@
     window.addEventListener('DOMContentLoaded', generateFancyText);
 </script>
 
-<!-- Firebase Interactive Rating Integration -->
+<!-- Static rating UI -->
 <script type="module">
 
 const TOOL = "instagram-fonts";
@@ -492,16 +492,7 @@ if (savedRating) {
         $("badgeCount").textContent = `(${newCount.toLocaleString()} votes)`;
       }
 
-      try {
-        await addDoc(collection(db, "toolRatings"), {
-          tool: TOOL,
-          rating: selectedRating,
-          createdAt: serverTimestamp()
-        });
-        loadRatingsSummary();
-      } catch (e) {
-        console.error("Error saving rating to Firebase:", e.message);
-      }
+      
     });
   });
 }
