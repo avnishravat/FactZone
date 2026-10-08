@@ -24,7 +24,7 @@ function imageFor(p){return SITE_URL+'/assets/images/posts/'+encodeURIComponent(
 function inlineImagePath(slug,index){return SITE_URL+'/assets/images/posts/'+encodeURIComponent(slug)+'-inline-'+index+'.webp';}
 function localizeContentImages(content,slug){
  let index=0;
- return String(content||'').replace(/(<img\\b[^>]*\\bsrc=["'])(https?:\\/\\/[^"']+)(["'])/gi,(m,prefix,url,suffix)=>{
+ return String(content||'').replace(/(<img\b[^>]*\bsrc=["'])(https?:\/\/[^"']+)(["'])/gi,(m,prefix,url,suffix)=>{
   index++;
   return prefix+inlineImagePath(slug,index)+suffix;
  });
