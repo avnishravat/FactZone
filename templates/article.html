@@ -347,6 +347,57 @@
   })();
 
 
+  // Two related cards + four Adsterra ads inside the article content.
+  (function injectMidArticleContent() {
+    var content = document.querySelector('#post .content');
+    var pool = document.querySelector('#midRelatedPool');
+    if (!content) return;
+
+    var nodes = Array.prototype.slice.call(content.children);
+    if (pool) {
+      var relatedBlocks = Array.prototype.slice.call(pool.children);
+      var gapCount = Math.max(1, nodes.length - 1);
+      var positions = [];
+      for (var i = 1; i <= 2; i++) {
+        var pos = Math.round(i * gapCount / 3) - 1;
+        pos = Math.max(0, Math.min(gapCount - 1, pos));
+        while (positions.indexOf(pos) !== -1 && pos < gapCount - 1) pos++;
+        positions.push(pos);
+      }
+      positions.sort(function(a,b){return b-a;});
+      positions.forEach(function(pos, idx) {
+        var block = relatedBlocks[positions.length - 1 - idx];
+        if (block && nodes[pos]) nodes[pos].parentNode.insertBefore(block, nodes[pos].nextSibling);
+      });
+      pool.remove();
+    }
+
+    nodes = Array.prototype.slice.call(content.children);
+    if (nodes.length < 2) return;
+    var adGapCount = nodes.length - 1;
+    var adPositions = [];
+    for (var a = 1; a <= 4; a++) {
+      var adPos = Math.round(a * adGapCount / 5) - 1;
+      adPos = Math.max(0, Math.min(adGapCount - 1, adPos));
+      while (adPositions.indexOf(adPos) !== -1 && adPos < adGapCount - 1) adPos++;
+      adPositions.push(adPos);
+    }
+    adPositions.sort(function(a,b){return b-a;});
+    adPositions.forEach(function(pos) {
+      var ad = document.createElement('div');
+      ad.className = 'ad-slot mid-article-ad';
+      ad.style.textAlign = 'center';
+      ad.style.margin = '0.75rem 0';
+      var optionsScript = document.createElement('script');
+      optionsScript.text = "atOptions = {'key':'3012ad1961449518ada204e09cdbceef','format':'iframe','height':50,'width':320,'params':{}};";
+      var invokeScript = document.createElement('script');
+      invokeScript.src = 'https://www.highrevenueformat.com/3012ad1961449518ada204e09cdbceef/invoke.js';
+      ad.appendChild(optionsScript);
+      ad.appendChild(invokeScript);
+      if (nodes[pos]) nodes[pos].parentNode.insertBefore(ad, nodes[pos].nextSibling);
+    });
+  })();
+
   var POST_ID = "{{POST_ID}}";
 function key(name){ return "fz-" + name + "-" + POST_ID; }
 function readJSON(k,fallback){try{var v=localStorage.getItem(k);return v?JSON.parse(v):fallback;}catch(e){return fallback;}}
