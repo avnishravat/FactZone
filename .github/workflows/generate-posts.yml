@@ -37,7 +37,7 @@ jobs:
           # Create empty tracking files if folders don't exist
           mkdir -p assets/images/posts posts
           
-          git add assets/images/posts/ posts/ index.html posts-index.json data/posts/ raw-images/ || true
+          git add assets/images/posts/ posts/ index.html posts-index.json data/posts/ || true
           
           if git diff --staged --quiet; then
             echo "No changes to commit"
