@@ -264,7 +264,7 @@
     </footer>
 
     <script>
-        // Firebase removed: the store keeps its existing UI and can render cached products locally.
+        // static backend removed: the store keeps its existing UI and can render cached products locally.
         function fsRunQuery(collectionId) {
             if (collectionId === 'products') {
                 try { return Promise.resolve(JSON.parse(localStorage.getItem('fz_cache_products') || '[]')); }
