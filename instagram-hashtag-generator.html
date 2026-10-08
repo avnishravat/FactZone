@@ -288,9 +288,7 @@ footer{text-align:center;color:#8a92a1;font-size:12px;padding:25px}
 
 <footer>© 2026 Instagram Creator Tools</footer>
 
-<script type="module">
-import { getstatic data, collection, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/static backendjs/10.12.2/static backend-static data.js";
-
+<script>
 const TOOL="instagram-hashtag-generator";
 let templates=[];
 const $=id=>document.getElementById(id);
@@ -303,12 +301,7 @@ function replaceVars(text,input){
  return String(text).replace(/\{\{input\}\}|\{input\}|\{\{topic\}\}|\{topic\}|\{\{niche\}\}|\{niche\}|\{\{content\}\}|\{content\}|\{\{reel\}\}|\{reel\}/gi,input);
 }
 
-async function loadTemplates(){
- try{
-  const snap=await getDocs(collection(db,"instagramCreatorToolOutputs"));
-  templates=snap.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.tool===TOOL&&x.text);
- }catch(e){console.log("static backend templates unavailable",e.message);}
-}
+async function loadTemplates(){try{const r=await fetch("/data/instagram-templates.json",{cache:"no-store"});const d=await r.json();templates=Array.isArray(d)?d.filter(x=>x.tool===TOOL&&x.text):[];}catch(e){templates=[];}}
 
 // Fetch & Aggregate Real-time Ratings
 function loadRatingsSummary(){
