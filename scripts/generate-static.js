@@ -7,9 +7,9 @@ const outputPostsDir = path.join(__dirname, '../posts');
 const indexHtmlPath = path.join(__dirname, '../index.html');
 const postsIndexJsonPath = path.join(__dirname, '../posts-index.json');
 
-if (!fs.existsSync(outputPostsDir)) {
-    fs.mkdirSync(outputPostsDir, { recursive: true });
-}
+// Auto-create directories if missing
+if (!fs.existsSync(postsDir)) fs.mkdirSync(postsDir, { recursive: true });
+if (!fs.existsSync(outputPostsDir)) fs.mkdirSync(outputPostsDir, { recursive: true });
 
 function stripTags(html) {
     return sanitizeHtml(html || '', { allowedTags: [], allowedAttributes: {} });
@@ -191,12 +191,7 @@ function generatePostPage(post) {
 }
 
 async function buildSite() {
-    if (!fs.existsSync(postsDir)) {
-        console.log('No posts found in data/posts directory.');
-        return;
-    }
-
-    const files = fs.readdirSync(postsDir);
+    const files = fs.existsSync(postsDir) ? fs.readdirSync(postsDir) : [];
     const postList = [];
 
     for (const file of files) {
