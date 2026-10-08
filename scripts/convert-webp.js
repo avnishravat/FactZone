@@ -2,25 +2,51 @@ const sharp = require('sharp');
 const fs = require('fs');
 const path = require('path');
 
-const inputFolder = './src/assets/raw-images';
-const outputFolder = './public/images';
+const inputDir = path.join(__dirname, '../raw-images');
+const outputDir = path.join(__dirname, '../assets/images/posts');
 
-if (!fs.existsSync(outputFolder)) {
-  fs.mkdirSync(outputFolder, { recursive: true });
+if (!fs.existsSync(inputDir)) {
+    fs.mkdirSync(inputDir, { recursive: true });
+}
+if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir, { recursive: true });
 }
 
-fs.readdirSync(inputFolder).forEach(file => {
-  if (file.match(/\.(jpg|jpeg|png)$/i)) {
-    const fileName = path.parse(file).name;
-    
-    sharp(`${inputFolder}/${file}`)
-      .resize(1200, 675, {         // Exact 16:9 Discover banner size
-        fit: 'cover',              // Image stretched nahi hogi, properly crop hogi
-        position: 'center'
-      })
-      .webp({ quality: 80 })       // Super sharp quality under 150 KB
-      .toFile(`${outputFolder}/${fileName}.webp`)
-      .then(() => console.log(`Discover-ready WebP created: ${fileName}.webp`))
-      .catch(err => console.error(`Error processing ${file}:`, err));
-  }
-});
+async function convertImages() {
+    try {
+        const files = fs.readdirSync(inputDir);
+        const validExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.avif'];
+
+        for (const file of files) {
+            const ext = path.extname(file).toLowerCase();
+            if (validExtensions.includes(ext)) {
+                const inputPath = path.join(inputDir, file);
+                const fileName = path.parse(file).name;
+                const outputPath = path.join(outputDir, `${fileName}.webp`);
+
+                try {
+                    // Google Discover Standard: 1200x675 px (16:9 ratio)
+                    await sharp(inputPath)
+                        .resize(1200, 675, {
+                            fit: 'cover',
+                            position: 'center'
+                        })
+                        .webp({
+                            quality: 80,
+                            effort: 6
+                        })
+                        .toFile(outputPath);
+
+                    console.log(`[SUCCESS] Converted: ${file} -> ${fileName}.webp (1200x675px)`);
+                    fs.unlinkSync(inputPath);
+                } catch (err) {
+                    console.error(`[ERROR] Failed converting ${file}:`, err.message);
+                }
+            }
+        }
+    } catch (err) {
+        console.error('[ERROR] Directory read failed:', err.message);
+    }
+}
+
+convertImages();
