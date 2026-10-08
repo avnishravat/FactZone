@@ -380,13 +380,9 @@
     </section>
   </div>
 
-  <div class="ad-slot" style="margin: 0.6rem 0;">
-    <div class="banner-300x250-slot"></div>
-  </div>
-
   <section id="relatedSection" aria-label="Related Facts">
     <h2>Related Facts</h2>
-    <div id="relatedGrid" class="rc-row"><section class="related-posts"><h2>📚 Related FactZone Articles</h2><div class="related-grid"><a href="/posts/raat-mein-jyada-sochne-ki-wajah.html">🧠 दिमाग रात में ज्यादा क्यों सोचता है?</a><a href="/posts/can-our-brain-see-the-future-while-we-sleep.html">क्या हमारा दिमाग सोते समय भविष्य देख सकता है?</a><a href="/posts/why-songs-get-stuck-in-head-earworm-hindi.html">एक ही गाना दिमाग में बार-बार क्यों बजता है? इयरवॉर्म</a></div></section></div>
+    <div id="relatedGrid" class="rc-row"><a class="rc" href="/posts/raat-mein-jyada-sochne-ki-wajah.html" aria-label="Read: 🧠 दिमाग रात में ज्यादा क्यों सोचता है?"><img src="https://factzone.online/assets/images/posts/raat-mein-jyada-sochne-ki-wajah.webp" alt="🧠 दिमाग रात में ज्यादा क्यों सोचता है?" loading="lazy" decoding="async" width="300" height="169" onerror="this.style.display='none'"><h3>🧠 दिमाग रात में ज्यादा क्यों सोचता है?</h3></a><a class="rc" href="/posts/can-our-brain-see-the-future-while-we-sleep.html" aria-label="Read: क्या हमारा दिमाग सोते समय भविष्य देख सकता है?"><img src="https://factzone.online/assets/images/posts/can-our-brain-see-the-future-while-we-sleep.webp" alt="क्या हमारा दिमाग सोते समय भविष्य देख सकता है?" loading="lazy" decoding="async" width="300" height="169" onerror="this.style.display='none'"><h3>क्या हमारा दिमाग सोते समय भविष्य देख सकता है?</h3></a><a class="rc" href="/posts/why-songs-get-stuck-in-head-earworm-hindi.html" aria-label="Read: एक ही गाना दिमाग में बार-बार क्यों बजता है? इयरवॉर्म"><img src="https://factzone.online/assets/images/posts/why-songs-get-stuck-in-head-earworm-hindi.webp" alt="एक ही गाना दिमाग में बार-बार क्यों बजता है? इयरवॉर्म" loading="lazy" decoding="async" width="300" height="169" onerror="this.style.display='none'"><h3>एक ही गाना दिमाग में बार-बार क्यों बजता है? इयरवॉर्म</h3></a></div>
   </section>
 
   <footer class="site-footer">
@@ -418,6 +414,35 @@
     if (!heroWrap || !content) return;
     var firstP = content.querySelector('p');
     if (firstP) firstP.insertAdjacentElement('afterend', heroWrap);
+  })();
+
+  // Keep exactly four 320x50 ad slots inside the article content,
+  // distributed as evenly as possible across the post.
+  (function injectFourMidArticleAds() {
+    var content = document.querySelector('#post .content');
+    if (!content || content.querySelectorAll('.mid-article-ad').length) return;
+    var nodes = Array.prototype.slice.call(content.childNodes).filter(function(n) {
+      return n.nodeType === 1 || (n.nodeType === 3 && n.textContent.trim() !== '');
+    });
+    if (nodes.length < 5) return;
+
+    var totalGaps = nodes.length - 1;
+    var used = {};
+    var positions = [];
+    for (var i = 1; i <= 4; i++) {
+      var pos = Math.round((i * totalGaps) / 5) - 1;
+      pos = Math.max(0, Math.min(totalGaps - 1, pos));
+      while (used[pos] && pos < totalGaps - 1) pos++;
+      used[pos] = true;
+      positions.push(pos);
+    }
+
+    positions.sort(function(a,b){ return b-a; }).forEach(function(pos) {
+      var ad = document.createElement('div');
+      ad.className = 'ad-slot mid-article-ad';
+      ad.innerHTML = '<div class="banner-320x50-slot"></div>';
+      nodes[pos].parentNode.insertBefore(ad, nodes[pos].nextSibling);
+    });
   })();
 
   var POST_ID = "8blvvHaYSGs6oDgV9Jii";
