@@ -194,7 +194,7 @@ footer{text-align:center;color:#8a92a1;font-size:12px;padding:25px}
     <button id="again">Generate Again</button>
   </div>
 
-  <div class="small">New saved outputs are automatically read from the Firebase database when available.</div>
+  <div class="small">New saved outputs are automatically read from the static database when available.</div>
 
   <!-- Interactive Rating Widget (Order 1 to 5: 1 Star on Left, 5 Stars on Right) -->
   <div class="interactive-rating">
@@ -361,7 +361,7 @@ if (savedRating) {
         });
         loadRatingsSummary(); // Refresh average score from Firestore
       } catch (e) {
-        console.error("Error saving rating to Firebase:", e.message);
+        console.error("Error saving rating to static:", e.message);
       }
     });
   });
