@@ -353,17 +353,7 @@ if (savedRating) {
         $("badgeCount").textContent = `(${newCount.toLocaleString()} creator votes)`;
       }
 
-      try {
-        await addDoc(collection(db, "toolRatings"), {
-          tool: TOOL,
-          rating: selectedRating,
-          createdAt: serverTimestamp()
-        });
-        loadRatingsSummary(); // Refresh average score from Firestore
-      } catch (e) {
-        console.error("Error saving rating to static:", e.message);
-      }
-    });
+          });
   });
 }
 
