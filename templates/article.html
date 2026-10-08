@@ -154,6 +154,12 @@
     .rc h3 { font-size: 0.85rem; font-weight: 700; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.3; }
 
     .story-carousel-section { margin: 0.9rem 0; }
+    .mid-related-block { margin: 0.9rem 0; padding: 0.65rem; background: var(--surface); border: 1px solid var(--border); border-radius: 0.55rem; }
+    .mid-related-row { grid-template-columns: 1fr !important; }
+    .mid-related-row .rc { flex-direction: row; align-items: center; gap: 0.65rem; }
+    .mid-related-row .rc img { width: 82px; height: 62px; flex: 0 0 82px; object-fit: cover; }
+    .mid-related-row .rc h3 { font-size: 0.84rem; }
+    .mid-related-block .story-carousel-heading { margin-bottom: 0.35rem; }
     .story-carousel-heading { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; font-weight: 700; color: var(--ink); margin-bottom: 0.5rem; white-space: nowrap; }
     .story-carousel-heading::after { content: ""; flex: 1; border-bottom: 2px dotted var(--border); margin-left: 0.3rem; }
 
@@ -253,6 +259,7 @@
       <p class="meta-line">{{META_LINE}}</p>
       <div class="hero-wrap"><img class="hero" src="{{OG_IMAGE}}" alt="{{TITLE}}" itemprop="image" loading="eager" fetchpriority="high" decoding="async" width="300" height="169" onerror="this.style.display='none'"></div>
       <div class="content" itemprop="articleBody">{{CONTENT_HTML}}</div>
+      <div id="midRelatedPool" hidden>{{MID_RELATED_HTML}}</div>
       <div class="reaction-bar">
         <button type="button" id="likeBtn" class="like-btn" aria-label="Like this article">🤍 <span id="likeCount">0</span></button>
         <a href="#commentsSection" class="comment-jump-link">💬 <span id="commentsCountInline">0</span> Comments</a>
@@ -342,32 +349,43 @@
     if (firstP) firstP.insertAdjacentElement('afterend', heroWrap);
   })();
 
-  // Keep exactly four 320x50 ad slots inside the article content,
-  // distributed as evenly as possible across the post.
-  (function injectFourMidArticleAds() {
+  // Insert exactly two related-post cards and four ad slots inside the article body.
+  // The two related cards are separate from the 12-card Related Facts section below.
+  (function injectMidArticleBlocks() {
     var content = document.querySelector('#post .content');
-    if (!content || content.querySelectorAll('.mid-article-ad').length) return;
-    var nodes = Array.prototype.slice.call(content.childNodes).filter(function(n) {
-      return n.nodeType === 1 || (n.nodeType === 3 && n.textContent.trim() !== '');
-    });
-    if (nodes.length < 5) return;
+    var pool = document.querySelector('#midRelatedPool');
+    if (!content) return;
+
+    var nodes = Array.prototype.slice.call(content.children);
+    if (nodes.length < 3) return;
 
     var totalGaps = nodes.length - 1;
-    var used = {};
-    var positions = [];
-    for (var i = 1; i <= 4; i++) {
-      var pos = Math.round((i * totalGaps) / 5) - 1;
-      pos = Math.max(0, Math.min(totalGaps - 1, pos));
-      while (used[pos] && pos < totalGaps - 1) pos++;
-      used[pos] = true;
-      positions.push(pos);
+    function gapPosition(i, total) {
+      var pos = Math.round((i * totalGaps) / (total + 1)) - 1;
+      return Math.max(0, Math.min(totalGaps - 1, pos));
     }
 
-    positions.sort(function(a,b){ return b-a; }).forEach(function(pos) {
+    // Put the two related cards at roughly 1/3 and 2/3 of the article.
+    if (pool) {
+      var relatedBlocks = Array.prototype.slice.call(pool.children);
+      [gapPosition(1,2), gapPosition(2,2)].sort(function(a,b){return b-a;}).forEach(function(pos, idx) {
+        var block = relatedBlocks[idx];
+        if (block && nodes[pos]) nodes[pos].parentNode.insertBefore(block, nodes[pos].nextSibling);
+      });
+      pool.remove();
+    }
+
+    // Four evenly distributed ad slots across the article.
+    nodes = Array.prototype.slice.call(content.children);
+    if (nodes.length < 5) return;
+    totalGaps = nodes.length - 1;
+    var adPositions = [];
+    for (var i = 1; i <= 4; i++) adPositions.push(gapPosition(i,4));
+    adPositions.sort(function(a,b){return b-a;}).forEach(function(pos) {
       var ad = document.createElement('div');
       ad.className = 'ad-slot mid-article-ad';
       ad.innerHTML = '<div class="banner-320x50-slot"></div>';
-      nodes[pos].parentNode.insertBefore(ad, nodes[pos].nextSibling);
+      if (nodes[pos]) nodes[pos].parentNode.insertBefore(ad, nodes[pos].nextSibling);
     });
   })();
 
