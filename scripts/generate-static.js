@@ -33,7 +33,7 @@ function canonical(p){return SITE_URL+'/posts/'+encodeURIComponent(p.slug)+'.htm
 function buildArticle(p,all){
  const title=p.title||'FactZone Post',slug=p.slug,date=iso(p.date||p.createdAt),modified=iso(p.updatedAt||date),cat=categorySlug(p.category),catLabel=CATEGORY_LABELS[cat]||p.category||'Science / विज्ञान',description=p.description||p.desc||stripTags(p.content).slice(0,160),author=p.author||'Awaneesh',image=imageFor(p),url=canonical(p);
  const related=all.filter(x=>x.slug!==slug&&categorySlug(x.category)===cat).slice(0,3);
- const relatedHtml=related.length?'<section class="related-posts"><h2>📚 Related FactZone Articles</h2><div class="related-grid">'+related.map(x=>'<a href="/posts/'+encodeURIComponent(x.slug)+'.html">'+esc(x.title)+'</a>').join('')+'</div></section>':'';
+ const relatedHtml=related.length?'<section class="related-posts"><h2>📚 Related FactZone Articles</h2><div class="related-grid">'+related.map(x=>'<a class="rc" href="/posts/'+encodeURIComponent(x.slug)+'.html"><img src="'+esc(imageFor(x))+'" alt="'+esc(x.title)+'" loading="lazy" decoding="async" width="300" height="169" onerror="this.style.display=\'none\'"><h3>'+esc(x.title)+'</h3></a>').join('')+'</div></section>':'';
  const jsonld={"@context":"https://schema.org","@graph":[
   {"@type":"Organization","@id":SITE_URL+"/#organization","name":"FactZone","url":SITE_URL+"/","logo":{"@type":"ImageObject","url":SITE_URL+"/logo.png","width":512,"height":512}},
   {"@type":"WebSite","@id":SITE_URL+"/#website","name":"FactZone","url":SITE_URL+"/","inLanguage":"hi","publisher":{"@id":SITE_URL+"/#organization"}},
