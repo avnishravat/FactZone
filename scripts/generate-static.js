@@ -30,31 +30,15 @@ function localizeContentImages(content,slug){
  });
 }
 function canonical(p){return SITE_URL+'/posts/'+encodeURIComponent(p.slug)+'.html';}
-function adsterra320(){return `<div class="ad-slot mid-article-ad"><script>atOptions = {'key' : '3012ad1961449518ada204e09cdbceef', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {}};<\/script><script src="https://www.highrevenueformat.com/3012ad1961449518ada204e09cdbceef/invoke.js"><\/script></div>`;}
-function relatedCardHtml(x){return `<a class="rc" href="/posts/${encodeURIComponent(x.slug)}.html" aria-label="Read: ${esc(x.title)}"><img src="${esc(imageFor(x))}" alt="${esc(x.title)}" loading="lazy" decoding="async" width="300" height="169" onerror="this.style.display='none'"><h3>${esc(x.title)}</h3></a>`;}
-function midRelatedHtml(x,i){return `<div class="mid-related-block" data-mid-related="${i+1}"><div class="story-carousel-heading">📚 Related Fact</div><div class="rc-row mid-related-row">${relatedCardHtml(x)}</div></div>`;}
-function buildArticleBody(content,slug,related){
- const parts=String(content||'').split(/(?=<p\b[^>]*>)/i).filter(x=>x.trim());
- if(parts.length<2)return content;
- const gapCount=parts.length-1;
- const pickPositions=(count)=>{const used={};const out=[];for(let i=1;i<=count;i++){let pos=Math.round(i*gapCount/(count+1))-1;pos=Math.max(0,Math.min(gapCount-1,pos));while(used[pos]&&pos<gapCount-1)pos++;used[pos]=true;out.push(pos);}return out;};
- const adPositions=pickPositions(Math.min(4,gapCount));
- const relatedPositions=pickPositions(Math.min(2,gapCount));
- let out='';
- parts.forEach((part,i)=>{
-  out+=part;
-  if(i===0)out+='<div class="article-image-anchor" aria-hidden="true"></div>';
-  const ri=relatedPositions.indexOf(i);
-  if(ri!==-1&&related[ri])out+=midRelatedHtml(related[ri],ri);
-  if(adPositions.indexOf(i)!==-1)out+=adsterra320();
- });
- return out;
-}
 function buildArticle(p,all){
  const title=p.title||'FactZone Post',slug=p.slug,date=iso(p.date||p.createdAt),modified=iso(p.updatedAt||date),cat=categorySlug(p.category),catLabel=CATEGORY_LABELS[cat]||p.category||'Science / विज्ञान',description=p.description||p.desc||stripTags(p.content).slice(0,160),author=p.author||'Awaneesh',image=imageFor(p),url=canonical(p);
  const sameCategory=all.filter(x=>x.slug!==slug&&categorySlug(x.category)===cat);
  const otherPosts=all.filter(x=>x.slug!==slug&&categorySlug(x.category)!==cat);
  const related=[...sameCategory,...otherPosts].slice(0,12);
+ const relatedCard=x=>'<a class="rc" href="/posts/'+encodeURIComponent(x.slug)+'.html" aria-label="Read: '+esc(x.title)+'"><img src="'+esc(imageFor(x))+'" alt="'+esc(x.title)+'" loading="lazy" decoding="async" width="300" height="169" onerror="this.style.display=\'none\'"><h3>'+esc(x.title)+'</h3></a>';
+ const relatedHtml=related.map(relatedCard).join('');
+ const midRelatedHtml=related.slice(0,2).map((x,i)=>'<div class="mid-related-block" data-mid-related="'+(i+1)+'"><div class="story-carousel-heading">📚 Related Fact</div><div class="rc-row mid-related-row">'+relatedCard(x)+'</div></div>').join('');
+ const midRelatedHtml=related.slice(0,2).map((x,i)=>'<div class="mid-related-block" data-mid-related="'+(i+1)+'"><div class="story-carousel-heading">📚 Related Fact</div><div class="rc-row mid-related-row">'+relatedCard(x)+'</div></div>').join('');
  const jsonld={"@context":"https://schema.org","@graph":[
   {"@type":"Organization","@id":SITE_URL+"/#organization","name":"FactZone","url":SITE_URL+"/","logo":{"@type":"ImageObject","url":SITE_URL+"/logo.png","width":512,"height":512}},
   {"@type":"WebSite","@id":SITE_URL+"/#website","name":"FactZone","url":SITE_URL+"/","inLanguage":"hi","publisher":{"@id":SITE_URL+"/#organization"}},
@@ -63,7 +47,7 @@ function buildArticle(p,all){
  ]};
  let html=fs.readFileSync(articleTemplatePath,'utf8');
  const repl={
-  '{{TITLE}}':esc(title),'{{META_DESCRIPTION}}':esc(description),'{{CANONICAL_URL}}':url,'{{OG_IMAGE}}':image,'{{PUBLISHED_ISO}}':date,'{{MODIFIED_ISO}}':modified,'{{CATEGORY_LABEL}}':esc(catLabel),'{{JSONLD}}':JSON.stringify(jsonld,null,2),'{{CATEGORY_URL}}':SITE_URL+'/categories/'+cat+'/','{{META_LINE}}':'<strong>Author:</strong> '+esc(author)+' &nbsp;•&nbsp; <strong>Date:</strong> '+esc(formatDate(date))+' &nbsp;•&nbsp; <strong>Updated:</strong> '+esc(formatDate(modified)),'{{CONTENT_HTML}}':buildArticleBody(localizeContentImages(sanitizeHtml(p.content||'',{allowedTags:sanitizeHtml.defaults.allowedTags.concat(['img','iframe','h1','h2']),allowedAttributes:{'*':['class','style'],a:['href','target','rel'],img:['src','alt','width','height','loading','decoding','fetchpriority']}}),slug,related),'{{SHARE_WHATSAPP_URL}}':'https://api.whatsapp.com/send?text='+encodeURIComponent(title+' - Read on FactZone: '+url),'{{SHARE_FACEBOOK_URL}}':'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(url),'{{SHARE_TWITTER_URL}}':'https://twitter.com/intent/tweet?text='+encodeURIComponent(title+' - FactZone')+'&url='+encodeURIComponent(url),'{{RELATED_SECTION_HIDDEN}}':related.length?'':' hidden','{{RELATED_HTML}}':related.map(relatedCardHtml).join(''),'{{POST_ID}}':esc(p.id||slug)
+  '{{TITLE}}':esc(title),'{{META_DESCRIPTION}}':esc(description),'{{CANONICAL_URL}}':url,'{{OG_IMAGE}}':image,'{{PUBLISHED_ISO}}':date,'{{MODIFIED_ISO}}':modified,'{{CATEGORY_LABEL}}':esc(catLabel),'{{JSONLD}}':JSON.stringify(jsonld,null,2),'{{CATEGORY_URL}}':SITE_URL+'/categories/'+cat+'/','{{META_LINE}}':'<strong>Author:</strong> '+esc(author)+' &nbsp;•&nbsp; <strong>Date:</strong> '+esc(formatDate(date))+' &nbsp;•&nbsp; <strong>Updated:</strong> '+esc(formatDate(modified)),'{{CONTENT_HTML}}':localizeContentImages(sanitizeHtml(p.content||'',{allowedTags:sanitizeHtml.defaults.allowedTags.concat(['img','iframe','h1','h2']),allowedAttributes:{'*':['class','style'],a:['href','target','rel'],img:['src','alt','width','height','loading','decoding','fetchpriority']}}),slug),'{{SHARE_WHATSAPP_URL}}':'https://api.whatsapp.com/send?text='+encodeURIComponent(title+' - Read on FactZone: '+url),'{{SHARE_FACEBOOK_URL}}':'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(url),'{{SHARE_TWITTER_URL}}':'https://twitter.com/intent/tweet?text='+encodeURIComponent(title+' - FactZone')+'&url='+encodeURIComponent(url),'{{RELATED_SECTION_HIDDEN}}':relatedHtml?'':' hidden','{{RELATED_HTML}}':relatedHtml,'{{MID_RELATED_HTML}}':midRelatedHtml,'{{POST_ID}}':esc(p.id||slug)
  };
  for(const [k,v] of Object.entries(repl))html=html.split(k).join(v);
  return html;
