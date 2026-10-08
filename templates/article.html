@@ -331,10 +331,7 @@
 
 <script>
 (function () {
-  /* This is the SAME interactive engine detail.html uses for likes / comments / subscribe / ads
-     (public Firestore REST reads+writes, unchanged collections/fields) - just pointed at this
-     post's ID directly instead of parsing it from a ?slug=/?id= URL, since the content itself
-     is already rendered server-side above. */
+  /* Static browser-only likes, comments and subscribe helpers. */
 
   // Move the hero image from above the content to right after the first paragraph.
   // If no <p> is found (unusual content), it safely stays in its original spot.
