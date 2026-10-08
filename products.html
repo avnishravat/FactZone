@@ -24,11 +24,8 @@
 
     <link rel="preconnect" href="https://api.qrserver.com" crossorigin>
     <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
-    <link rel="dns-prefetch" href="https://api.qrserver.com">
-    <link rel="dns-prefetch" href="https://firestore.googleapis.com">
-
-    <meta name="theme-color" content="#0284c7">
+<link rel="dns-prefetch" href="https://api.qrserver.com">
+<meta name="theme-color" content="#0284c7">
 
     <!-- Breadcrumb structured data -->
     <script type="application/ld+json">
@@ -267,72 +264,11 @@
     </footer>
 
     <script>
-        const FS_PROJECT_ID = "factzone-a9ace";
-        const FS_BASE = `https://firestore.googleapis.com/v1/projects/${FS_PROJECT_ID}/databases/(default)/documents`;
-
-        function fsValueToJs(v) {
-            if (v == null) return null;
-            if ('stringValue' in v) return v.stringValue;
-            if ('integerValue' in v) return Number(v.integerValue);
-            if ('doubleValue' in v) return v.doubleValue;
-            if ('booleanValue' in v) return v.booleanValue;
-            if ('timestampValue' in v) return { __isTimestamp: true, iso: v.timestampValue, toMillis: () => new Date(v.timestampValue).getTime() };
-            if ('mapValue' in v) return fsFieldsToJs(v.mapValue.fields || {});
-            if ('arrayValue' in v) return (v.arrayValue.values || []).map(fsValueToJs);
-            return null;
-        }
-        function fsFieldsToJs(fields) {
-            const out = {};
-            for (const k in fields) out[k] = fsValueToJs(fields[k]);
-            return out;
-        }
-        function jsToFsValue(v) {
-            if (v === null || v === undefined) return { nullValue: null };
-            if (v instanceof Date) return { timestampValue: v.toISOString() };
-            if (typeof v === 'number') return Number.isInteger(v) ? { integerValue: String(v) } : { doubleValue: v };
-            if (typeof v === 'boolean') return { booleanValue: v };
-            return { stringValue: String(v) };
-        }
-        function fsDocId(name) { return name ? name.split('/').pop() : null; }
-
-        async function fsRunQuery(collectionId, { where, orderBy, limit, select } = {}) {
-            const structuredQuery = { from: [{ collectionId }] };
-            if (where) structuredQuery.where = where;
-            if (orderBy) structuredQuery.orderBy = orderBy;
-            if (limit) structuredQuery.limit = limit;
-            if (select) structuredQuery.select = { fields: select.map(f => ({ fieldPath: f })) };
-            const res = await fetch(`${FS_BASE}:runQuery`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ structuredQuery })
-            });
-            if (!res.ok) throw new Error('Firestore query failed: ' + res.status);
-            const rows = await res.json();
-            return rows.filter(r => r.document).map(r => ({ id: fsDocId(r.document.name), ...fsFieldsToJs(r.document.fields || {}) }));
-        }
-
-        async function fsGetDoc(collectionId, docId, fieldMask) {
-            const maskQS = fieldMask ? '?' + fieldMask.map(f => `mask.fieldPaths=${encodeURIComponent(f)}`).join('&') : '';
-            const res = await fetch(`${FS_BASE}/${collectionId}/${docId}${maskQS}`);
-            if (res.status === 404) return null;
-            if (!res.ok) throw new Error('Firestore get failed: ' + res.status);
-            const doc = await res.json();
-            return { id: fsDocId(doc.name), ...fsFieldsToJs(doc.fields || {}) };
-        }
-
-        async function fsCreateDoc(collectionId, dataObj) {
-            const fields = {};
-            for (const k in dataObj) fields[k] = jsToFsValue(dataObj[k]);
-            const res = await fetch(`${FS_BASE}/${collectionId}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ fields })
-            });
-            if (!res.ok) throw new Error('Firestore write failed: ' + res.status);
-            const doc = await res.json();
-            return fsDocId(doc.name);
-        }
-
+        // Static-store compatibility helpers. Online order/review backend is disabled without a database.
+        async function fsRunQuery(collectionId){if(collectionId==="products"){try{return JSON.parse(localStorage.getItem("fz_cache_products")||"[]")}catch(e){return[]}}return[]}
+        async function fsGetDoc(){return null}
+        async function fsCreateDoc(){throw new Error("Online order/review backend is disabled in the static version.")}
+        
         const DEFAULT_EXPIRY_HOURS = 48;
 
         const translations = {
