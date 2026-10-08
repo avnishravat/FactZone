@@ -692,19 +692,46 @@
       const q=(document.getElementById("searchInput").value||"").toLowerCase();
       document.querySelectorAll("#posts .card").forEach(card=>{const okQ=card.textContent.toLowerCase().includes(q),okCat=selectedCategory==="all"||card.dataset.category===selectedCategory;card.style.display=okQ&&okCat?"flex":"none";});
     }
+    function renderCrawlablePosts(){
+      const source=document.getElementById("seo-placeholder-cards");
+      if(!source)return false;
+      const links=[...source.querySelectorAll('a[href^="/posts/"]')];
+      if(!links.length)return false;
+      const html=links.map((a,index)=>{
+        const img=a.querySelector("img"),title=a.querySelector("h2"),excerpt=a.querySelector("p");
+        const category=a.dataset.category||"science",image=img&&img.getAttribute("src")?img.getAttribute("src"):SVG_FALLBACK,text=title?title.textContent.trim():"FactZone Post";
+        return '<a href="'+a.getAttribute("href")+'" class="card" data-category="'+escapeHtml(category)+'"><div class="post-image-container"><img src="'+escapeHtml(image)+'" alt="'+escapeHtml(text)+'" class="post-image" loading="'+(index<4?"eager":"lazy")+'" decoding="async" width="300" height="120" onerror="this.onerror=null;this.src=\''+SVG_FALLBACK+'\';"></div><div class="p-2.5 flex flex-col flex-1"><span class="card-category-badge">'+(CATEGORY_LABELS[category]||escapeHtml(category))+'</span><h3 class="font-bold text-xs sm:text-sm text-gray-900 dark:text-white leading-snug mt-1">'+escapeHtml(text)+'</h3>'+(excerpt?'<p class="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-3">'+escapeHtml(excerpt.textContent.trim())+'</p>':"")+'<div class="card-footer"><span class="card-read-link">पढ़ें →</span></div></div></a>';
+      }).join("");
+      postsContainer.innerHTML=html;
+      filterPosts();
+      return true;
+    }
     async function loadPosts(){
       try{
-        const cached=localStorage.getItem(CACHE_KEY);
-        if(cached){postsContainer.innerHTML=cached;filterPosts();}
         const res=await fetch("/posts-index.json",{cache:"no-store"});
-        if(!res.ok)throw new Error("Static post index "+res.status);
-        const posts=await res.json();
-        posts.sort((a,b)=>parseDate(b.date||b.createdAt)-parseDate(a.date||a.createdAt));
-        const html=posts.map(buildCardHtml).join("");
-        postsContainer.innerHTML=html||'<h2 class="text-center text-xl col-span-full dark:text-white">No Posts Found</h2>';
-        localStorage.setItem(CACHE_KEY,html);
-        filterPosts();
-      }catch(e){console.error("Static posts load failed:",e);if(!postsContainer.innerHTML.trim())postsContainer.innerHTML='<h2 class="text-center text-xl col-span-full dark:text-white">Posts temporarily unavailable</h2>';}
+        if(res.ok){
+          const posts=await res.json();
+          if(Array.isArray(posts)&&posts.length){
+            posts.sort((a,b)=>parseDate(b.date||b.createdAt)-parseDate(a.date||a.createdAt));
+            const html=posts.map(buildCardHtml).join("");
+            postsContainer.innerHTML=html;
+            localStorage.setItem(CACHE_KEY,html);
+            filterPosts();
+            return;
+          }
+        }
+        if(renderCrawlablePosts())return;
+        const cached=localStorage.getItem(CACHE_KEY);
+        if(cached){postsContainer.innerHTML=cached;filterPosts();return;}
+        postsContainer.innerHTML='<h2 class="text-center text-xl col-span-full dark:text-white">No Posts Found</h2>';
+      }catch(e){
+        console.error("Static posts load failed:",e);
+        if(!renderCrawlablePosts()){
+          const cached=localStorage.getItem(CACHE_KEY);
+          if(cached){postsContainer.innerHTML=cached;filterPosts();}
+          else postsContainer.innerHTML='<h2 class="text-center text-xl col-span-full dark:text-white">Posts temporarily unavailable</h2>';
+        }
+      }
     }
     (function(){const q=new URLSearchParams(location.search).get("search");if(q)document.getElementById("searchInput").value=q;})();
     loadPosts();
