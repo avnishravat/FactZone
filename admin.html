@@ -496,14 +496,14 @@ select.form-input{cursor:pointer; appearance:none; background-image:url("data:im
       </div>
     </div>
 
-    <!-- Instagram Creator Tools: uses the SAME Firebase Admin authentication -->
+    <!-- Instagram Creator Tools: uses the SAME static backend Admin authentication -->
     <div id="page-instagram-tools" class="page">
       <div class="content" style="padding-top:24px">
         <div class="section-header">
           <div class="section-icon">📸</div>
           <div>
             <div class="section-title">Instagram Creator Tools</div>
-            <div style="font-size:12px;color:var(--muted);margin-top:4px">Cloud outputs managed by the same Firebase Admin account</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:4px">Cloud outputs managed by the same static backend Admin account</div>
           </div>
         </div>
 
@@ -517,13 +517,13 @@ select.form-input{cursor:pointer; appearance:none; background-image:url("data:im
           <div class="ig-bulk-head">
             <div>
               <h3>⚡ Bulk Import Outputs</h3>
-              <p>Upload the prepared Instagram outputs JSON or CSV file and save all valid outputs to Firebase in one operation.</p>
+              <p>Upload the prepared Instagram outputs JSON or CSV file and save all valid outputs to static backend in one operation.</p>
             </div>
           </div>
           <div class="ig-bulk-actions">
             <label class="ig-file-label" for="igBulkFile">📁 Choose JSON / CSV</label>
             <input id="igBulkFile" type="file" accept=".json,.csv,application/json,text/csv" style="display:none">
-            <button class="btn btn-primary" id="igBulkImportBtn" type="button" onclick="bulkImportInstagramOutputs()">⚡ Import All to Firebase</button>
+            <button class="btn btn-primary" id="igBulkImportBtn" type="button" onclick="bulkImportInstagramOutputs()">⚡ Import All to static backend</button>
           </div>
           <div class="ig-bulk-status" id="igBulkStatus">No file selected.</div>
           <div class="ig-bulk-note">Expected fields: <b>tool</b>, <b>category</b>, <b>text</b>. Duplicate checking is included, so the same tool + category + text is not added twice.</div>
@@ -553,10 +553,10 @@ You can use placeholders:
 {niche}
 {content}
 {reel}"></textarea>
-              <div class="ig-help">This output is saved in Firebase Firestore collection: instagramCreatorToolOutputs</div>
+              <div class="ig-help">This output is saved in static backend static data collection: instagramCreatorToolOutputs</div>
             </div>
 
-            <button class="btn btn-primary" id="igSaveBtn" onclick="saveInstagramOutput()">💾 Save to Firebase</button>
+            <button class="btn btn-primary" id="igSaveBtn" onclick="saveInstagramOutput()">💾 Save to static backend</button>
             <button class="btn btn-primary" id="igUpdateBtn" onclick="updateInstagramOutput()" style="display:none">💾 Update Output</button>
             <button class="btn btn-secondary" id="igCancelBtn" onclick="cancelInstagramEdit()" style="display:none;margin-top:10px">Cancel Editing</button>
           </div>
@@ -687,7 +687,7 @@ You can use placeholders:
 <!-- Quill Library JS -->
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
 
-<!-- Firebase removed: GitHub static publisher backend -->
+<!-- static backend removed: GitHub static publisher backend -->
 <script>
 const OWNER="avnishravat", REPO="FactZone", BRANCH="main", TOKEN_KEY="fz_github_token";
 const API="https://api.github.com";
@@ -707,7 +707,7 @@ async function login(){token=document.getElementById("adminPassword").value.trim
 document.getElementById("loginSubmitBtn").onclick=login;document.getElementById("adminPassword").onkeydown=e=>{if(e.key==="Enter")login();};document.getElementById("logoutBtn").onclick=()=>{token="";sessionStorage.removeItem(TOKEN_KEY);document.getElementById("auth-view").style.display="none";document.getElementById("login-view").style.display="flex";status("","GitHub Offline");};
 window.toggleTheme=function(){const h=document.documentElement,d=h.dataset.theme==="dark";h.dataset.theme=d?"light":"dark";document.getElementById("themeBtn").textContent=d?"🌙":"☀️";localStorage.setItem("fz-admin-theme",h.dataset.theme);};(function(){const s=localStorage.getItem("fz-admin-theme")||"dark";document.documentElement.dataset.theme=s;document.getElementById("themeBtn").textContent=s==="dark"?"☀️":"🌙";})();
 function preview(prefix){const v=document.getElementById(prefix+"-image")?.value,p=document.getElementById(prefix+"-preview");if(p){if(v){p.src=v;p.classList.add("show");}else p.classList.remove("show");}}window.previewImg=preview;
-window.triggerImgUpload=function(){toast("ℹ️ Firebase हटाने के बाद image URL paste करें. ImgBB upload backend को अभी नहीं बदला गया है.","success");};window.uploadImageFile=window.triggerImgUpload;window.pasteImgFromClipboard=window.triggerImgUpload;
+window.triggerImgUpload=function(){toast("ℹ️ static backend हटाने के बाद image URL paste करें. ImgBB upload backend को अभी नहीं बदला गया है.","success");};window.uploadImageFile=window.triggerImgUpload;window.pasteImgFromClipboard=window.triggerImgUpload;
 function initEditors(){if(typeof Quill==="undefined")return;const h=function(v){if(v){const x=prompt("Enter link URL:");if(x)this.quill.format("link",x);}};quillEditor=new Quill("#u-content",{modules:{toolbar:{container:"#u-toolbar",handlers:{link:h}}},theme:"snow"});editQuillEditor=new Quill("#e-content",{modules:{toolbar:{container:"#e-toolbar",handlers:{link:h}}},theme:"snow"});}
 function dateOf(p){return p.date||p.createdAt||p.updatedAt||"";}
 function card(p,i){return '<div class="post-card"><img class="post-thumb" src="'+esc(p.image||"https://placehold.co/400x175")+'" loading="lazy"><div class="post-num">#'+(i+1)+'</div><div class="post-body"><div class="post-cat">'+esc(CATS[p.category]||p.category||"")+'</div><div class="post-title">'+esc(p.title)+'</div><div class="post-desc">'+esc(p.desc||p.description||"")+'</div><div class="post-actions"><button class="btn btn-edit" onclick="openEditModal(\\''+esc(p.id)+"\\')">✏️ Edit</button><button class="btn btn-danger" onclick="deletePost(\\''+esc(p.id)+"\\')">🗑 Delete</button></div></div></div>';}
@@ -718,7 +718,7 @@ window.uploadPost=async function(prefix){const title=document.getElementById(pre
 window.deletePost=async function(id){if(!confirm("Delete this post?"))return;const p=allPostsCache.find(x=>x.id===id);if(!p)return;try{await deleteFile(p._path,p._sha,"Delete post: "+p.slug);toast("🗑 Deleted. Site will rebuild automatically.","success");await loadPosts();}catch(e){toast("❌ "+e.message,"error");}};
 window.openEditModal=function(id){const p=allPostsCache.find(x=>x.id===id);if(!p)return;currentEditId=id;document.getElementById("e-title").value=p.title||"";document.getElementById("e-desc").value=p.desc||p.description||"";document.getElementById("e-image").value=p.image||"";document.getElementById("e-category").value=p.category||"science";if(editQuillEditor)editQuillEditor.root.innerHTML=p.content||"";preview("e");document.getElementById("editModal").classList.add("show");};window.closeModal=function(){document.getElementById("editModal").classList.remove("show");currentEditId=null;};
 window.saveEdit=async function(){const p=allPostsCache.find(x=>x.id===currentEditId);if(!p)return;const b=document.getElementById("saveEditBtn");b.disabled=true;try{const n={id:p.id,title:document.getElementById("e-title").value.trim(),slug:p.slug,category:document.getElementById("e-category").value,image:document.getElementById("e-image").value.trim(),desc:document.getElementById("e-desc").value.trim(),description:document.getElementById("e-desc").value.trim(),content:editQuillEditor?editQuillEditor.root.innerHTML.trim():p.content,date:p.date,updatedAt:new Date().toISOString(),author:p.author||"Awaneesh"};await saveFile(p._path,JSON.stringify(n,null,2)+"\\n","Update post: "+p.slug,p._sha);closeModal();toast("✅ Updated. GitHub Actions will regenerate it.","success");await loadPosts();}catch(e){toast("❌ "+e.message,"error");}finally{b.disabled=false;b.textContent="💾 Save Changes";}};
-function loadOfflinePage(id,msg){const e=document.getElementById(id);if(e)e.innerHTML='<div class="ig-empty">'+msg+"</div>";}window.filterCommentsAdmin=function(){loadOfflinePage("comments-admin-list","💬 Firebase removed. Realtime comments are not connected in the static version.");};window.filterSubscribersAdmin=function(){loadOfflinePage("subscribers-admin-list","📧 Firebase removed. Realtime subscribers are not connected in the static version.");};
+function loadOfflinePage(id,msg){const e=document.getElementById(id);if(e)e.innerHTML='<div class="ig-empty">'+msg+"</div>";}window.filterCommentsAdmin=function(){loadOfflinePage("comments-admin-list","💬 static backend removed. Realtime comments are not connected in the static version.");};window.filterSubscribersAdmin=function(){loadOfflinePage("subscribers-admin-list","📧 static backend removed. Realtime subscribers are not connected in the static version.");};
 window.switchPage=function(page,btn){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".nav-item").forEach(x=>x.classList.remove("active"));document.getElementById("page-"+page)?.classList.add("active");btn?.classList.add("active");document.getElementById("pageTitle").textContent=({dashboard:"Dashboard",upload:"New Post",posts:"All Posts","instagram-tools":"Instagram Creator Tools",comments:"Comments",subscribers:"Subscribers"})[page]||"Dashboard";if(page==="comments")filterCommentsAdmin();if(page==="subscribers")filterSubscribersAdmin();};
 window.addEventListener("DOMContentLoaded",()=>{initEditors();const p=document.getElementById("adminPassword");p.placeholder="GitHub fine-grained token";const q=document.querySelector("#login-view p");if(q)q.textContent="Connect using a GitHub token with Contents: Read and write for FactZone.";if(token)connect().catch(()=>{token="";sessionStorage.removeItem(TOKEN_KEY);});});
 </script>
