@@ -27,7 +27,7 @@ function fetchBuffer(url,redirects=0){
  });
 }
 function getInlineUrls(html){
- return [...String(html||'').matchAll(/<img\\b[^>]*\\bsrc=["'](https?:\\/\\/[^"']+)["'][^>]*>/gi)].map(m=>m[1]);
+ return [...String(html||'').matchAll(/<img\b[^>]*\bsrc=["'](https?:\/\/[^"']+)["'][^>]*>/gi)].map(m=>m[1]);
 }
 async function convertOne(url,outFile){
  if(fs.existsSync(outFile)&&fs.statSync(outFile).size>0){console.log('[SKIP] '+path.basename(outFile));return;}
@@ -42,7 +42,7 @@ async function convertImages(){
   try{
    const post=JSON.parse(fs.readFileSync(path.join(postsDir,file),'utf8'));
    const slug=post.slug||path.parse(file).name;
-   if(post.image&&/^https?:\\/\\//i.test(post.image)) await convertOne(post.image,path.join(outputDir,slug+'.webp'));
+   if(post.image&&/^https?:\/\//i.test(post.image)) await convertOne(post.image,path.join(outputDir,slug+'.webp'));
    const urls=getInlineUrls(post.content);
    for(let i=0;i<urls.length;i++) await convertOne(urls[i],path.join(outputDir,slug+'-inline-'+(i+1)+'.webp'));
   }catch(err){console.error('[ERROR] '+file+': '+err.message);}
