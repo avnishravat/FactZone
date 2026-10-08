@@ -644,16 +644,6 @@
       iframe.onerror = function() { hideSlotOnError(container); };
 
       var doc = '<!DOCTYPE html><html><head><style>*{margin:0;padding:0;}body{background:transparent;}</style></head><body>' +
-        '<script>
-(function(){
- const p=new URLSearchParams(location.search),slug=p.get("slug"),id=p.get("id");
- if(slug){location.replace("/posts/"+encodeURIComponent(slug)+".html");return;}
- fetch("/posts-index.json",{cache:"no-store"}).then(r=>r.json()).then(posts=>{
-   const x=(posts||[]).find(v=>String(v.id)===String(id));
-   if(x&&x.slug) location.replace("/posts/"+encodeURIComponent(x.slug)+".html");
-   else document.getElementById("post-content").innerHTML='<div class="err"><h2>Post Not Found</h2><p>यह पुराना article URL अब उपलब्ध नहीं है।</p></div>';
- }).catch(()=>{document.getElementById("post-content").innerHTML='<div class="err"><h2>Post Not Found</h2></div>';});
-})();
-</script>
+        '<script>(function(){const p=new URLSearchParams(location.search),slug=p.get("slug"),id=p.get("id");if(slug){location.replace("/posts/"+encodeURIComponent(slug)+".html");return;}fetch("/posts-index.json",{cache:"no-store"}).then(r=>r.json()).then(posts=>{const x=(posts||[]).find(v=>String(v.id)===String(id));if(x&&x.slug)location.replace("/posts/"+encodeURIComponent(x.slug)+".html");else document.getElementById("post-content").innerHTML='<div class="err"><h2>Post Not Found</h2><p>यह पुराना article URL अब उपलब्ध नहीं है।</p></div>';}).catch(()=>{document.getElementById("post-content").innerHTML='<div class="err"><h2>Post Not Found</h2></div>';});})();</script>
 </body>
 </html>
