@@ -269,8 +269,8 @@
     <script>
 (function(){
  const grid=document.getElementById("productGrid");
- if(grid) grid.innerHTML='<div class="empty-state"><span class="icon-box">🛍️</span><p>Store is being migrated from Firebase to a static system. Product listings are temporarily unavailable.</p></div>';
- const support=document.getElementById("supportLine"); if(support) support.textContent="Orders and reviews are disabled until a secure non-Firebase backend is connected.";
+ if(grid) grid.innerHTML='<div class="empty-state"><span class="icon-box">🛍️</span><p>Store is being migrated from cloud database to a static system. Product listings are temporarily unavailable.</p></div>';
+ const support=document.getElementById("supportLine"); if(support) support.textContent="Orders and reviews are disabled until a secure non-cloud database backend is connected.";
  window.loadProducts=()=>{};window.loadReviews=()=>{};window.loadSettings=()=>{};window.submitVerification=()=>alert("Store checkout is temporarily unavailable.");window.submitReview=()=>alert("Reviews are temporarily unavailable.");
  const saved=localStorage.getItem("fz_theme");if(saved)document.documentElement.setAttribute("data-theme",saved);
 })();
