@@ -194,7 +194,7 @@ footer{text-align:center;color:#8a92a1;font-size:12px;padding:25px}
     <button id="again">Generate Again</button>
   </div>
 
-  <div class="small">New saved outputs are automatically read from the Firebase database when available.</div>
+  <div class="small">New saved outputs are automatically read from the static database when available.</div>
 
   <!-- Interactive Rating Widget (Order 1 to 5: 1 Star on Left, 5 Stars on Right) -->
   <div class="interactive-rating">
@@ -353,16 +353,7 @@ if (savedRating) {
         $("badgeCount").textContent = `(${newCount.toLocaleString()} creator votes)`;
       }
 
-      try {
-        await addDoc(collection(db, "toolRatings"), {
-          tool: TOOL,
-          rating: selectedRating,
-          createdAt: serverTimestamp()
-        });
-        loadRatingsSummary();
-      } catch (e) {
-        console.error("Error saving rating to Firebase:", e.message);
-      }
+      
     });
   });
 }
