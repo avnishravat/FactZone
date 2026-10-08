@@ -44,20 +44,6 @@
         "url": "https://factzone.online/logo.png",
         "width": 512,
         "height": 512
-      },
-      "sameAs": [
-        "https://www.instagram.com/avnish__1203/",
-        "https://www.youtube.com/@DirectionNews08"
-      ],
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "contactType": "customer support",
-        "email": "avnishravat20@gmail.com",
-        "areaServed": "IN",
-        "availableLanguage": [
-          "Hindi",
-          "English"
-        ]
       }
     },
     {
@@ -95,34 +81,11 @@
       ]
     },
     {
-      "@type": "WebPage",
-      "@id": "https://factzone.online/posts/why-do-we-respond-to-our-own-name-science-in-hindi.html#webpage",
-      "url": "https://factzone.online/posts/why-do-we-respond-to-our-own-name-science-in-hindi.html",
-      "name": "अपना नाम सुनते ही ध्यान क्यों जाता है? Cocktail Party Effect",
-      "description": "कल्पना कीजिए कि आप दिल्ली के किसी भीड़भाड़ वाले मेट्रो स्टेशन पर खड़े हैं। आसपास लोग बातें कर रहे हैं, ट्रेन की आवाज आ रही है और लगातार कई तरह के शोर हो रहे हैं",
-      "inLanguage": "hi",
-      "isPartOf": {
-        "@id": "https://factzone.online/#website"
-      },
-      "primaryImageOfPage": {
-        "@type": "ImageObject",
-        "@id": "https://factzone.online/posts/why-do-we-respond-to-our-own-name-science-in-hindi.html#primaryimage",
-        "url": "https://i.ibb.co/BVMzwJYW/clipboard-image.png",
-        "caption": "अपना नाम सुनते ही ध्यान क्यों जाता है? Cocktail Party Effect"
-      },
-      "breadcrumb": {
-        "@id": "https://factzone.online/posts/why-do-we-respond-to-our-own-name-science-in-hindi.html#breadcrumb"
-      },
-      "mainEntity": {
-        "@id": "https://factzone.online/posts/why-do-we-respond-to-our-own-name-science-in-hindi.html#article"
-      }
-    },
-    {
-      "@type": "Article",
+      "@type": [
+        "Article",
+        "BlogPosting"
+      ],
       "@id": "https://factzone.online/posts/why-do-we-respond-to-our-own-name-science-in-hindi.html#article",
-      "mainEntityOfPage": {
-        "@id": "https://factzone.online/posts/why-do-we-respond-to-our-own-name-science-in-hindi.html#webpage"
-      },
       "headline": "अपना नाम सुनते ही ध्यान क्यों जाता है? Cocktail Party Effect",
       "description": "कल्पना कीजिए कि आप दिल्ली के किसी भीड़भाड़ वाले मेट्रो स्टेशन पर खड़े हैं। आसपास लोग बातें कर रहे हैं, ट्रेन की आवाज आ रही है और लगातार कई तरह के शोर हो रहे हैं",
       "image": [
@@ -130,12 +93,10 @@
       ],
       "inLanguage": "hi",
       "articleSection": "Science / विज्ञान",
-      "wordCount": 1613,
       "datePublished": "2026-09-17T02:40:20.476Z",
       "dateModified": "2026-10-01T07:08:31.959Z",
       "author": {
         "@type": "Person",
-        "@id": "https://factzone.online/#person-awaneesh",
         "name": "Awaneesh",
         "url": "https://factzone.online/author.html"
       },
@@ -152,8 +113,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
-  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="preload" as="image" href="https://i.ibb.co/BVMzwJYW/clipboard-image.png" fetchpriority="high">
 
   <link rel="manifest" href="/manifest.json">
@@ -232,7 +192,20 @@
     .author-box p { margin-bottom: 0.3rem; line-height: 1.35; }
     .author-box .author-profile-link { display: inline-block; font-weight: 700; }
 
-    .share-container { margin-top: 0.75rem; padding-top: 0.6rem; border-top: 1px dashed var(--border); }
+    /* Flex container for Share & Subscribe in the same row */
+    .share-container {
+      margin-top: 0.75rem;
+      padding-top: 0.6rem;
+      border-top: 1px dashed var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.8rem;
+    }
+    .share-block { flex: 1; min-width: 250px; }
+    .subscribe-inline-block { flex: 1; min-width: 250px; }
+
     .share-title { font-size: 0.82rem; font-weight: 700; color: var(--ink); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.04em; }
     .share-buttons { display: flex; flex-wrap: wrap; gap: 0.4rem; }
     .share-btn { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.35rem 0.7rem; border-radius: 0.35rem; font-size: 0.8rem; font-weight: 700; text-decoration: none; color: #fff; cursor: pointer; border: none; }
@@ -283,11 +256,10 @@
     .comment-jump-link { font-size: 0.85rem; font-weight: 700; color: var(--muted); text-decoration: none; }
     .comment-jump-link:hover { color: var(--accent); }
 
-    /* Single compact card container for both Comments and Subscribe */
+    /* Single compact card container for Comments */
     .widget-card { margin-top: 0.5rem; background: var(--surface); border-radius: var(--r); padding: 0.5rem 0.65rem; box-shadow: 0 2px 10px rgba(0,0,0,.04); }
-    #commentsSection, #subscribeSection { margin-top: 0; background: transparent; border-radius: 0; padding: 0; box-shadow: none; }
-    #subscribeSection { margin-top: 0.55rem; padding-top: 0.45rem; border-top: 1px dashed var(--border); }
-    #commentsSection h2, #subscribeSection h2 { font-family: 'Merriweather', serif; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.25rem; padding-bottom: 0.15rem; border-bottom: 2px solid var(--ink); }
+    #commentsSection { margin-top: 0; background: transparent; border-radius: 0; padding: 0; box-shadow: none; }
+    #commentsSection h2 { font-family: 'Merriweather', serif; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.25rem; padding-bottom: 0.15rem; border-bottom: 2px solid var(--ink); }
 
     .comment-form { display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 0.4rem; }
     .comment-input, .comment-textarea { width: 100%; font-family: inherit; font-size: 0.8rem; padding: 0.32rem 0.5rem; border: 1px solid var(--border); border-radius: 0.4rem; background: var(--bg); color: var(--ink); resize: vertical; }
@@ -306,10 +278,8 @@
     .comment-text { font-size: 0.84rem; color: #1f2937; white-space: pre-wrap; word-break: break-word; }
     .no-comments { color: var(--muted); font-size: 0.82rem; }
 
-    .subscribe-type-row { display: flex; gap: 0.85rem; margin-bottom: 0.3rem; font-size: 0.76rem; }
-    .radio-label { display: flex; align-items: center; gap: 0.25rem; cursor: pointer; }
     .subscribe-input-row { display: flex; gap: 0.4rem; flex-wrap: wrap; }
-    .subscribe-input-row .comment-input { flex: 1; min-width: 180px; }
+    .subscribe-input-row .comment-input { flex: 1; min-width: 150px; }
   </style>
 
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=DM+Sans:wght@400;500;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
@@ -354,22 +324,39 @@
         <span>Article</span>
       </nav>
       <h1 itemprop="headline">अपना नाम सुनते ही ध्यान क्यों जाता है? Cocktail Party Effect</h1>
-      <p class="meta-line"><strong>Author:</strong> Awaneesh &nbsp;•&nbsp; <strong>Date:</strong> 17 September 2026 &nbsp;•&nbsp; <strong>Updated:</strong> 1 October 2026 &nbsp;•&nbsp; <strong>Read Time:</strong> 8 min read</p>
+      <p class="meta-line"><strong>Author:</strong> Awaneesh &nbsp;•&nbsp; <strong>Date:</strong> 17 सित॰ 2026 &nbsp;•&nbsp; <strong>Updated:</strong> 1 अक्टू॰ 2026</p>
       <div class="hero-wrap"><img class="hero" src="https://i.ibb.co/BVMzwJYW/clipboard-image.png" alt="अपना नाम सुनते ही ध्यान क्यों जाता है? Cocktail Party Effect" itemprop="image" loading="eager" fetchpriority="high" decoding="async" width="300" height="169" onerror="this.style.display='none'"></div>
       <div class="content" itemprop="articleBody"><p>कल्पना कीजिए कि आप दिल्ली के किसी भीड़भाड़ वाले मेट्रो स्टेशन पर खड़े हैं। आसपास लोग बातें कर रहे हैं, ट्रेन की आवाज आ रही है और लगातार कई तरह के शोर हो रहे हैं। आपको ज्यादातर आवाजें साफ समझ भी नहीं आ रहीं।</p><p>तभी अचानक भीड़ के बीच से कोई आपका नाम पुकारता है—<strong>“राहुल!”</strong></p><p>आप तुरंत उस तरफ देखने लगते हैं।</p><p>ऐसा क्यों होता है? क्या आपका कान बाकी आवाजों को बंद कर देता है? या दिमाग शोर के बीच आपके नाम को पहले ही पहचान लेता है?</p><p>इस घटना को समझने के लिए विज्ञान में <strong>कॉकटेल पार्टी इफेक्ट</strong> शब्द का इस्तेमाल किया जाता है। यह उस क्षमता से जुड़ा है जिसमें इंसान कई आवाजों के बीच किसी खास आवाज या जानकारी पर ध्यान दे सकता है।</p><h2>🎧 कॉकटेल पार्टी इफेक्ट क्या है?</h2><p>1953 में वैज्ञानिक <strong>कॉलिन चेरी</strong> ने इस समस्या का वैज्ञानिक अध्ययन किया। सवाल यह था कि जब एक साथ कई लोग बोल रहे हों, तब इंसान एक व्यक्ति की बात पर ध्यान कैसे रखता है?</p><p>उनके प्रयोगों ने दिखाया कि हमारा ध्यान एक साथ आने वाली सभी आवाजों को बराबर महत्व नहीं देता। हम कुछ आवाजों को चुनते हैं और बाकी को पीछे कर देते हैं।</p><p>लेकिन कहानी यहीं खत्म नहीं होती।</p><p>कई प्रयोगों में पाया गया कि जिस आवाज पर हम ध्यान नहीं दे रहे होते, उसमें भी <strong>अपना नाम</strong> जैसी निजी जानकारी कभी-कभी हमारा ध्यान खींच सकती है। यही वजह है कि भीड़ में किसी दूसरे व्यक्ति की बातचीत सुनते समय भी अपना नाम कान में पड़ सकता है।</p><h2>🧠 अपना नाम इतना खास क्यों लगता है?</h2><p>आपका नाम आपके लिए सिर्फ एक आम शब्द नहीं है। बचपन से ही आप इसे बार-बार सुनते हैं—घर में, स्कूल में, दोस्तों से और रोजमर्रा की जिंदगी में।</p><p>इसलिए आपका नाम आपकी पहचान से बहुत गहराई से जुड़ा होता है।</p><p>जब दिमाग को कोई आवाज मिलती है, तो वह केवल यह नहीं देखता कि आवाज कैसी है। वह यह भी देखता है कि उस जानकारी का आपके लिए क्या मतलब है। अपना नाम इस मामले में बहुत महत्वपूर्ण जानकारी है।</p><p>इसी वजह से दूसरे नामों की तुलना में अपना नाम ध्यान खींचने की ज्यादा क्षमता रखता है। एक अध्ययन में पाया गया कि अपना नाम सुनने पर लोगों की प्रतिक्रिया दूसरे नामों की तुलना में अलग थी और वह ध्यान को अपनी ओर खींच सकता था।</p><h2>🔊 शोर के बीच दिमाग अपना नाम कैसे पकड़ता है?</h2><p>यह समझना जरूरी है कि दिमाग सचमुच आसपास के <strong>90% शोर को बंद नहीं करता</strong>।</p><p>असल में काम इससे ज्यादा जटिल है।</p><p>आपका दिमाग आवाजों की अलग-अलग जानकारी को लगातार समझने की कोशिश करता है। आवाज किस दिशा से आ रही है, बोलने वाले की आवाज कैसी है, शब्दों का क्रम क्या है और आपकी अपनी रुचि किस चीज में है—ये सभी बातें ध्यान को प्रभावित करती हैं।</p><p>अगर किसी दूसरी आवाज में आपका नाम सुनाई देता है, तो वह जानकारी बाकी आवाजों की तुलना में ज्यादा महत्वपूर्ण लग सकती है। इससे आपका ध्यान उस आवाज की तरफ खिंच सकता है।</p><p>इसलिए अगली बार जब आपको लगे कि आपने भीड़ में अपना नाम “अचानक” सुन लिया, तो यह सिर्फ कान का कमाल नहीं है। इसमें ध्यान और दिमाग की आवाज पहचानने वाली प्रक्रिया दोनों शामिल हैं।</p><h2>👂 कान सुनता है, लेकिन पहचान कौन करता है?</h2><p>कान आवाज को पकड़ता है, लेकिन उसका मतलब समझने का काम दिमाग करता है।</p><p>आवाज से जुड़ी जानकारी दिमाग के <strong>ऑडिटरी कॉर्टेक्स</strong> तक पहुंचती है। इसके बाद दिमाग आवाज की कई विशेषताओं को समझता है और उनसे अर्थ निकालता है।</p><p>अपना नाम सुनने पर केवल आवाज पहचानने वाली व्यवस्था ही काम नहीं करती। शोध में पाया गया है कि अपना नाम सुनना दिमाग के उन हिस्सों को भी सक्रिय कर सकता है जो ध्यान और खुद से जुड़ी जानकारी को समझने में शामिल हैं।</p><p>लेकिन यह कहना सही नहीं होगा कि सिर्फ एक ही हिस्सा “नाम पहचानने का बटन” है। इसके पीछे दिमाग के कई हिस्से मिलकर काम करते हैं।</p><h2>👀 नाम सुनते ही हम उस तरफ क्यों मुड़ते हैं?</h2><p>जब कोई खास आवाज आपका ध्यान खींचती है, तो आपका ध्यान उस दिशा में जाने लगता है।</p><p>इसे आसान भाषा में <strong>ध्यान का अचानक मुड़ना</strong> कह सकते हैं।</p><p>उदाहरण के लिए, आप अपने दोस्त से बात कर रहे हैं और अचानक पीछे से आपका नाम सुनाई देता है। आपका दिमाग पहले उस आवाज को महत्वपूर्ण मान सकता है और फिर आपकी आंखें और सिर उस दिशा में मुड़ सकते हैं।</p><p>ध्यान में ऐसे बदलाव बहुत तेजी से हो सकते हैं। शोध के अनुसार आवाजों के बीच ध्यान बदलने की प्रक्रिया बहुत कम समय में शुरू हो सकती है।</p><p>इसका मतलब यह नहीं कि हर व्यक्ति हर बार अपना नाम सुनते ही जरूर मुड़ेगा। आवाज बहुत धीमी हो, शोर बहुत ज्यादा हो या व्यक्ति बहुत ज्यादा ध्यान लगाए हो, तो नाम छूट भी सकता है।</p><h2>👶 बच्चे अपना नाम कब पहचानने लगते हैं?</h2><p>यह क्षमता जन्म के समय पूरी तरह तैयार नहीं होती।</p><p>शोध में पाया गया है कि छोटे बच्चे कुछ महीनों की उम्र में अपने नाम की आवाज को दूसरे नामों से अलग पहचानने लगते हैं। एक अध्ययन में <strong>5 महीने के बच्चों</strong> ने अपने नाम पर दूसरे नामों की तुलना में अलग दिमागी प्रतिक्रिया दिखाई और अपना नाम सुनने के बाद उनका ध्यान सामने रखी चीजों की ओर ज्यादा गया।</p><p>इसका मतलब है कि नाम धीरे-धीरे बच्चे के लिए एक खास सामाजिक संकेत बन जाता है।</p><h2>😴 क्या सोते समय भी अपना नाम दिमाग पकड़ सकता है?</h2><p>दिलचस्प बात यह है कि नींद में भी दिमाग पूरी तरह आवाजों से अलग नहीं हो जाता।</p><p>एक पुराने लेकिन महत्वपूर्ण अध्ययन में वैज्ञानिकों ने सो रहे लोगों को उनका अपना नाम और दूसरे नाम सुनाए। दिमाग की विद्युत गतिविधि में अपने नाम के लिए अलग प्रतिक्रिया देखी गई। इससे पता चलता है कि नींद के दौरान भी दिमाग कुछ महत्वपूर्ण आवाजों को अलग तरीके से पहचान सकता है।</p><p>लेकिन इसका मतलब यह नहीं है कि सोता हुआ व्यक्ति हर बार अपना नाम सुनकर जाग जाएगा।</p><h2>🧪 क्या हर व्यक्ति भीड़ में अपना नाम सुन लेता है?</h2><p>नहीं।</p><p>यह घटना हमेशा नहीं होती।</p><p>शोध में पाया गया है कि अपना नाम ध्यान खींच सकता है, लेकिन इसका असर हर व्यक्ति और हर परिस्थिति में समान नहीं होता। आवाज की तेज़ी, शोर, बोलने वाले की आवाज, व्यक्ति का ध्यान और काम की कठिनाई जैसे कई कारण असर डालते हैं।</p><p>यानी <strong>“दिमाग हमेशा बैकग्राउंड में हर शब्द को स्कैन करता रहता है और नाम मिलते ही अलार्म बजा देता है”</strong> कहना बहुत आसान लेकिन जरूरत से ज्यादा सरल व्याख्या होगी।</p><h2>🧠 क्या RAS ही अपना नाम पहचानता है?</h2><p>आपने इसके बारे में अक्सर सुना होगा कि <strong>Reticular Activating System (RAS)</strong> दिमाग का ऐसा फिल्टर है जो आपके नाम को तुरंत चुन लेता है।</p><p>लेकिन आधुनिक शोध इससे ज्यादा जटिल तस्वीर दिखाता है। RAS दिमाग में जागरूकता और ध्यान से जुड़े कामों में शामिल है, लेकिन अपना नाम पहचानने की पूरी प्रक्रिया को केवल RAS के भरोसे समझाना सही नहीं है।</p><p>अपने नाम पर प्रतिक्रिया में सुनने वाला तंत्र, ध्यान से जुड़े हिस्से और खुद से जुड़ी जानकारी समझने वाली दिमागी प्रक्रियाएं मिलकर काम करती हैं।</p><h2>📢 क्या नाम सुनते ही डोपामिन और एड्रेनालिन निकलता है?</h2><p>यह दावा इंटरनेट पर बहुत देखने को मिलता है, लेकिन इसे इतनी निश्चितता से कहना सही नहीं है।</p><p>नाम सुनने पर ध्यान और शरीर की प्रतिक्रिया बदल सकती है, लेकिन हर बार नाम सुनते ही डोपामिन या एड्रेनालिन का कोई खास “छोटा विस्फोट” होता है—इसका सीधा प्रमाण नहीं है।</p><p>एक अध्ययन में नाम सुनने से सतर्कता में कुछ बदलाव देखे गए, लेकिन परिणाम छोटे और पूरी तरह एक जैसे नहीं थे।</p><p>इसलिए यहां सबसे सही बात है—<strong>अपना नाम हमारे लिए बहुत महत्वपूर्ण जानकारी है, इसलिए वह ध्यान को आसानी से खींच सकता है।</strong></p><h2>🧩 क्या यह केवल इंसानों की खासियत है?</h2><p>जानवर भी आवाजों के जरिए एक-दूसरे की पहचान कर सकते हैं। कुछ जानवरों में खास पुकार या आवाज किसी खास साथी से जुड़ी हो सकती है।</p><p>लेकिन इसे सीधे इंसानी “नाम” के बराबर मानना सही नहीं होगा। अलग-अलग जानवरों में आवाज से पहचानने की व्यवस्था अलग होती है।</p><p>इसलिए यह कहना कि डॉल्फिन या हाथी बिल्कुल इंसानों की तरह एक-दूसरे के नाम लेते हैं, जरूरत से ज्यादा सरल दावा होगा।</p><h2>📚 अगर दिमाग से जुड़े ऐसे तथ्य पसंद हैं…</h2><p>याददाश्त और ध्यान आपस में जुड़े हुए हैं। FactZone पर <strong><a href="https://factzone.online/posts/human-memory-how-it-works-and-why-we-forget-in-hindi.html" rel="noopener noreferrer" target="_blank">याददाश्त कैसे काम करती है और हम बातें क्यों भूल जाते हैं?</a></strong> में आप पढ़ सकते हैं कि नई जानकारी दिमाग में कैसे दर्ज होती है और कभी-कभी हमें पुरानी बातें क्यों याद नहीं रहतीं।</p><p>इसी तरह अगर आपको दिमाग के अजीब अनुभवों में दिलचस्पी है, तो <strong><a href="https://factzone.online/posts/why-songs-get-stuck-in-head-earworm-hindi.html" rel="noopener noreferrer" target="_blank">एक ही गाना दिमाग में बार-बार क्यों बजता रहता है?</a></strong> भी पढ़ सकते हैं।</p><h2>❓ अक्सर पूछे जाने वाले सवाल</h2><p><strong>क्या अपना नाम सुनना सच में ध्यान खींचता है?</strong></p><p>हां। शोध में पाया गया है कि अपना नाम दूसरे नामों की तुलना में ध्यान खींचने की ज्यादा क्षमता रख सकता है। हालांकि यह हर स्थिति में समान नहीं होता।</p><p><strong>क्या इसे कॉकटेल पार्टी इफेक्ट कहते हैं?</strong></p><p>हां, शोर के बीच किसी खास आवाज पर ध्यान देने की घटना को कॉकटेल पार्टी इफेक्ट से जोड़ा जाता है। अपना नाम सुनाई देना इसका एक प्रसिद्ध उदाहरण है।</p><p><strong>क्या सोते समय भी दिमाग अपना नाम पहचान सकता है?</strong></p><p>शोध में सोते समय अपने नाम पर अलग दिमागी प्रतिक्रिया देखी गई है। लेकिन इसका मतलब यह नहीं कि हर बार व्यक्ति जाग जाएगा।</p><p><strong>बच्चे अपना नाम कब पहचानने लगते हैं?</strong></p><p>अध्ययनों में लगभग 4–5 महीने की उम्र के बच्चों में अपने नाम के प्रति अलग प्रतिक्रिया देखी गई है।</p><h2>💡 आखिरी बात</h2><p>भीड़ में अचानक अपना नाम सुनाई देना कोई जादू नहीं है। यह हमारे दिमाग की <strong>चुनिंदा ध्यान देने की क्षमता</strong> का एक दिलचस्प उदाहरण है।</p><p>हमारा दिमाग हर आवाज को बराबर महत्व नहीं देता। जो जानकारी हमारे लिए ज्यादा जरूरी या निजी होती है, वह हमारा ध्यान खींच सकती है। अपना नाम इसी वजह से खास है।</p><p>तो अगली बार जब किसी स्टेशन, बाजार या शादी में आपको लगे कि शोर के बीच अचानक किसी ने आपका नाम पुकारा है, तो एक पल रुककर सोचिए—<strong>आपके कान ने सिर्फ आवाज सुनी है, लेकिन आपके दिमाग ने उस आवाज में अपने लिए खास मतलब खोज लिया है।</strong></p></div>
       <div class="reaction-bar">
         <button type="button" id="likeBtn" class="like-btn" aria-label="Like this article">🤍 <span id="likeCount">0</span></button>
         <a href="#commentsSection" class="comment-jump-link">💬 <span id="commentsCountInline">0</span> Comments</a>
       </div>
+
+      <!-- Share buttons and Subscribe box in the same row -->
       <div class="share-container">
-        <div class="share-title">Share this Fact:</div>
-        <div class="share-buttons">
-          <a href="https://api.whatsapp.com/send?text=%E0%A4%85%E0%A4%AA%E0%A4%A8%E0%A4%BE%20%E0%A4%A8%E0%A4%BE%E0%A4%AE%20%E0%A4%B8%E0%A5%81%E0%A4%A8%E0%A4%A4%E0%A5%87%20%E0%A4%B9%E0%A5%80%20%E0%A4%A7%E0%A5%8D%E0%A4%AF%E0%A4%BE%E0%A4%A8%20%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A5%8B%E0%A4%82%20%E0%A4%9C%E0%A4%BE%E0%A4%A4%E0%A4%BE%20%E0%A4%B9%E0%A5%88%3F%20Cocktail%20Party%20Effect%20-%20Read%20more%20on%20FactZone%3A%0Ahttps%3A%2F%2Ffactzone.online%2Fposts%2Fwhy-do-we-respond-to-our-own-name-science-in-hindi.html" target="_blank" rel="noopener" class="share-btn btn-wa">WhatsApp</a>
-          <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ffactzone.online%2Fposts%2Fwhy-do-we-respond-to-our-own-name-science-in-hindi.html" target="_blank" rel="noopener" class="share-btn btn-fb">Facebook</a>
-          <a href="https://twitter.com/intent/tweet?text=%E0%A4%85%E0%A4%AA%E0%A4%A8%E0%A4%BE%20%E0%A4%A8%E0%A4%BE%E0%A4%AE%20%E0%A4%B8%E0%A5%81%E0%A4%A8%E0%A4%A4%E0%A5%87%20%E0%A4%B9%E0%A5%80%20%E0%A4%A7%E0%A5%8D%E0%A4%AF%E0%A4%BE%E0%A4%A8%20%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A5%8B%E0%A4%82%20%E0%A4%9C%E0%A4%BE%E0%A4%A4%E0%A4%BE%20%E0%A4%B9%E0%A5%88%3F%20Cocktail%20Party%20Effect%20-%20Read%20more%20on%20FactZone%3A%0A&url=https%3A%2F%2Ffactzone.online%2Fposts%2Fwhy-do-we-respond-to-our-own-name-science-in-hindi.html" target="_blank" rel="noopener" class="share-btn btn-tw">X / Twitter</a>
-          <button onclick="window.copyArticleLink(this)" class="share-btn btn-cp">Copy Link</button>
+        <div class="share-block">
+          <div class="share-title">Share this Fact:</div>
+          <div class="share-buttons">
+            <a href="https://api.whatsapp.com/send?text=%E0%A4%85%E0%A4%AA%E0%A4%A8%E0%A4%BE%20%E0%A4%A8%E0%A4%BE%E0%A4%AE%20%E0%A4%B8%E0%A5%81%E0%A4%A8%E0%A4%A4%E0%A5%87%20%E0%A4%B9%E0%A5%80%20%E0%A4%A7%E0%A5%8D%E0%A4%AF%E0%A4%BE%E0%A4%A8%20%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A5%8B%E0%A4%82%20%E0%A4%9C%E0%A4%BE%E0%A4%A4%E0%A4%BE%20%E0%A4%B9%E0%A5%88%3F%20Cocktail%20Party%20Effect%20-%20Read%20on%20FactZone%3A%20https%3A%2F%2Ffactzone.online%2Fposts%2Fwhy-do-we-respond-to-our-own-name-science-in-hindi.html" target="_blank" rel="noopener" class="share-btn btn-wa">WhatsApp</a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ffactzone.online%2Fposts%2Fwhy-do-we-respond-to-our-own-name-science-in-hindi.html" target="_blank" rel="noopener" class="share-btn btn-fb">Facebook</a>
+            <a href="https://twitter.com/intent/tweet?text=%E0%A4%85%E0%A4%AA%E0%A4%A8%E0%A4%BE%20%E0%A4%A8%E0%A4%BE%E0%A4%AE%20%E0%A4%B8%E0%A5%81%E0%A4%A8%E0%A4%A4%E0%A5%87%20%E0%A4%B9%E0%A5%80%20%E0%A4%A7%E0%A5%8D%E0%A4%AF%E0%A4%BE%E0%A4%A8%20%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A5%8B%E0%A4%82%20%E0%A4%9C%E0%A4%BE%E0%A4%A4%E0%A4%BE%20%E0%A4%B9%E0%A5%88%3F%20Cocktail%20Party%20Effect%20-%20FactZone&url=https%3A%2F%2Ffactzone.online%2Fposts%2Fwhy-do-we-respond-to-our-own-name-science-in-hindi.html" target="_blank" rel="noopener" class="share-btn btn-tw">X / Twitter</a>
+            <button onclick="window.copyArticleLink(this)" class="share-btn btn-cp">Copy Link</button>
+          </div>
+        </div>
+
+        <div class="subscribe-inline-block" id="subscribeSection">
+          <div class="share-title">सब्सक्राइब करें</div>
+          <div class="subscribe-form">
+            <input type="radio" name="subscribeType" value="email" checked style="display:none;">
+            <div class="subscribe-input-row">
+              <input type="text" id="subscribeValue" class="comment-input" placeholder="ईमेल या व्हाट्सएप नंबर">
+              <button type="button" id="subscribeBtn" class="comment-submit-btn">सब्सक्राइब करें</button>
+            </div>
+            <div><span id="subscribeStatus" class="form-status"></span></div>
+          </div>
         </div>
       </div>
+
       <div class="author-box" itemprop="author" itemscope itemtype="https://schema.org/Person">
         <p>Written by <a href="/author.html" itemprop="url"><span itemprop="name">Awaneesh</span></a>, a tech enthusiast sharing verified facts.</p>
         <a href="/author.html" class="author-profile-link">View Author Profile →</a>
@@ -381,8 +368,7 @@
     <section id="commentsSection" aria-label="Comments">
       <h2>टिप्पणियाँ / Comments (<span id="commentsCount">0</span>)</h2>
       <div class="comment-form">
-        <input type="text" id="commentName" class="comment-input" placeholder="आपका नाम (वैकल्पिक) / Your name (optional)" maxlength="60">
-        <textarea id="commentText" class="comment-textarea" rows="2" placeholder="अपनी टिप्पणी लिखें... / Write your comment..." maxlength="1000"></textarea>
+        <textarea id="commentText" class="comment-textarea" rows="2" placeholder="आपका नाम और टिप्पणी लिखें... / Write your name & comment..." maxlength="1000"></textarea>
         <div class="comment-form-footer">
           <button type="button" id="commentSubmitBtn" class="comment-submit-btn">टिप्पणी भेजें / Post Comment</button>
           <span id="commentStatus" class="form-status"></span>
@@ -390,21 +376,6 @@
       </div>
       <div id="commentsList" class="comments-list">
         <p class="no-comments">लोड हो रहा है... / Loading...</p>
-      </div>
-    </section>
-
-    <section id="subscribeSection" aria-label="Get notified of new articles">
-      <h2>नए आर्टिकल की सूचना पाएं / Get Notified</h2>
-      <div class="subscribe-form">
-        <div class="subscribe-type-row">
-          <label class="radio-label"><input type="radio" name="subscribeType" value="email" checked> ईमेल / Email</label>
-          <label class="radio-label"><input type="radio" name="subscribeType" value="whatsapp"> व्हाट्सएप / WhatsApp</label>
-        </div>
-        <div class="subscribe-input-row">
-          <input type="text" id="subscribeValue" class="comment-input" placeholder="अपना ईमेल या व्हाट्सएप नंबर डालें">
-          <button type="button" id="subscribeBtn" class="comment-submit-btn">सब्सक्राइब करें / Subscribe</button>
-        </div>
-        <div><span id="subscribeStatus" class="form-status"></span></div>
       </div>
     </section>
   </div>
@@ -415,7 +386,7 @@
 
   <section id="relatedSection" aria-label="Related Facts">
     <h2>Related Facts</h2>
-    <div id="relatedGrid" class="rc-row"><a href="/posts/raat-mein-jyada-sochne-ki-wajah.html" class="rc" aria-label="Read: 🧠 दिमाग रात में ज्यादा क्यों सोचता है?"><img src="https://i.ibb.co/27vwycDG/clipboard-image.png" loading="lazy" width="55" height="55" alt="🧠 दिमाग रात में ज्यादा क्यों सोचता है?" onerror="this.style.display='none'"><h3>🧠 दिमाग रात में ज्यादा क्यों सोचता है?</h3></a><a href="/posts/why-the-moon-walks-with-us.html" class="rc" aria-label="Read: चांद हमारे साथ चलता हुआ क्यों दिखाई देता है?"><img src="https://i.ibb.co/N2P7tkJH/clipboard-image.png" loading="lazy" width="55" height="55" alt="चांद हमारे साथ चलता हुआ क्यों दिखाई देता है?" onerror="this.style.display='none'"><h3>चांद हमारे साथ चलता हुआ क्यों दिखाई देता है?</h3></a><a href="/posts/can-our-brain-see-the-future-while-we-sleep.html" class="rc" aria-label="Read: क्या हमारा दिमाग सोते समय भविष्य देख सकता है?"><img src="https://i.ibb.co/MxjVDQ37/clipboard-image.png" loading="lazy" width="55" height="55" alt="क्या हमारा दिमाग सोते समय भविष्य देख सकता है?" onerror="this.style.display='none'"><h3>क्या हमारा दिमाग सोते समय भविष्य देख सकता है?</h3></a><a href="/posts/why-songs-get-stuck-in-head-earworm-hindi.html" class="rc" aria-label="Read: एक ही गाना दिमाग में बार-बार क्यों बजता है? इयरवॉर्म"><img src="https://i.ibb.co/00Xr4CR/clipboard-image.png" loading="lazy" width="55" height="55" alt="एक ही गाना दिमाग में बार-बार क्यों बजता है? इयरवॉर्म" onerror="this.style.display='none'"><h3>एक ही गाना दिमाग में बार-बार क्यों बजता है? इयरवॉर्म</h3></a><a href="/posts/why-we-feel-someone-is-watching-us-science-hindi.html" class="rc" aria-label="Read: जब कोई देख रहा हो ऐसा क्यों लगता है? इसके पीछे का विज्ञान"><img src="https://i.ibb.co/mV0MC3tc/clipboard-image.png" loading="lazy" width="55" height="55" alt="जब कोई देख रहा हो ऐसा क्यों लगता है? इसके पीछे का विज्ञान" onerror="this.style.display='none'"><h3>जब कोई देख रहा हो ऐसा क्यों लगता है? इसके पीछे का विज्ञान</h3></a><a href="/posts/why-face-looks-weird-in-mirror-science-in-hindi.html" class="rc" aria-label="Read: 🪞 आईने में चेहरा अजीब क्यों लगता है? इसके पीछे का असली विज्ञान"><img src="https://i.ibb.co/whymvSCq/clipboard-image.png" loading="lazy" width="55" height="55" alt="🪞 आईने में चेहरा अजीब क्यों लगता है? इसके पीछे का असली विज्ञान" onerror="this.style.display='none'"><h3>🪞 आईने में चेहरा अजीब क्यों लगता है? इसके पीछे का असली विज्ञान</h3></a></div>
+    <div id="relatedGrid" class="rc-row"><section class="related-posts"><h2>📚 Related FactZone Articles</h2><div class="related-grid"><a href="/posts/raat-mein-jyada-sochne-ki-wajah.html">🧠 दिमाग रात में ज्यादा क्यों सोचता है?</a><a href="/posts/why-the-moon-walks-with-us.html">चांद हमारे साथ चलता हुआ क्यों दिखाई देता है?</a><a href="/posts/can-our-brain-see-the-future-while-we-sleep.html">क्या हमारा दिमाग सोते समय भविष्य देख सकता है?</a></div></section></div>
   </section>
 
   <footer class="site-footer">
@@ -449,378 +420,16 @@
     if (firstP) firstP.insertAdjacentElement('afterend', heroWrap);
   })();
 
-  var PROJECT_ID = "factzone-a9ace";
-  var API_KEY    = "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc";
-  var FS_BASE    = "https://firestore.googleapis.com/v1/projects/" + PROJECT_ID + "/databases/(default)/documents";
-  var POST_ID    = "A9sBcdeWzMGQ4JJxSsr5";
-
-  function $(q) { return document.getElementById(q); }
-
-  function parseField(val) {
-    if (!val) return "";
-    if (val.stringValue  !== undefined) return val.stringValue;
-    if (val.integerValue  !== undefined) return val.integerValue;
-    if (val.booleanValue  !== undefined) return val.booleanValue;
-    if (val.timestampValue !== undefined) return val.timestampValue;
-    if (val.arrayValue    !== undefined) { return (val.arrayValue.values || []).map(parseField); }
-    if (val.mapValue      !== undefined) return parseDoc(val.mapValue.fields || {});
-    return "";
-  }
-  function parseDoc(fields) {
-    var obj = {};
-    Object.keys(fields || {}).forEach(function(k){ obj[k] = parseField(fields[k]); });
-    return obj;
-  }
-  function escapeHtml(str) {
-    return String(str == null ? "" : str)
-      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
-  }
-  function toSafeDate(val) {
-    if (val === undefined || val === null || val === "") return null;
-    var d;
-    if (typeof val === 'number') { d = new Date(val); }
-    else if (typeof val === 'string' && /^\d+$/.test(val)) { var num = Number(val); if (val.length <= 10) num = num * 1000; d = new Date(num); }
-    else { d = new Date(val); }
-    return isNaN(d.getTime()) ? null : d;
-  }
-  function formatDate(iso) {
-    try { var d = new Date(iso); if (isNaN(d.getTime())) return ""; return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }); }
-    catch (e) { return ""; }
-  }
-
-  // Setup cards mid-article, and fill bottom section (#relatedGrid) up to 9 distinct cards
-  (function setupRelatedPosts() {
-    var relatedGrid = document.getElementById('relatedGrid');
-    var content = document.querySelector('#post .content');
-    if (!relatedGrid || !content) return;
-
-    var allCards = Array.prototype.slice.call(relatedGrid.children);
-    if (allCards.length < 1) return;
-
-    var usedUrls = {};
-    var currentPath = window.location.pathname.toLowerCase();
-    usedUrls[currentPath] = true;
-
-    // 1. Take first 3 cards for mid-article (CSS handles hiding 3rd on mobile)
-    var midCards = [];
-    var remainingCards = [];
-
-    allCards.forEach(function(card) {
-      var href = (card.getAttribute('href') || '').toLowerCase();
-      if (midCards.length < 3 && href && !usedUrls[href]) {
-        midCards.push(card);
-        usedUrls[href] = true;
-      } else {
-        remainingCards.push(card);
-      }
-    });
-
-    var children = Array.prototype.slice.call(content.children);
-    if (midCards.length === 3 && children.length >= 4) {
-      var midNode = children[Math.floor(children.length / 2) - 1];
-      var section = document.createElement('div');
-      section.className = 'story-carousel-section';
-      var midContainer = document.createElement('div');
-      midContainer.className = 'rc-row';
-      midCards.forEach(function(c) { midContainer.appendChild(c); });
-      section.innerHTML = '<div class="story-carousel-heading">Related Facts</div>';
-      section.appendChild(midContainer);
-      midNode.insertAdjacentElement('afterend', section);
-    }
-
-    // 2. Put remaining unique cards into bottom grid
-    relatedGrid.innerHTML = '';
-    var bottomUniqueCards = [];
-    remainingCards.forEach(function(card) {
-      var href = (card.getAttribute('href') || '').toLowerCase();
-      if (!href || !usedUrls[href]) {
-        bottomUniqueCards.push(card);
-        if (href) usedUrls[href] = true;
-      }
-    });
-
-    bottomUniqueCards.forEach(function(card) {
-      relatedGrid.appendChild(card);
-    });
-
-    // Fill up to 9 cards instantly using placeholders if needed so layout stays complete
-    var sourcePool = bottomUniqueCards.length > 0 ? bottomUniqueCards : midCards;
-    var cloneIdx = 0;
-    while (relatedGrid.children.length < 9 && sourcePool.length > 0) {
-      var clone = sourcePool[cloneIdx % sourcePool.length].cloneNode(true);
-      clone.setAttribute('data-is-placeholder', 'true');
-      relatedGrid.appendChild(clone);
-      cloneIdx++;
-    }
-
-    // 3. Fetch real posts from Firestore API to fill up to 9 unique posts (no duplicates with mid-article)
-    fetch(FS_BASE + ":runQuery?key=" + API_KEY, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        structuredQuery: {
-          from: [{ collectionId: "posts" }],
-          orderBy: [{ field: { fieldPath: "createdAt" }, direction: "DESCENDING" }],
-          limit: 30
-        }
-      })
-    }).then(function(r){ return r.json(); }).then(function(data){
-      var docs = Array.isArray(data) ? data : [];
-      docs.forEach(function(d){
-        if (!d.document || !d.document.fields) return;
-        var f = d.document.fields;
-        var title = parseField(f.title) || parseField(f.headline) || "";
-        var img = parseField(f.ogImage) || parseField(f.image) || parseField(f.heroImage) || "";
-        var slug = parseField(f.slug) || "";
-        var cat = parseField(f.category) || "";
-        var url = parseField(f.canonicalUrl) || parseField(f.url) || "";
-        if (!url && slug) {
-          url = cat ? "/categories/" + cat + "/" + slug + ".html" : "/posts/" + slug + ".html";
-        }
-        if (!url || !title) return;
-        var lowerUrl = url.toLowerCase();
-        if (usedUrls[lowerUrl]) return;
-
-        var placeholder = relatedGrid.querySelector('[data-is-placeholder="true"]');
-        if (placeholder) {
-          usedUrls[lowerUrl] = true;
-          placeholder.removeAttribute('data-is-placeholder');
-          placeholder.setAttribute('href', url);
-          var imgEl = placeholder.querySelector('img');
-          if (imgEl) { imgEl.src = img; imgEl.alt = title; }
-          var h3El = placeholder.querySelector('h3');
-          if (h3El) { h3El.textContent = title; }
-        } else if (relatedGrid.children.length < 9) {
-          usedUrls[lowerUrl] = true;
-          var a = document.createElement('a');
-          a.className = 'rc';
-          a.href = url;
-          a.innerHTML = '<img src="' + escapeHtml(img) + '" alt="' + escapeHtml(title) + '" loading="lazy"><h3>' + escapeHtml(title) + '</h3>';
-          relatedGrid.appendChild(a);
-        }
-      });
-    }).catch(function(e){});
-  })();
-
-  window.copyArticleLink = function(btn) {
-    var currentUrl = location.href;
-    navigator.clipboard.writeText(currentUrl).then(function() {
-      var oldText = btn.innerHTML;
-      btn.innerHTML = '✓ Copied!';
-      setTimeout(function() { btn.innerHTML = oldText; }, 2000);
-    }).catch(function() { alert("Link copied: " + currentUrl); });
-  };
-
-  /* ---------- Ads (identical fail-safe iframes as detail.html) ---------- */
-  function hideSlotOnError(container) {
-    if (!container) return;
-    var parentSlot = container.closest('.ad-slot') || container;
-    parentSlot.style.display = 'none';
-    parentSlot.setAttribute('data-ad-failed', 'true');
-  }
-  function injectBanner300x250(container) {
-    try {
-      if (!container || container.dataset.adLoaded === "true") return;
-      var iframe = document.createElement('iframe');
-      iframe.style.width = '300px'; iframe.style.height = '250px'; iframe.style.border = '0';
-      iframe.style.overflow = 'hidden'; iframe.style.maxWidth = '100%'; iframe.scrolling = 'no';
-      iframe.title = 'Advertisement';
-      iframe.onerror = function() { hideSlotOnError(container); };
-      var doc = '<!DOCTYPE html><html><head><style>*{margin:0;padding:0;}body{background:transparent;}</style></head><body>' +
-        '<script>atOptions = {"key":"d7218ad0d4e9095bb4a145457bc7bea2","format":"iframe","height":250,"width":300,"params":{}};</' + 'script>' +
-        '<script src="https://www.highperformanceformat.com/d7218ad0d4e9095bb4a145457bc7bea2/invoke.js" onerror="window.parent.postMessage(\'ad-failed\', \'*\')"></' + 'script>' +
-        '</body></html>';
-      iframe.srcdoc = doc;
-      container.appendChild(iframe);
-      container.dataset.adLoaded = "true";
-    } catch (e) { hideSlotOnError(container); }
-  }
-  function injectBanner320x50(container) {
-    try {
-      if (!container || container.dataset.adLoaded === "true") return;
-      var iframe = document.createElement('iframe');
-      iframe.style.width = '320px'; iframe.style.height = '50px'; iframe.style.border = '0';
-      iframe.style.overflow = 'hidden'; iframe.style.maxWidth = '100%'; iframe.scrolling = 'no';
-      iframe.title = 'Advertisement';
-      iframe.onerror = function() { hideSlotOnError(container); };
-      var doc = '<!DOCTYPE html><html><head><style>*{margin:0;padding:0;}body{background:transparent;}</style></head><body>' +
-        '<script>atOptions = {"key":"3012ad1961449518ada204e09cdbceef","format":"iframe","height":50,"width":320,"params":{}};</' + 'script>' +
-        '<script src="https://www.highperformanceformat.com/3012ad1961449518ada204e09cdbceef/invoke.js" onerror="window.parent.postMessage(\'ad-failed\', \'*\')"></' + 'script>' +
-        '</body></html>';
-      iframe.srcdoc = doc;
-      container.appendChild(iframe);
-      container.dataset.adLoaded = "true";
-    } catch (e) { hideSlotOnError(container); }
-  }
-  window.addEventListener('message', function(e) {
-    if (e.data === 'ad-failed') { document.querySelectorAll('.ad-slot').forEach(function(slot) { slot.style.display = 'none'; }); }
-  });
-  /* Mid-article ad: content is already static, so insert in-place instead of the string-transform detail.html uses */
-  function injectInlineAdInPlace(container, count, adHtmlString) {
-    if (!container) return;
-    var children = Array.prototype.slice.call(container.childNodes).filter(function(n) {
-      return n.nodeType === 1 || (n.nodeType === 3 && n.textContent.trim() !== '');
-    });
-    if (children.length < 3) return;
-    var totalGaps = children.length - 1;
-    var slots = Math.min(count, totalGaps);
-    if (slots < 1) return;
-    var used = {}; var insertAfter = [];
-    for (var i = 1; i <= slots; i++) {
-      var pos = Math.round((i * totalGaps) / (slots + 1)) - 1;
-      pos = Math.max(0, Math.min(totalGaps - 1, pos));
-      while (used[pos] && pos < totalGaps - 1) pos++;
-      used[pos] = true;
-      insertAfter.push(pos);
-    }
-    insertAfter.sort(function(a,b){ return b - a; }).forEach(function(pos) {
-      var node = children[pos];
-      if (node && node.insertAdjacentHTML) node.insertAdjacentHTML('afterend', adHtmlString);
-    });
-  }
-  document.querySelectorAll('.banner-300x250-slot').forEach(injectBanner300x250);
-  document.querySelectorAll('.banner-320x50-slot').forEach(injectBanner320x50);
-  injectInlineAdInPlace($('post-content').querySelector('.content'), 2, '<div class="ad-slot"><div class="banner-320x50-slot"></div></div>');
-  document.querySelectorAll('.banner-320x50-slot').forEach(injectBanner320x50);
-
-  document.querySelectorAll('#post .content a').forEach(function(a) { a.setAttribute('target', '_blank'); a.setAttribute('rel', 'noopener noreferrer'); });
-  document.querySelectorAll('#post .content img').forEach(function(img) { img.onerror = function() { this.style.display = 'none'; }; });
-
-  /* ---------- LIKES (postLikes/{postId}, same public collection as detail.html) ---------- */
-  function likeStorageKey(pid) { return "fz-liked-" + pid; }
-  function renderLikeUI(count, liked) {
-    var btn = $("likeBtn");
-    if (!btn) return;
-    btn.classList.toggle("liked", !!liked);
-    btn.innerHTML = (liked ? "❤️" : "🤍") + ' <span id="likeCount">' + count + '</span>';
-  }
-  function fetchLikeCount(pid) {
-    return fetch(FS_BASE + "/postLikes/" + pid + "?key=" + API_KEY)
-      .then(function(r){ return r.json(); })
-      .then(function(data){
-        if (data && data.fields && data.fields.count && data.fields.count.integerValue !== undefined) return parseInt(data.fields.count.integerValue, 10) || 0;
-        return 0;
-      }).catch(function(){ return 0; });
-  }
-  function saveLikeCount(pid, count) {
-    return fetch(FS_BASE + "/postLikes/" + pid + "?updateMask.fieldPaths=count&key=" + API_KEY, {
-      method: "PATCH", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ fields: { count: { integerValue: String(count) } } })
-    });
-  }
-  function initLikes(pid) {
-    var liked = false;
-    try { liked = localStorage.getItem(likeStorageKey(pid)) === "1"; } catch(e){}
-    var btn = $("likeBtn");
-    if (!btn) return;
-    var knownCount = 0;
-    renderLikeUI(0, liked);
-    fetchLikeCount(pid).then(function(count){
-      knownCount = count;
-      renderLikeUI(knownCount, liked);
-      btn.onclick = function() {
-        if (btn.dataset.busy === "1") return;
-        btn.dataset.busy = "1";
-        var newLiked = !liked;
-        var delta = newLiked ? 1 : -1;
-        var optimisticCount = Math.max(0, knownCount + delta);
-        renderLikeUI(optimisticCount, newLiked);
-        fetchLikeCount(pid).then(function(freshCount){
-          var finalCount = Math.max(0, freshCount + delta);
-          return saveLikeCount(pid, finalCount).then(function(r){
-            if (!r.ok) throw new Error("save failed");
-            liked = newLiked; knownCount = finalCount;
-            try { if (liked) localStorage.setItem(likeStorageKey(pid), "1"); else localStorage.removeItem(likeStorageKey(pid)); } catch(e){}
-            renderLikeUI(knownCount, liked);
-          });
-        }).catch(function(){ renderLikeUI(knownCount, liked); }).then(function(){ btn.dataset.busy = "0"; });
-      };
-    });
-  }
-
-  /* ---------- COMMENTS (comments collection, same as detail.html) ---------- */
-  function loadComments(postId) {
-    fetch(FS_BASE + ":runQuery?key=" + API_KEY, {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ structuredQuery: { from: [{ collectionId: "comments" }],
-        where: { fieldFilter: { field: { fieldPath: "postId" }, op: "EQUAL", value: { stringValue: postId } } },
-        orderBy: [{ field: { fieldPath: "createdAt" }, direction: "DESCENDING" }], limit: 100 } })
-    }).then(function(r){ return r.json(); }).then(function(data){
-      var docs = Array.isArray(data) ? data : [];
-      var items = [];
-      docs.forEach(function(d){ if (d.document) items.push(parseDoc(d.document.fields)); });
-      renderComments(items);
-    }).catch(function(){ renderComments([]); });
-  }
-  function renderComments(items) {
-    var list = $("commentsList");
-    if (!list) return;
-    var count = items.length;
-    var countEl = $("commentsCount"); if (countEl) countEl.textContent = count;
-    var inlineEl = $("commentsCountInline"); if (inlineEl) inlineEl.textContent = count;
-    if (!count) { list.innerHTML = '<p class="no-comments">अभी तक कोई टिप्पणी नहीं। पहली टिप्पणी आप करें! / No comments yet — be the first!</p>'; return; }
-    list.innerHTML = items.map(function(c){
-      var name = escapeHtml(c.name || "Anonymous");
-      var text = escapeHtml(c.comment || "");
-      var when = ""; var d = toSafeDate(c.createdAt); if (d) when = formatDate(d.toISOString());
-      return '<div class="comment-item"><div class="comment-head"><strong>' + name + '</strong>' + (when ? ' <span class="comment-date">' + when + '</span>' : '') + '</div><div class="comment-text">' + text + '</div></div>';
-    }).join("");
-  }
-  function submitComment(postId) {
-    if (!postId) return;
-    var nameEl = $("commentName"), textEl = $("commentText"), statusEl = $("commentStatus");
-    var name = nameEl ? nameEl.value.trim() : "", text = textEl ? textEl.value.trim() : "";
-    if (!text) { if (statusEl) statusEl.textContent = "कृपया अपनी टिप्पणी लिखें। / Please write a comment."; return; }
-    var btn = $("commentSubmitBtn");
-    if (btn) { btn.disabled = true; btn.textContent = "भेजा जा रहा है... / Posting..."; }
-    if (statusEl) statusEl.textContent = "";
-    fetch(FS_BASE + "/comments?key=" + API_KEY, {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ fields: { postId: { stringValue: postId }, name: { stringValue: name || "Anonymous" }, comment: { stringValue: text }, createdAt: { integerValue: String(Date.now()) } } })
-    }).then(function(r){ if (!r.ok) throw new Error("failed"); return r.json(); }).then(function(){
-      if (textEl) textEl.value = "";
-      if (statusEl) statusEl.textContent = "✅ टिप्पणी सफलतापूर्वक जोड़ी गई। / Comment posted.";
-      loadComments(postId);
-    }).catch(function(){ if (statusEl) statusEl.textContent = "❌ टिप्पणी भेजने में समस्या हुई, दोबारा कोशिश करें। / Something went wrong, please try again."; })
-      .then(function(){ if (btn) { btn.disabled = false; btn.textContent = "टिप्पणी भेजें / Post Comment"; } });
-  }
-
-  /* ---------- SUBSCRIBE (subscribers collection, same as detail.html) ---------- */
-  function submitSubscriber(postId) {
-    var typeEls = document.getElementsByName("subscribeType");
-    var type = "email";
-    for (var i = 0; i < typeEls.length; i++) { if (typeEls[i].checked) type = typeEls[i].value; }
-    var valEl = $("subscribeValue"), statusEl = $("subscribeStatus");
-    var val = valEl ? valEl.value.trim() : "";
-    if (!val) { if (statusEl) statusEl.textContent = "कृपया अपनी जानकारी भरें। / Please enter a value."; return; }
-    if (type === "email") {
-      var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRe.test(val)) { if (statusEl) statusEl.textContent = "कृपया सही ईमेल पता डालें। / Please enter a valid email."; return; }
-    } else {
-      var digits = val.replace(/\D/g, "");
-      if (digits.length < 10) { if (statusEl) statusEl.textContent = "कृपया सही व्हाट्सएप नंबर डालें। / Please enter a valid WhatsApp number."; return; }
-      val = digits;
-    }
-    var btn = $("subscribeBtn");
-    if (btn) { btn.disabled = true; btn.textContent = "भेजा जा रहा है... / Submitting..."; }
-    if (statusEl) statusEl.textContent = "";
-    fetch(FS_BASE + "/subscribers?key=" + API_KEY, {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ fields: { type: { stringValue: type }, value: { stringValue: val }, postId: { stringValue: postId || "" }, createdAt: { integerValue: String(Date.now()) } } })
-    }).then(function(r){ if (!r.ok) throw new Error("failed"); return r.json(); }).then(function(){
-      if (valEl) valEl.value = "";
-      if (statusEl) statusEl.textContent = "✅ धन्यवाद! नए आर्टिकल की सूचना आपको मिलेगी। / Thanks, you're subscribed!";
-    }).catch(function(){ if (statusEl) statusEl.textContent = "❌ कुछ गड़बड़ हुई, दोबारा कोशिश करें। / Something went wrong, please try again."; })
-      .then(function(){ if (btn) { btn.disabled = false; btn.textContent = "सब्सक्राइब करें / Subscribe"; } });
-  }
-
-  var commentBtn = $("commentSubmitBtn"); if (commentBtn) commentBtn.onclick = function(){ submitComment(POST_ID); };
-  var subscribeBtn = $("subscribeBtn"); if (subscribeBtn) subscribeBtn.onclick = function(){ submitSubscriber(POST_ID); };
-
-  initLikes(POST_ID);
-  loadComments(POST_ID);
-})();
+  var POST_ID = "A9sBcdeWzMGQ4JJxSsr5";
+function key(name){ return "fz-" + name + "-" + POST_ID; }
+function readJSON(k,fallback){try{var v=localStorage.getItem(k);return v?JSON.parse(v):fallback;}catch(e){return fallback;}}
+function writeJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function renderLocalLikes(){var btn=$("likeBtn");if(!btn)return;var liked=localStorage.getItem(key("liked"))==="1";var count=Number(localStorage.getItem(key("like-count"))||"0");btn.classList.toggle("liked",liked);btn.innerHTML=(liked?"❤️":"🤍")+" <span id=\"likeCount\">"+count+"</span>";btn.onclick=function(){liked=!liked;count=Math.max(0,count+(liked?1:-1));localStorage.setItem(key("liked"),liked?"1":"0");localStorage.setItem(key("like-count"),String(count));btn.classList.toggle("liked",liked);btn.innerHTML=(liked?"❤️":"🤍")+" <span id=\"likeCount\">"+count+"</span>";};}
+function renderLocalComments(){var list=$("commentsList");if(!list)return;var items=readJSON(key("comments"),[]),countEl=$("commentsCount"),inlineEl=$("commentsCountInline");if(countEl)countEl.textContent=items.length;if(inlineEl)inlineEl.textContent=items.length;if(!items.length){list.innerHTML="<p class=\"no-comments\">अभी तक कोई टिप्पणी नहीं। पहली टिप्पणी आप करें!</p>";return;}list.innerHTML=items.map(function(c){return "<div class=\"comment-item\"><div class=\"comment-head\"><strong>"+escapeHtml(c.name||"Anonymous")+"</strong></div><div class=\"comment-text\">"+escapeHtml(c.comment||"")+"</div></div>";}).join("");}
+function submitLocalComment(){var nameEl=$("commentName"),textEl=$("commentText"),statusEl=$("commentStatus"),text=(textEl&&textEl.value||"").trim(),name=(nameEl&&nameEl.value||"").trim()||"Anonymous";if(!text){if(statusEl)statusEl.textContent="कृपया अपनी टिप्पणी लिखें।";return;}var items=readJSON(key("comments"),[]);items.unshift({name:name,comment:text,createdAt:new Date().toISOString()});writeJSON(key("comments"),items);if(textEl)textEl.value="";if(statusEl)statusEl.textContent="✅ टिप्पणी आपके ब्राउज़र में सेव हो गई।";renderLocalComments();}
+function submitLocalSubscriber(){var valEl=$("subscribeValue"),statusEl=$("subscribeStatus"),val=(valEl&&valEl.value||"").trim();if(!val){if(statusEl)statusEl.textContent="कृपया अपनी जानकारी भरें।";return;}writeJSON("fz-subscriber",{value:val,savedAt:new Date().toISOString()});if(valEl)valEl.value="";if(statusEl)statusEl.textContent="✅ आपकी जानकारी इस ब्राउज़र में सेव हो गई।";}
+(function(){var heroWrap=document.querySelector(".hero-wrap"),content=document.querySelector("#post .content");if(heroWrap&&content){var firstP=content.querySelector("p");if(firstP)firstP.insertAdjacentElement("afterend",heroWrap);}})();
+var commentBtn=$("commentSubmitBtn");if(commentBtn)commentBtn.onclick=submitLocalComment;var subscribeBtn=$("subscribeBtn");if(subscribeBtn)subscribeBtn.onclick=submitLocalSubscriber;renderLocalLikes();renderLocalComments();;
 </script>
 </body>
 </html>

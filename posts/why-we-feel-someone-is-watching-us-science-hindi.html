@@ -44,20 +44,6 @@
         "url": "https://factzone.online/logo.png",
         "width": 512,
         "height": 512
-      },
-      "sameAs": [
-        "https://www.instagram.com/avnish__1203/",
-        "https://www.youtube.com/@DirectionNews08"
-      ],
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "contactType": "customer support",
-        "email": "avnishravat20@gmail.com",
-        "areaServed": "IN",
-        "availableLanguage": [
-          "Hindi",
-          "English"
-        ]
       }
     },
     {
@@ -95,34 +81,11 @@
       ]
     },
     {
-      "@type": "WebPage",
-      "@id": "https://factzone.online/posts/why-we-feel-someone-is-watching-us-science-hindi.html#webpage",
-      "url": "https://factzone.online/posts/why-we-feel-someone-is-watching-us-science-hindi.html",
-      "name": "जब कोई देख रहा हो ऐसा क्यों लगता है? इसके पीछे का विज्ञान",
-      "description": "रात के करीब 9 बज रहे हैं। 26 साल की नेहा मेट्रो स्टेशन से निकलकर घर की तरफ जा रही है। सड़क पर स्ट्रीट लाइट जल रही है, लेकिन आसपास ज्यादा लोग नहीं हैं। नेहा आगे ",
-      "inLanguage": "hi",
-      "isPartOf": {
-        "@id": "https://factzone.online/#website"
-      },
-      "primaryImageOfPage": {
-        "@type": "ImageObject",
-        "@id": "https://factzone.online/posts/why-we-feel-someone-is-watching-us-science-hindi.html#primaryimage",
-        "url": "https://i.ibb.co/mV0MC3tc/clipboard-image.png",
-        "caption": "जब कोई देख रहा हो ऐसा क्यों लगता है? इसके पीछे का विज्ञान"
-      },
-      "breadcrumb": {
-        "@id": "https://factzone.online/posts/why-we-feel-someone-is-watching-us-science-hindi.html#breadcrumb"
-      },
-      "mainEntity": {
-        "@id": "https://factzone.online/posts/why-we-feel-someone-is-watching-us-science-hindi.html#article"
-      }
-    },
-    {
-      "@type": "Article",
+      "@type": [
+        "Article",
+        "BlogPosting"
+      ],
       "@id": "https://factzone.online/posts/why-we-feel-someone-is-watching-us-science-hindi.html#article",
-      "mainEntityOfPage": {
-        "@id": "https://factzone.online/posts/why-we-feel-someone-is-watching-us-science-hindi.html#webpage"
-      },
       "headline": "जब कोई देख रहा हो ऐसा क्यों लगता है? इसके पीछे का विज्ञान",
       "description": "रात के करीब 9 बज रहे हैं। 26 साल की नेहा मेट्रो स्टेशन से निकलकर घर की तरफ जा रही है। सड़क पर स्ट्रीट लाइट जल रही है, लेकिन आसपास ज्यादा लोग नहीं हैं। नेहा आगे ",
       "image": [
@@ -130,12 +93,10 @@
       ],
       "inLanguage": "hi",
       "articleSection": "Science / विज्ञान",
-      "wordCount": 1580,
       "datePublished": "2026-09-19T02:39:06.639Z",
       "dateModified": "2026-10-01T07:12:47.094Z",
       "author": {
         "@type": "Person",
-        "@id": "https://factzone.online/#person-awaneesh",
         "name": "Awaneesh",
         "url": "https://factzone.online/author.html"
       },
@@ -152,8 +113,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
-  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="preload" as="image" href="https://i.ibb.co/mV0MC3tc/clipboard-image.png" fetchpriority="high">
 
   <link rel="manifest" href="/manifest.json">
@@ -232,7 +192,20 @@
     .author-box p { margin-bottom: 0.3rem; line-height: 1.35; }
     .author-box .author-profile-link { display: inline-block; font-weight: 700; }
 
-    .share-container { margin-top: 0.75rem; padding-top: 0.6rem; border-top: 1px dashed var(--border); }
+    /* Flex container for Share & Subscribe in the same row */
+    .share-container {
+      margin-top: 0.75rem;
+      padding-top: 0.6rem;
+      border-top: 1px dashed var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.8rem;
+    }
+    .share-block { flex: 1; min-width: 250px; }
+    .subscribe-inline-block { flex: 1; min-width: 250px; }
+
     .share-title { font-size: 0.82rem; font-weight: 700; color: var(--ink); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.04em; }
     .share-buttons { display: flex; flex-wrap: wrap; gap: 0.4rem; }
     .share-btn { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.35rem 0.7rem; border-radius: 0.35rem; font-size: 0.8rem; font-weight: 700; text-decoration: none; color: #fff; cursor: pointer; border: none; }
@@ -283,11 +256,10 @@
     .comment-jump-link { font-size: 0.85rem; font-weight: 700; color: var(--muted); text-decoration: none; }
     .comment-jump-link:hover { color: var(--accent); }
 
-    /* Single compact card container for both Comments and Subscribe */
+    /* Single compact card container for Comments */
     .widget-card { margin-top: 0.5rem; background: var(--surface); border-radius: var(--r); padding: 0.5rem 0.65rem; box-shadow: 0 2px 10px rgba(0,0,0,.04); }
-    #commentsSection, #subscribeSection { margin-top: 0; background: transparent; border-radius: 0; padding: 0; box-shadow: none; }
-    #subscribeSection { margin-top: 0.55rem; padding-top: 0.45rem; border-top: 1px dashed var(--border); }
-    #commentsSection h2, #subscribeSection h2 { font-family: 'Merriweather', serif; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.25rem; padding-bottom: 0.15rem; border-bottom: 2px solid var(--ink); }
+    #commentsSection { margin-top: 0; background: transparent; border-radius: 0; padding: 0; box-shadow: none; }
+    #commentsSection h2 { font-family: 'Merriweather', serif; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.25rem; padding-bottom: 0.15rem; border-bottom: 2px solid var(--ink); }
 
     .comment-form { display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 0.4rem; }
     .comment-input, .comment-textarea { width: 100%; font-family: inherit; font-size: 0.8rem; padding: 0.32rem 0.5rem; border: 1px solid var(--border); border-radius: 0.4rem; background: var(--bg); color: var(--ink); resize: vertical; }
@@ -306,10 +278,8 @@
     .comment-text { font-size: 0.84rem; color: #1f2937; white-space: pre-wrap; word-break: break-word; }
     .no-comments { color: var(--muted); font-size: 0.82rem; }
 
-    .subscribe-type-row { display: flex; gap: 0.85rem; margin-bottom: 0.3rem; font-size: 0.76rem; }
-    .radio-label { display: flex; align-items: center; gap: 0.25rem; cursor: pointer; }
     .subscribe-input-row { display: flex; gap: 0.4rem; flex-wrap: wrap; }
-    .subscribe-input-row .comment-input { flex: 1; min-width: 180px; }
+    .subscribe-input-row .comment-input { flex: 1; min-width: 150px; }
   </style>
 
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=DM+Sans:wght@400;500;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
@@ -354,22 +324,39 @@
         <span>Article</span>
       </nav>
       <h1 itemprop="headline">जब कोई देख रहा हो ऐसा क्यों लगता है? इसके पीछे का विज्ञान</h1>
-      <p class="meta-line"><strong>Author:</strong> Awaneesh &nbsp;•&nbsp; <strong>Date:</strong> 19 September 2026 &nbsp;•&nbsp; <strong>Updated:</strong> 1 October 2026 &nbsp;•&nbsp; <strong>Read Time:</strong> 8 min read</p>
+      <p class="meta-line"><strong>Author:</strong> Awaneesh &nbsp;•&nbsp; <strong>Date:</strong> 19 सित॰ 2026 &nbsp;•&nbsp; <strong>Updated:</strong> 1 अक्टू॰ 2026</p>
       <div class="hero-wrap"><img class="hero" src="https://i.ibb.co/mV0MC3tc/clipboard-image.png" alt="जब कोई देख रहा हो ऐसा क्यों लगता है? इसके पीछे का विज्ञान" itemprop="image" loading="eager" fetchpriority="high" decoding="async" width="300" height="169" onerror="this.style.display='none'"></div>
       <div class="content" itemprop="articleBody"><p>रात के करीब 9 बज रहे हैं। 26 साल की नेहा मेट्रो स्टेशन से निकलकर घर की तरफ जा रही है। सड़क पर स्ट्रीट लाइट जल रही है, लेकिन आसपास ज्यादा लोग नहीं हैं। नेहा आगे देख रही है और कानों में ईयरफोन लगा हुआ है।</p><p>अचानक उसे लगता है कि कोई उसे पीछे से देख रहा है।</p><p>वह बिना किसी साफ कारण के पीछे मुड़ती है और सड़क के मोड़ पर एक व्यक्ति को खड़ा देखती है। वह सच में नेहा की तरफ देख रहा था।</p><p>नेहा के मन में सवाल आता है—<strong>“जब मैंने उसे देखा ही नहीं, तो मुझे कैसे लगा कि कोई मुझे देख रहा है?”</strong></p><p>क्या इंसानों में सचमुच कोई छठी इंद्री होती है?</p><p>विज्ञान का जवाब थोड़ा अलग है। हमारे पास किसी की नजर को दूर से महसूस करने वाली कोई जादुई शक्ति होने का पक्का सबूत नहीं है। लेकिन हमारा दिमाग आंखों की दिशा, चेहरे की हलचल, आसपास की आवाज और पूरे माहौल से मिलने वाले छोटे-छोटे संकेतों को बहुत तेजी से जोड़ सकता है। कई बार इसी वजह से हमें लगता है कि कोई हमें देख रहा है।</p><h2>👀 आंखें किसी की नजर की दिशा कैसे बताती हैं?</h2><p>किसी व्यक्ति की नजर समझने में उसकी आंखें सबसे जरूरी संकेतों में से एक हैं।</p><p>हमारी आंख का सफेद हिस्सा <strong>स्क्लेरा (Sclera)</strong> कहलाता है। इंसानों में आंख का सफेद हिस्सा काफी साफ दिखाई देता है, इसलिए पुतली और आंख की दिशा में अंतर समझना आसान हो सकता है।</p><p>कुछ शोधों में पाया गया है कि आंखों की बनावट और सफेद स्क्लेरा नजर की दिशा पहचानने में मदद कर सकती है। लेकिन यह कहना सही नहीं होगा कि इंसानों की सफेद आंखें <strong>सिर्फ इसी काम के लिए बनी हैं</strong>। इस बारे में वैज्ञानिकों के बीच अभी भी चर्चा है।</p><p>यानी जब कोई व्यक्ति आपकी तरफ देखता है, तो आपका दिमाग उसकी आंखों और चेहरे की दिशा से यह अंदाजा लगा सकता है कि उसकी नजर कहां है।</p><h2>👁️ बिना सीधे देखे भी हमें कुछ पता कैसे चलता है?</h2><p>मान लीजिए आप मोबाइल देख रहे हैं और आपके पास खड़ा व्यक्ति अचानक आपकी तरफ मुड़ता है।</p><p>आपने शायद उसकी आंखों को सीधे नहीं देखा, फिर भी आपको उसके मुड़ने का अंदाजा हो सकता है। इसकी एक वजह <strong>बगल की नजर (Peripheral Vision)</strong> है।</p><p>आंखों का बीच वाला हिस्सा किसी चीज को साफ देखने में सबसे अच्छा होता है, लेकिन उसके आसपास का हिस्सा भी हलचल और बड़े बदलाव पकड़ सकता है। इसलिए कोई व्यक्ति पास में अपना चेहरा आपकी तरफ घुमाए, शरीर हिलाए या आपके आसपास आए, तो आपका ध्यान उसकी तरफ जा सकता है।</p><p>यह जरूरी नहीं कि आपको साफ दिखाई ही दिया हो। कई बार दिमाग को सिर्फ इतना संकेत मिलता है कि <strong>“आसपास कुछ बदला है।”</strong></p><p>फिर वह आपको पीछे देखने के लिए प्रेरित कर सकता है।</p><h2>🧠 हमारा दिमाग नजर को खतरे से क्यों जोड़ता है?</h2><p>किसी की सीधी नजर सिर्फ सामाजिक संकेत नहीं होती। कुछ परिस्थितियों में यह खतरे या तनाव का संकेत भी हो सकती है।</p><p>दिमाग का <strong>एमिग्डाला (Amygdala)</strong> डर और खतरे से जुड़ी जानकारी को संभालने वाले नेटवर्क का हिस्सा है। शोध में पाया गया है कि सीधी नजर और चेहरे के भाव जैसी चीजें इस नेटवर्क की गतिविधि से जुड़ सकती हैं।</p><p>लेकिन इसका मतलब यह नहीं कि एमिग्डाला अकेले यह तय करता है कि कोई आपको देख रहा है।</p><p>असल में आंखों की दिशा, चेहरा, आसपास का माहौल और आपकी अपनी स्थिति—इन सबकी जानकारी मिलकर दिमाग को एक अनुमान बनाने में मदद करती है।</p><p>इसीलिए सुनसान सड़क पर यही छोटी-सी चीज ज्यादा डरावनी लग सकती है, जबकि भीड़भाड़ वाले बाजार में शायद आप उस पर ध्यान ही न दें।</p><h2>😨 डर होने पर “कोई देख रहा है” वाली फीलिंग क्यों बढ़ जाती है?</h2><p>जब हम पहले से डरे या तनाव में होते हैं, तो हमारा ध्यान संभावित खतरे से जुड़ी चीजों पर ज्यादा जा सकता है।</p><p>मान लीजिए आप रात में अकेले चल रहे हैं। आपको पीछे से हल्की आवाज सुनाई देती है। हो सकता है वह सिर्फ किसी वाहन की आवाज हो। लेकिन आपका दिमाग पहले यह संभावना देख सकता है कि <strong>“शायद कोई पीछे आ रहा है।”</strong></p><p>फिर आप पीछे मुड़कर देखते हैं।</p><p>अगर वहां कोई व्यक्ति मिल गया, तो वह घटना आपको बहुत अच्छी तरह याद रह सकती है। लेकिन जिन कई बार आपने पीछे देखा और वहां कोई नहीं था, वे घटनाएं उतनी याद नहीं रहतीं।</p><p>इसी वजह से हमें अपने अनुमान कई बार वास्तविकता से ज्यादा सही लग सकते हैं।</p><p>यहां <strong>Confirmation Bias</strong> जैसे मानसिक असर भी भूमिका निभा सकते हैं, लेकिन हर “कोई मुझे देख रहा है” वाले अनुभव को सिर्फ Confirmation Bias कहना भी सही नहीं होगा।</p><h2>🎧 ईयरफोन लगाने पर यह अहसास और क्यों हो सकता है?</h2><p>नेहा के उदाहरण में एक और खास बात है—उसने ईयरफोन लगा रखा है।</p><p>ईयरफोन होने पर आसपास की आवाज कम सुनाई दे सकती है। इससे व्यक्ति को अपने आसपास की जानकारी सामान्य से कम मिलती है। ऐसे में दिमाग उपलब्ध संकेतों पर ज्यादा भरोसा कर सकता है।</p><p>अगर कोई व्यक्ति पीछे से चल रहा हो, सड़क पर वाहन आ रहा हो या कोई पास में हिल रहा हो, तो आवाज कम सुनाई देने के कारण हमें स्थिति समझने में देर हो सकती है।</p><p>लेकिन इसका मतलब यह नहीं कि दिमाग “पीठ पर पड़ रही नजर” को सीधे महसूस कर रहा है।</p><h2>🔬 क्या सच में कोई हमें पीछे से देखे तो हम महसूस कर सकते हैं?</h2><p>यह सवाल वैज्ञानिकों ने बहुत लंबे समय से पूछा है।</p><p>ऐसे प्रयोग हुए हैं जिनमें व्यक्ति को इस तरह बैठाया गया कि वह पीछे मौजूद व्यक्ति को देख न सके। कुछ शोधकर्ताओं ने दावा किया कि लोग केवल अनुमान से यह पहचान सकते हैं कि उन्हें देखा जा रहा है। लेकिन इन प्रयोगों के नतीजे सभी वैज्ञानिकों में स्वीकार नहीं हुए हैं और स्वतंत्र दोहराव को लेकर सवाल बने रहे हैं। एक 2004 की समीक्षा में भी ऐसे अध्ययनों के छोटे असर और स्वतंत्र दोहराव की कमी की बात कही गई थी।</p><p>इसलिए अभी उपलब्ध सबूतों से यह कहना सही नहीं है कि <strong>मानव शरीर किसी व्यक्ति की नजर को बिना किसी सामान्य संकेत के सीधे महसूस कर सकता है।</strong></p><p>सबसे आसान वैज्ञानिक समझ यही है कि कई बार हमें ऐसे संकेत मिल जाते हैं जिनका हमें खुद पता नहीं चलता।</p><h2>👁️ क्या अंधे लोग भी किसी की नजर पहचान सकते हैं?</h2><p>यह दावा अक्सर इंटरनेट पर दिखाई देता है, लेकिन इसे बहुत सावधानी से समझना चाहिए।</p><p>कुछ ऐसे लोग जिनकी आंखें ठीक होने के बावजूद दिमाग के दृश्य हिस्से में नुकसान हुआ है, उनमें <strong>blindsight</strong> नाम की स्थिति देखी गई है। ऐसे व्यक्ति कभी-कभी बिना सचेत रूप से देखने के भी कुछ दृश्य संकेतों के बारे में सामान्य अनुमान से बेहतर जवाब दे सकते हैं।</p><p>यह बहुत रोचक घटना है, लेकिन इससे यह साबित नहीं होता कि पूरी तरह अंधा व्यक्ति किसी की पीठ से आती नजर को जादुई तरीके से महसूस कर सकता है।</p><p>दिलचस्प बात यह है कि एक अध्ययन में ऐसे मरीज में सीधी नजर से जुड़ी एमिग्डाला गतिविधि भी देखी गई थी, जबकि उसके सामान्य दृश्य हिस्से में गंभीर नुकसान था।</p><p>इससे पता चलता है कि आंखों और नजर से जुड़ी जानकारी दिमाग में कई रास्तों से काम कर सकती है।</p><h2>👶 बच्चों में नजर की पहचान कब शुरू होती है?</h2><p>दूसरों के चेहरे और आंखों पर ध्यान देना इंसानों में बहुत जल्दी विकसित होता है।</p><p>शोध में नवजात बच्चों में भी चेहरे और सीधी नजर वाले चेहरों की ओर खास ध्यान देखा गया है। बाद के महीनों में यह क्षमता और मजबूत होती है। एक बड़े अध्ययन में 4 महीने की उम्र से ही बच्चों का चेहरों की ओर ज्यादा ध्यान पाया गया और 6 महीने तक यह पसंद और स्पष्ट हुई।</p><p>इसका मतलब यह है कि इंसानी दिमाग सामाजिक संकेतों, खासकर चेहरों और आंखों की जानकारी को बहुत जल्दी सीखना शुरू कर देता है।</p><h2>❓ अक्सर पूछे जाने वाले सवाल</h2><p><strong>क्या किसी की नजर को सच में महसूस किया जा सकता है?</strong></p><p>बिना किसी सामान्य संकेत के नजर को दूर से महसूस करने की जादुई क्षमता का मजबूत वैज्ञानिक प्रमाण नहीं है। लेकिन आंखों की दिशा, हलचल, आवाज और माहौल जैसे छोटे संकेतों से दिमाग सही अनुमान लगा सकता है।</p><p><strong>Peripheral Vision क्या करती है?</strong></p><p>यह सामने की चीज को साफ देखने के बजाय आसपास की हलचल और बदलाव पकड़ने में मदद करती है।</p><p><strong>क्या एमिग्डाला ही बताता है कि कोई हमें देख रहा है?</strong></p><p>नहीं। एमिग्डाला खतरे और भावनाओं से जुड़े नेटवर्क का हिस्सा है। नजर की पहचान कई दिमागी हिस्सों और प्रक्रियाओं के मिलकर काम करने से होती है।</p><p><strong>क्या इंसानी आंख का सफेद हिस्सा नजर पहचानने में मदद करता है?</strong></p><p>हां, यह आंखों की दिशा समझने में मदद कर सकता है, हालांकि इसके विकास का कारण केवल यही था, ऐसा निश्चित रूप से नहीं कहा जा सकता।</p><p><strong>क्या हर बार पीछे मुड़ने पर वहां कोई व्यक्ति मिलेगा?</strong></p><p>नहीं। हमारा अनुमान गलत भी हो सकता है। डर, तनाव और आसपास के माहौल के कारण यह अहसास ज्यादा मजबूत हो सकता है।</p><h2>🔗 FactZone पर यह भी पढ़ें</h2><ol><li><span></span><a href="https://factzone.online/posts/why-do-we-respond-to-our-own-name-science-in-hindi.html?utm_source=chatgpt.com" rel="noopener noreferrer" target="_blank">अपना नाम सुनते ही ध्यान क्यों जाता है?</a></li><li><span></span><a href="https://factzone.online/posts/why-we-cannot-see-in-dark-eyes-science-hindi.html?utm_source=chatgpt.com" rel="noopener noreferrer" target="_blank">अंधेरे में दिखाई क्यों नहीं देता? आंखों का नाइट विजन</a></li><li><span></span><a href="https://factzone.online/posts/why-face-looks-weird-in-mirror-science-in-hindi.html?utm_source=chatgpt.com" rel="noopener noreferrer" target="_blank">आईने में चेहरा अजीब क्यों लगता है?</a></li></ol><h2>✅ निष्कर्ष</h2><p>जब हमें लगता है कि कोई हमें देख रहा है, तो इसके पीछे जरूरी नहीं कि कोई छठी इंद्री काम कर रही हो।</p><p>हमारा दिमाग आंखों की दिशा, चेहरे की हलचल, बगल की नजर, आवाज और पूरे माहौल से मिलने वाले छोटे संकेतों को जोड़कर बहुत तेज अनुमान लगा सकता है। डर या तनाव होने पर हमारा ध्यान ऐसे संकेतों पर और ज्यादा जा सकता है।</p><p>इसलिए नेहा का पीछे मुड़ना कोई जादू नहीं था। संभव है कि उसके दिमाग ने किसी छोटी-सी हलचल या दूसरे संकेत को उसकी चेतना तक पहुंचने से पहले ही पकड़ लिया हो।</p><p>और अगर कभी सचमुच आपको लगे कि कोई आपका पीछा कर रहा है, तो इसे केवल “वहम” मानकर नजरअंदाज करने के बजाय <strong>सुरक्षित जगह की तरफ जाना और आसपास ध्यान देना</strong> व्यावहारिक कदम है।</p></div>
       <div class="reaction-bar">
         <button type="button" id="likeBtn" class="like-btn" aria-label="Like this article">🤍 <span id="likeCount">0</span></button>
         <a href="#commentsSection" class="comment-jump-link">💬 <span id="commentsCountInline">0</span> Comments</a>
       </div>
+
+      <!-- Share buttons and Subscribe box in the same row -->
       <div class="share-container">
-        <div class="share-title">Share this Fact:</div>
-        <div class="share-buttons">
-          <a href="https://api.whatsapp.com/send?text=%E0%A4%9C%E0%A4%AC%20%E0%A4%95%E0%A5%8B%E0%A4%88%20%E0%A4%A6%E0%A5%87%E0%A4%96%20%E0%A4%B0%E0%A4%B9%E0%A4%BE%20%E0%A4%B9%E0%A5%8B%20%E0%A4%90%E0%A4%B8%E0%A4%BE%20%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A5%8B%E0%A4%82%20%E0%A4%B2%E0%A4%97%E0%A4%A4%E0%A4%BE%20%E0%A4%B9%E0%A5%88%3F%20%E0%A4%87%E0%A4%B8%E0%A4%95%E0%A5%87%20%E0%A4%AA%E0%A5%80%E0%A4%9B%E0%A5%87%20%E0%A4%95%E0%A4%BE%20%E0%A4%B5%E0%A4%BF%E0%A4%9C%E0%A5%8D%E0%A4%9E%E0%A4%BE%E0%A4%A8%20-%20Read%20more%20on%20FactZone%3A%0Ahttps%3A%2F%2Ffactzone.online%2Fposts%2Fwhy-we-feel-someone-is-watching-us-science-hindi.html" target="_blank" rel="noopener" class="share-btn btn-wa">WhatsApp</a>
-          <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ffactzone.online%2Fposts%2Fwhy-we-feel-someone-is-watching-us-science-hindi.html" target="_blank" rel="noopener" class="share-btn btn-fb">Facebook</a>
-          <a href="https://twitter.com/intent/tweet?text=%E0%A4%9C%E0%A4%AC%20%E0%A4%95%E0%A5%8B%E0%A4%88%20%E0%A4%A6%E0%A5%87%E0%A4%96%20%E0%A4%B0%E0%A4%B9%E0%A4%BE%20%E0%A4%B9%E0%A5%8B%20%E0%A4%90%E0%A4%B8%E0%A4%BE%20%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A5%8B%E0%A4%82%20%E0%A4%B2%E0%A4%97%E0%A4%A4%E0%A4%BE%20%E0%A4%B9%E0%A5%88%3F%20%E0%A4%87%E0%A4%B8%E0%A4%95%E0%A5%87%20%E0%A4%AA%E0%A5%80%E0%A4%9B%E0%A5%87%20%E0%A4%95%E0%A4%BE%20%E0%A4%B5%E0%A4%BF%E0%A4%9C%E0%A5%8D%E0%A4%9E%E0%A4%BE%E0%A4%A8%20-%20Read%20more%20on%20FactZone%3A%0A&url=https%3A%2F%2Ffactzone.online%2Fposts%2Fwhy-we-feel-someone-is-watching-us-science-hindi.html" target="_blank" rel="noopener" class="share-btn btn-tw">X / Twitter</a>
-          <button onclick="window.copyArticleLink(this)" class="share-btn btn-cp">Copy Link</button>
+        <div class="share-block">
+          <div class="share-title">Share this Fact:</div>
+          <div class="share-buttons">
+            <a href="https://api.whatsapp.com/send?text=%E0%A4%9C%E0%A4%AC%20%E0%A4%95%E0%A5%8B%E0%A4%88%20%E0%A4%A6%E0%A5%87%E0%A4%96%20%E0%A4%B0%E0%A4%B9%E0%A4%BE%20%E0%A4%B9%E0%A5%8B%20%E0%A4%90%E0%A4%B8%E0%A4%BE%20%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A5%8B%E0%A4%82%20%E0%A4%B2%E0%A4%97%E0%A4%A4%E0%A4%BE%20%E0%A4%B9%E0%A5%88%3F%20%E0%A4%87%E0%A4%B8%E0%A4%95%E0%A5%87%20%E0%A4%AA%E0%A5%80%E0%A4%9B%E0%A5%87%20%E0%A4%95%E0%A4%BE%20%E0%A4%B5%E0%A4%BF%E0%A4%9C%E0%A5%8D%E0%A4%9E%E0%A4%BE%E0%A4%A8%20-%20Read%20on%20FactZone%3A%20https%3A%2F%2Ffactzone.online%2Fposts%2Fwhy-we-feel-someone-is-watching-us-science-hindi.html" target="_blank" rel="noopener" class="share-btn btn-wa">WhatsApp</a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ffactzone.online%2Fposts%2Fwhy-we-feel-someone-is-watching-us-science-hindi.html" target="_blank" rel="noopener" class="share-btn btn-fb">Facebook</a>
+            <a href="https://twitter.com/intent/tweet?text=%E0%A4%9C%E0%A4%AC%20%E0%A4%95%E0%A5%8B%E0%A4%88%20%E0%A4%A6%E0%A5%87%E0%A4%96%20%E0%A4%B0%E0%A4%B9%E0%A4%BE%20%E0%A4%B9%E0%A5%8B%20%E0%A4%90%E0%A4%B8%E0%A4%BE%20%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A5%8B%E0%A4%82%20%E0%A4%B2%E0%A4%97%E0%A4%A4%E0%A4%BE%20%E0%A4%B9%E0%A5%88%3F%20%E0%A4%87%E0%A4%B8%E0%A4%95%E0%A5%87%20%E0%A4%AA%E0%A5%80%E0%A4%9B%E0%A5%87%20%E0%A4%95%E0%A4%BE%20%E0%A4%B5%E0%A4%BF%E0%A4%9C%E0%A5%8D%E0%A4%9E%E0%A4%BE%E0%A4%A8%20-%20FactZone&url=https%3A%2F%2Ffactzone.online%2Fposts%2Fwhy-we-feel-someone-is-watching-us-science-hindi.html" target="_blank" rel="noopener" class="share-btn btn-tw">X / Twitter</a>
+            <button onclick="window.copyArticleLink(this)" class="share-btn btn-cp">Copy Link</button>
+          </div>
+        </div>
+
+        <div class="subscribe-inline-block" id="subscribeSection">
+          <div class="share-title">सब्सक्राइब करें</div>
+          <div class="subscribe-form">
+            <input type="radio" name="subscribeType" value="email" checked style="display:none;">
+            <div class="subscribe-input-row">
+              <input type="text" id="subscribeValue" class="comment-input" placeholder="ईमेल या व्हाट्सएप नंबर">
+              <button type="button" id="subscribeBtn" class="comment-submit-btn">सब्सक्राइब करें</button>
+            </div>
+            <div><span id="subscribeStatus" class="form-status"></span></div>
+          </div>
         </div>
       </div>
+
       <div class="author-box" itemprop="author" itemscope itemtype="https://schema.org/Person">
         <p>Written by <a href="/author.html" itemprop="url"><span itemprop="name">Awaneesh</span></a>, a tech enthusiast sharing verified facts.</p>
         <a href="/author.html" class="author-profile-link">View Author Profile →</a>
@@ -381,8 +368,7 @@
     <section id="commentsSection" aria-label="Comments">
       <h2>टिप्पणियाँ / Comments (<span id="commentsCount">0</span>)</h2>
       <div class="comment-form">
-        <input type="text" id="commentName" class="comment-input" placeholder="आपका नाम (वैकल्पिक) / Your name (optional)" maxlength="60">
-        <textarea id="commentText" class="comment-textarea" rows="2" placeholder="अपनी टिप्पणी लिखें... / Write your comment..." maxlength="1000"></textarea>
+        <textarea id="commentText" class="comment-textarea" rows="2" placeholder="आपका नाम और टिप्पणी लिखें... / Write your name & comment..." maxlength="1000"></textarea>
         <div class="comment-form-footer">
           <button type="button" id="commentSubmitBtn" class="comment-submit-btn">टिप्पणी भेजें / Post Comment</button>
           <span id="commentStatus" class="form-status"></span>
@@ -390,21 +376,6 @@
       </div>
       <div id="commentsList" class="comments-list">
         <p class="no-comments">लोड हो रहा है... / Loading...</p>
-      </div>
-    </section>
-
-    <section id="subscribeSection" aria-label="Get notified of new articles">
-      <h2>नए आर्टिकल की सूचना पाएं / Get Notified</h2>
-      <div class="subscribe-form">
-        <div class="subscribe-type-row">
-          <label class="radio-label"><input type="radio" name="subscribeType" value="email" checked> ईमेल / Email</label>
-          <label class="radio-label"><input type="radio" name="subscribeType" value="whatsapp"> व्हाट्सएप / WhatsApp</label>
-        </div>
-        <div class="subscribe-input-row">
-          <input type="text" id="subscribeValue" class="comment-input" placeholder="अपना ईमेल या व्हाट्सएप नंबर डालें">
-          <button type="button" id="subscribeBtn" class="comment-submit-btn">सब्सक्राइब करें / Subscribe</button>
-        </div>
-        <div><span id="subscribeStatus" class="form-status"></span></div>
       </div>
     </section>
   </div>
@@ -415,7 +386,7 @@
 
   <section id="relatedSection" aria-label="Related Facts">
     <h2>Related Facts</h2>
-    <div id="relatedGrid" class="rc-row"><a href="/posts/raat-mein-jyada-sochne-ki-wajah.html" class="rc" aria-label="Read: 🧠 दिमाग रात में ज्यादा क्यों सोचता है?"><img src="https://i.ibb.co/27vwycDG/clipboard-image.png" loading="lazy" width="55" height="55" alt="🧠 दिमाग रात में ज्यादा क्यों सोचता है?" onerror="this.style.display='none'"><h3>🧠 दिमाग रात में ज्यादा क्यों सोचता है?</h3></a><a href="/posts/why-the-moon-walks-with-us.html" class="rc" aria-label="Read: चांद हमारे साथ चलता हुआ क्यों दिखाई देता है?"><img src="https://i.ibb.co/N2P7tkJH/clipboard-image.png" loading="lazy" width="55" height="55" alt="चांद हमारे साथ चलता हुआ क्यों दिखाई देता है?" onerror="this.style.display='none'"><h3>चांद हमारे साथ चलता हुआ क्यों दिखाई देता है?</h3></a><a href="/posts/can-our-brain-see-the-future-while-we-sleep.html" class="rc" aria-label="Read: क्या हमारा दिमाग सोते समय भविष्य देख सकता है?"><img src="https://i.ibb.co/MxjVDQ37/clipboard-image.png" loading="lazy" width="55" height="55" alt="क्या हमारा दिमाग सोते समय भविष्य देख सकता है?" onerror="this.style.display='none'"><h3>क्या हमारा दिमाग सोते समय भविष्य देख सकता है?</h3></a><a href="/posts/why-songs-get-stuck-in-head-earworm-hindi.html" class="rc" aria-label="Read: एक ही गाना दिमाग में बार-बार क्यों बजता है? इयरवॉर्म"><img src="https://i.ibb.co/00Xr4CR/clipboard-image.png" loading="lazy" width="55" height="55" alt="एक ही गाना दिमाग में बार-बार क्यों बजता है? इयरवॉर्म" onerror="this.style.display='none'"><h3>एक ही गाना दिमाग में बार-बार क्यों बजता है? इयरवॉर्म</h3></a><a href="/posts/why-face-looks-weird-in-mirror-science-in-hindi.html" class="rc" aria-label="Read: 🪞 आईने में चेहरा अजीब क्यों लगता है? इसके पीछे का असली विज्ञान"><img src="https://i.ibb.co/whymvSCq/clipboard-image.png" loading="lazy" width="55" height="55" alt="🪞 आईने में चेहरा अजीब क्यों लगता है? इसके पीछे का असली विज्ञान" onerror="this.style.display='none'"><h3>🪞 आईने में चेहरा अजीब क्यों लगता है? इसके पीछे का असली विज्ञान</h3></a><a href="/posts/why-do-we-respond-to-our-own-name-science-in-hindi.html" class="rc" aria-label="Read: अपना नाम सुनते ही ध्यान क्यों जाता है? Cocktail Party Effect"><img src="https://i.ibb.co/BVMzwJYW/clipboard-image.png" loading="lazy" width="55" height="55" alt="अपना नाम सुनते ही ध्यान क्यों जाता है? Cocktail Party Effect" onerror="this.style.display='none'"><h3>अपना नाम सुनते ही ध्यान क्यों जाता है? Cocktail Party Effect</h3></a></div>
+    <div id="relatedGrid" class="rc-row"><section class="related-posts"><h2>📚 Related FactZone Articles</h2><div class="related-grid"><a href="/posts/raat-mein-jyada-sochne-ki-wajah.html">🧠 दिमाग रात में ज्यादा क्यों सोचता है?</a><a href="/posts/why-the-moon-walks-with-us.html">चांद हमारे साथ चलता हुआ क्यों दिखाई देता है?</a><a href="/posts/can-our-brain-see-the-future-while-we-sleep.html">क्या हमारा दिमाग सोते समय भविष्य देख सकता है?</a></div></section></div>
   </section>
 
   <footer class="site-footer">
@@ -449,378 +420,16 @@
     if (firstP) firstP.insertAdjacentElement('afterend', heroWrap);
   })();
 
-  var PROJECT_ID = "factzone-a9ace";
-  var API_KEY    = "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc";
-  var FS_BASE    = "https://firestore.googleapis.com/v1/projects/" + PROJECT_ID + "/databases/(default)/documents";
-  var POST_ID    = "ATgJJUdraVIdAdY8wHBj";
-
-  function $(q) { return document.getElementById(q); }
-
-  function parseField(val) {
-    if (!val) return "";
-    if (val.stringValue  !== undefined) return val.stringValue;
-    if (val.integerValue  !== undefined) return val.integerValue;
-    if (val.booleanValue  !== undefined) return val.booleanValue;
-    if (val.timestampValue !== undefined) return val.timestampValue;
-    if (val.arrayValue    !== undefined) { return (val.arrayValue.values || []).map(parseField); }
-    if (val.mapValue      !== undefined) return parseDoc(val.mapValue.fields || {});
-    return "";
-  }
-  function parseDoc(fields) {
-    var obj = {};
-    Object.keys(fields || {}).forEach(function(k){ obj[k] = parseField(fields[k]); });
-    return obj;
-  }
-  function escapeHtml(str) {
-    return String(str == null ? "" : str)
-      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
-  }
-  function toSafeDate(val) {
-    if (val === undefined || val === null || val === "") return null;
-    var d;
-    if (typeof val === 'number') { d = new Date(val); }
-    else if (typeof val === 'string' && /^\d+$/.test(val)) { var num = Number(val); if (val.length <= 10) num = num * 1000; d = new Date(num); }
-    else { d = new Date(val); }
-    return isNaN(d.getTime()) ? null : d;
-  }
-  function formatDate(iso) {
-    try { var d = new Date(iso); if (isNaN(d.getTime())) return ""; return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }); }
-    catch (e) { return ""; }
-  }
-
-  // Setup cards mid-article, and fill bottom section (#relatedGrid) up to 9 distinct cards
-  (function setupRelatedPosts() {
-    var relatedGrid = document.getElementById('relatedGrid');
-    var content = document.querySelector('#post .content');
-    if (!relatedGrid || !content) return;
-
-    var allCards = Array.prototype.slice.call(relatedGrid.children);
-    if (allCards.length < 1) return;
-
-    var usedUrls = {};
-    var currentPath = window.location.pathname.toLowerCase();
-    usedUrls[currentPath] = true;
-
-    // 1. Take first 3 cards for mid-article (CSS handles hiding 3rd on mobile)
-    var midCards = [];
-    var remainingCards = [];
-
-    allCards.forEach(function(card) {
-      var href = (card.getAttribute('href') || '').toLowerCase();
-      if (midCards.length < 3 && href && !usedUrls[href]) {
-        midCards.push(card);
-        usedUrls[href] = true;
-      } else {
-        remainingCards.push(card);
-      }
-    });
-
-    var children = Array.prototype.slice.call(content.children);
-    if (midCards.length === 3 && children.length >= 4) {
-      var midNode = children[Math.floor(children.length / 2) - 1];
-      var section = document.createElement('div');
-      section.className = 'story-carousel-section';
-      var midContainer = document.createElement('div');
-      midContainer.className = 'rc-row';
-      midCards.forEach(function(c) { midContainer.appendChild(c); });
-      section.innerHTML = '<div class="story-carousel-heading">Related Facts</div>';
-      section.appendChild(midContainer);
-      midNode.insertAdjacentElement('afterend', section);
-    }
-
-    // 2. Put remaining unique cards into bottom grid
-    relatedGrid.innerHTML = '';
-    var bottomUniqueCards = [];
-    remainingCards.forEach(function(card) {
-      var href = (card.getAttribute('href') || '').toLowerCase();
-      if (!href || !usedUrls[href]) {
-        bottomUniqueCards.push(card);
-        if (href) usedUrls[href] = true;
-      }
-    });
-
-    bottomUniqueCards.forEach(function(card) {
-      relatedGrid.appendChild(card);
-    });
-
-    // Fill up to 9 cards instantly using placeholders if needed so layout stays complete
-    var sourcePool = bottomUniqueCards.length > 0 ? bottomUniqueCards : midCards;
-    var cloneIdx = 0;
-    while (relatedGrid.children.length < 9 && sourcePool.length > 0) {
-      var clone = sourcePool[cloneIdx % sourcePool.length].cloneNode(true);
-      clone.setAttribute('data-is-placeholder', 'true');
-      relatedGrid.appendChild(clone);
-      cloneIdx++;
-    }
-
-    // 3. Fetch real posts from Firestore API to fill up to 9 unique posts (no duplicates with mid-article)
-    fetch(FS_BASE + ":runQuery?key=" + API_KEY, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        structuredQuery: {
-          from: [{ collectionId: "posts" }],
-          orderBy: [{ field: { fieldPath: "createdAt" }, direction: "DESCENDING" }],
-          limit: 30
-        }
-      })
-    }).then(function(r){ return r.json(); }).then(function(data){
-      var docs = Array.isArray(data) ? data : [];
-      docs.forEach(function(d){
-        if (!d.document || !d.document.fields) return;
-        var f = d.document.fields;
-        var title = parseField(f.title) || parseField(f.headline) || "";
-        var img = parseField(f.ogImage) || parseField(f.image) || parseField(f.heroImage) || "";
-        var slug = parseField(f.slug) || "";
-        var cat = parseField(f.category) || "";
-        var url = parseField(f.canonicalUrl) || parseField(f.url) || "";
-        if (!url && slug) {
-          url = cat ? "/categories/" + cat + "/" + slug + ".html" : "/posts/" + slug + ".html";
-        }
-        if (!url || !title) return;
-        var lowerUrl = url.toLowerCase();
-        if (usedUrls[lowerUrl]) return;
-
-        var placeholder = relatedGrid.querySelector('[data-is-placeholder="true"]');
-        if (placeholder) {
-          usedUrls[lowerUrl] = true;
-          placeholder.removeAttribute('data-is-placeholder');
-          placeholder.setAttribute('href', url);
-          var imgEl = placeholder.querySelector('img');
-          if (imgEl) { imgEl.src = img; imgEl.alt = title; }
-          var h3El = placeholder.querySelector('h3');
-          if (h3El) { h3El.textContent = title; }
-        } else if (relatedGrid.children.length < 9) {
-          usedUrls[lowerUrl] = true;
-          var a = document.createElement('a');
-          a.className = 'rc';
-          a.href = url;
-          a.innerHTML = '<img src="' + escapeHtml(img) + '" alt="' + escapeHtml(title) + '" loading="lazy"><h3>' + escapeHtml(title) + '</h3>';
-          relatedGrid.appendChild(a);
-        }
-      });
-    }).catch(function(e){});
-  })();
-
-  window.copyArticleLink = function(btn) {
-    var currentUrl = location.href;
-    navigator.clipboard.writeText(currentUrl).then(function() {
-      var oldText = btn.innerHTML;
-      btn.innerHTML = '✓ Copied!';
-      setTimeout(function() { btn.innerHTML = oldText; }, 2000);
-    }).catch(function() { alert("Link copied: " + currentUrl); });
-  };
-
-  /* ---------- Ads (identical fail-safe iframes as detail.html) ---------- */
-  function hideSlotOnError(container) {
-    if (!container) return;
-    var parentSlot = container.closest('.ad-slot') || container;
-    parentSlot.style.display = 'none';
-    parentSlot.setAttribute('data-ad-failed', 'true');
-  }
-  function injectBanner300x250(container) {
-    try {
-      if (!container || container.dataset.adLoaded === "true") return;
-      var iframe = document.createElement('iframe');
-      iframe.style.width = '300px'; iframe.style.height = '250px'; iframe.style.border = '0';
-      iframe.style.overflow = 'hidden'; iframe.style.maxWidth = '100%'; iframe.scrolling = 'no';
-      iframe.title = 'Advertisement';
-      iframe.onerror = function() { hideSlotOnError(container); };
-      var doc = '<!DOCTYPE html><html><head><style>*{margin:0;padding:0;}body{background:transparent;}</style></head><body>' +
-        '<script>atOptions = {"key":"d7218ad0d4e9095bb4a145457bc7bea2","format":"iframe","height":250,"width":300,"params":{}};</' + 'script>' +
-        '<script src="https://www.highperformanceformat.com/d7218ad0d4e9095bb4a145457bc7bea2/invoke.js" onerror="window.parent.postMessage(\'ad-failed\', \'*\')"></' + 'script>' +
-        '</body></html>';
-      iframe.srcdoc = doc;
-      container.appendChild(iframe);
-      container.dataset.adLoaded = "true";
-    } catch (e) { hideSlotOnError(container); }
-  }
-  function injectBanner320x50(container) {
-    try {
-      if (!container || container.dataset.adLoaded === "true") return;
-      var iframe = document.createElement('iframe');
-      iframe.style.width = '320px'; iframe.style.height = '50px'; iframe.style.border = '0';
-      iframe.style.overflow = 'hidden'; iframe.style.maxWidth = '100%'; iframe.scrolling = 'no';
-      iframe.title = 'Advertisement';
-      iframe.onerror = function() { hideSlotOnError(container); };
-      var doc = '<!DOCTYPE html><html><head><style>*{margin:0;padding:0;}body{background:transparent;}</style></head><body>' +
-        '<script>atOptions = {"key":"3012ad1961449518ada204e09cdbceef","format":"iframe","height":50,"width":320,"params":{}};</' + 'script>' +
-        '<script src="https://www.highperformanceformat.com/3012ad1961449518ada204e09cdbceef/invoke.js" onerror="window.parent.postMessage(\'ad-failed\', \'*\')"></' + 'script>' +
-        '</body></html>';
-      iframe.srcdoc = doc;
-      container.appendChild(iframe);
-      container.dataset.adLoaded = "true";
-    } catch (e) { hideSlotOnError(container); }
-  }
-  window.addEventListener('message', function(e) {
-    if (e.data === 'ad-failed') { document.querySelectorAll('.ad-slot').forEach(function(slot) { slot.style.display = 'none'; }); }
-  });
-  /* Mid-article ad: content is already static, so insert in-place instead of the string-transform detail.html uses */
-  function injectInlineAdInPlace(container, count, adHtmlString) {
-    if (!container) return;
-    var children = Array.prototype.slice.call(container.childNodes).filter(function(n) {
-      return n.nodeType === 1 || (n.nodeType === 3 && n.textContent.trim() !== '');
-    });
-    if (children.length < 3) return;
-    var totalGaps = children.length - 1;
-    var slots = Math.min(count, totalGaps);
-    if (slots < 1) return;
-    var used = {}; var insertAfter = [];
-    for (var i = 1; i <= slots; i++) {
-      var pos = Math.round((i * totalGaps) / (slots + 1)) - 1;
-      pos = Math.max(0, Math.min(totalGaps - 1, pos));
-      while (used[pos] && pos < totalGaps - 1) pos++;
-      used[pos] = true;
-      insertAfter.push(pos);
-    }
-    insertAfter.sort(function(a,b){ return b - a; }).forEach(function(pos) {
-      var node = children[pos];
-      if (node && node.insertAdjacentHTML) node.insertAdjacentHTML('afterend', adHtmlString);
-    });
-  }
-  document.querySelectorAll('.banner-300x250-slot').forEach(injectBanner300x250);
-  document.querySelectorAll('.banner-320x50-slot').forEach(injectBanner320x50);
-  injectInlineAdInPlace($('post-content').querySelector('.content'), 2, '<div class="ad-slot"><div class="banner-320x50-slot"></div></div>');
-  document.querySelectorAll('.banner-320x50-slot').forEach(injectBanner320x50);
-
-  document.querySelectorAll('#post .content a').forEach(function(a) { a.setAttribute('target', '_blank'); a.setAttribute('rel', 'noopener noreferrer'); });
-  document.querySelectorAll('#post .content img').forEach(function(img) { img.onerror = function() { this.style.display = 'none'; }; });
-
-  /* ---------- LIKES (postLikes/{postId}, same public collection as detail.html) ---------- */
-  function likeStorageKey(pid) { return "fz-liked-" + pid; }
-  function renderLikeUI(count, liked) {
-    var btn = $("likeBtn");
-    if (!btn) return;
-    btn.classList.toggle("liked", !!liked);
-    btn.innerHTML = (liked ? "❤️" : "🤍") + ' <span id="likeCount">' + count + '</span>';
-  }
-  function fetchLikeCount(pid) {
-    return fetch(FS_BASE + "/postLikes/" + pid + "?key=" + API_KEY)
-      .then(function(r){ return r.json(); })
-      .then(function(data){
-        if (data && data.fields && data.fields.count && data.fields.count.integerValue !== undefined) return parseInt(data.fields.count.integerValue, 10) || 0;
-        return 0;
-      }).catch(function(){ return 0; });
-  }
-  function saveLikeCount(pid, count) {
-    return fetch(FS_BASE + "/postLikes/" + pid + "?updateMask.fieldPaths=count&key=" + API_KEY, {
-      method: "PATCH", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ fields: { count: { integerValue: String(count) } } })
-    });
-  }
-  function initLikes(pid) {
-    var liked = false;
-    try { liked = localStorage.getItem(likeStorageKey(pid)) === "1"; } catch(e){}
-    var btn = $("likeBtn");
-    if (!btn) return;
-    var knownCount = 0;
-    renderLikeUI(0, liked);
-    fetchLikeCount(pid).then(function(count){
-      knownCount = count;
-      renderLikeUI(knownCount, liked);
-      btn.onclick = function() {
-        if (btn.dataset.busy === "1") return;
-        btn.dataset.busy = "1";
-        var newLiked = !liked;
-        var delta = newLiked ? 1 : -1;
-        var optimisticCount = Math.max(0, knownCount + delta);
-        renderLikeUI(optimisticCount, newLiked);
-        fetchLikeCount(pid).then(function(freshCount){
-          var finalCount = Math.max(0, freshCount + delta);
-          return saveLikeCount(pid, finalCount).then(function(r){
-            if (!r.ok) throw new Error("save failed");
-            liked = newLiked; knownCount = finalCount;
-            try { if (liked) localStorage.setItem(likeStorageKey(pid), "1"); else localStorage.removeItem(likeStorageKey(pid)); } catch(e){}
-            renderLikeUI(knownCount, liked);
-          });
-        }).catch(function(){ renderLikeUI(knownCount, liked); }).then(function(){ btn.dataset.busy = "0"; });
-      };
-    });
-  }
-
-  /* ---------- COMMENTS (comments collection, same as detail.html) ---------- */
-  function loadComments(postId) {
-    fetch(FS_BASE + ":runQuery?key=" + API_KEY, {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ structuredQuery: { from: [{ collectionId: "comments" }],
-        where: { fieldFilter: { field: { fieldPath: "postId" }, op: "EQUAL", value: { stringValue: postId } } },
-        orderBy: [{ field: { fieldPath: "createdAt" }, direction: "DESCENDING" }], limit: 100 } })
-    }).then(function(r){ return r.json(); }).then(function(data){
-      var docs = Array.isArray(data) ? data : [];
-      var items = [];
-      docs.forEach(function(d){ if (d.document) items.push(parseDoc(d.document.fields)); });
-      renderComments(items);
-    }).catch(function(){ renderComments([]); });
-  }
-  function renderComments(items) {
-    var list = $("commentsList");
-    if (!list) return;
-    var count = items.length;
-    var countEl = $("commentsCount"); if (countEl) countEl.textContent = count;
-    var inlineEl = $("commentsCountInline"); if (inlineEl) inlineEl.textContent = count;
-    if (!count) { list.innerHTML = '<p class="no-comments">अभी तक कोई टिप्पणी नहीं। पहली टिप्पणी आप करें! / No comments yet — be the first!</p>'; return; }
-    list.innerHTML = items.map(function(c){
-      var name = escapeHtml(c.name || "Anonymous");
-      var text = escapeHtml(c.comment || "");
-      var when = ""; var d = toSafeDate(c.createdAt); if (d) when = formatDate(d.toISOString());
-      return '<div class="comment-item"><div class="comment-head"><strong>' + name + '</strong>' + (when ? ' <span class="comment-date">' + when + '</span>' : '') + '</div><div class="comment-text">' + text + '</div></div>';
-    }).join("");
-  }
-  function submitComment(postId) {
-    if (!postId) return;
-    var nameEl = $("commentName"), textEl = $("commentText"), statusEl = $("commentStatus");
-    var name = nameEl ? nameEl.value.trim() : "", text = textEl ? textEl.value.trim() : "";
-    if (!text) { if (statusEl) statusEl.textContent = "कृपया अपनी टिप्पणी लिखें। / Please write a comment."; return; }
-    var btn = $("commentSubmitBtn");
-    if (btn) { btn.disabled = true; btn.textContent = "भेजा जा रहा है... / Posting..."; }
-    if (statusEl) statusEl.textContent = "";
-    fetch(FS_BASE + "/comments?key=" + API_KEY, {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ fields: { postId: { stringValue: postId }, name: { stringValue: name || "Anonymous" }, comment: { stringValue: text }, createdAt: { integerValue: String(Date.now()) } } })
-    }).then(function(r){ if (!r.ok) throw new Error("failed"); return r.json(); }).then(function(){
-      if (textEl) textEl.value = "";
-      if (statusEl) statusEl.textContent = "✅ टिप्पणी सफलतापूर्वक जोड़ी गई। / Comment posted.";
-      loadComments(postId);
-    }).catch(function(){ if (statusEl) statusEl.textContent = "❌ टिप्पणी भेजने में समस्या हुई, दोबारा कोशिश करें। / Something went wrong, please try again."; })
-      .then(function(){ if (btn) { btn.disabled = false; btn.textContent = "टिप्पणी भेजें / Post Comment"; } });
-  }
-
-  /* ---------- SUBSCRIBE (subscribers collection, same as detail.html) ---------- */
-  function submitSubscriber(postId) {
-    var typeEls = document.getElementsByName("subscribeType");
-    var type = "email";
-    for (var i = 0; i < typeEls.length; i++) { if (typeEls[i].checked) type = typeEls[i].value; }
-    var valEl = $("subscribeValue"), statusEl = $("subscribeStatus");
-    var val = valEl ? valEl.value.trim() : "";
-    if (!val) { if (statusEl) statusEl.textContent = "कृपया अपनी जानकारी भरें। / Please enter a value."; return; }
-    if (type === "email") {
-      var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRe.test(val)) { if (statusEl) statusEl.textContent = "कृपया सही ईमेल पता डालें। / Please enter a valid email."; return; }
-    } else {
-      var digits = val.replace(/\D/g, "");
-      if (digits.length < 10) { if (statusEl) statusEl.textContent = "कृपया सही व्हाट्सएप नंबर डालें। / Please enter a valid WhatsApp number."; return; }
-      val = digits;
-    }
-    var btn = $("subscribeBtn");
-    if (btn) { btn.disabled = true; btn.textContent = "भेजा जा रहा है... / Submitting..."; }
-    if (statusEl) statusEl.textContent = "";
-    fetch(FS_BASE + "/subscribers?key=" + API_KEY, {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ fields: { type: { stringValue: type }, value: { stringValue: val }, postId: { stringValue: postId || "" }, createdAt: { integerValue: String(Date.now()) } } })
-    }).then(function(r){ if (!r.ok) throw new Error("failed"); return r.json(); }).then(function(){
-      if (valEl) valEl.value = "";
-      if (statusEl) statusEl.textContent = "✅ धन्यवाद! नए आर्टिकल की सूचना आपको मिलेगी। / Thanks, you're subscribed!";
-    }).catch(function(){ if (statusEl) statusEl.textContent = "❌ कुछ गड़बड़ हुई, दोबारा कोशिश करें। / Something went wrong, please try again."; })
-      .then(function(){ if (btn) { btn.disabled = false; btn.textContent = "सब्सक्राइब करें / Subscribe"; } });
-  }
-
-  var commentBtn = $("commentSubmitBtn"); if (commentBtn) commentBtn.onclick = function(){ submitComment(POST_ID); };
-  var subscribeBtn = $("subscribeBtn"); if (subscribeBtn) subscribeBtn.onclick = function(){ submitSubscriber(POST_ID); };
-
-  initLikes(POST_ID);
-  loadComments(POST_ID);
-})();
+  var POST_ID = "ATgJJUdraVIdAdY8wHBj";
+function key(name){ return "fz-" + name + "-" + POST_ID; }
+function readJSON(k,fallback){try{var v=localStorage.getItem(k);return v?JSON.parse(v):fallback;}catch(e){return fallback;}}
+function writeJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function renderLocalLikes(){var btn=$("likeBtn");if(!btn)return;var liked=localStorage.getItem(key("liked"))==="1";var count=Number(localStorage.getItem(key("like-count"))||"0");btn.classList.toggle("liked",liked);btn.innerHTML=(liked?"❤️":"🤍")+" <span id=\"likeCount\">"+count+"</span>";btn.onclick=function(){liked=!liked;count=Math.max(0,count+(liked?1:-1));localStorage.setItem(key("liked"),liked?"1":"0");localStorage.setItem(key("like-count"),String(count));btn.classList.toggle("liked",liked);btn.innerHTML=(liked?"❤️":"🤍")+" <span id=\"likeCount\">"+count+"</span>";};}
+function renderLocalComments(){var list=$("commentsList");if(!list)return;var items=readJSON(key("comments"),[]),countEl=$("commentsCount"),inlineEl=$("commentsCountInline");if(countEl)countEl.textContent=items.length;if(inlineEl)inlineEl.textContent=items.length;if(!items.length){list.innerHTML="<p class=\"no-comments\">अभी तक कोई टिप्पणी नहीं। पहली टिप्पणी आप करें!</p>";return;}list.innerHTML=items.map(function(c){return "<div class=\"comment-item\"><div class=\"comment-head\"><strong>"+escapeHtml(c.name||"Anonymous")+"</strong></div><div class=\"comment-text\">"+escapeHtml(c.comment||"")+"</div></div>";}).join("");}
+function submitLocalComment(){var nameEl=$("commentName"),textEl=$("commentText"),statusEl=$("commentStatus"),text=(textEl&&textEl.value||"").trim(),name=(nameEl&&nameEl.value||"").trim()||"Anonymous";if(!text){if(statusEl)statusEl.textContent="कृपया अपनी टिप्पणी लिखें।";return;}var items=readJSON(key("comments"),[]);items.unshift({name:name,comment:text,createdAt:new Date().toISOString()});writeJSON(key("comments"),items);if(textEl)textEl.value="";if(statusEl)statusEl.textContent="✅ टिप्पणी आपके ब्राउज़र में सेव हो गई।";renderLocalComments();}
+function submitLocalSubscriber(){var valEl=$("subscribeValue"),statusEl=$("subscribeStatus"),val=(valEl&&valEl.value||"").trim();if(!val){if(statusEl)statusEl.textContent="कृपया अपनी जानकारी भरें।";return;}writeJSON("fz-subscriber",{value:val,savedAt:new Date().toISOString()});if(valEl)valEl.value="";if(statusEl)statusEl.textContent="✅ आपकी जानकारी इस ब्राउज़र में सेव हो गई।";}
+(function(){var heroWrap=document.querySelector(".hero-wrap"),content=document.querySelector("#post .content");if(heroWrap&&content){var firstP=content.querySelector("p");if(firstP)firstP.insertAdjacentElement("afterend",heroWrap);}})();
+var commentBtn=$("commentSubmitBtn");if(commentBtn)commentBtn.onclick=submitLocalComment;var subscribeBtn=$("subscribeBtn");if(subscribeBtn)subscribeBtn.onclick=submitLocalSubscriber;renderLocalLikes();renderLocalComments();;
 </script>
 </body>
 </html>

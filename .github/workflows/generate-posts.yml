@@ -5,6 +5,9 @@ on:
     paths:
       - 'data/posts/**'
       - 'raw-images/**'
+      - 'templates/**'
+      - 'scripts/**'
+      - 'index.html'
   workflow_dispatch:
 
 permissions:
@@ -13,35 +16,25 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-
       - name: Install Dependencies
         run: npm install --no-audit
-
       - name: Run Full SSG Build
         run: npm run build
-
-      - name: Commit and Push Changes
+      - name: Commit Generated Site
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          
-          # Create empty tracking files if folders don't exist
-          mkdir -p assets/images/posts posts
-          
-          git add assets/images/posts/ posts/ index.html posts-index.json data/posts/ raw-images/ || true
-          
+          git add assets/images/posts/ posts/ categories/ index.html posts-index.json sitemap.xml data/posts/ raw-images/ templates/ scripts/ package.json
           if git diff --staged --quiet; then
-            echo "No changes to commit"
+            echo "No generated changes"
           else
-            git commit -m "Auto-build: Processed WebP images & generated static pages [skip ci]"
+            git commit -m "Auto-build: regenerate static FactZone pages [skip ci]"
             git push
           fi
