@@ -425,16 +425,7 @@ if (savedRating) {
         $("badgeCount").textContent = `(${newCount.toLocaleString()} votes)`;
       }
 
-      try {
-        await addDoc(collection(db, "toolRatings"), {
-          tool: TOOL,
-          rating: selectedRating,
-          createdAt: serverTimestamp()
-        });
-        loadRatingsSummary();
-      } catch (e) {
-        console.error("Error saving rating to Firebase:", e.message);
-      }
+      
     });
   });
 }
