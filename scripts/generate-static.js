@@ -29,6 +29,43 @@ function localizeContentImages(content,slug){
   return prefix+inlineImagePath(slug,index)+suffix;
  });
 }
+function adMarkup(index){
+ const key='3012ad1961449518ada204e09cdbceef';
+ return '<div class="ad-slot mid-article-ad" data-ad-placement="'+index+'" style="text-align:center;margin:0.75rem 0;">'+
+  '<script>atOptions = {\'key\':\''+key+'\',\'format\':\'iframe\',\'height\':50,\'width\':320,\'params\':{}};</script>'+
+  '<script src="https://www.highrevenueformat.com/'+key+'/invoke.js"></script></div>';
+}
+function buildArticleBody(rawContent,slug,title,image,midRelatedHtml){
+ let content=localizeContentImages(sanitizeHtml(rawContent||'',{allowedTags:sanitizeHtml.defaults.allowedTags.concat(['img','iframe','h1','h2']),allowedAttributes:{'*':['class','style'],a:['href','target','rel'],img:['src','alt','width','height','loading','decoding','fetchpriority']}}),slug);
+ const hero='<div class="hero-wrap"><img class="hero" src="'+esc(image)+'" alt="'+esc(title)+'" itemprop="image" loading="eager" fetchpriority="high" decoding="async" width="300" height="169" onerror="this.style.display=\'none\'"></div>';
+ const firstParagraphEnd=content.indexOf('</p>');
+ if(firstParagraphEnd>=0){
+  const end=firstParagraphEnd+4;
+  content=content.slice(0,end)+hero+content.slice(end);
+ }else{
+  content=hero+content;
+ }
+ const boundaryRe=new RegExp('</(?:p|ul|ol|blockquote|figure)>','gi');
+ const points=[];
+ let boundaryMatch;
+ while((boundaryMatch=boundaryRe.exec(content))!==null){
+  const pos=boundaryMatch.index+boundaryMatch[0].length;
+  if(pos>content.indexOf(hero)+hero.length) points.push(pos);
+ }
+ const midCards=String(midRelatedHtml||'');
+ const midStarts=[...midCards.matchAll(/<div class="mid-related-block"/g)].map(m=>m.index);
+ const midBlocks=midStarts.map((start,i)=>midCards.slice(start,i+1<midStarts.length?midStarts[i+1]:midCards.length));
+ const inserts=[adMarkup(1),midBlocks[0]||'',adMarkup(2),midBlocks[1]||'',adMarkup(3),adMarkup(4)].filter(Boolean);
+ const grouped=new Map();
+ inserts.forEach((component,i)=>{
+  const pointIndex=points.length?Math.max(0,Math.min(points.length-1,Math.round((i+1)*points.length/(inserts.length+1))-1)):-1;
+  const pos=pointIndex>=0?points[pointIndex]:content.length;
+  grouped.set(pos,(grouped.get(pos)||'')+component);
+ });
+ [...grouped.entries()].sort((a,b)=>b[0]-a[0]).forEach(([pos,html])=>{content=content.slice(0,pos)+html+content.slice(pos);});
+ return content;
+}
+
 function canonical(p){return SITE_URL+'/posts/'+encodeURIComponent(p.slug)+'.html';}
 function buildArticle(p,all){
  const title=p.title||'FactZone Post',slug=p.slug,date=iso(p.date||p.createdAt),modified=iso(p.updatedAt||date),cat=categorySlug(p.category),catLabel=CATEGORY_LABELS[cat]||p.category||'Science / विज्ञान',description=p.description||p.desc||stripTags(p.content).slice(0,160),author=p.author||'Awaneesh',image=imageFor(p),url=canonical(p);
@@ -46,7 +83,7 @@ function buildArticle(p,all){
  ]};
  let html=fs.readFileSync(articleTemplatePath,'utf8');
  const repl={
-  '{{TITLE}}':esc(title),'{{META_DESCRIPTION}}':esc(description),'{{CANONICAL_URL}}':url,'{{OG_IMAGE}}':image,'{{PUBLISHED_ISO}}':date,'{{MODIFIED_ISO}}':modified,'{{CATEGORY_LABEL}}':esc(catLabel),'{{JSONLD}}':JSON.stringify(jsonld,null,2),'{{CATEGORY_URL}}':SITE_URL+'/categories/'+cat+'/','{{META_LINE}}':'<strong>Author:</strong> '+esc(author)+' &nbsp;•&nbsp; <strong>Date:</strong> '+esc(formatDate(date))+' &nbsp;•&nbsp; <strong>Updated:</strong> '+esc(formatDate(modified)),'{{CONTENT_HTML}}':localizeContentImages(sanitizeHtml(p.content||'',{allowedTags:sanitizeHtml.defaults.allowedTags.concat(['img','iframe','h1','h2']),allowedAttributes:{'*':['class','style'],a:['href','target','rel'],img:['src','alt','width','height','loading','decoding','fetchpriority']}}),slug),'{{SHARE_WHATSAPP_URL}}':'https://api.whatsapp.com/send?text='+encodeURIComponent(title+' - Read on FactZone: '+url),'{{SHARE_FACEBOOK_URL}}':'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(url),'{{SHARE_TWITTER_URL}}':'https://twitter.com/intent/tweet?text='+encodeURIComponent(title+' - FactZone')+'&url='+encodeURIComponent(url),'{{RELATED_SECTION_HIDDEN}}':relatedHtml?'':' hidden','{{RELATED_HTML}}':relatedHtml,'{{MID_RELATED_HTML}}':midRelatedHtml,'{{POST_ID}}':esc(p.id||slug)
+  '{{TITLE}}':esc(title),'{{META_DESCRIPTION}}':esc(description),'{{CANONICAL_URL}}':url,'{{OG_IMAGE}}':image,'{{PUBLISHED_ISO}}':date,'{{MODIFIED_ISO}}':modified,'{{CATEGORY_LABEL}}':esc(catLabel),'{{JSONLD}}':JSON.stringify(jsonld,null,2),'{{CATEGORY_URL}}':SITE_URL+'/categories/'+cat+'/','{{META_LINE}}':'<strong>Author:</strong> '+esc(author)+' &nbsp;•&nbsp; <strong>Date:</strong> '+esc(formatDate(date))+' &nbsp;•&nbsp; <strong>Updated:</strong> '+esc(formatDate(modified)),'{{CONTENT_HTML}}':buildArticleBody(p.content,slug,title,image,midRelatedHtml),'{{SHARE_WHATSAPP_URL}}':'https://api.whatsapp.com/send?text='+encodeURIComponent(title+' - Read on FactZone: '+url),'{{SHARE_FACEBOOK_URL}}':'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(url),'{{SHARE_TWITTER_URL}}':'https://twitter.com/intent/tweet?text='+encodeURIComponent(title+' - FactZone')+'&url='+encodeURIComponent(url),'{{RELATED_SECTION_HIDDEN}}':relatedHtml?'':' hidden','{{RELATED_HTML}}':relatedHtml,'{{MID_RELATED_HTML}}':midRelatedHtml,'{{POST_ID}}':esc(p.id||slug)
  };
  for(const [k,v] of Object.entries(repl))html=html.split(k).join(v);
  return html;
