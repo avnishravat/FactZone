@@ -289,10 +289,18 @@ function renderArticle(post, allPosts, articleTpl) {
   const shareUrl = encodeURIComponent(canonicalUrl);
   const shareText = encodeURIComponent(titleRaw + ' - Read more on FactZone:\n');
 
-  const related = allPosts
-    .filter(p => p.category === post.category && p.slug !== post.slug)
-    .sort((a, b) => (toSafeDate(b.createdAt) || 0) - (toSafeDate(a.createdAt) || 0))
-    .slice(0, 6);
+  const newestFirst = (a, b) =>
+    (toSafeDate(b.createdAt) || 0) - (toSafeDate(a.createdAt) || 0);
+
+  // Generate 15 unique related cards: 3 are used inside the article and 12 remain below it.
+  // Prefer the same category, then fill from the newest posts in other categories.
+  const sameCategory = allPosts
+    .filter(p => p.slug && p.slug !== post.slug && p.category === post.category)
+    .sort(newestFirst);
+  const otherCategories = allPosts
+    .filter(p => p.slug && p.slug !== post.slug && p.category !== post.category)
+    .sort(newestFirst);
+  const related = sameCategory.concat(otherCategories).slice(0, 15);
 
   const jsonLd = buildJsonLd(post, {
     canonicalUrl, title: titleRaw, desc, image, categoryLabel, categoryUrl,
