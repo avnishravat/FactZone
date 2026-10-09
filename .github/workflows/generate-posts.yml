@@ -52,6 +52,6 @@ jobs:
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "Auto-build: Processed WebP images & generated static pages [skip ci]"
+            git commit -m "Auto-build: Processed WebP images & generated static pages"
             git push
           fi
