@@ -34,9 +34,9 @@ function buildArticle(p,all){
  const title=p.title||'FactZone Post',slug=p.slug,date=iso(p.date||p.createdAt),modified=iso(p.updatedAt||date),cat=categorySlug(p.category),catLabel=CATEGORY_LABELS[cat]||p.category||'Science / विज्ञान',description=p.description||p.desc||stripTags(p.content).slice(0,160),author=p.author||'Awaneesh',image=imageFor(p),url=canonical(p);
  const sameCategory=all.filter(x=>x.slug!==slug&&categorySlug(x.category)===cat);
  const otherPosts=all.filter(x=>x.slug!==slug&&categorySlug(x.category)!==cat);
- const related=[...sameCategory,...otherPosts].slice(0,12);
+ const related=[...sameCategory,...otherPosts].slice(0,14);
  const relatedCard=x=>'<a class="rc" href="/posts/'+encodeURIComponent(x.slug)+'.html" aria-label="Read: '+esc(x.title)+'"><img src="'+esc(imageFor(x))+'" alt="'+esc(x.title)+'" loading="lazy" decoding="async" width="300" height="169" onerror="this.style.display=\'none\'"><h3>'+esc(x.title)+'</h3></a>';
- const relatedHtml=related.map(relatedCard).join('');
+ const relatedHtml=related.slice(2,14).map(relatedCard).join('');
  const midRelatedHtml=related.slice(0,2).map((x,i)=>'<div class="mid-related-block" data-mid-related="'+(i+1)+'"><div class="story-carousel-heading">📚 Related Fact</div><div class="rc-row mid-related-row">'+relatedCard(x)+'</div></div>').join('');
  const jsonld={"@context":"https://schema.org","@graph":[
   {"@type":"Organization","@id":SITE_URL+"/#organization","name":"FactZone","url":SITE_URL+"/","logo":{"@type":"ImageObject","url":SITE_URL+"/logo.png","width":512,"height":512}},
