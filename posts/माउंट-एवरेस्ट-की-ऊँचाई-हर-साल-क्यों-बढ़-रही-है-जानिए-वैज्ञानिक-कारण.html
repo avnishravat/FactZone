@@ -503,118 +503,63 @@
     catch (e) { return ""; }
   }
 
-  // Setup cards mid-article, and fill bottom section (#relatedGrid) up to 9 distinct cards
+  // Keep 3 unique cards inside the article and 12 real cards in the bottom Related Facts section.
+  // All cards are generated into the static HTML at build time; no Firestore fetch or duplicate placeholders.
   (function setupRelatedPosts() {
     var relatedGrid = document.getElementById('relatedGrid');
     var content = document.querySelector('#post .content');
     if (!relatedGrid || !content) return;
 
-    var allCards = Array.prototype.slice.call(relatedGrid.children);
-    if (allCards.length < 1) return;
-
-    var usedUrls = {};
+    var allCards = Array.prototype.slice.call(relatedGrid.querySelectorAll(':scope > a.rc'));
     var currentPath = window.location.pathname.toLowerCase();
-    usedUrls[currentPath] = true;
+    var seen = Object.create(null);
+    seen[currentPath] = true;
 
-    // 1. Take first 3 cards for mid-article (CSS handles hiding 3rd on mobile)
-    var midCards = [];
-    var remainingCards = [];
-
+    var uniqueCards = [];
     allCards.forEach(function(card) {
-      var href = (card.getAttribute('href') || '').toLowerCase();
-      if (midCards.length < 3 && href && !usedUrls[href]) {
-        midCards.push(card);
-        usedUrls[href] = true;
-      } else {
-        remainingCards.push(card);
+      var href = (card.getAttribute('href') || '').trim();
+      if (!href) return;
+      var key = href.toLowerCase();
+      if (seen[key]) return;
+      seen[key] = true;
+
+      // Keep cards usable even if a source post has no thumbnail.
+      var img = card.querySelector('img');
+      if (img && !img.getAttribute('src')) img.src = '/logo.png';
+      if (img) {
+        img.onerror = function() {
+          if (this.dataset.fallbackApplied === 'true') {
+            this.style.display = 'none';
+            return;
+          }
+          this.dataset.fallbackApplied = 'true';
+          this.src = '/logo.png';
+        };
       }
+      uniqueCards.push(card);
     });
 
+    var midCards = uniqueCards.slice(0, 3);
+    var bottomCards = uniqueCards.slice(3, 15);
+
     var children = Array.prototype.slice.call(content.children);
-    if (midCards.length === 3 && children.length >= 4) {
-      var midNode = children[Math.floor(children.length / 2) - 1];
+    if (midCards.length && children.length >= 4) {
+      var midNode = children[Math.max(0, Math.floor(children.length / 2) - 1)];
       var section = document.createElement('div');
       section.className = 'story-carousel-section';
+      section.innerHTML = '<div class="story-carousel-heading">Related Facts</div>';
       var midContainer = document.createElement('div');
       midContainer.className = 'rc-row';
-      midCards.forEach(function(c) { midContainer.appendChild(c); });
-      section.innerHTML = '<div class="story-carousel-heading">Related Facts</div>';
+      midCards.forEach(function(card) { midContainer.appendChild(card); });
       section.appendChild(midContainer);
       midNode.insertAdjacentElement('afterend', section);
     }
 
-    // 2. Put remaining unique cards into bottom grid
     relatedGrid.innerHTML = '';
-    var bottomUniqueCards = [];
-    remainingCards.forEach(function(card) {
-      var href = (card.getAttribute('href') || '').toLowerCase();
-      if (!href || !usedUrls[href]) {
-        bottomUniqueCards.push(card);
-        if (href) usedUrls[href] = true;
-      }
-    });
-
-    bottomUniqueCards.forEach(function(card) {
-      relatedGrid.appendChild(card);
-    });
-
-    // Fill up to 9 cards instantly using placeholders if needed so layout stays complete
-    var sourcePool = bottomUniqueCards.length > 0 ? bottomUniqueCards : midCards;
-    var cloneIdx = 0;
-    while (relatedGrid.children.length < 9 && sourcePool.length > 0) {
-      var clone = sourcePool[cloneIdx % sourcePool.length].cloneNode(true);
-      clone.setAttribute('data-is-placeholder', 'true');
-      relatedGrid.appendChild(clone);
-      cloneIdx++;
+    bottomCards.forEach(function(card) { relatedGrid.appendChild(card); });
+    if (bottomCards.length === 0) {
+      document.getElementById('relatedSection').style.display = 'none';
     }
-
-    // 3. Fetch real posts from Firestore API to fill up to 9 unique posts (no duplicates with mid-article)
-    fetch(FS_BASE + ":runQuery?key=" + API_KEY, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        structuredQuery: {
-          from: [{ collectionId: "posts" }],
-          orderBy: [{ field: { fieldPath: "createdAt" }, direction: "DESCENDING" }],
-          limit: 30
-        }
-      })
-    }).then(function(r){ return r.json(); }).then(function(data){
-      var docs = Array.isArray(data) ? data : [];
-      docs.forEach(function(d){
-        if (!d.document || !d.document.fields) return;
-        var f = d.document.fields;
-        var title = parseField(f.title) || parseField(f.headline) || "";
-        var img = parseField(f.ogImage) || parseField(f.image) || parseField(f.heroImage) || "";
-        var slug = parseField(f.slug) || "";
-        var cat = parseField(f.category) || "";
-        var url = parseField(f.canonicalUrl) || parseField(f.url) || "";
-        if (!url && slug) {
-          url = "/posts/" + slug + ".html";
-        }
-        if (!url || !title) return;
-        var lowerUrl = url.toLowerCase();
-        if (usedUrls[lowerUrl]) return;
-
-        var placeholder = relatedGrid.querySelector('[data-is-placeholder="true"]');
-        if (placeholder) {
-          usedUrls[lowerUrl] = true;
-          placeholder.removeAttribute('data-is-placeholder');
-          placeholder.setAttribute('href', url);
-          var imgEl = placeholder.querySelector('img');
-          if (imgEl) { imgEl.src = img; imgEl.alt = title; }
-          var h3El = placeholder.querySelector('h3');
-          if (h3El) { h3El.textContent = title; }
-        } else if (relatedGrid.children.length < 9) {
-          usedUrls[lowerUrl] = true;
-          var a = document.createElement('a');
-          a.className = 'rc';
-          a.href = url;
-          a.innerHTML = '<img src="' + escapeHtml(img) + '" alt="' + escapeHtml(title) + '" loading="lazy"><h3>' + escapeHtml(title) + '</h3>';
-          relatedGrid.appendChild(a);
-        }
-      });
-    }).catch(function(e){});
   })();
 
   window.copyArticleLink = function(btn) {
