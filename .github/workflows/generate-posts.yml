@@ -2,9 +2,12 @@ name: Generate Static Posts & Process Images
 
 on:
   push:
+    branches:
+      - main
     paths:
       - 'data/posts/**'
       - 'raw-images/**'
+      - 'assets/images/posts/**'
       - 'scripts/**'
       - 'templates/**'
       - 'index.html'
@@ -15,14 +18,19 @@ on:
 
 concurrency:
   group: factzone-static-build-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: Checkout Repository
@@ -39,19 +47,27 @@ jobs:
       - name: Run Full SSG Build
         run: npm run build
 
-      - name: Commit and Push Changes
+      - name: Commit and Push Generated Static Files
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          
-          # Create empty tracking files if folders don't exist
           mkdir -p assets/images/posts posts
-          
           git add assets/images/posts/ posts/ index.html posts-index.json categories/ sitemap.xml package.json package-lock.json data/posts/ || true
-          
           if git diff --staged --quiet; then
-            echo "No changes to commit"
+            echo "No generated changes to commit"
           else
             git commit -m "Auto-build: Processed WebP images & generated static pages"
             git push
           fi
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Static Site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy Static Site
+        id: deployment
+        uses: actions/deploy-pages@v4
