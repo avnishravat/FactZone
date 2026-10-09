@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Instagram Creator Tools Admin | FactZone</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,Helvetica,sans-serif;background:#f4f6f9;color:#172033}.header{background:#111827;color:#fff;padding:14px 12px;text-align:center}.header h1{font-size:20px}.header p{font-size:11px;color:#cbd5e1;margin-top:4px}.status{font-size:11px;margin-top:8px;color:#cbd5e1}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#94a3b8;margin-right:6px}.dot.online{background:#22c55e}.dot.error{background:#ef4444}.wrap{width:96%;max-width:920px;margin:12px auto 30px}.notice{background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a;border-radius:9px;padding:11px;font-size:12px;line-height:1.6;margin-bottom:11px}.card{background:#fff;border-radius:10px;padding:14px;margin-bottom:12px;box-shadow:0 4px 18px rgba(0,0,0,.06)}.card h2{font-size:17px;margin-bottom:10px}label{display:block;font-size:12px;font-weight:700;margin:10px 0 5px}select,textarea{width:100%;border:1px solid #d7dce5;border-radius:7px;padding:10px;font-family:inherit;font-size:13px;outline:none;background:#fff}select:focus,textarea:focus{border-color:#2563eb}textarea{min-height:200px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.btn{width:100%;border:0;border-radius:7px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;margin-top:12px}.btn:disabled{opacity:.6;cursor:not-allowed}.save{background:#2563eb;color:#fff}.update{background:#16a34a;color:#fff}.cancel{background:#e5e7eb;color:#172033}.hidden{display:none!important}.message{display:none;margin-top:10px;padding:10px;border-radius:7px;font-size:12px}.message.show{display:block}.success{background:#dcfce7;color:#166534}.error{background:#fee2e2;color:#991b1b}.info{background:#eff6ff;color:#1d4ed8}.small{font-size:11px;color:#64748b;line-height:1.6;margin-top:8px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}.stat{background:#fff;border-radius:8px;padding:10px;text-align:center;box-shadow:0 3px 12px rgba(0,0,0,.04)}.stat b{display:block;font-size:18px}.stat span{font-size:10px;color:#64748b}.items{display:grid;gap:9px;margin-top:12px}.item{background:#fff;border:1px solid #e2e8f0;border-radius:9px;padding:11px}.item-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.badges{display:flex;flex-wrap:wrap;gap:5px}.badge{background:#eff6ff;color:#1d4ed8;border-radius:20px;padding:4px 7px;font-size:10px;font-weight:700}.category{background:#fef3c7;color:#92400e}.item-text{white-space:pre-line;font-size:12px;line-height:1.65;margin-top:9px;word-break:break-word}.actions{display:flex;gap:6px}.small-btn{border:0;border-radius:6px;padding:7px 9px;font-size:11px;font-weight:700;cursor:pointer}.edit{background:#dbeafe;color:#1d4ed8}.delete{background:#fee2e2;color:#b91c1c}.empty{padding:22px;text-align:center;color:#64748b;font-size:12px}.footer{text-align:center;color:#64748b;font-size:11px;padding:15px}@media(max-width:600px){.row{grid-template-columns:1fr}.item-top{flex-direction:column}.actions{width:100%}.small-btn{flex:1}}
+</style>
+</head>
+<body>
+<header class="header"><h1>Instagram Creator Tools Admin</h1><p>Manage all Instagram tool outputs with Firebase Firestore</p><div class="status"><span class="dot" id="dot"></span><span id="statusText">Connecting to Firebase...</span></div></header>
+<main class="wrap">
+<div class="notice">Outputs are stored in Firebase Firestore, not in localStorage. Select a tool and category, then save the text. All matching tool pages can read the same cloud database.</div>
+<section class="card"><h2 id="formTitle">Add New Output</h2>
+<div class="row"><div><label>Select Tool Page</label><select id="tool"></select></div><div><label>Select Category</label><select id="category"></select></div></div>
+<label>Output Text</label><textarea id="text" placeholder="Write the output/template here...
+
+You can use: {input} {topic} {niche} {content} {reel}"></textarea>
+<button class="btn save" id="saveBtn">Save Output to Firebase</button>
+<button class="btn update hidden" id="updateBtn">Update Output</button>
+<button class="btn cancel hidden" id="cancelBtn">Cancel Editing</button>
+<div class="message" id="message"></div>
+<p class="small">The placeholders are replaced automatically with the user's text when the matching tool generates an output.</p></section>
+<section class="stats"><div class="stat"><b id="total">0</b><span>Total Outputs</span></div><div class="stat"><b id="toolsUsed">0</b><span>Tools Used</span></div><div class="stat"><b id="catsUsed">0</b><span>Categories Used</span></div></section>
+<section class="card"><h2>Saved Firebase Outputs</h2><div class="row"><div><label>Filter by Tool</label><select id="filterTool"></select></div><div><label>Filter by Category</label><select id="filterCategory"><option value="all">All Categories</option></select></div></div><div class="items" id="list"><div class="empty">Loading outputs from Firebase...</div></div></section>
+</main><footer class="footer">© 2026 FactZone.online — Instagram Creator Tools Admin</footer>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig={
+apiKey:"AIzaSyCUyMZee1e01RqmTmIp_0jLT7guUAc",
+authDomain:"factzone-a9ace.firebaseapp.com",
+databaseURL:"https://factzone-a9ace-default-rtdb.firebaseio.com",
+projectId:"factzone-a9ace",
+storageBucket:"factzone-a9ace.firebasestorage.app",
+messagingSenderId:"425838320650",
+appId:"1:425838320650:web:eb81baddf818cb73d3f3",
+measurementId:"G-311JQXBXRY"
+};
+
+const db=getFirestore(initializeApp(firebaseConfig));
+const collectionName="instagramCreatorToolOutputs";
+const toolNames={"instagram-caption-generator": "Instagram Caption Generator", "instagram-username-generator": "Instagram Username Generator", "instagram-content-idea-generator": "Instagram Content Idea Generator", "instagram-quote-generator": "Instagram Quote Generator", "instagram-comment-generator": "Instagram Comment Generator", "instagram-hashtag-generator": "Instagram Hashtag Generator", "instagram-bio-generator": "Instagram Bio Generator", "instagram-story-idea-generator": "Instagram Story Idea Generator", "instagram-reel-idea-generator": "Instagram Reel Idea Generator", "instagram-reel-hook-generator": "Instagram Reel Hook Generator", "instagram-reel-script-generator": "Instagram Reel Script Generator", "instagram-carousel-idea-generator": "Instagram Carousel Idea Generator"};
+const categoryMap={"instagram-caption-generator": ["general", "engaging", "short", "storytelling", "promotional", "funny", "motivational"], "instagram-username-generator": ["general", "personal", "business", "creator", "gaming", "fashion", "fitness"], "instagram-content-idea-generator": ["general", "educational", "entertainment", "promotional", "trending", "tutorial", "storytelling"], "instagram-quote-generator": ["general", "motivational", "success", "life", "love", "attitude", "business"], "instagram-comment-generator": ["general", "supportive", "funny", "short", "engaging", "appreciation", "question"], "instagram-hashtag-generator": ["general", "trending", "niche", "business", "creator", "reels", "engagement"], "instagram-bio-generator": ["general", "creator", "business", "personal", "professional", "short", "creative"], "instagram-story-idea-generator": ["general", "engagement", "educational", "interactive", "personal", "promotional", "behind-scenes"], "instagram-reel-idea-generator": ["general", "educational", "entertainment", "trending", "tutorial", "storytelling", "promotional"], "instagram-reel-hook-generator": ["general", "curiosity", "question", "problem", "warning", "list", "bold"], "instagram-reel-script-generator": ["general", "educational", "storytelling", "tutorial", "list", "promotional", "short"], "instagram-carousel-idea-generator": ["general", "educational", "tips", "list", "tutorial", "storytelling", "promotional"]};
+
+const $=id=>document.getElementById(id);
+let allOutputs=[],editingId=null;
+
+function esc(v){return String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
+function msg(text,type="info"){$("message").className="message show "+type;$("message").textContent=text;setTimeout(()=>$("message").className="message",5000)}
+function setStatus(type,text){$("dot").className="dot "+type;$("statusText").textContent=text}
+function populateTools(){const o=Object.entries(toolNames).map(([id,n])=>`<option value="${id}">${n}</option>`).join("");$("tool").innerHTML=o;$("filterTool").innerHTML='<option value="all">All Tools</option>'+o}
+function updateCategories(){const a=categoryMap[$("tool").value]||["general"];$("category").innerHTML=a.map(x=>`<option value="${x}">${x.replace(/-/g," ")}</option>`).join("")}
+function updateFilterCategories(){const old=$("filterCategory").value;const a=[...new Set(allOutputs.map(x=>x.category).filter(Boolean))].sort();$("filterCategory").innerHTML='<option value="all">All Categories</option>'+a.map(x=>`<option value="${esc(x)}">${esc(x.replace(/-/g," "))}</option>`).join("");if(a.includes(old))$("filterCategory").value=old}
+function render(){const ft=$("filterTool").value,fc=$("filterCategory").value;const a=allOutputs.filter(x=>(ft==="all"||x.tool===ft)&&(fc==="all"||x.category===fc));$("list").innerHTML=a.length?a.map(x=>`<div class="item"><div class="item-top"><div class="badges"><span class="badge">${esc(toolNames[x.tool]||x.tool)}</span><span class="badge category">${esc(x.category||"general")}</span></div><div class="actions"><button class="small-btn edit" data-edit="${x.id}">Edit</button><button class="small-btn delete" data-delete="${x.id}">Delete</button></div></div><div class="item-text">${esc(x.text)}</div></div>`).join(""):'<div class="empty">No outputs found.</div>';$("total").textContent=allOutputs.length;$("toolsUsed").textContent=new Set(allOutputs.map(x=>x.tool)).size;$("catsUsed").textContent=new Set(allOutputs.map(x=>x.category)).size}
+async function load(){try{const s=await getDocs(collection(db,collectionName));allOutputs=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>String(b.createdAt?.seconds||0).localeCompare(String(a.createdAt?.seconds||0)));updateFilterCategories();render();setStatus("online","Firebase connected")}catch(e){console.error(e);setStatus("error","Firebase connection error");$("list").innerHTML='<div class="empty">Could not load Firebase data. Check Firestore setup and rules.</div>'}}
+async function save(){const text=$("text").value.trim();if(!text){msg("Please enter the output text.","error");$("text").focus();return}$("saveBtn").disabled=true;$("saveBtn").textContent="Saving...";try{await addDoc(collection(db,collectionName),{tool:$("tool").value,category:$("category").value,text,createdAt:serverTimestamp(),updatedAt:serverTimestamp()});$("text").value="";msg("Output saved successfully to Firebase.","success");await load()}catch(e){console.error(e);msg("Could not save. Check Firestore rules.","error")}finally{$("saveBtn").disabled=false;$("saveBtn").textContent="Save Output to Firebase"}}
+function startEdit(id){const x=allOutputs.find(v=>v.id===id);if(!x)return;editingId=id;$("tool").value=x.tool;updateCategories();$("category").value=x.category;$("text").value=x.text;$("formTitle").textContent="Edit Output";$("saveBtn").classList.add("hidden");$("updateBtn").classList.remove("hidden");$("cancelBtn").classList.remove("hidden");window.scrollTo({top:0,behavior:"smooth"})}
+function cancelEdit(){editingId=null;$("text").value="";$("formTitle").textContent="Add New Output";$("saveBtn").classList.remove("hidden");$("updateBtn").classList.add("hidden");$("cancelBtn").classList.add("hidden")}
+async function updateCurrent(){if(!editingId)return;const text=$("text").value.trim();if(!text){msg("Please enter the output text.","error");return}$("updateBtn").disabled=true;try{await updateDoc(doc(db,collectionName,editingId),{tool:$("tool").value,category:$("category").value,text,updatedAt:serverTimestamp()});msg("Output updated successfully.","success");cancelEdit();await load()}catch(e){console.error(e);msg("Could not update output.","error")}finally{$("updateBtn").disabled=false}}
+async function remove(id){if(!confirm("Delete this output permanently?"))return;try{await deleteDoc(doc(db,collectionName,id));msg("Output deleted successfully.","success");await load()}catch(e){console.error(e);msg("Could not delete output.","error")}}
+$("tool").addEventListener("change",updateCategories);$("filterTool").addEventListener("change",render);$("filterCategory").addEventListener("change",render);$("saveBtn").addEventListener("click",save);$("updateBtn").addEventListener("click",updateCurrent);$("cancelBtn").addEventListener("click",cancelEdit);$("list").addEventListener("click",e=>{if(e.target.dataset.edit)startEdit(e.target.dataset.edit);if(e.target.dataset.delete)remove(e.target.dataset.delete)});
+populateTools();updateCategories();load();
+</script>
+</body></html>

@@ -194,7 +194,7 @@ footer{text-align:center;color:#8a92a1;font-size:12px;padding:25px}
     <button id="again">Generate Again</button>
   </div>
 
-  <div class="small">Saved outputs can be managed from the FactZone admin panel.</div>
+  <div class="small">New saved outputs are automatically read from the Firebase database when available.</div>
 
   <!-- Interactive Rating Widget (Order 1 to 5: 1 Star on Left, 5 Stars on Right) -->
   <div class="interactive-rating">
@@ -286,7 +286,22 @@ footer{text-align:center;color:#8a92a1;font-size:12px;padding:25px}
 
 <footer>© 2026 Instagram Creator Tools</footer>
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig={
+  apiKey:"AIzaSyCUyMZee1e01RqmTmIp_0jLT7guUAc",
+  authDomain:"factzone-a9ace.firebaseapp.com",
+  databaseURL:"https://factzone-a9ace-default-rtdb.firebaseio.com",
+  projectId:"factzone-a9ace",
+  storageBucket:"factzone-a9ace.firebasestorage.app",
+  messagingSenderId:"425838320650",
+  appId:"1:425838320650:web:eb81baddf818cb73d3f3",
+  measurementId:"G-311JQXBXRY"
+};
+
+const db=getFirestore(initializeApp(firebaseConfig));
 const TOOL="instagram-caption-generator";
 let templates=[];
 const $=id=>document.getElementById(id);
@@ -299,15 +314,32 @@ function replaceVars(text,input){
  return String(text).replace(/\{\{input\}\}|\{input\}|\{\{topic\}\}|\{topic\}|\{\{niche\}\}|\{niche\}|\{\{content\}\}|\{content\}|\{\{reel\}\}|\{reel\}/gi,input);
 }
 
-async function loadTemplates(){try{const r=await fetch("/data/instagram-templates.json",{cache:"no-store"});const d=await r.json();templates=Array.isArray(d)?d.filter(x=>x.tool===TOOL&&x.text):[];}catch(e){templates=[];}}
+async function loadTemplates(){
+ try{
+  const snap=await getDocs(collection(db,"instagramCreatorToolOutputs"));
+  templates=snap.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.tool===TOOL&&x.text);
+ }catch(e){console.log("Firebase templates unavailable",e.message);}
+}
 
 // Fetch & Aggregate Real-time Ratings
-function loadRatingsSummary(){
-  const total=1650, sum=1650 * 4.9;
-  const count=document.getElementById('badgeCount'), rating=document.getElementById('badgeRating');
-  if(count) count.textContent='('+total.toLocaleString()+' votes)';
-  if(rating) rating.textContent=(sum/total).toFixed(1);
+async function loadRatingsSummary(){
+  try{
+    const snap = await getDocs(collection(db, "toolRatings"));
+    const toolRatings = snap.docs.map(d => d.data()).filter(x => x.tool === TOOL);
+    
+    let totalVotes = BASE_VOTES + toolRatings.length;
+    let totalSum = BASE_RATING_SUM;
+    toolRatings.forEach(r => totalSum += Number(r.rating || 5));
+    
+    let avgRating = (totalSum / totalVotes).toFixed(1);
+    
+    $("badgeCount").textContent = `(${totalVotes.toLocaleString()} creator votes)`;
+    $("badgeRating").textContent = avgRating;
+  }catch(e){
+    console.log("Error calculating ratings summary:", e.message);
+  }
 }
+
 function fallback(input){
  return `✨ Essential vibes with ${input}! ☕️\n\nHere is what I learned today: never skip your focus routine.\n\n👇 What's your daily routine? Let me know below!\n\n#${input.toLowerCase().replace(/[^a-z0-9]/g,'')} #dailyvibes #instagram #creator`;
 }
@@ -386,9 +418,14 @@ if (savedRating) {
       }
 
       try {
-        loadRatingsSummary(); // Refresh average score from static data
+        await addDoc(collection(db, "toolRatings"), {
+          tool: TOOL,
+          rating: selectedRating,
+          createdAt: serverTimestamp()
+        });
+        loadRatingsSummary(); // Refresh average score from Firestore
       } catch (e) {
-        console.error('Error saving rating:', e.message);
+        console.error("Error saving rating to Firebase:", e.message);
       }
     });
   });

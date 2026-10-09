@@ -1,0 +1,18 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Blog posts: anyone may read (public site), only the designated admin may write.
+    match /posts/{postId} {
+      allow read: if true;
+      allow write: if request.auth != null
+                   && request.auth.uid == "Hfs04Qras4MVMzSe2DpZNJZHPwD2";
+    }
+
+    // Deny everything else by default.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -278,10 +278,10 @@ select.form-input{cursor:pointer; appearance:none; background-image:url("data:im
     </div>
     <p style="color:var(--muted); font-size:14px; margin-bottom:20px;">Sign in with your admin account</p>
     <div class="form-group" style="margin-bottom:14px;">
-      <input type="email" id="adminEmail" class="form-input" placeholder="GitHub username (optional)" autocomplete="username" required>
+      <input type="email" id="adminEmail" class="form-input" placeholder="Email address" autocomplete="username" required>
     </div>
     <div class="form-group" style="margin-bottom:20px;">
-      <input type="password" id="adminPassword" class="form-input" placeholder="GitHub fine-grained token" autocomplete="current-password" required>
+      <input type="password" id="adminPassword" class="form-input" placeholder="Password" autocomplete="current-password" required>
     </div>
     <button class="btn btn-primary" id="loginSubmitBtn">🔐 Authenticate</button>
   </div>
@@ -496,14 +496,14 @@ select.form-input{cursor:pointer; appearance:none; background-image:url("data:im
       </div>
     </div>
 
-    <!-- Instagram Creator Tools: uses the SAME static backend Admin authentication -->
+    <!-- Instagram Creator Tools: uses the SAME Firebase Admin authentication -->
     <div id="page-instagram-tools" class="page">
       <div class="content" style="padding-top:24px">
         <div class="section-header">
           <div class="section-icon">📸</div>
           <div>
             <div class="section-title">Instagram Creator Tools</div>
-            <div style="font-size:12px;color:var(--muted);margin-top:4px">Cloud outputs managed by the same static backend Admin account</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:4px">Cloud outputs managed by the same Firebase Admin account</div>
           </div>
         </div>
 
@@ -517,13 +517,13 @@ select.form-input{cursor:pointer; appearance:none; background-image:url("data:im
           <div class="ig-bulk-head">
             <div>
               <h3>⚡ Bulk Import Outputs</h3>
-              <p>Upload the prepared Instagram outputs JSON or CSV file and save all valid outputs to static backend in one operation.</p>
+              <p>Upload the prepared Instagram outputs JSON or CSV file and save all valid outputs to Firebase in one operation.</p>
             </div>
           </div>
           <div class="ig-bulk-actions">
             <label class="ig-file-label" for="igBulkFile">📁 Choose JSON / CSV</label>
             <input id="igBulkFile" type="file" accept=".json,.csv,application/json,text/csv" style="display:none">
-            <button class="btn btn-primary" id="igBulkImportBtn" type="button" onclick="bulkImportInstagramOutputs()">⚡ Import All to static backend</button>
+            <button class="btn btn-primary" id="igBulkImportBtn" type="button" onclick="bulkImportInstagramOutputs()">⚡ Import All to Firebase</button>
           </div>
           <div class="ig-bulk-status" id="igBulkStatus">No file selected.</div>
           <div class="ig-bulk-note">Expected fields: <b>tool</b>, <b>category</b>, <b>text</b>. Duplicate checking is included, so the same tool + category + text is not added twice.</div>
@@ -553,10 +553,10 @@ You can use placeholders:
 {niche}
 {content}
 {reel}"></textarea>
-              <div class="ig-help">This output is saved in static backend static data collection: instagramCreatorToolOutputs</div>
+              <div class="ig-help">This output is saved in Firebase Firestore collection: instagramCreatorToolOutputs</div>
             </div>
 
-            <button class="btn btn-primary" id="igSaveBtn" onclick="saveInstagramOutput()">💾 Save to static backend</button>
+            <button class="btn btn-primary" id="igSaveBtn" onclick="saveInstagramOutput()">💾 Save to Firebase</button>
             <button class="btn btn-primary" id="igUpdateBtn" onclick="updateInstagramOutput()" style="display:none">💾 Update Output</button>
             <button class="btn btn-secondary" id="igCancelBtn" onclick="cancelInstagramEdit()" style="display:none;margin-top:10px">Cancel Editing</button>
           </div>
@@ -687,41 +687,1118 @@ You can use placeholders:
 <!-- Quill Library JS -->
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
 
-<script>
-const OWNER="avnishravat",REPO="FactZone",BRANCH="main",TOKEN_KEY="fz_github_token",API="https://api.github.com";
-const CATS={science:"Science / विज्ञान",tech:"Tech / तकनीक",history:"History / इतिहास",mystery:"Mystery / रहस्य",viral:"Viral / रोचक तथ्य"};
-let token=sessionStorage.getItem(TOKEN_KEY)||"",allPostsCache=[],currentEditId=null,quillEditor=null,editQuillEditor=null;
-function H(){return {"Accept":"application/vnd.github+json","Authorization":"Bearer "+token,"X-GitHub-Api-Version":"2026-03-10"}}
-async function api(path,opt={}){const r=await fetch(API+path,{...opt,headers:{...H(),...(opt.headers||{})}}),t=await r.text();let d={};try{d=t?JSON.parse(t):{}}catch(e){}if(!r.ok)throw Error(d.message||("GitHub API "+r.status));return d}
-function b64(s){return btoa(unescape(encodeURIComponent(s)))}function toast(m,t="success"){const e=document.getElementById("toast");e.innerHTML=m;e.className="toast show "+t;setTimeout(()=>e.classList.remove("show"),3500)}
-function status(s,t){document.getElementById("syncDot").className="sync-dot "+s;document.getElementById("syncText").textContent=t}
-function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
-function slugify(s){return String(s||"").trim().toLowerCase().replace(/[^\p{L}\p{N}\p{M}]+/gu,"-").replace(/^-+|-+$/g,"")}
-function uniqueSlug(s,id){const used=new Set(allPostsCache.filter(p=>p.id!==id).map(p=>p.slug));let x=s,i=2;while(used.has(x))x=s+"-"+i++;return x}
-function saveFile(path,content,message,sha){const body={message,content:b64(content),branch:BRANCH};if(sha)body.sha=sha;return api("/repos/"+OWNER+"/"+REPO+"/contents/"+path,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})}
-function removeFile(path,sha,message){return api("/repos/"+OWNER+"/"+REPO+"/contents/"+path,{method:"DELETE",headers:{"Content-Type":"application/json"},body:JSON.stringify({message,sha,branch:BRANCH})})}
-async function connect(){if(!token)throw Error("GitHub token required");await api("/user");await loadPosts();document.getElementById("login-view").style.display="none";document.getElementById("auth-view").style.display="block";status("connected","GitHub Connected")}
-async function login(){token=document.getElementById("adminPassword").value.trim();if(!token){toast("⚠️ GitHub token required.","error");return}sessionStorage.setItem(TOKEN_KEY,token);const b=document.getElementById("loginSubmitBtn");b.disabled=true;try{await connect();toast("🔐 GitHub connected successfully!","success")}catch(e){token="";sessionStorage.removeItem(TOKEN_KEY);toast("❌ "+e.message,"error")}finally{b.disabled=false}}
-document.getElementById("loginSubmitBtn").onclick=login;document.getElementById("adminPassword").onkeydown=e=>{if(e.key==="Enter")login()};document.getElementById("logoutBtn").onclick=()=>{token="";sessionStorage.removeItem(TOKEN_KEY);document.getElementById("auth-view").style.display="none";document.getElementById("login-view").style.display="flex";status("","GitHub Offline")};
-window.toggleTheme=function(){const h=document.documentElement,d=h.getAttribute("data-theme")==="dark";h.setAttribute("data-theme",d?"light":"dark");document.getElementById("themeBtn").textContent=d?"🌙":"☀️";localStorage.setItem("fz-admin-theme",h.dataset.theme)};
-(function(){const s=localStorage.getItem("fz-admin-theme")||"dark";document.documentElement.setAttribute("data-theme",s);document.getElementById("themeBtn").textContent=s==="dark"?"☀️":"🌙"})();
-window.previewImg=function(prefix){const v=document.getElementById(prefix+"-image")?.value,p=document.getElementById(prefix+"-preview");if(p){if(v){p.src=v;p.classList.add("show")}else p.classList.remove("show")}};
-window.triggerImgUpload=function(){toast("ℹ️ Paste the image URL to use it in the post.","success")};window.uploadImageFile=window.triggerImgUpload;window.pasteImgFromClipboard=window.triggerImgUpload;
-function initQuill(){if(typeof Quill==="undefined")return;const link=function(v){if(v){const u=prompt("Enter Link URL:");if(u)this.quill.format("link",u)}};quillEditor=new Quill("#u-content",{modules:{toolbar:{container:"#u-toolbar",handlers:{link}}},theme:"snow"});editQuillEditor=new Quill("#e-content",{modules:{toolbar:{container:"#e-toolbar",handlers:{link}}},theme:"snow"});}
-function dateOf(p){return p.date||p.createdAt||p.updatedAt||""}
-function card(p,i){return '<div class="post-card"><img class="post-thumb" src="'+esc(p.image||"https://placehold.co/400x175")+'" loading="lazy"><div class="post-num">#'+(i+1)+'</div><div class="post-body"><div class="post-cat">'+esc(CATS[p.category]||p.category||"")+'</div><div class="post-title">'+esc(p.title||"Untitled")+'</div><div class="post-desc">'+esc(p.desc||p.description||"")+'</div><div class="post-actions"><button class="btn btn-edit" onclick="openEditModal(\''+esc(p.id)+'\')">✏️ Edit</button><button class="btn btn-danger" onclick="deletePost(\''+esc(p.id)+'\')">🗑 Delete</button></div></div></div>'}
-function render(id,arr){const e=document.getElementById(id);if(!e)return;e.innerHTML=arr.length?arr.map(card).join(""):'<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">📭</div><div class="empty-text">No posts found</div></div>'}
-async function loadPosts(){const dir=await api("/repos/"+OWNER+"/"+REPO+"/contents/data/posts?ref="+BRANCH);const files=Array.isArray(dir)?dir.filter(x=>x.type==="file"&&x.name.endsWith(".json")):[];const posts=[];for(const f of files){try{const p=await fetch(f.download_url).then(x=>x.json());p._sha=f.sha;p._path=f.path;p.id=p.id||p.slug;posts.push(p)}catch(e){}}posts.sort((a,b)=>new Date(dateOf(b))-new Date(dateOf(a)));allPostsCache=posts;document.getElementById("statTotal").textContent=posts.length;document.getElementById("statSync").textContent=new Date().toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"});render("dash-grid",posts);render("posts-grid",posts);status("connected","GitHub Connected")}
-window.filterPosts=function(){const q=document.getElementById("searchBox").value.toLowerCase();render("posts-grid",q?allPostsCache.filter(p=>(p.title+" "+(p.desc||p.description||"")).toLowerCase().includes(q)):allPostsCache)}
-window.filterDash=function(){const q=document.getElementById("dashSearch").value.toLowerCase();render("dash-grid",q?allPostsCache.filter(p=>(p.title+" "+(p.desc||p.description||"")).toLowerCase().includes(q)):allPostsCache)}
-window.uploadPost=async function(prefix){const title=document.getElementById(prefix+"-title").value.trim(),desc=document.getElementById(prefix+"-desc").value.trim(),image=document.getElementById(prefix+"-image").value.trim(),category=document.getElementById(prefix+"-category").value,content=prefix==="u"&&quillEditor?quillEditor.root.innerHTML.trim():document.getElementById(prefix+"-content").value.trim();if(!title||!desc||!content){toast("⚠️ Title, description, and content are required!","error");return}const b=document.getElementById(prefix==="q"?"quickUploadBtn":"uploadBtn");b.disabled=true;try{const raw=document.getElementById(prefix+"-slug")?.value.trim()||slugify(title),slug=uniqueSlug(slugify(raw)),now=new Date().toISOString(),p={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),title,slug,category,image,desc,description:desc,content,date:now,updatedAt:now,author:"Awaneesh"};await saveFile("data/posts/"+slug+".json",JSON.stringify(p,null,2)+"\n","Publish post: "+slug);toast("🚀 Post saved to GitHub. Actions will build it automatically.","success");await loadPosts();switchPage("dashboard",document.getElementById("nav-dashboard"))}catch(e){toast("❌ "+e.message,"error")}finally{b.disabled=false}};
-window.deletePost=async function(id){if(!confirm("Are you sure you want to delete this post?"))return;const p=allPostsCache.find(x=>x.id===id);if(!p)return;try{await removeFile(p._path,p._sha,"Delete post: "+p.slug);toast("🗑 Deleted. Site will rebuild automatically.","success");await loadPosts()}catch(e){toast("❌ "+e.message,"error")}};
-window.openEditModal=function(id){const p=allPostsCache.find(x=>x.id===id);if(!p)return;currentEditId=id;document.getElementById("e-title").value=p.title||"";document.getElementById("e-desc").value=p.desc||p.description||"";document.getElementById("e-image").value=p.image||"";document.getElementById("e-category").value=p.category||"science";if(editQuillEditor)editQuillEditor.root.innerHTML=p.content||"";previewImg("e");document.getElementById("editModal").classList.add("show")};
-window.closeModal=function(){document.getElementById("editModal").classList.remove("show");currentEditId=null};
-window.saveEdit=async function(){const p=allPostsCache.find(x=>x.id===currentEditId);if(!p)return;const b=document.getElementById("saveEditBtn");b.disabled=true;try{const n={id:p.id,title:document.getElementById("e-title").value.trim(),slug:p.slug,category:document.getElementById("e-category").value,image:document.getElementById("e-image").value.trim(),desc:document.getElementById("e-desc").value.trim(),description:document.getElementById("e-desc").value.trim(),content:editQuillEditor?editQuillEditor.root.innerHTML.trim():p.content,date:p.date,updatedAt:new Date().toISOString(),author:p.author||"Awaneesh"};await saveFile(p._path,JSON.stringify(n,null,2)+"\n","Update post: "+p.slug,p._sha);closeModal();toast("✅ Updated. GitHub Actions will regenerate it.","success");await loadPosts()}catch(e){toast("❌ "+e.message,"error")}finally{b.disabled=false;b.textContent="💾 Save Changes"}};
-function offline(id,msg){const e=document.getElementById(id);if(e)e.innerHTML='<div class="ig-empty">'+msg+"</div>"};window.filterCommentsAdmin=function(){offline("comments-admin-list","Realtime comments are not connected in the static version.")};window.filterSubscribersAdmin=function(){offline("Realtime subscribers are not connected in the static version.")};
-window.switchPage=function(page,btn){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.querySelectorAll(".nav-item").forEach(n=>n.classList.remove("active"));document.getElementById("page-"+page)?.classList.add("active");if(btn)btn.classList.add("active");document.getElementById("pageTitle").textContent=({dashboard:"Dashboard",upload:"New Post",posts:"All Posts","instagram-tools":"Instagram Creator Tools",comments:"Comments",subscribers:"Subscribers"})[page]||"Dashboard";if(page==="comments")filterCommentsAdmin();if(page==="subscribers")filterSubscribersAdmin()};
-window.addEventListener("DOMContentLoaded",()=>{initQuill();document.getElementById("adminPassword").placeholder="GitHub fine-grained token";const p=document.querySelector("#login-view p");if(p)p.textContent="Connect using a GitHub token with Contents: Read and write for FactZone.";if(token)connect().catch(()=>{token="";sessionStorage.removeItem(TOKEN_KEY)})});
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, serverTimestamp, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCUyQyMzEee1eO1RqmhTmIp_OjLT7guUAc",
+  authDomain: "factzone-a9ace.firebaseapp.com",
+  projectId: "factzone-a9ace",
+  storageBucket: "factzone-a9ace.firebasestorage.app",
+  messagingSenderId: "425838320650",
+  appId: "1:425838320650:web:beab18baddf818cb73d3f3"
+};
+
+const app  = initializeApp(firebaseConfig);
+const db   = getFirestore(app);
+const auth = getAuth(app);
+
+const IMGBB_API_KEY = "f1bdb9735d4cd84dd8a265b7d092d2eb";
+
+// Only this Firebase account may access the admin dashboard.
+const ADMIN_UID = "Hfs04Qras4MVMzSe2DpZNJZHPwD2";
+
+// ── Category labels (id -> display label used in badges) ──
+const CATEGORY_LABELS = {
+  science: "Science / विज्ञान",
+  tech:    "Tech / तकनीक",
+  history: "History / इतिहास",
+  mystery: "Mystery / रहस्य",
+  viral:   "Viral / रोचक तथ्य"
+};
+
+let allPostsCache = [];
+let currentEditId = null;
+let quillEditor = null;     
+let editQuillEditor = null; 
+
+// ── ImgBB Upload Helpers ──
+window.triggerImgUpload = function(prefix) {
+  const fileInput = document.getElementById(`${prefix}-file-input`);
+  if(fileInput) fileInput.click();
+};
+
+window.uploadImageFile = async function(prefix, file) {
+  if(!file) return;
+  showToast('⏳ Uploading Image...', 'syncing');
+  const formData = new FormData();
+  formData.append('image', file);
+
+  try {
+    const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+    if(data.success) {
+      const url = data.data.url;
+      const input = document.getElementById(`${prefix}-image`);
+      if(input) {
+        input.value = url;
+        previewImg(prefix);
+      }
+      showToast('✅ Image uploaded successfully!', 'success');
+    } else {
+      throw new Error(data.error?.message || 'Upload failed');
+    }
+  } catch(e) {
+    console.error(e);
+    showToast('❌ Upload failed: ' + e.message, 'error');
+  }
+};
+
+window.pasteImgFromClipboard = async function(prefix) {
+  try {
+    const items = await navigator.clipboard.read();
+    let file = null;
+    for (const item of items) {
+      const imageType = item.types.find(type => type.startsWith('image/'));
+      if (imageType) {
+        const blob = await item.getType(imageType);
+        file = new File([blob], 'clipboard_image.png', { type: imageType });
+        break;
+      }
+    }
+    if (file) {
+      uploadImageFile(prefix, file);
+    } else {
+      showToast('⚠️ No image found in clipboard!', 'error');
+    }
+  } catch(e) {
+    console.error(e);
+    showToast('⚠️ Clipboard access permission needed!', 'error');
+  }
+};
+
+// Initialize Editors
+function initQuill() {
+  const linkHandler = function(value) {
+    if (value) {
+      let href = prompt('Enter the Link URL (e.g., https://... or /slug):');
+      if (href) this.quill.format('link', href);
+    } else {
+      this.quill.format('link', false);
+    }
+  };
+
+  quillEditor = new Quill('#u-content', {
+    modules: {
+      toolbar: {
+        container: '#u-toolbar',
+        handlers: { link: linkHandler }
+      }
+    },
+    theme: 'snow',
+    placeholder: 'Write your full content here...'
+  });
+
+  editQuillEditor = new Quill('#e-content', {
+    modules: {
+      toolbar: {
+        container: '#e-toolbar',
+        handlers: { link: linkHandler }
+      }
+    },
+    theme: 'snow',
+    placeholder: 'Edit your content here...'
+  });
+
+  // Handle Fullscreen for New Post
+  const fsBtn = document.getElementById('custom-fullscreen');
+  const editorWrapper = document.getElementById('u-editor-wrapper');
+  fsBtn.addEventListener('click', () => {
+    if(editorWrapper.classList.contains('ql-fullscreen')) {
+      editorWrapper.classList.remove('ql-fullscreen');
+      fsBtn.textContent = "Fullscreen";
+      fsBtn.style.color = "var(--text)";
+    } else {
+      editorWrapper.classList.add('ql-fullscreen');
+      fsBtn.textContent = "✕ Exit Fullscreen";
+      fsBtn.style.color = "var(--red)";
+    }
+  });
+
+  // Handle Fullscreen for Edit Post
+  const editFsBtn = document.getElementById('edit-fullscreen');
+  const editWrapper = document.getElementById('e-editor-wrapper');
+  editFsBtn.addEventListener('click', () => {
+    if(editWrapper.classList.contains('ql-fullscreen')) {
+      editWrapper.classList.remove('ql-fullscreen');
+      editFsBtn.textContent = "Fullscreen";
+      editFsBtn.style.color = "var(--text)";
+    } else {
+      editWrapper.classList.add('ql-fullscreen');
+      editFsBtn.textContent = "✕ Exit Fullscreen";
+      editFsBtn.style.color = "var(--red)";
+    }
+  });
+}
+
+// Initialize editors on load
+window.addEventListener('DOMContentLoaded', () => {
+  initQuill();
+});
+
+// ── React to auth state: show dashboard only for the designated admin ──
+onAuthStateChanged(auth, (user) => {
+  if (user && user.uid === ADMIN_UID) {
+    document.getElementById('login-view').style.display = 'none';
+    document.getElementById('auth-view').style.display = 'block';
+    setSyncStatus('connected', 'Database Online');
+    loadPosts();
+    initInstagramToolsAdmin();
+  } else {
+    document.getElementById('auth-view').style.display = 'none';
+    document.getElementById('login-view').style.display = 'flex';
+    setSyncStatus('muted', 'Database Offline');
+    // A valid but non-admin account must not stay signed in.
+    if (user) {
+      signOut(auth);
+      showToast('❌ This account is not authorized for admin access.', 'error');
+    }
+  }
+});
+
+// ── Login Submit Function (Firebase Authentication) ──
+async function handleLogin() {
+  const email    = document.getElementById('adminEmail').value.trim();
+  const password = document.getElementById('adminPassword').value;
+
+  if (!email || !password) {
+    showToast('⚠️ Please enter your email and password!', 'error');
+    return;
+  }
+
+  const btn = document.getElementById('loginSubmitBtn');
+  btn.disabled = true;
+
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    document.getElementById('adminPassword').value = '';
+    showToast('🔐 Login successful!', 'success');
+    // onAuthStateChanged handles showing the dashboard
+  } catch (e) {
+    showToast('❌ Login failed: ' + (e.code || e.message), 'error');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+document.getElementById('loginSubmitBtn').addEventListener('click', handleLogin);
+document.getElementById('adminPassword').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') handleLogin();
+});
+
+// ── Logout Function ──
+document.getElementById('logoutBtn').addEventListener('click', async () => {
+  try {
+    await signOut(auth);
+    showToast('🚪 Successfully logged out', 'success');
+    // onAuthStateChanged handles returning to the login view
+  } catch (e) {
+    showToast('❌ ' + e.message, 'error');
+  }
+});
+
+// ── Theme ──
+window.toggleTheme = function() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeBtn').textContent = isDark ? '🌙' : '☀️';
+  localStorage.setItem('fz-admin-theme', isDark ? 'light' : 'dark');
+};
+(function initTheme() {
+  const saved = localStorage.getItem('fz-admin-theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  document.getElementById('themeBtn').textContent = saved === 'dark' ? '☀️' : '🌙';
+})();
+
+// ── Image preview ──
+window.previewImg = function(prefix) {
+  const url = document.getElementById(`${prefix}-image`)?.value;
+  const prev = document.getElementById(`${prefix}-preview`);
+  if (!prev) return;
+  if (url) { prev.src = url; prev.classList.add('show'); }
+  else prev.classList.remove('show');
+};
+
+// ── Toast ──
+function showToast(msg, type = 'success') {
+  const el = document.getElementById('toast');
+  el.innerHTML = msg;
+  el.className = `toast show ${type}`;
+  setTimeout(() => el.classList.remove('show'), 3500);
+}
+
+// ── Sync status ──
+function setSyncStatus(state, text) {
+  document.getElementById('syncDot').className = `sync-dot ${state}`;
+  document.getElementById('syncText').textContent = text;
+}
+
+// ── Escape untrusted values before injecting into HTML ──
+function escapeHtml(str) {
+  return String(str == null ? "" : str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+// ── Build a URL-safe slug from text (Unicode-aware, keeps Hindi/Devanagari) ──
+function slugify(str) {
+  let s = String(str == null ? "" : str).trim().toLowerCase();
+  s = s.replace(/[^\p{L}\p{N}\p{M}]+/gu, '-');
+  s = s.replace(/^-+|-+$/g, '');
+  return s;
+}
+
+// ── Ensure a slug doesn't collide with an already-loaded post's slug ──
+function makeUniqueSlug(baseSlug) {
+  if (!baseSlug) return baseSlug;
+  const existing = new Set((allPostsCache || []).map(p => p.slug).filter(Boolean));
+  if (!existing.has(baseSlug)) return baseSlug;
+  let i = 2;
+  while (existing.has(`${baseSlug}-${i}`)) i++;
+  return `${baseSlug}-${i}`;
+}
+
+// ── Build post card HTML ──
+function buildCard(post, index) {
+  const date = post.createdAt
+    ? new Date(post.createdAt?.seconds ? post.createdAt.seconds*1000 : post.createdAt).toLocaleDateString('en-US')
+    : '';
+  const image = escapeHtml(post.image || 'https://placehold.co/400x175/1c1c26/6b6b8a?text=No+Image');
+  const title = escapeHtml(post.title || 'Untitled');
+  const desc  = escapeHtml(post.desc || 'No description');
+  const id    = escapeHtml(post.id);
+  const catLabel = CATEGORY_LABELS[post.category] || null;
+  return `
+  <div class="post-card">
+    <img class="post-thumb" src="${image}"
+      onerror="this.src='https://placehold.co/400x175/1c1c26/6b6b8a?text=No+Image'" loading="lazy">
+    ${date ? `<div class="post-meta">${escapeHtml(date)}</div>` : ''}
+    <div class="post-num">#${index+1}</div>
+    <div class="post-body">
+      ${catLabel ? `<div class="post-cat">${escapeHtml(catLabel)}</div>` : ''}
+      <div class="post-title">${title}</div>
+      <div class="post-desc">${desc}</div>
+      <div class="post-actions">
+        <button class="btn btn-edit" onclick="openEditModal('${id}')">✏️ Edit</button>
+        <button class="btn btn-danger" onclick="deletePost('${id}')">🗑 Delete</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── Render grids ──
+function renderGrid(containerId, posts) {
+  const grid = document.getElementById(containerId);
+  if (!posts.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+      <div class="empty-icon">📭</div>
+      <div class="empty-text">No posts found</div>
+      <div class="empty-sub">Publish your first post!</div>
+    </div>`;
+    return;
+  }
+  grid.innerHTML = posts.map((p,i) => buildCard(p,i)).join('');
+}
+
+// ── Load Posts ──
+async function loadPosts() {
+  const skeletons = [...Array(4)].map(() => `
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden">
+      <div class="skeleton" style="height:175px"></div>
+      <div style="padding:14px">
+        <div class="skeleton" style="height:14px;margin-bottom:8px"></div>
+        <div class="skeleton" style="height:12px;width:70%"></div>
+      </div>
+    </div>`).join('');
+  document.getElementById('dash-grid').innerHTML = skeletons;
+  document.getElementById('posts-grid').innerHTML = skeletons + skeletons;
+
+  try {
+    const snap = await getDocs(collection(db, "posts"));
+    const seenIds = new Set();
+    const posts = [];
+    snap.forEach(d => {
+      if (seenIds.has(d.id)) return;
+      seenIds.add(d.id);
+      posts.push({ id:d.id, ...d.data() });
+    });
+    posts.sort((a,b) => (b.createdAt?.seconds||b.createdAt||0) - (a.createdAt?.seconds||a.createdAt||0));
+    allPostsCache = posts;
+
+    document.getElementById('statTotal').textContent = posts.length;
+    document.getElementById('statSync').textContent = new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+    renderGrid('dash-grid', posts);
+    renderGrid('posts-grid', posts);
+    setSyncStatus('connected', 'Database Online');
+  } catch(e) {
+    ['dash-grid','posts-grid'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.innerHTML = `<div style="color:var(--red);padding:20px;grid-column:1/-1">❌ Error: ${e.message}</div>`;
+    });
+    setSyncStatus('error', 'Firebase error');
+  }
+}
+
+// ── Search ──
+window.filterPosts = function() {
+  const q = document.getElementById('searchBox').value.toLowerCase();
+  renderGrid('posts-grid', q ? allPostsCache.filter(p => (p.title+p.desc).toLowerCase().includes(q)) : allPostsCache);
+};
+window.filterDash = function() {
+  const q = document.getElementById('dashSearch').value.toLowerCase();
+  renderGrid('dash-grid', q ? allPostsCache.filter(p => (p.title+p.desc).toLowerCase().includes(q)) : allPostsCache);
+};
+
+// ── Upload ──
+window.uploadPost = async function(prefix) {
+  const title    = document.getElementById(`${prefix}-title`).value.trim();
+  const desc     = document.getElementById(`${prefix}-desc`).value.trim();
+  const image    = document.getElementById(`${prefix}-image`).value.trim();
+  const category = document.getElementById(`${prefix}-category`)?.value || '';
+  const slugRaw  = document.getElementById(`${prefix}-slug`)?.value.trim() || '';
+  
+  let content = '';
+  if (prefix === 'u' && quillEditor) {
+    content = quillEditor.root.innerHTML.trim();
+    if(quillEditor.root.textContent.trim() === '') content = '';
+  } else {
+    content = document.getElementById(`${prefix}-content`).value.trim();
+  }
+
+  if (!title || !desc || !content) { showToast('⚠️ Title, description, and content are required!', 'error'); return; }
+  
+  const btnId = prefix === 'q' ? 'quickUploadBtn' : 'uploadBtn';
+  const btn = document.getElementById(btnId);
+  btn.disabled = true; btn.innerHTML = '<span>⏳</span> Publishing...';
+  
+  try {
+    const slug = makeUniqueSlug(slugify(slugRaw) || slugify(title));
+    await addDoc(collection(db,"posts"), { title, desc, image, content, category, slug, createdAt: Date.now() });
+    
+    ['title','desc','image','slug'].forEach(f => { 
+      const inputEl = document.getElementById(`${prefix}-${f}`);
+      if(inputEl) inputEl.value=''; 
+    });
+    const catEl = document.getElementById(`${prefix}-category`);
+    if (catEl) catEl.selectedIndex = 0;
+    
+    if (prefix === 'u' && quillEditor) {
+      quillEditor.setContents([]);
+      document.getElementById('u-editor-wrapper').classList.remove('ql-fullscreen');
+      document.getElementById('custom-fullscreen').textContent = "Fullscreen";
+      document.getElementById('custom-fullscreen').style.color = "var(--text)";
+    } else {
+      document.getElementById(`${prefix}-content`).value = '';
+    }
+    
+    const prev = document.getElementById(`${prefix}-preview`);
+    if (prev) prev.classList.remove('show');
+    
+    btn.innerHTML = '<span>✅</span> Published!';
+    showToast('🚀 Post published successfully!', 'success');
+    
+    setTimeout(() => { 
+      btn.disabled = false; 
+      btn.innerHTML = '<span>🚀</span> Publish Post'; 
+      const dashBtn = document.getElementById('nav-dashboard');
+      window.switchPage('dashboard', dashBtn);
+    }, 1000);
+    
+    await loadPosts();
+  } catch(e) {
+    btn.disabled=false; btn.innerHTML='<span>🚀</span> Publish Post';
+    showToast('❌ Upload failed: ' + e.message, 'error');
+  }
+};
+
+// ── Delete ──
+window.deletePost = async function(id) {
+  if (!confirm('Are you sure you want to delete this post?')) return;
+  try {
+    await deleteDoc(doc(db,"posts",id));
+    showToast('🗑 Post deleted successfully', 'success');
+    await loadPosts();
+  } catch(e) { showToast('❌ ' + e.message, 'error'); }
+};
+
+// ── Edit Modal ──
+window.openEditModal = function(id) {
+  const post = allPostsCache.find(p => p.id === id);
+  if (!post) return;
+  currentEditId = id;
+  document.getElementById('e-title').value   = post.title   || '';
+  document.getElementById('e-desc').value    = post.desc    || '';
+  document.getElementById('e-image').value   = post.image   || '';
+  const catEl = document.getElementById('e-category');
+  if (catEl) catEl.value = post.category || 'science';
+  
+  if (editQuillEditor) {
+    editQuillEditor.root.innerHTML = post.content || '';
+  }
+  
+  const prev = document.getElementById('e-preview');
+  if (post.image) { prev.src = post.image; prev.classList.add('show'); }
+  else prev.classList.remove('show');
+  document.getElementById('editModal').classList.add('show');
+};
+
+window.closeModal = function() {
+  document.getElementById('editModal').classList.remove('show');
+  document.getElementById('e-editor-wrapper').classList.remove('ql-fullscreen');
+  document.getElementById('edit-fullscreen').textContent = "Fullscreen";
+  document.getElementById('edit-fullscreen').style.color = "var(--text)";
+  currentEditId = null;
+};
+
+// ── Save Edit (Updates updatedAt ONLY when 200+ words are added/replaced or post changes substantially) ──
+window.saveEdit = async function() {
+  if (!currentEditId) return;
+  const btn = document.getElementById('saveEditBtn');
+  btn.textContent = 'Saving...'; btn.disabled = true;
+  
+  let content = '';
+  if (editQuillEditor) {
+    content = editQuillEditor.root.innerHTML.trim();
+  }
+
+  // Cache se purani post nikalna
+  const oldPost = allPostsCache.find(p => p.id === currentEditId);
+  const oldContent = oldPost ? (oldPost.content || '') : '';
+
+  // 200+ words add, replace ya major change check karne ka logic
+  const isMajorUpdate = (oldHtml, newHtml) => {
+    const getWords = (html) => {
+      const div = document.createElement('div');
+      div.innerHTML = html || '';
+      return (div.textContent || div.innerText || '').trim().split(/\s+/).filter(Boolean);
+    };
+
+    const oldWords = getWords(oldHtml);
+    const newWords = getWords(newHtml);
+
+    // 1. Agar 200 ya usse zyada naye words judey hain
+    if (newWords.length - oldWords.length >= 200) return true;
+
+    // Purane aur naye words mein matching check karna
+    let matchingCount = 0;
+    const oldWordMap = new Map();
+    oldWords.forEach(w => oldWordMap.set(w, (oldWordMap.get(w) || 0) + 1));
+
+    newWords.forEach(w => {
+      if (oldWordMap.get(w) > 0) {
+        matchingCount++;
+        oldWordMap.set(w, oldWordMap.get(w) - 1);
+      }
+    });
+
+    const replacedOrNewWords = newWords.length - matchingCount;
+
+    // 2. Agar 200 ya usse zyada words replace/change kiye gaye hain
+    if (replacedOrNewWords >= 200) return true;
+
+    // 3. Agar puri post majorly badal gayi hai (purane content se 50% se kam match)
+    if (oldWords.length > 0 && (matchingCount / oldWords.length) < 0.5) return true;
+
+    return false;
+  };
+
+  try {
+    const updateData = {
+      title:    document.getElementById('e-title').value,
+      desc:     document.getElementById('e-desc').value,
+      image:    document.getElementById('e-image').value,
+      category: document.getElementById('e-category')?.value || '',
+      content:  content
+    };
+
+    // Condition sahi hone par hi last update add/change hoga
+    if (isMajorUpdate(oldContent, content)) {
+      updateData.updatedAt = Date.now();
+    }
+
+    await updateDoc(doc(db,"posts",currentEditId), updateData);
+    closeModal();
+    showToast('✅ Post updated successfully!', 'success');
+    await loadPosts();
+  } catch(e) { showToast('❌ ' + e.message, 'error'); }
+  btn.textContent = '💾 Save Changes'; btn.disabled = false;
+};
+
+// ── Instagram Creator Tools Admin ──
+// This page is inside the existing admin dashboard, so it uses the SAME
+// Firebase Authentication session already checked by onAuthStateChanged above.
+const IG_COLLECTION = "instagramCreatorToolOutputs";
+
+const IG_TOOLS = {
+  "instagram-caption-generator":"Instagram Caption Generator",
+  "instagram-username-generator":"Instagram Username Generator",
+  "instagram-content-idea-generator":"Instagram Content Idea Generator",
+  "instagram-quote-generator":"Instagram Quote Generator",
+  "instagram-comment-generator":"Instagram Comment Generator",
+  "instagram-hashtag-generator":"Instagram Hashtag Generator",
+  "instagram-bio-generator":"Instagram Bio Generator",
+  "instagram-story-idea-generator":"Instagram Story Idea Generator",
+  "instagram-reel-idea-generator":"Instagram Reel Idea Generator",
+  "instagram-reel-hook-generator":"Instagram Reel Hook Generator",
+  "instagram-reel-script-generator":"Instagram Reel Script Generator",
+  "instagram-carousel-idea-generator":"Instagram Carousel Idea Generator"
+};
+
+const IG_CATEGORIES = {
+  "instagram-caption-generator":["general","engaging","short","storytelling","promotional","funny","motivational"],
+  "instagram-username-generator":["general","personal","business","creator","gaming","fashion","fitness"],
+  "instagram-content-idea-generator":["general","educational","entertainment","promotional","trending","tutorial","storytelling"],
+  "instagram-quote-generator":["general","motivational","success","life","love","attitude","business"],
+  "instagram-comment-generator":["general","supportive","funny","short","engaging","appreciation","question"],
+  "instagram-hashtag-generator":["general","trending","niche","business","creator","reels","engagement"],
+  "instagram-bio-generator":["general","creator","business","personal","professional","short","creative"],
+  "instagram-story-idea-generator":["general","engagement","educational","interactive","personal","promotional","behind-scenes"],
+  "instagram-reel-idea-generator":["general","educational","entertainment","trending","tutorial","storytelling","promotional"],
+  "instagram-reel-hook-generator":["general","curiosity","question","problem","warning","list","bold"],
+  "instagram-reel-script-generator":["general","educational","storytelling","tutorial","list","promotional","short"],
+  "instagram-carousel-idea-generator":["general","educational","tips","list","tutorial","storytelling","promotional"]
+};
+
+let instagramOutputs = [];
+let currentInstagramEditId = null;
+let instagramLoadedOnce = false;
+
+function igEsc(v) {
+  return String(v == null ? "" : v)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#39;");
+}
+
+function initInstagramToolsAdmin() {
+  const toolEl = document.getElementById("igTool");
+  const filterToolEl = document.getElementById("igFilterTool");
+  if (!toolEl || toolEl.dataset.ready) return;
+
+  const options = Object.entries(IG_TOOLS)
+    .map(([id,name]) => `<option value="${id}">${name}</option>`)
+    .join("");
+
+  toolEl.innerHTML = options;
+  filterToolEl.innerHTML = `<option value="all">All Tools</option>` + options;
+  toolEl.dataset.ready = "1";
+
+  updateInstagramCategories();
+
+  toolEl.addEventListener("change", updateInstagramCategories);
+  filterToolEl.addEventListener("change", renderInstagramOutputs);
+  document.getElementById("igFilterCategory").addEventListener("change", renderInstagramOutputs);
+
+  document.getElementById("igOutputList").addEventListener("click", (e) => {
+    const editId = e.target.dataset.edit;
+    const deleteId = e.target.dataset.delete;
+    if (editId) startInstagramEdit(editId);
+    if (deleteId) deleteInstagramOutput(deleteId);
+  });
+}
+
+function updateInstagramCategories() {
+  const tool = document.getElementById("igTool").value;
+  const list = IG_CATEGORIES[tool] || ["general"];
+  document.getElementById("igCategory").innerHTML =
+    list.map(x => `<option value="${x}">${x.replace(/-/g," ")}</option>`).join("");
+}
+
+function updateInstagramFilterCategories() {
+  const select = document.getElementById("igFilterCategory");
+  const previous = select.value;
+  const cats = [...new Set(instagramOutputs.map(x => x.category).filter(Boolean))].sort();
+
+  select.innerHTML = `<option value="all">All Categories</option>` +
+    cats.map(x => `<option value="${igEsc(x)}">${igEsc(x.replace(/-/g," "))}</option>`).join("");
+
+  if (cats.includes(previous)) select.value = previous;
+}
+
+async function loadInstagramOutputs() {
+  initInstagramToolsAdmin();
+
+  const list = document.getElementById("igOutputList");
+  list.innerHTML = `<div class="ig-empty">Loading outputs from Firebase...</div>`;
+
+  try {
+    const snap = await getDocs(collection(db, IG_COLLECTION));
+    instagramOutputs = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+
+    instagramOutputs.sort((a,b) => {
+      const av = a.createdAt?.seconds || 0;
+      const bv = b.createdAt?.seconds || 0;
+      return bv - av;
+    });
+
+    updateInstagramFilterCategories();
+    renderInstagramOutputs();
+    instagramLoadedOnce = true;
+  } catch(e) {
+    console.error(e);
+    list.innerHTML = `<div class="ig-empty">❌ Could not load Instagram outputs: ${igEsc(e.message)}</div>`;
+  }
+}
+
+function renderInstagramOutputs() {
+  const toolFilter = document.getElementById("igFilterTool").value;
+  const categoryFilter = document.getElementById("igFilterCategory").value;
+
+  const filtered = instagramOutputs.filter(x =>
+    (toolFilter === "all" || x.tool === toolFilter) &&
+    (categoryFilter === "all" || x.category === categoryFilter)
+  );
+
+  document.getElementById("igOutputList").innerHTML = filtered.length
+    ? filtered.map(x => `
+      <div class="ig-item">
+        <div class="ig-item-top">
+          <div class="ig-badges">
+            <span class="ig-badge">${igEsc(IG_TOOLS[x.tool] || x.tool)}</span>
+            <span class="ig-badge category">${igEsc(x.category || "general")}</span>
+          </div>
+          <div class="ig-actions">
+            <button class="ig-small-btn" data-edit="${x.id}">Edit</button>
+            <button class="ig-small-btn delete" data-delete="${x.id}">Delete</button>
+          </div>
+        </div>
+        <div class="ig-item-text">${igEsc(x.text || "")}</div>
+      </div>
+    `).join("")
+    : `<div class="ig-empty">No outputs found.</div>`;
+
+  document.getElementById("igTotal").textContent = instagramOutputs.length;
+  document.getElementById("igToolsUsed").textContent = new Set(instagramOutputs.map(x => x.tool)).size;
+  document.getElementById("igCategoriesUsed").textContent = new Set(instagramOutputs.map(x => x.category)).size;
+}
+
+window.saveInstagramOutput = async function() {
+  const text = document.getElementById("igOutputText").value.trim();
+  if (!text) {
+    showToast("⚠️ Please enter the output text.", "error");
+    return;
+  }
+
+  const btn = document.getElementById("igSaveBtn");
+  btn.disabled = true;
+  btn.textContent = "⏳ Saving...";
+
+  try {
+    await addDoc(collection(db, IG_COLLECTION), {
+      tool: document.getElementById("igTool").value,
+      category: document.getElementById("igCategory").value,
+      text,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    });
+
+    document.getElementById("igOutputText").value = "";
+    showToast("✅ Instagram tool output saved successfully!", "success");
+    await loadInstagramOutputs();
+  } catch(e) {
+    console.error(e);
+    showToast("❌ " + e.message, "error");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "💾 Save to Firebase";
+  }
+};
+
+function startInstagramEdit(id) {
+  const item = instagramOutputs.find(x => x.id === id);
+  if (!item) return;
+
+  currentInstagramEditId = id;
+  document.getElementById("igTool").value = item.tool;
+  updateInstagramCategories();
+  document.getElementById("igCategory").value = item.category;
+  document.getElementById("igOutputText").value = item.text || "";
+
+  document.getElementById("igFormTitle").textContent = "Edit Output";
+  document.getElementById("igSaveBtn").style.display = "none";
+  document.getElementById("igUpdateBtn").style.display = "block";
+  document.getElementById("igCancelBtn").style.display = "block";
+  window.scrollTo({ top:0, behavior:"smooth" });
+}
+
+window.cancelInstagramEdit = function() {
+  currentInstagramEditId = null;
+  document.getElementById("igOutputText").value = "";
+  document.getElementById("igFormTitle").textContent = "Add New Output";
+  document.getElementById("igSaveBtn").style.display = "block";
+  document.getElementById("igUpdateBtn").style.display = "none";
+  document.getElementById("igCancelBtn").style.display = "none";
+};
+
+window.updateInstagramOutput = async function() {
+  if (!currentInstagramEditId) return;
+
+  const text = document.getElementById("igOutputText").value.trim();
+  if (!text) {
+    showToast("⚠️ Please enter the output text.", "error");
+    return;
+  }
+
+  const btn = document.getElementById("igUpdateBtn");
+  btn.disabled = true;
+  btn.textContent = "⏳ Updating...";
+
+  try {
+    await updateDoc(doc(db, IG_COLLECTION, currentInstagramEditId), {
+      tool: document.getElementById("igTool").value,
+      category: document.getElementById("igCategory").value,
+      text,
+      updatedAt: serverTimestamp()
+    });
+
+    showToast("✅ Instagram tool output updated!", "success");
+    window.cancelInstagramEdit();
+    await loadInstagramOutputs();
+  } catch(e) {
+    console.error(e);
+    showToast("❌ " + e.message, "error");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "💾 Update Output";
+  }
+};
+
+async function deleteInstagramOutput(id) {
+  if (!confirm("Delete this output permanently?")) return;
+
+  try {
+    await deleteDoc(doc(db, IG_COLLECTION, id));
+    showToast("🗑️ Output deleted successfully.", "success");
+    await loadInstagramOutputs();
+  } catch(e) {
+    console.error(e);
+    showToast("❌ " + e.message, "error");
+  }
+}
+
+// ── Instagram Bulk Import ──
+function setInstagramBulkStatus(message, type="") {
+  const el = document.getElementById("igBulkStatus");
+  if (!el) return;
+  el.textContent = message;
+  el.className = "ig-bulk-status" + (type ? " " + type : "");
+}
+
+function normalizeInstagramRecord(item) {
+  if (!item || typeof item !== "object") return null;
+  const tool = String(item.tool || "").trim();
+  const category = String(item.category || "").trim();
+  const text = String(item.text || item.output || "").trim();
+  if (!tool || !category || !text) return null;
+  if (!IG_TOOLS[tool]) return null;
+  if (!(IG_CATEGORIES[tool] || []).includes(category)) return null;
+  return { tool, category, text };
+}
+
+function parseInstagramCSV(text) {
+  const rows = [];
+  let row = [], cell = "", quoted = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i], next = text[i + 1];
+    if (ch === '"' && quoted && next === '"') { cell += '"'; i++; }
+    else if (ch === '"') quoted = !quoted;
+    else if (ch === "," && !quoted) { row.push(cell); cell = ""; }
+    else if ((ch === "\n" || ch === "\r") && !quoted) {
+      if (ch === "\r" && next === "\n") i++;
+      row.push(cell);
+      if (row.some(v => String(v).trim() !== "")) rows.push(row);
+      row = []; cell = "";
+    } else cell += ch;
+  }
+  if (cell.length || row.length) {
+    row.push(cell);
+    if (row.some(v => String(v).trim() !== "")) rows.push(row);
+  }
+  if (!rows.length) return [];
+  const headers = rows[0].map(h => String(h).replace(/^\uFEFF/, "").trim());
+  return rows.slice(1).map(values => {
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = values[i] ?? "");
+    return obj;
+  });
+}
+
+window.bulkImportInstagramOutputs = async function() {
+  const fileInput = document.getElementById("igBulkFile");
+  const file = fileInput?.files?.[0];
+  if (!file) {
+    setInstagramBulkStatus("⚠️ First choose the JSON or CSV output file.", "error");
+    return;
+  }
+
+  const btn = document.getElementById("igBulkImportBtn");
+  btn.disabled = true;
+  btn.textContent = "⏳ Reading file...";
+  setInstagramBulkStatus("Reading and validating the selected file...");
+
+  try {
+    const raw = await file.text();
+    let parsed;
+    if (file.name.toLowerCase().endsWith(".json") || file.type === "application/json") {
+      parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) throw new Error("JSON must contain an array of output records.");
+    } else {
+      parsed = parseInstagramCSV(raw);
+    }
+
+    const valid = [], seenInFile = new Set();
+    let skipped = 0;
+    for (const item of parsed) {
+      const x = normalizeInstagramRecord(item);
+      if (!x) { skipped++; continue; }
+      const key = x.tool + "\u0001" + x.category + "\u0001" + x.text;
+      if (seenInFile.has(key)) { skipped++; continue; }
+      seenInFile.add(key);
+      valid.push(x);
+    }
+    if (!valid.length) throw new Error("No valid outputs were found. Check tool IDs, categories and text fields.");
+
+    btn.textContent = "⏳ Checking duplicates...";
+    setInstagramBulkStatus(`Validated ${valid.length} outputs. Checking existing Firebase data...`);
+
+    const snap = await getDocs(collection(db, IG_COLLECTION));
+    const existing = new Set(snap.docs.map(d => {
+      const x = d.data();
+      return String(x.tool || "") + "\u0001" + String(x.category || "") + "\u0001" + String(x.text || "");
+    }));
+
+    const toAdd = valid.filter(x => !existing.has(x.tool + "\u0001" + x.category + "\u0001" + x.text));
+    const duplicates = valid.length - toAdd.length;
+    if (!toAdd.length) {
+      setInstagramBulkStatus(`ℹ️ Nothing new to import. ${duplicates} outputs already exist in Firebase.`, "success");
+      return;
+    }
+
+    btn.textContent = `⏳ Importing ${toAdd.length} outputs...`;
+    let imported = 0;
+    for (let start = 0; start < toAdd.length; start += 450) {
+      const chunk = toAdd.slice(start, start + 450);
+      const batch = writeBatch(db);
+      chunk.forEach(item => {
+        const newRef = doc(collection(db, IG_COLLECTION));
+        batch.set(newRef, {
+          tool: item.tool,
+          category: item.category,
+          text: item.text,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        });
+      });
+      await batch.commit();
+      imported += chunk.length;
+      setInstagramBulkStatus(`Imported ${imported} of ${toAdd.length} outputs...`);
+    }
+
+    fileInput.value = "";
+    await loadInstagramOutputs();
+    setInstagramBulkStatus(
+      `✅ Import complete! Added ${imported} outputs.` +
+      (duplicates ? ` ${duplicates} duplicate outputs were skipped.` : "") +
+      (skipped ? ` ${skipped} invalid/duplicate file records were skipped.` : ""),
+      "success"
+    );
+    showToast(`✅ ${imported} Instagram outputs imported successfully!`, "success");
+  } catch (e) {
+    console.error(e);
+    setInstagramBulkStatus("❌ Import failed: " + e.message, "error");
+    showToast("❌ " + e.message, "error");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "⚡ Import All to Firebase";
+  }
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const fileInput = document.getElementById("igBulkFile");
+  if (fileInput) {
+    fileInput.addEventListener("change", () => {
+      const file = fileInput.files?.[0];
+      setInstagramBulkStatus(file ? `Selected: ${file.name}` : "No file selected.");
+    });
+  }
+});
+
+// ── Comments Admin ──
+let allCommentsCache = [];
+let commentsLoadedOnce = false;
+
+function fmtAdminDate(ms) {
+  if (!ms) return "";
+  try { return new Date(Number(ms)).toLocaleString('en-IN'); } catch(e) { return ""; }
+}
+
+async function loadCommentsAdmin() {
+  const list = document.getElementById("comments-admin-list");
+  list.innerHTML = `<div class="ig-empty">Loading comments...</div>`;
+  try {
+    const snap = await getDocs(collection(db, "comments"));
+    allCommentsCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    allCommentsCache.sort((a,b) => (Number(b.createdAt)||0) - (Number(a.createdAt)||0));
+    renderCommentsAdmin(allCommentsCache);
+    commentsLoadedOnce = true;
+  } catch(e) {
+    list.innerHTML = `<div class="ig-empty">❌ Error: ${escapeHtml(e.message)}</div>`;
+  }
+}
+
+function renderCommentsAdmin(items) {
+  const list = document.getElementById("comments-admin-list");
+  document.getElementById("commentsAdminCount").textContent = `Comments (${allCommentsCache.length})`;
+  if (!items.length) {
+    list.innerHTML = `<div class="ig-empty">No comments yet.</div>`;
+    return;
+  }
+  list.innerHTML = items.map(c => {
+    const name = escapeHtml(c.name || "Anonymous");
+    const text = escapeHtml(c.comment || "");
+    const post = allPostsCache.find(p => p.id === c.postId);
+    const postLabel = escapeHtml(post ? post.title : (c.postId || "Unknown post"));
+    return `
+    <div class="ig-item">
+      <div class="ig-item-top">
+        <div class="ig-badges">
+          <span class="ig-badge">${postLabel}</span>
+          <span class="ig-badge category">${escapeHtml(fmtAdminDate(c.createdAt))}</span>
+        </div>
+        <div class="ig-actions">
+          <button class="ig-small-btn delete" data-comment-delete="${c.id}">Delete</button>
+        </div>
+      </div>
+      <div class="ig-item-text"><strong>${name}:</strong> ${text}</div>
+    </div>`;
+  }).join("");
+}
+
+window.filterCommentsAdmin = function() {
+  const q = document.getElementById("commentsSearchBox").value.toLowerCase();
+  const filtered = q ? allCommentsCache.filter(c => ((c.name||"")+(c.comment||"")).toLowerCase().includes(q)) : allCommentsCache;
+  renderCommentsAdmin(filtered);
+};
+
+document.getElementById("comments-admin-list").addEventListener("click", async (e) => {
+  const id = e.target.dataset.commentDelete;
+  if (!id) return;
+  if (!confirm("Delete this comment permanently?")) return;
+  try {
+    await deleteDoc(doc(db, "comments", id));
+    showToast("🗑️ Comment deleted.", "success");
+    await loadCommentsAdmin();
+  } catch(err) {
+    showToast("❌ " + err.message, "error");
+  }
+});
+
+// ── Subscribers Admin ──
+let allSubscribersCache = [];
+let subscribersLoadedOnce = false;
+
+async function loadSubscribersAdmin() {
+  const list = document.getElementById("subscribers-admin-list");
+  list.innerHTML = `<div class="ig-empty">Loading subscribers...</div>`;
+  try {
+    const snap = await getDocs(collection(db, "subscribers"));
+    allSubscribersCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    allSubscribersCache.sort((a,b) => (Number(b.createdAt)||0) - (Number(a.createdAt)||0));
+    renderSubscribersAdmin(allSubscribersCache);
+    subscribersLoadedOnce = true;
+  } catch(e) {
+    list.innerHTML = `<div class="ig-empty">❌ Error: ${escapeHtml(e.message)}</div>`;
+  }
+}
+
+function renderSubscribersAdmin(items) {
+  const list = document.getElementById("subscribers-admin-list");
+  document.getElementById("subscribersAdminCount").textContent = `Subscribers (${allSubscribersCache.length})`;
+  if (!items.length) {
+    list.innerHTML = `<div class="ig-empty">No subscribers yet.</div>`;
+    return;
+  }
+  list.innerHTML = items.map(s => {
+    const typeLabel = s.type === "whatsapp" ? "WhatsApp" : "Email";
+    const value = escapeHtml(s.value || "");
+    return `
+    <div class="ig-item">
+      <div class="ig-item-top">
+        <div class="ig-badges">
+          <span class="ig-badge">${typeLabel}</span>
+          <span class="ig-badge category">${escapeHtml(fmtAdminDate(s.createdAt))}</span>
+        </div>
+        <div class="ig-actions">
+          <button class="ig-small-btn delete" data-sub-delete="${s.id}">Delete</button>
+        </div>
+      </div>
+      <div class="ig-item-text">${value}</div>
+    </div>`;
+  }).join("");
+}
+
+window.filterSubscribersAdmin = function() {
+  const q = document.getElementById("subscribersSearchBox").value.toLowerCase();
+  const filtered = q ? allSubscribersCache.filter(s => (s.value||"").toLowerCase().includes(q)) : allSubscribersCache;
+  renderSubscribersAdmin(filtered);
+};
+
+document.getElementById("subscribers-admin-list").addEventListener("click", async (e) => {
+  const id = e.target.dataset.subDelete;
+  if (!id) return;
+  if (!confirm("Delete this subscriber permanently?")) return;
+  try {
+    await deleteDoc(doc(db, "subscribers", id));
+    showToast("🗑️ Subscriber deleted.", "success");
+    await loadSubscribersAdmin();
+  } catch(err) {
+    showToast("❌ " + err.message, "error");
+  }
+});
+
+// ── Page switch ──
+window.switchPage = function(page, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  
+  const targetPage = document.getElementById(`page-${page}`);
+  if(targetPage) targetPage.classList.add('active');
+  if(btn) btn.classList.add('active');
+  
+  const titles = {dashboard:'Dashboard', upload:'New Post', posts:'All Posts', 'instagram-tools':'Instagram Creator Tools', comments:'Comments', subscribers:'Subscribers'};
+  document.getElementById('pageTitle').textContent = titles[page] || 'Dashboard';
+
+  if(page === 'instagram-tools' && !instagramLoadedOnce) {
+    loadInstagramOutputs();
+  }
+  if(page === 'comments' && !commentsLoadedOnce) {
+    loadCommentsAdmin();
+  }
+  if(page === 'subscribers' && !subscribersLoadedOnce) {
+    loadSubscribersAdmin();
+  }
+};
 </script>
 </body>
 </html>

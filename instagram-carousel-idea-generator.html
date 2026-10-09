@@ -194,7 +194,7 @@ footer{text-align:center;color:#8a92a1;font-size:12px;padding:25px}
     <button id="again">Generate Again</button>
   </div>
 
-  <div class="small">Saved outputs can be managed from the FactZone admin panel.</div>
+  <div class="small">New saved outputs are automatically read from the Firebase database when available.</div>
 
   <!-- Interactive Rating Widget (1 to 5 Order: Left Star = 1, Right Star = 5) -->
   <div class="interactive-rating">
@@ -289,8 +289,21 @@ footer{text-align:center;color:#8a92a1;font-size:12px;padding:25px}
 <footer>© 2026 Instagram Creator Tools</footer>
 
 <script type="module">
-import { getstatic data, collection, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/static backendjs/10.12.2/static backend-static data.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+const firebaseConfig={
+  apiKey:"AIzaSyCUyMZee1e01RqmTmIp_0jLT7guUAc",
+  authDomain:"factzone-a9ace.firebaseapp.com",
+  databaseURL:"https://factzone-a9ace-default-rtdb.firebaseio.com",
+  projectId:"factzone-a9ace",
+  storageBucket:"factzone-a9ace.firebasestorage.app",
+  messagingSenderId:"425838320650",
+  appId:"1:425838320650:web:eb81baddf818cb73d3f3",
+  measurementId:"G-311JQXBXRY"
+};
+
+const db=getFirestore(initializeApp(firebaseConfig));
 const TOOL="instagram-carousel-idea-generator";
 let templates=[];
 const $=id=>document.getElementById(id);
@@ -307,11 +320,28 @@ async function loadTemplates(){
  try{
   const snap=await getDocs(collection(db,"instagramCreatorToolOutputs"));
   templates=snap.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.tool===TOOL&&x.text);
- }catch(e){console.log("static backend templates unavailable",e.message);}
+ }catch(e){console.log("Firebase templates unavailable",e.message);}
 }
 
 // Fetch & Aggregate Real-time Ratings
-function loadRatingsSummary(){const total=1840,sum=1840 * 4.9,c=document.getElementById('badgeCount'),r=document.getElementById('badgeRating');if(c)c.textContent='('+total.toLocaleString()+' votes)';if(r)r.textContent=(sum/total).toFixed(1);}
+async function loadRatingsSummary(){
+  try{
+    const snap = await getDocs(collection(db, "toolRatings"));
+    const toolRatings = snap.docs.map(d => d.data()).filter(x => x.tool === TOOL);
+    
+    let totalVotes = BASE_VOTES + toolRatings.length;
+    let totalSum = BASE_RATING_SUM;
+    toolRatings.forEach(r => totalSum += Number(r.rating || 5));
+    
+    let avgRating = (totalSum / totalVotes).toFixed(1);
+    
+    $("badgeCount").textContent = `(${totalVotes.toLocaleString()} creator votes)`;
+    $("badgeRating").textContent = avgRating;
+  }catch(e){
+    console.log("Error calculating ratings summary:", e.message);
+  }
+}
+
 function fallback(input){
  return `📌 CAROUSEL OUTLINE FOR: ${input}\n\nSlide 1 (Hook): How to master ${input} step-by-step (Swipe 👉)\nSlide 2 (The Problem): Why most people struggle with ${input}.\nSlide 3 (Core Tip 1): Master the absolute fundamentals first.\nSlide 4 (Core Tip 2): Optimize your daily workflow for continuous growth.\nSlide 5 (Summary): 1. Focus on basics | 2. Stay consistent | 3. Track progress.\nSlide 6 (CTA): Saved this post for later? Double tap and share!`;
 }
@@ -390,9 +420,14 @@ if (savedRating) {
       }
 
       try {
+        await addDoc(collection(db, "toolRatings"), {
+          tool: TOOL,
+          rating: selectedRating,
+          createdAt: serverTimestamp()
+        });
         loadRatingsSummary();
       } catch (e) {
-        console.error("Error saving rating to static backend:", e.message);
+        console.error("Error saving rating to Firebase:", e.message);
       }
     });
   });
