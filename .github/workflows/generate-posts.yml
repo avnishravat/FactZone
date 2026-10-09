@@ -5,6 +5,12 @@ on:
     paths:
       - 'data/posts/**'
       - 'raw-images/**'
+      - 'scripts/**'
+      - 'templates/**'
+      - 'index.html'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/generate-posts.yml'
   workflow_dispatch:
 
 permissions:
@@ -37,7 +43,7 @@ jobs:
           # Create empty tracking files if folders don't exist
           mkdir -p assets/images/posts posts
           
-          git add assets/images/posts/ posts/ index.html posts-index.json data/posts/ || true
+          git add assets/images/posts/ posts/ index.html posts-index.json categories/ sitemap.xml package.json package-lock.json data/posts/ || true
           
           if git diff --staged --quiet; then
             echo "No changes to commit"
