@@ -44,6 +44,18 @@ const CATEGORY_LABELS = {
 };
 const CATEGORY_ORDER = ['science', 'history', 'tech', 'mystery', 'viral'];
 
+// Normalize legacy/admin category labels so every post lands on the correct static category page.
+function normalizeCategory(value) {
+  const raw = String(value == null ? '' : value).trim().toLowerCase();
+  if (!raw) return '';
+  if (raw === 'science' || raw.includes('science') || raw.includes('विज्ञान')) return 'science';
+  if (raw === 'tech' || raw.includes('technology') || raw.includes('tech') || raw.includes('तकनीक') || raw.includes('टेक')) return 'tech';
+  if (raw === 'history' || raw.includes('history') || raw.includes('इतिहास')) return 'history';
+  if (raw === 'mystery' || raw.includes('mystery') || raw.includes('रहस्य')) return 'mystery';
+  if (raw === 'viral' || raw.includes('viral') || raw.includes('रोचक तथ्य') || raw === 'रोचक') return 'viral';
+  return raw;
+}
+
 const DRY_RUN_ARG = process.argv.find(a => a.startsWith('--dry-run='));
 const DRY_RUN_FIXTURE = DRY_RUN_ARG ? DRY_RUN_ARG.split('=')[1] : null;
 
@@ -249,7 +261,7 @@ function buildJsonLd(post, ctx) {
 function buildRelatedHtml(relatedPosts) {
   if (!relatedPosts.length) return '';
   return relatedPosts.map(p => {
-    const img = escapeHtml(p.image || `${SITE_URL}/logo.png`);
+    const img = escapeHtml(p.image || '/logo.png');
     const ttl = escapeHtml(p.title || '');
     return `<a href="/posts/${encodeURIComponent(p.slug)}.html" class="rc" aria-label="Read: ${ttl}">` +
            `<img src="${img}" loading="lazy" width="55" height="55" alt="${ttl}" onerror="this.style.display='none'">` +
@@ -272,8 +284,9 @@ function renderArticle(post, allPosts, articleTpl) {
   const cleanText = stripHtml(contentRaw);
   const wordCount = cleanText.trim().split(/\s+/).filter(Boolean).length;
 
-  const categoryLabel = CATEGORY_LABELS[post.category] || post.category || 'Amazing Facts';
-  const categoryUrl = post.category ? `${SITE_URL}/categories/${post.category}/` : `${SITE_URL}/`;
+  const categorySlug = normalizeCategory(post.category);
+  const categoryLabel = CATEGORY_LABELS[categorySlug] || post.category || 'Amazing Facts';
+  const categoryUrl = categorySlug && CATEGORY_ORDER.includes(categorySlug) ? `${SITE_URL}/categories/${categorySlug}/` : `${SITE_URL}/`;
   const canonicalUrl = `${SITE_URL}/posts/${encodeURIComponent(post.slug)}.html`;
 
   const title = escapeHtml(titleRaw);
@@ -336,13 +349,13 @@ function renderCategoryPage(category, posts, categoryTpl) {
   const sorted = posts.slice().sort((a, b) => (toSafeDate(b.createdAt) || 0) - (toSafeDate(a.createdAt) || 0));
 
   const cards = sorted.map(p => {
-    const img = escapeHtml(p.image || `${SITE_URL}/logo.png`);
+    const img = escapeHtml(p.image || '/logo.png');
     const ttl = escapeHtml(p.title || 'Untitled');
     const desc = escapeHtml(stripHtml(p.content || '').substring(0, 110));
     const d = toSafeDate(p.createdAt);
     const dateStr = d ? formatDate(d.toISOString()) : '';
     return `    <a class="post-card" href="/posts/${encodeURIComponent(p.slug)}.html">
-      <img src="${img}" alt="${ttl}" loading="lazy" onerror="this.style.display='none'">
+      <img src="${img}" alt="${ttl}" loading="lazy" width="640" height="360" onerror="if(!this.dataset.fallbackApplied){this.dataset.fallbackApplied='true';this.src='/logo.png';}else{this.style.display='none';}">
       <div class="body">
         <div class="title">${ttl}</div>
         <div class="desc">${desc}</div>
@@ -489,7 +502,7 @@ async function main() {
   const categoryLastmods = {};
   let categoryCount = 0;
   for (const cat of CATEGORY_ORDER) {
-    const inCat = usablePosts.filter(p => p.category === cat);
+    const inCat = usablePosts.filter(p => normalizeCategory(p.category) === cat);
     const { html, lastmod } = renderCategoryPage(cat, inCat, categoryTpl);
     if (lastmod) categoryLastmods[cat] = lastmod;
     const catDir = path.join(ROOT, 'categories', cat);
