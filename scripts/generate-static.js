@@ -31,6 +31,7 @@
 const fs = require('fs');
 const path = require('path');
 const sanitizeHtml = require('sanitize-html');
+const sharp = require('sharp');
 
 const ROOT = path.join(__dirname, '..');
 const SITE_URL = 'https://factzone.online';
@@ -151,6 +152,69 @@ function readTemplate(name) {
 
 function fillTemplate(tpl, data) {
   return tpl.replace(/\{\{(\w+)\}\}/g, (m, k) => (k in data ? String(data[k]) : ''));
+}
+
+
+
+// ---------------------------------------------------------------------------
+// Image optimization: download remote post images and save local WebP copies.
+// If a source cannot be fetched/converted, preserve its original URL.
+// ---------------------------------------------------------------------------
+const ASSETS_DIR = path.join(ROOT, 'assets');
+const imageCache = new Map();
+
+function isLocalAsset(url) {
+  return typeof url === 'string' && (url.startsWith('/assets/') || url.startsWith('assets/'));
+}
+
+async function imageToWebp(sourceUrl, outputName) {
+  if (!sourceUrl || typeof sourceUrl !== 'string') return sourceUrl;
+  const source = sourceUrl.trim();
+  if (!/^https?:\/\//i.test(source) || isLocalAsset(source) || source.startsWith('data:')) return source;
+  const cacheKey = source + '|' + outputName;
+  if (imageCache.has(cacheKey)) return imageCache.get(cacheKey);
+
+  const task = (async () => {
+    try {
+      const response = await fetch(source, { signal: AbortSignal.timeout(20000), headers: { 'User-Agent': 'FactZone-Image-Optimizer/1.0' } });
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      const type = (response.headers.get('content-type') || '').toLowerCase();
+      if (type && !type.startsWith('image/')) throw new Error('Source is not an image');
+      const bytes = Buffer.from(await response.arrayBuffer());
+      if (!bytes.length || bytes.length > 15 * 1024 * 1024) throw new Error('Image is empty or larger than 15 MB');
+      const outputPath = path.join(ASSETS_DIR, outputName);
+      fs.mkdirSync(ASSETS_DIR, { recursive: true });
+      await sharp(bytes, { failOn: 'none' }).rotate().webp({ quality: 82, effort: 4 }).toFile(outputPath);
+      console.log('WebP saved: /assets/' + outputName);
+      return '/assets/' + outputName;
+    } catch (err) {
+      console.warn('WebP conversion skipped for ' + source + ': ' + err.message);
+      return source;
+    }
+  })();
+  imageCache.set(cacheKey, task);
+  return task;
+}
+
+async function optimizePostImages(posts) {
+  for (const post of posts) {
+    const slug = String(post.slug || post.id || 'post').replace(/[^\p{L}\p{N}\p{M}-]+/gu, '-').slice(0, 140) || 'post';
+    if (post.image) post.image = await imageToWebp(post.image, slug + '.webp');
+
+    // Convert images embedded in the article body too, without changing the HTML layout.
+    if (typeof post.content === 'string' && post.content.includes('<img')) {
+      let index = 0;
+      const matches = [...post.content.matchAll(/(<img\b[^>]*?\bsrc\s*=\s*)(["'])(https?:\/\/[^"']+)\2/gi)];
+      for (const match of matches) {
+        index++;
+        const converted = await imageToWebp(match[3], slug + '-inline-' + index + '.webp');
+        if (converted !== match[3]) {
+          const replacement = match[1] + match[2] + converted + match[2];
+          post.content = post.content.replace(match[0], replacement);
+        }
+      }
+    }
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -478,6 +542,9 @@ async function main() {
   console.log(`Loaded ${posts.length} post(s) from ${DRY_RUN_FIXTURE ? 'fixture' : 'Firestore'}.`);
 
   await backfillSlugs(db, posts);
+
+  // Create local WebP assets for post thumbnails and embedded article images.
+  await optimizePostImages(posts);
 
   const usablePosts = posts.filter(p => p.slug);
   const skipped = posts.length - usablePosts.length;
