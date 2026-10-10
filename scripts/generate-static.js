@@ -196,8 +196,21 @@ async function imageToWebp(sourceUrl, outputName) {
   return task;
 }
 
+// Keep known replacement images for posts whose old external image hosts returned 404.
+const RECOVERED_COVER_IMAGES = {
+  'why-sky-appears-blue-scientific-reason-hindi': '/assets/why-sky-appears-blue.webp',
+  'why-honey-never-spoils-expiration-date-science-hindi': '/assets/why-honey-never-spoils.webp',
+  'neuralink-brain-chip-जानिए-इंसान-कैसे-बनेगा-superhuman': '/assets/neuralink-brain-chip.webp',
+  'why-face-looks-weird-in-mirror-science-in-hindi': '/assets/why-face-looks-weird-in-mirror.webp'
+};
+
 async function optimizePostImages(posts) {
   for (const post of posts) {
+    const recoveredImage = RECOVERED_COVER_IMAGES[String(post.slug || '')];
+    if (recoveredImage) {
+      post.image = recoveredImage;
+      console.log('Using recovered local cover image for: ' + post.slug + ' -> ' + recoveredImage);
+    }
     const slug = String(post.slug || post.id || 'post').replace(/[^\p{L}\p{N}\p{M}-]+/gu, '-').slice(0, 140) || 'post';
     const matches = typeof post.content === 'string'
       ? [...post.content.matchAll(/(<img\b[^>]*?\bsrc\s*=\s*)(["'])(https?:\/\/[^"']+)\2/gi)]
