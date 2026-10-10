@@ -199,20 +199,34 @@ async function imageToWebp(sourceUrl, outputName) {
 async function optimizePostImages(posts) {
   for (const post of posts) {
     const slug = String(post.slug || post.id || 'post').replace(/[^\p{L}\p{N}\p{M}-]+/gu, '-').slice(0, 140) || 'post';
-    if (post.image) post.image = await imageToWebp(post.image, slug + '.webp');
+    const matches = typeof post.content === 'string'
+      ? [...post.content.matchAll(/(<img\b[^>]*?\bsrc\s*=\s*)(["'])(https?:\/\/[^"']+)\2/gi)]
+      : [];
 
-    // Convert images embedded in the article body too, without changing the HTML layout.
-    if (typeof post.content === 'string' && post.content.includes('<img')) {
-      let index = 0;
-      const matches = [...post.content.matchAll(/(<img\b[^>]*?\bsrc\s*=\s*)(["'])(https?:\/\/[^"']+)\2/gi)];
-      for (const match of matches) {
-        index++;
-        const converted = await imageToWebp(match[3], slug + '-inline-' + index + '.webp');
-        if (converted !== match[3]) {
-          const replacement = match[1] + match[2] + converted + match[2];
-          post.content = post.content.replace(match[0], replacement);
-        }
+    // Convert embedded images first, so a working article image can repair a missing/broken cover.
+    let firstUsableInlineImage = '';
+    let index = 0;
+    for (const match of matches) {
+      index++;
+      const converted = await imageToWebp(match[3], slug + '-inline-' + index + '.webp');
+      if (converted !== match[3] && !firstUsableInlineImage) firstUsableInlineImage = converted;
+      if (converted !== match[3]) {
+        const replacement = match[1] + match[2] + converted + match[2];
+        post.content = post.content.replace(match[0], replacement);
       }
+    }
+
+    if (post.image) {
+      const originalCover = post.image;
+      post.image = await imageToWebp(originalCover, slug + '.webp');
+      // If the cover link cannot be downloaded, use the first article image that converted successfully.
+      if (post.image === originalCover && firstUsableInlineImage) post.image = firstUsableInlineImage;
+    } else if (firstUsableInlineImage) {
+      // Admin article content already has an image link; reuse it as the cover.
+      post.image = firstUsableInlineImage;
+      console.log('Cover image recovered from article content for: ' + slug);
+    } else {
+      console.warn('No image URL found in admin post or article content for: ' + slug);
     }
   }
 }
