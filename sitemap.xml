@@ -17,7 +17,7 @@
 
   <url>
     <loc>https://factzone.online/categories/science/</loc>
-    <lastmod>2026-10-10</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
@@ -291,6 +291,13 @@
   <url>
     <loc>https://factzone.online/posts/%E0%A4%9A%E0%A4%BE%E0%A4%AF-%E0%A4%AA%E0%A5%80%E0%A4%A8%E0%A5%87-%E0%A4%95%E0%A5%87-%E0%A4%A8%E0%A5%81%E0%A4%95%E0%A4%B8%E0%A4%BE%E0%A4%A8.html</loc>
     <lastmod>2026-10-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/thand-me-safed-saans-kyon-dikhti-hai.html</loc>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
