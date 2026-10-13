@@ -22,5 +22,19 @@ jobs:
           cache: 'npm'
       - name: Install locked dependencies
         run: npm ci
+      - name: Install image conversion dependency
+        run: npm install --no-save sharp
       - name: Check generator JavaScript syntax
         run: node --check scripts/generate-static.js
+      - name: Run generator against safe fixture data
+        run: npm run generate:dry-run
+      - name: Verify generated article and category pages
+        run: |
+          test -s posts/fixture-sky-blue.html
+          test -s posts/fixture-brain-tech.html
+          test -s categories/science/index.html
+          test -s categories/tech/index.html
+          test -s categories/history/index.html
+          test -s categories/mystery/index.html
+          test -s categories/viral/index.html
+          test -s sitemap.xml
