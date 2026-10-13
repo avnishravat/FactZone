@@ -8,6 +8,8 @@ name: Generate static article pages
 
 "on":
   workflow_dispatch: {}          # manual "Run workflow" button
+  repository_dispatch:
+    types: [factzone-post-changed] # secure Firebase post-change trigger
   schedule:
     - cron: '0 */6 * * *'        # every 6 hours - adjust as needed
   push:
