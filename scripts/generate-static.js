@@ -610,7 +610,7 @@ async function main() {
     const outPath = path.join(postsDir, `${post.slug}.html`);
     if (writeIfChanged(outPath, html)) articleCount++;
   }
-  console.log(`Generated ${articleCount} article page(s) in posts/<slug>.html`);
+  console.log(`Updated ${articleCount} article page(s); unchanged pages were left untouched.`);
 
   // 2. Category pages: categories/<cat>/index.html
   const categoryLastmods = {};
@@ -623,7 +623,7 @@ async function main() {
     fs.mkdirSync(catDir, { recursive: true });
     if (writeIfChanged(path.join(catDir, 'index.html'), html)) categoryCount++;
   }
-  console.log(`Generated ${categoryCount} category page(s) in categories/<cat>/index.html`);
+  console.log(`Updated ${categoryCount} category page(s); unchanged pages were left untouched.`);
 
   // 3. Homepage crawlable links
   updateHomepageLinks(usablePosts);
