@@ -150,6 +150,23 @@ function readTemplate(name) {
   return fs.readFileSync(path.join(ROOT, 'templates', name), 'utf8');
 }
 
+// Write generated output only when its bytes actually change. This keeps unchanged
+// static pages untouched across builds and avoids needless GitHub commits/deploys.
+function writeIfChanged(filePath, content) {
+  let previous = null;
+  try { previous = fs.readFileSync(filePath, 'utf8'); } catch (err) {
+    if (err.code !== 'ENOENT') throw err;
+  }
+  if (previous === content) {
+    console.log('Unchanged, kept existing file: ' + path.relative(ROOT, filePath));
+    return false;
+  }
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  fs.writeFileSync(filePath, content, 'utf8');
+  console.log('Updated generated file: ' + path.relative(ROOT, filePath));
+  return true;
+}
+
 function fillTemplate(tpl, data) {
   return tpl.replace(/\{\{(\w+)\}\}/g, (m, k) => (k in data ? String(data[k]) : ''));
 }
@@ -517,6 +534,10 @@ function updateHomepageLinks(posts) {
   const after = text.slice(endIdx);
   const updated = `${before}\r\n${linksHtml}\r\n  ${after}`;
 
+  if (updated === text) {
+    console.log('index.html: crawlable links unchanged; homepage file left untouched.');
+    return;
+  }
   fs.writeFileSync(indexPath, updated, 'utf8');
   console.log(`index.html: injected ${sorted.length} crawlable article link(s) between the SSG markers.`);
 }
@@ -587,8 +608,7 @@ async function main() {
   for (const post of usablePosts) {
     const { html } = renderArticle(post, usablePosts, articleTpl);
     const outPath = path.join(postsDir, `${post.slug}.html`);
-    fs.writeFileSync(outPath, html, 'utf8');
-    articleCount++;
+    if (writeIfChanged(outPath, html)) articleCount++;
   }
   console.log(`Generated ${articleCount} article page(s) in posts/<slug>.html`);
 
@@ -601,8 +621,7 @@ async function main() {
     if (lastmod) categoryLastmods[cat] = lastmod;
     const catDir = path.join(ROOT, 'categories', cat);
     fs.mkdirSync(catDir, { recursive: true });
-    fs.writeFileSync(path.join(catDir, 'index.html'), html, 'utf8');
-    categoryCount++;
+    if (writeIfChanged(path.join(catDir, 'index.html'), html)) categoryCount++;
   }
   console.log(`Generated ${categoryCount} category page(s) in categories/<cat>/index.html`);
 
@@ -611,8 +630,8 @@ async function main() {
 
   // 4. Sitemap
   const sitemapXml = buildSitemap(usablePosts, categoryLastmods);
-  fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), sitemapXml, 'utf8');
-  console.log(`sitemap.xml regenerated: ${usablePosts.length + CATEGORY_ORDER.length + 2} URLs.`);
+  writeIfChanged(path.join(ROOT, 'sitemap.xml'), sitemapXml);
+  console.log(`sitemap.xml checked: ${usablePosts.length + CATEGORY_ORDER.length + 2} URLs.`);
 
   console.log('\nDone.');
 }
