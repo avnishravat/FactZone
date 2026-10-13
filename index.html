@@ -692,8 +692,15 @@
     const postsContainer = document.getElementById("posts");
     let selectedCategory = "all";
 
-    const CACHE_KEY = "factzone_posts_v8";
-    try { localStorage.removeItem("factzone_posts_v7"); } catch (e) {}
+    const CACHE_KEY = "factzone_posts_v9";
+    // Clear older cached card HTML so repaired local cover images appear immediately.
+    try { localStorage.removeItem("factzone_posts_v8"); localStorage.removeItem("factzone_posts_v7"); } catch (e) {}
+    const LOCAL_COVER_IMAGES = {
+      "why-sky-appears-blue-scientific-reason-hindi": "assets/why-sky-appears-blue.webp",
+      "why-honey-never-spoils-expiration-date-science-hindi": "assets/why-honey-never-spoils.webp",
+      "neuralink-brain-chip-जानिए-इंसान-कैसे-बनेगा-superhuman": "assets/neuralink-brain-chip.webp",
+      "why-face-looks-weird-in-mirror-science-in-hindi": "assets/why-face-looks-weird-in-mirror.webp"
+    };
     const CATEGORY_LABELS = {
       science: "Science / विज्ञान",
       tech:    "Tech / तकनीक",
@@ -755,7 +762,9 @@
 
     function buildCardHtml(post, index) {
       const safeTitle    = escapeHtml(post.title || 'FactZone Post');
-      const safeImage    = (post.image && post.image.trim() !== '') ? escapeHtml(post.image) : SVG_FALLBACK;
+      const localCover   = LOCAL_COVER_IMAGES[String(post.slug || "").trim()];
+      const imageUrl     = localCover || ((post.image && String(post.image).trim() !== "") ? String(post.image).trim() : SVG_FALLBACK);
+      const safeImage    = escapeHtml(imageUrl);
       const safeId       = encodeURIComponent(post.id);
       const safeSlug     = post.slug ? encodeURIComponent(post.slug) : '';
       const safeCategory = escapeHtml(post.category || '');
