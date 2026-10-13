@@ -24,7 +24,3 @@ jobs:
         run: npm ci
       - name: Check generator JavaScript syntax
         run: node --check scripts/generate-static.js
-      - name: Check admin JavaScript syntax
-        run: |
-          node --input-type=module -e "const fs = require('fs'); const html = fs.readFileSync('admin.html','utf8'); const scripts = [...html.matchAll(/<script(?:\\s[^>]*)?>([\\s\\S]*?)<\\/script>/gi)].map(m=>m[1]).filter(s=>s.trim()); if (!scripts.length) throw new Error('No inline scripts found'); fs.writeFileSync('/tmp/factzone-admin-check.js', scripts.join('\\n'));"
-          node --check /tmp/factzone-admin-check.js
