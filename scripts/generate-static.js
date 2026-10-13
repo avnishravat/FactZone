@@ -193,13 +193,20 @@ async function imageToWebp(sourceUrl, outputName) {
 
   const task = (async () => {
     try {
+      // Reuse an existing WebP for this post/image slot instead of downloading and
+      // recompressing it on every scheduled generator run.
+      const outputPath = path.join(ASSETS_DIR, outputName);
+      if (fs.existsSync(outputPath)) {
+        console.log('WebP already exists; reused: /assets/' + outputName);
+        return '/assets/' + outputName;
+      }
+
       const response = await fetch(source, { signal: AbortSignal.timeout(20000), headers: { 'User-Agent': 'FactZone-Image-Optimizer/1.0' } });
       if (!response.ok) throw new Error('HTTP ' + response.status);
       const type = (response.headers.get('content-type') || '').toLowerCase();
       if (type && !type.startsWith('image/')) throw new Error('Source is not an image');
       const bytes = Buffer.from(await response.arrayBuffer());
       if (!bytes.length || bytes.length > 15 * 1024 * 1024) throw new Error('Image is empty or larger than 15 MB');
-      const outputPath = path.join(ASSETS_DIR, outputName);
       fs.mkdirSync(ASSETS_DIR, { recursive: true });
       await sharp(bytes, { failOn: 'none' }).rotate().webp({ quality: 82, effort: 4 }).toFile(outputPath);
       console.log('WebP saved: /assets/' + outputName);
