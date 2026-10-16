@@ -17,7 +17,7 @@
 
   <url>
     <loc>https://factzone.online/categories/science/</loc>
-    <lastmod>2026-10-11</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
@@ -130,6 +130,13 @@
   <url>
     <loc>https://factzone.online/posts/einstein-%E0%A4%95%E0%A4%BE-spooky-science-%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A4%BE-%E0%A4%95%E0%A4%A3-%E0%A4%86%E0%A4%AA%E0%A4%B8-%E0%A4%AE%E0%A5%87%E0%A4%82-%E0%A4%AC%E0%A4%BE%E0%A4%A4%E0%A5%87%E0%A4%82-%E0%A4%95%E0%A4%B0%E0%A4%A4%E0%A5%87-%E0%A4%B9%E0%A5%88%E0%A4%82-%EF%B8%8F.html</loc>
     <lastmod>2026-10-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/barf-pani-par-kyon-tairti-hai.html</loc>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -340,6 +347,13 @@
   <url>
     <loc>https://factzone.online/posts/why-songs-get-stuck-in-head-earworm-hindi.html</loc>
     <lastmod>2026-10-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://factzone.online/posts/garam-tave-par-pani-ki-bundein-kyon-nachti-hain.html</loc>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
