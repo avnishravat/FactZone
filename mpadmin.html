@@ -40,6 +40,8 @@
         .status-badge { padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600; font-size: 0.75rem; }
         .status-pending { background: #fef08a; color: #854d0e; }
         .status-approved { background: #bbf7d0; color: #166534; }
+        .type-badge { padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600; font-size: 0.72rem; background: #e0f2fe; color: #075985; }
+        .type-external { background: #f3e8ff; color: #6b21a8; }
 
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.2rem; }
         .stat-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; text-align: center; }
@@ -172,6 +174,16 @@
         <h2 id="formTitle">Add / Edit Digital Product</h2>
         <form id="productForm" style="margin-top: 1rem;">
             <input type="hidden" id="productId">
+
+            <div class="form-group">
+                <label>Product Type</label>
+                <select id="productType" onchange="toggleProductType()">
+                    <option value="digital">Digital Product (UPI payment + download)</option>
+                    <option value="external">External Link (Gumroad etc.)</option>
+                </select>
+                <p class="hint">External Link choose karne par visitor click karte hi seedha aapke diye hue link par chala jayega (UPI payment flow nahi chalega).</p>
+            </div>
+
             <div class="form-group">
                 <label>Product Title</label>
                 <input type="text" id="title" placeholder="e.g. Master SEO Guide PDF" required>
@@ -182,19 +194,34 @@
                     <input type="text" id="tag" placeholder="e.g. E-Book, Template" required>
                 </div>
                 <div class="form-group" style="flex: 1;">
-                    <label>Price (₹)</label>
-                    <input type="number" id="price" placeholder="e.g. 99" min="1" step="1" required>
+                    <label id="priceLabel">Price (₹)</label>
+                    <input type="number" id="price" placeholder="e.g. 99" min="0" step="1">
+                    <p class="hint" id="priceHint" style="display:none;">External product me price optional hai. 0 rakhoge to store par price hide kar sakte ho.</p>
                 </div>
             </div>
             <div class="form-group">
                 <label>Description</label>
                 <textarea id="desc" rows="2" placeholder="Short detail about product..."></textarea>
             </div>
-            <div class="form-group">
-                <label>PDF File Link</label>
-                <input type="text" id="fileUrl" placeholder="Paste a public download link (Google Drive / Cloudinary)">
-                <p class="hint">Use a direct/"Anyone with the link" share link so it opens straight to the file.</p>
+
+            <!-- Digital product fields -->
+            <div id="digitalFields">
+                <div class="form-group">
+                    <label>PDF File Link</label>
+                    <input type="text" id="fileUrl" placeholder="Paste a public download link (Google Drive / Cloudinary)">
+                    <p class="hint">Use a direct/"Anyone with the link" share link so it opens straight to the file.</p>
+                </div>
             </div>
+
+            <!-- External link product fields -->
+            <div id="externalFields" style="display:none;">
+                <div class="form-group">
+                    <label>Product Link (Gumroad etc.)</label>
+                    <input type="text" id="externalUrl" placeholder="https://yourname.gumroad.com/l/product">
+                    <p class="hint">Click karne par visitor seedha is link par chala jayega.</p>
+                </div>
+            </div>
+
             <div class="form-group">
                 <label>Preview / Screenshot Image Link (optional)</label>
                 <input type="text" id="previewUrl" placeholder="Paste a public image link">
@@ -209,7 +236,7 @@
     <div class="card">
         <h2>Existing Products</h2>
         <table>
-            <thead><tr><th>Title</th><th>Category</th><th>Price</th><th>File</th><th>Rating</th><th>Actions</th></tr></thead>
+            <thead><tr><th>Title</th><th>Category</th><th>Type</th><th>Price</th><th>File / Link</th><th>Rating</th><th>Actions</th></tr></thead>
             <tbody id="adminTableBody"></tbody>
         </table>
     </div>
@@ -540,10 +567,20 @@
     // ---------------------------------------------------------------
     // PRODUCTS
     // ---------------------------------------------------------------
+
+    // Show / hide the fields depending on product type
+    function toggleProductType() {
+        const isExternal = document.getElementById('productType').value === 'external';
+        document.getElementById('digitalFields').style.display = isExternal ? 'none' : 'block';
+        document.getElementById('externalFields').style.display = isExternal ? 'block' : 'none';
+        document.getElementById('priceHint').style.display = isExternal ? 'block' : 'none';
+        document.getElementById('priceLabel').textContent = isExternal ? 'Price (₹) — optional' : 'Price (₹)';
+    }
+
     function renderAdminTable() {
         const tbody = document.getElementById('adminTableBody');
         if (!products.length) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No products yet — add your first one above.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No products yet — add your first one above.</td></tr>';
             return;
         }
         tbody.innerHTML = products.map(p => {
@@ -551,12 +588,21 @@
             const ratingText = reviews.length
                 ? (reviews.reduce((a, r) => a + Number(r.rating || 0), 0) / reviews.length).toFixed(1) + ` (${reviews.length})`
                 : '-';
+            const isExternal = p.productType === 'external';
+            const typeBadge = isExternal
+                ? '<span class="type-badge type-external">External</span>'
+                : '<span class="type-badge">Digital</span>';
+            const fileCell = isExternal
+                ? (p.externalUrl ? `🔗 <a href="${escapeHtml(p.externalUrl)}" target="_blank" rel="noopener noreferrer">Open link</a>` : 'No link')
+                : (p.fileUrl ? '📄 Link set' : 'No link');
+            const priceCell = Number(p.price) > 0 ? '₹' + escapeHtml(p.price) : '-';
             return `
             <tr>
                 <td><strong>${escapeHtml(p.title)}</strong></td>
                 <td>${escapeHtml(p.tag)}</td>
-                <td>₹${escapeHtml(p.price)}</td>
-                <td>${p.fileUrl ? '📄 Link set' : 'No link'}</td>
+                <td>${typeBadge}</td>
+                <td>${priceCell}</td>
+                <td>${fileCell}</td>
                 <td>${ratingText}</td>
                 <td>
                     <button class="btn btn-edit" onclick="editProduct('${p.id}')">Edit</button>
@@ -580,13 +626,28 @@
         const id = document.getElementById('productId').value;
         const title = document.getElementById('title').value.trim();
         const tag = document.getElementById('tag').value.trim();
-        const price = Number(document.getElementById('price').value);
+        const price = Number(document.getElementById('price').value) || 0;
         const desc = document.getElementById('desc').value.trim();
+        const productType = document.getElementById('productType').value;
         const fileUrl = document.getElementById('fileUrl').value.trim();
+        const externalUrl = document.getElementById('externalUrl').value.trim();
         const previewUrl = document.getElementById('previewUrl').value.trim();
 
         if (!title || !tag) return showFormError('Please fill in the title and category.');
-        if (!price || price <= 0) return showFormError('Please enter a valid price greater than 0.');
+
+        if (productType === 'external') {
+            if (!/^https?:\/\//i.test(externalUrl)) {
+                return showFormError('Please enter a valid product link starting with https://');
+            }
+        } else if (price <= 0) {
+            return showFormError('Please enter a valid price greater than 0.');
+        }
+
+        const data = {
+            title, tag, price, desc, previewUrl, productType,
+            fileUrl: productType === 'digital' ? fileUrl : '',
+            externalUrl: productType === 'external' ? externalUrl : ''
+        };
 
         const saveBtn = document.getElementById('saveBtn');
         saveBtn.disabled = true;
@@ -594,9 +655,9 @@
 
         try {
             if (id) {
-                await db.collection('products').doc(id).update({ title, tag, price, desc, fileUrl, previewUrl });
+                await db.collection('products').doc(id).update(data);
             } else {
-                await db.collection('products').add({ title, tag, price, desc, fileUrl, previewUrl, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+                await db.collection('products').add({ ...data, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
             }
             resetForm();
         } catch (e) {
@@ -618,6 +679,10 @@
         document.getElementById('desc').value = p.desc || '';
         document.getElementById('fileUrl').value = p.fileUrl || '';
         document.getElementById('previewUrl').value = p.previewUrl || '';
+        // Old products have no productType — treat them as "digital"
+        document.getElementById('productType').value = p.productType || 'digital';
+        document.getElementById('externalUrl').value = p.externalUrl || '';
+        toggleProductType();
         document.getElementById('formTitle').innerText = "Edit Product: " + p.title;
         hideFormError();
         window.scrollTo({ top: document.getElementById('productForm').offsetTop - 20, behavior: 'smooth' });
@@ -645,6 +710,7 @@
         document.getElementById('productForm').reset();
         document.getElementById('productId').value = '';
         document.getElementById('formTitle').innerText = "Add / Edit Digital Product";
+        toggleProductType();
         hideFormError();
     }
 
@@ -713,6 +779,9 @@
             ctx.fillText(m.label, x + barWidth / 2, h - 8);
         });
     }
+
+    // Page load par form ko sahi state me set karo
+    toggleProductType();
 </script>
 </body>
 </html>
