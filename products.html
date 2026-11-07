@@ -116,6 +116,7 @@
 
         .status-badge { font-size: 0.56rem; font-weight: 600; padding: 0.14rem 0.32rem; border-radius: 5px; text-align: center; white-space: nowrap; }
         .badge-info { background: rgba(2, 132, 199, 0.1); color: var(--primary); border: 1px solid rgba(2, 132, 199, 0.2); }
+        .badge-external { background: rgba(147, 51, 234, 0.1); color: #7e22ce; border: 1px solid rgba(147, 51, 234, 0.25); }
         .badge-pending { background: #fef08a; color: #854d0e; border: 1px solid #fde047; }
         .badge-approved { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
         .badge-expired { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
@@ -335,9 +336,11 @@
 
         const DEFAULT_EXPIRY_HOURS = 48;
 
+        // btnExternal = text on the button for External Link (Gumroad etc.) products.
+        // Change it here if you want e.g. "Buy on Gumroad" instead of "Download".
         const translations = {
-            en: { tools: "Tools", store: "Store", heroTitle: "Digital Products Store", heroDesc: "Premium eBooks, Canva Templates, and Source Codes for Instant Download", btnText: "Download", empty: "No products available right now. Please check back soon.", loading: "Loading products...", supportPrefix: "Need help with an order? ", supportCta: "Chat with us on WhatsApp 💬" },
-            hi: { tools: "टूल्स", store: "स्टोर", heroTitle: "डिजिटल प्रोडक्ट्स स्टोर", heroDesc: "प्रीमियम ई-बुक्स, कैनवा टेम्पलेट्स और सोर्स कोड्स तुरंत डाउनलोड करें", btnText: "डाउनलोड", empty: "अभी कोई प्रोडक्ट उपलब्ध नहीं है। कृपया बाद में देखें।", loading: "प्रोडक्ट्स लोड हो रहे हैं...", supportPrefix: "ऑर्डर से जुड़ी कोई मदद चाहिए? ", supportCta: "WhatsApp पर हमसे चैट करें 💬" }
+            en: { tools: "Tools", store: "Store", heroTitle: "Digital Products Store", heroDesc: "Premium eBooks, Canva Templates, and Source Codes for Instant Download", btnText: "Download", btnExternal: "Download", externalBadge: "🔗 External link", empty: "No products available right now. Please check back soon.", loading: "Loading products...", supportPrefix: "Need help with an order? ", supportCta: "Chat with us on WhatsApp 💬" },
+            hi: { tools: "टूल्स", store: "स्टोर", heroTitle: "डिजिटल प्रोडक्ट्स स्टोर", heroDesc: "प्रीमियम ई-बुक्स, कैनवा टेम्पलेट्स और सोर्स कोड्स तुरंत डाउनलोड करें", btnText: "डाउनलोड", btnExternal: "डाउनलोड", externalBadge: "🔗 एक्सटर्नल लिंक", empty: "अभी कोई प्रोडक्ट उपलब्ध नहीं है। कृपया बाद में देखें।", loading: "प्रोडक्ट्स लोड हो रहे हैं...", supportPrefix: "ऑर्डर से जुड़ी कोई मदद चाहिए? ", supportCta: "WhatsApp पर हमसे चैट करें 💬" }
         };
 
         let currentLang = localStorage.getItem('fz_lang') || 'en';
@@ -354,6 +357,16 @@
 
         function escapeHtml(str) {
             return String(str ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+        }
+
+        // External (Gumroad etc.) product helpers.
+        // Only real http(s) links are accepted, so a bad value can never run script.
+        function isExternalProduct(p) {
+            return p && p.productType === 'external';
+        }
+        function safeExternalUrl(p) {
+            const u = String((p && p.externalUrl) || '').trim();
+            return /^https?:\/\//i.test(u) ? u : '';
         }
 
         function changeLanguage(lang) {
@@ -407,7 +420,8 @@
             try {
                 const rows = await fsRunQuery('products', {
                     orderBy: [{ field: { fieldPath: 'createdAt' }, direction: 'DESCENDING' }],
-                    select: ['title', 'desc', 'tag', 'price', 'previewUrl', 'fileUrl', 'createdAt']
+                    // productType + externalUrl added for Gumroad / external link products
+                    select: ['title', 'desc', 'tag', 'price', 'previewUrl', 'fileUrl', 'createdAt', 'productType', 'externalUrl']
                 });
                 allProducts = rows;
                 try { localStorage.setItem('fz_cache_products', JSON.stringify(rows)); } catch(e){}
@@ -525,11 +539,21 @@
             grid.innerHTML = filtered.map((p, i) => {
                 const order = myOrderStatus[p.id];
                 const rating = avgRating(p.id);
+                const t = translations[currentLang];
+                const external = isExternalProduct(p);
 
                 let badgeHTML = `<span class="status-badge badge-info">Approve in 24 hrs</span>`;
-                let buttonHTML = `<button class="download-btn" onclick="handleProductClick('${p.id}')">${translations[currentLang].btnText}</button>`;
+                let buttonHTML = `<button class="download-btn" onclick="handleProductClick('${p.id}')">${t.btnText}</button>`;
 
-                if (order) {
+                if (external) {
+                    // External link product (Gumroad etc.): no UPI / approval flow.
+                    // The button is a real link, so it goes straight to the URL.
+                    const url = safeExternalUrl(p);
+                    badgeHTML = `<span class="status-badge badge-external">${escapeHtml(t.externalBadge)}</span>`;
+                    buttonHTML = url
+                        ? `<a class="download-btn" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(t.btnExternal)}</a>`
+                        : `<button class="download-btn download-btn-disabled" onclick="alert('The link for this product is not available right now. Please contact the seller.')">${escapeHtml(t.btnExternal)}</button>`;
+                } else if (order) {
                     if (order.status === 'Approved') {
                         const approvedAt = order.approvedAt ? order.approvedAt.toMillis() : null;
                         const expiryHrs = Number(upiSettings.expiryHours) || DEFAULT_EXPIRY_HOURS;
@@ -559,6 +583,10 @@
                     ? `<img src="${escapeHtml(p.previewUrl)}" alt="${escapeHtml(p.title)} preview" class="preview-thumb" ${imgLoadAttr} onclick="window.open('${escapeHtml(p.previewUrl)}','_blank')">`
                     : `<span class="icon-box">📦</span>`;
 
+                // External products may have price 0 — then the price is hidden.
+                const showPrice = !external || Number(p.price) > 0;
+                const priceHTML = showPrice ? `<span class="price">₹${escapeHtml(p.price)}</span>` : '';
+
                 return `
                     <div class="product-card">
                         <div class="card-image-wrap">
@@ -573,7 +601,7 @@
                         </div>
                         <div class="card-bottom">
                             <div class="price-row">
-                                <span class="price">₹${escapeHtml(p.price)}</span>
+                                ${priceHTML}
                                 ${badgeHTML}
                             </div>
                             ${buttonHTML}
@@ -633,6 +661,9 @@
                             }
                         }
                     };
+                    if (isExternalProduct(p) && safeExternalUrl(p)) {
+                        item.offers.url = safeExternalUrl(p);
+                    }
                     if (rating) {
                         item.aggregateRating = {
                             "@type": "AggregateRating",
@@ -649,6 +680,15 @@
         function handleProductClick(id) {
             const prod = allProducts.find(p => p.id === id);
             if (!prod) { alert('This product is no longer available.'); return; }
+
+            // External link product -> go straight to the link, no payment modal.
+            if (isExternalProduct(prod)) {
+                const url = safeExternalUrl(prod);
+                if (url) window.open(url, '_blank', 'noopener,noreferrer');
+                else alert('The link for this product is not available right now.');
+                return;
+            }
+
             const order = myOrderStatus[id];
             if (order && order.status === 'Approved') {
                 if (prod.fileUrl) window.open(prod.fileUrl, '_blank');
